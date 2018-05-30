@@ -4,8 +4,8 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-@MapperScan("com.yunlaiquan.dao")
+@SpringBootApplication()
+@MapperScan({"com.yunlaiquan.dao","com.yunlaiquan.admin.*.dao"})
 public class YlqApplication {
 
 	public static void main(String[] args) {

@@ -11,11 +11,21 @@
     </resultMap>
 
 	<select id="queryObject" resultType="${package}.entity.${className}Entity">
-		select * from ${tableName} where ${pk.columnName} = #{value}
+		select
+		#foreach($column in $columns)
+			`$column.columnName`#if($velocityCount != $columns.size()), #end
+
+		#end
+		from ${tableName} where ${pk.columnName} = #{value}
 	</select>
 
 	<select id="queryList" resultType="${package}.entity.${className}Entity">
-		select * from ${tableName}
+		select
+		#foreach($column in $columns)
+            `$column.columnName`#if($velocityCount != $columns.size()), #end
+
+		#end
+		from ${tableName}
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
