@@ -9,5 +9,8 @@
         <module name="renren-security-boot" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="renren-security-boot" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
