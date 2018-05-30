@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunlaiquan.admin.product.dao.ProductBrandDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.yunlaiquan.admin.product.entity.ProductBrandEntity" id="productBrandMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.yunlaiquan.admin.product.entity.ProductBrandEntity">
+		select
+					`id`, 
+					`name`, 
+					`remark`
+				from product_brand where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.yunlaiquan.admin.product.entity.ProductBrandEntity">
+		select
+		            `id`, 
+		            `name`, 
+		            `remark`
+				from product_brand
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from product_brand 
+	</select>
+	 
+	<insert id="save" parameterType="com.yunlaiquan.admin.product.entity.ProductBrandEntity">
+		insert into product_brand
+		(
+			`id`, 
+			`name`, 
+			`remark`
+		)
+		values
+		(
+			#{id}, 
+			#{name}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunlaiquan.admin.product.entity.ProductBrandEntity">
+		update product_brand 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from product_brand where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from product_brand where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

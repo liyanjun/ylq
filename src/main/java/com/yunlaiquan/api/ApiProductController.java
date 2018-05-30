@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 /**
  * @author  weicc
  * @date  2018/5/30 21:15
@@ -31,7 +33,7 @@ public class ApiProductController {
     @PostMapping("trackProduct")
     @ApiOperation(value = "商品查询")
     @ApiImplicitParams({
-        @ApiImplicitParam(paramType = "query", dataType="string", name = "name", value = "商品名稱", required = true),
+        @ApiImplicitParam(paramType = "query", dataType="string", name = "name", value = "商品名称", required = true),
         @ApiImplicitParam(paramType = "query", dataType="double", name = "amount", value = "实价", required = true),
         @ApiImplicitParam(paramType = "query", dataType="string", name = "brand_name", value = "商品品牌", required = true),
         @ApiImplicitParam(paramType = "query", dataType="int", name = "bucket_type", value = "桶类型", required = true)

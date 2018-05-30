@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author  weicc
- * @date  2018/5/30 18:30
+ * @author weicc
+ * @date 2018/5/30 18:30
  * @desc
  **/
 @RestController
@@ -27,6 +27,7 @@ public class ApiUserController {
 
     /**
      * 支付
+     *
      * @param money
      * @param pay_password
      * @return
@@ -35,10 +36,10 @@ public class ApiUserController {
     @PostMapping("pay")
     @ApiOperation(value = "支付")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType="string", name = "money", value = "支付金额", required = true),
-            @ApiImplicitParam(paramType = "query", dataType="string", name = "pay_password", value = "支付密码", required = true)
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "money", value = "支付金额", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "pay_password", value = "支付密码", required = true)
     })
-    public R pay(String money, String pay_password){
+    public R pay(String money, String pay_password) {
         Assert.isBlank(money, "支付金额不能为空");
         Assert.isBlank(pay_password, "支付密码不能为空");
 
@@ -49,6 +50,7 @@ public class ApiUserController {
 
     /**
      * 修改用户信息
+     *
      * @param username
      * @param phone
      * @return
@@ -57,10 +59,10 @@ public class ApiUserController {
     @PostMapping("modifyUserInfo")
     @ApiOperation(value = "修改用户信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType="string", name = "username", value = "用户名", required = true),
-            @ApiImplicitParam(paramType = "query", dataType="string", name = "phone", value = "电话", required = true)
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "用户名", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "phone", value = "电话", required = true)
     })
-    public R modifyUserInfo(String username, String age, String phone){
+    public R modifyUserInfo(String username, String age, String phone) {
         Assert.isBlank(username, "用户名不能为空");
         Assert.isBlank(phone, "电话不能为空");
 

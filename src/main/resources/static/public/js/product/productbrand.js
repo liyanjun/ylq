@@ -1,22 +1,11 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: '../productinfo/list',
+        url: '../productbrand/list',
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '商品名称', name: 'name', index: 'name', width: 80 }, 			
-			{ label: '标价', name: 'amountShow', index: 'amount_show', width: 80 }, 			
-			{ label: '实价', name: 'amount', index: 'amount', width: 80 }, 			
-			{ label: '商品品牌 ID', name: 'brandId', index: 'brand_id', width: 80 }, 			
-			{ label: '商品品牌', name: 'brandName', index: 'brand_name', width: 80 }, 			
-			{ label: '桶类型，10：一次性桶，20：可回收桶', name: 'bucketType', index: 'bucket_type', width: 80 }, 			
-			{ label: '配送费', name: 'deliveryFee', index: 'delivery_fee', width: 80 }, 			
-			{ label: '商品创建时间', name: 'creationTime', index: 'creation_time', width: 80 }, 			
-			{ label: '商品最后一次更新时间', name: 'updateTime', index: 'update_time', width: 80 }, 			
-			{ label: '商品创建人 ID', name: 'creatorId', index: 'creator_id', width: 80 }, 			
-			{ label: '商品创建人名', name: 'creatorName', index: 'creator_name', width: 80 }, 			
-			{ label: '商品更新人ID', name: 'updatorId', index: 'updator_id', width: 80 }, 			
-			{ label: '商品更新人名', name: 'updatorName', index: 'updator_name', width: 80 }			
+			{ label: '商品名', name: 'name', index: 'name', width: 80 }, 			
+			{ label: '备注', name: 'remark', index: 'remark', width: 80 }			
         ],
 		viewrecords: true,
         height: 385,
@@ -50,8 +39,7 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		productInfo: {},
-        brandList: {}
+		productBrand: {}
 	},
 	methods: {
 		query: function () {
@@ -60,10 +48,7 @@ var vm = new Vue({
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
-			vm.productInfo = {};
-
-            //获取品牌信息
-            this.getBrandList();
+			vm.productBrand = {};
 		},
 		update: function (event) {
 			var id = getSelectedRow();
@@ -74,21 +59,14 @@ var vm = new Vue({
             vm.title = "修改";
             
             vm.getInfo(id)
-            //获取品牌信息
-            this.getBrandList();
 		},
-        getBrandList: function(){
-            $.get("../productbrand/queryAll", function(r){
-                vm.brandList = r.list;
-            });
-        },
 		saveOrUpdate: function (event) {
-			var url = vm.productInfo.id == null ? "../productinfo/save" : "../productinfo/update";
+			var url = vm.productBrand.id == null ? "../productbrand/save" : "../productbrand/update";
 			$.ajax({
 				type: "POST",
 			    url: url,
 			    contentType: "application/json",
-			    data: JSON.stringify(vm.productInfo),
+			    data: JSON.stringify(vm.productBrand),
 			    success: function(r){
 			    	if(r.code === 0){
 						alert('操作成功', function(index){
@@ -109,7 +87,7 @@ var vm = new Vue({
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
-				    url: "../productinfo/delete",
+				    url: "../productbrand/delete",
 				    contentType: "application/json",
 				    data: JSON.stringify(ids),
 				    success: function(r){
@@ -125,8 +103,8 @@ var vm = new Vue({
 			});
 		},
 		getInfo: function(id){
-			$.get("../productinfo/info/"+id, function(r){
-                vm.productInfo = r.productInfo;
+			$.get("../productbrand/info/"+id, function(r){
+                vm.productBrand = r.productBrand;
             });
 		},
 		reload: function (event) {

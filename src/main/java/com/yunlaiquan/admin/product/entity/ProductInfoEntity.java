@@ -9,52 +9,80 @@ import java.util.Date;
 /**
  * 商品信息表表
  * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2018-05-30 17:16:47
+ * @author liyanjun
+ * @email 
+ * @date 2018-05-30 22:26:24
  */
 public class ProductInfoEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	//主键ID
-	private Integer id;
-	//商品名称
+    /**
+     * 设置：主键ID
+     */
+	private Long id;
+    /**
+     * 设置：商品名称
+     */
 	private String name;
-	//标价
+    /**
+     * 设置：标价
+     */
 	private BigDecimal amountShow;
-	//实价
+    /**
+     * 设置：实价
+     */
 	private BigDecimal amount;
-	//商品品牌 ID
-	private Integer brandId;
-	//商品品牌
+    /**
+     * 设置：商品品牌 ID
+     */
+	private Long brandId;
+    /**
+     * 设置：商品品牌
+     */
 	private String brandName;
-	//桶类型，10：一次性桶，20：可回收桶
+    /**
+     * 设置：桶类型，10：一次性桶，20：可回收桶
+     */
 	private Integer bucketType;
-	//配送费
+    /**
+     * 设置：配送费
+     */
 	private BigDecimal deliveryFee;
-	//商品创建时间
+    /**
+     * 设置：商品创建时间
+     */
 	private Date creationTime;
-	//商品最后一次更新时间
+    /**
+     * 设置：商品最后一次更新时间
+     */
 	private Date updateTime;
-	//商品创建人 ID
-	private Integer creatorId;
-	//商品创建人名
+    /**
+     * 设置：商品创建人 ID
+     */
+	private Long creatorId;
+    /**
+     * 设置：商品创建人名
+     */
 	private String creatorName;
-	//商品更新人ID
-	private Integer updatorId;
-	//商品更新人名
-	private String updatorName;
+    /**
+     * 设置：商品更新人ID
+     */
+	private Long updateId;
+    /**
+     * 设置：商品更新人名
+     */
+	private String updateName;
 
 	/**
 	 * 设置：主键ID
 	 */
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	/**
 	 * 获取：主键ID
 	 */
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	/**
@@ -96,13 +124,13 @@ public class ProductInfoEntity implements Serializable {
 	/**
 	 * 设置：商品品牌 ID
 	 */
-	public void setBrandId(Integer brandId) {
+	public void setBrandId(Long brandId) {
 		this.brandId = brandId;
 	}
 	/**
 	 * 获取：商品品牌 ID
 	 */
-	public Integer getBrandId() {
+	public Long getBrandId() {
 		return brandId;
 	}
 	/**
@@ -168,13 +196,13 @@ public class ProductInfoEntity implements Serializable {
 	/**
 	 * 设置：商品创建人 ID
 	 */
-	public void setCreatorId(Integer creatorId) {
+	public void setCreatorId(Long creatorId) {
 		this.creatorId = creatorId;
 	}
 	/**
 	 * 获取：商品创建人 ID
 	 */
-	public Integer getCreatorId() {
+	public Long getCreatorId() {
 		return creatorId;
 	}
 	/**
@@ -192,25 +220,25 @@ public class ProductInfoEntity implements Serializable {
 	/**
 	 * 设置：商品更新人ID
 	 */
-	public void setUpdatorId(Integer updatorId) {
-		this.updatorId = updatorId;
+	public void setUpdateId(Long updateId) {
+		this.updateId = updateId;
 	}
 	/**
 	 * 获取：商品更新人ID
 	 */
-	public Integer getUpdatorId() {
-		return updatorId;
+	public Long getUpdateId() {
+		return updateId;
 	}
 	/**
 	 * 设置：商品更新人名
 	 */
-	public void setUpdatorName(String updatorName) {
-		this.updatorName = updatorName;
+	public void setUpdateName(String updateName) {
+		this.updateName = updateName;
 	}
 	/**
 	 * 获取：商品更新人名
 	 */
-	public String getUpdatorName() {
-		return updatorName;
+	public String getUpdateName() {
+		return updateName;
 	}
 }

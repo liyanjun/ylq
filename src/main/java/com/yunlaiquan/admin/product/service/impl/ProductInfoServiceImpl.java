@@ -1,5 +1,6 @@
 package com.yunlaiquan.admin.product.service.impl;
 
+import com.yunlaiquan.admin.product.dao.ProductBrandDao;
 import com.yunlaiquan.admin.product.dao.ProductInfoDao;
 import com.yunlaiquan.admin.product.entity.ProductInfoEntity;
 import com.yunlaiquan.admin.product.service.ProductInfoService;
@@ -16,6 +17,9 @@ import java.util.Map;
 public class ProductInfoServiceImpl implements ProductInfoService {
 	@Autowired
 	private ProductInfoDao productInfoDao;
+
+	@Autowired
+	private ProductBrandDao productBrandDao;
 
 	@Override
 	public ProductInfoEntity queryObject(Integer id){
@@ -34,6 +38,7 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 
 	@Override
 	public void save(ProductInfoEntity productInfo){
+		productInfo.setBrandName(productBrandDao.queryObject(productInfo.getBrandId()).getName());
 		productInfoDao.save(productInfo);
 	}
 
