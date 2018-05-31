@@ -1,11 +1,15 @@
 package com.yunlaiquan.admin.product.service.impl;
 
 import com.yunlaiquan.admin.product.dao.ProductBrandDao;
+import com.yunlaiquan.admin.product.dao.ProductDetailDao;
 import com.yunlaiquan.admin.product.dao.ProductInfoDao;
+import com.yunlaiquan.admin.product.entity.ProductDetailEntity;
 import com.yunlaiquan.admin.product.entity.ProductInfoEntity;
+import com.yunlaiquan.admin.product.entity.ProductInfoVO;
 import com.yunlaiquan.admin.product.service.ProductInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +18,7 @@ import java.util.Map;
 
 
 @Service("productInfoService")
+@Transactional(rollbackFor = Exception.class)
 public class ProductInfoServiceImpl implements ProductInfoService {
 	@Autowired
 	private ProductInfoDao productInfoDao;
@@ -21,9 +26,14 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 	@Autowired
 	private ProductBrandDao productBrandDao;
 
+	@Autowired
+	private ProductDetailDao productDetailDao;
+
 	@Override
-	public ProductInfoEntity queryObject(Integer id){
-		return productInfoDao.queryObject(id);
+	public ProductInfoVO queryObject(Integer id){
+		ProductInfoEntity productInfoEntity = productInfoDao.queryObject(id);
+		ProductDetailEntity productDetailEntity = productDetailDao.queryObjectByProductInfoId(id);
+		return new ProductInfoVO(productInfoEntity,productDetailEntity);
 	}
 
 	@Override
@@ -37,14 +47,24 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 	}
 
 	@Override
-	public void save(ProductInfoEntity productInfo){
-		productInfo.setBrandName(productBrandDao.queryObject(productInfo.getBrandId()).getName());
-		productInfoDao.save(productInfo);
+	public void save(ProductInfoVO productInfoVO){
+		ProductInfoEntity productInfoEntity = productInfoVO.getProductInfoEntity();
+		ProductDetailEntity productDetailEntity = productInfoVO.getProductDetailEntity();
+
+		productInfoEntity.setBrandName(productBrandDao.queryObject(productInfoEntity.getBrandId()).getName());
+		productInfoDao.save(productInfoEntity);
+		productDetailEntity.setProductInfoId(productInfoEntity.getId());
+		productDetailDao.save(productDetailEntity);
 	}
 
 	@Override
-	public void update(ProductInfoEntity productInfo){
-		productInfoDao.update(productInfo);
+	public void update(ProductInfoVO productInfoVO){
+		ProductInfoEntity productInfoEntity = productInfoVO.getProductInfoEntity();
+		ProductDetailEntity productDetailEntityEdit = productInfoVO.getProductDetailEntity();
+		ProductDetailEntity productDetailEntity = productDetailDao.queryObjectByProductInfoId(productInfoEntity.getId());
+		productInfoDao.update(productInfoEntity);
+		productDetailEntityEdit.setId(productDetailEntity.getId());
+		productDetailDao.update(productDetailEntityEdit);
 	}
 
 	@Override

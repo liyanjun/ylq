@@ -43,6 +43,7 @@ $(function () {
         	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
         }
     });
+
 });
 
 var vm = new Vue({
@@ -61,6 +62,41 @@ var vm = new Vue({
 			vm.showList = false;
 			vm.title = "新增";
 			vm.productInfo = {};
+
+			// 初始化富文本编辑器
+            var E = window.wangEditor
+            var editor = new E('#editor')
+            editor.customConfig.uploadImgServer = '../sys/oss/editor/upload'
+            editor.customConfig.uploadFileName = 'file'
+            editor.customConfig.uploadImgMaxSize = 1 * 1024 * 1024
+            // 限制一次最多上传 1 张图片
+            editor.customConfig.uploadImgMaxLength = 1
+            editor.customConfig.onchange = function (html) {
+                // 监控变化，同步更新到 vm 对象
+                vm.productInfo.content = html;
+            }
+            editor.create()
+			// 初始化图片上传
+            new AjaxUpload('#upload', {
+                action: '../sys/oss/upload',
+                name: 'file',
+                autoSubmit:true,
+                responseType:"json",
+                onSubmit:function(file, extension){
+                    if (!(extension && /^(jpg|jpeg|png|gif)$/.test(extension.toLowerCase()))){
+                        alert('只支持jpg、png、gif格式的图片！');
+                        return false;
+                    }
+                },
+                onComplete : function(file, r){
+                    if(r.code == 0){
+                        $("#upload").css("background-image","url("+r.url+")");
+                        vm.productInfo.img = r.url;
+                    }else{
+                        alert(r.msg);
+                    }
+                }
+            });
 
             //获取品牌信息
             this.getBrandList();
@@ -127,6 +163,20 @@ var vm = new Vue({
 		getInfo: function(id){
 			$.get("../productinfo/info/"+id, function(r){
                 vm.productInfo = r.productInfo;
+                // 初始化富文本编辑器
+                var E = window.wangEditor
+                var editor = new E('#editor')
+                editor.customConfig.uploadImgServer = '../sys/oss/editor/upload'
+                editor.customConfig.uploadFileName = 'file'
+                editor.customConfig.uploadImgMaxSize = 1 * 1024 * 1024
+                // 限制一次最多上传 1 张图片
+                editor.customConfig.uploadImgMaxLength = 1
+                editor.customConfig.onchange = function (html) {
+                    // 监控变化，同步更新到 vm 对象
+                    vm.productInfo.content = html;
+                }
+                editor.create();
+                editor.txt.html(r.productInfo.content);
             });
 		},
 		reload: function (event) {
