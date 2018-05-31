@@ -1,3 +1,13 @@
+
+CREATE TABLE `product_detail` (
+`id` int NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+`img` text NULL COMMENT '商品介绍图，多个用逗号隔开',
+`content` text NULL COMMENT '商品内容',
+PRIMARY KEY (`id`)
+)
+COMMENT='商品信息表表'
+;
+
 CREATE TABLE `product_info` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '主键ID',
 `name` varchar(32) NOT NULL COMMENT '商品名称',
@@ -6,7 +16,7 @@ CREATE TABLE `product_info` (
 `brand_id` int NOT NULL COMMENT '商品品牌 ID',
 `brand_name` varchar(64) NOT NULL COMMENT '商品品牌',
 `bucket_type` tinyint(4) NULL COMMENT '桶类型，10：一次性桶，20：可回收桶',
-`delivery_fee` decimal(20,2) NULL COMMENT '配送费',
+`delivery_fee` decimal(20,2) NOT NULL COMMENT '配送费',
 `creation_time` datetime NULL COMMENT '商品创建时间',
 `update_time` datetime NULL COMMENT '商品最后一次更新时间',
 `creator_id` int NULL COMMENT '商品创建人 ID',
