@@ -1,8 +1,10 @@
 package com.yunlaiquan.admin.product.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.yunlaiquan.admin.AbstractController;
 import com.yunlaiquan.admin.product.entity.ProductInfoEntity;
 import com.yunlaiquan.admin.product.service.ProductInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -27,7 +29,7 @@ import com.yunlaiquan.utils.R;
  */
 @RestController
 @RequestMapping("productinfo")
-public class ProductInfoController {
+public class ProductInfoController extends AbstractController {
 	@Autowired
 	private ProductInfoService productInfoService;
 	
@@ -66,6 +68,10 @@ public class ProductInfoController {
 	@RequestMapping("/save")
 	@RequiresPermissions("productinfo:save")
 	public R save(@RequestBody ProductInfoEntity productInfo){
+
+		productInfo.setCreationTime(new Date());
+		productInfo.setCreatorName(getUser().getUsername());
+		productInfo.setCreatorId(getUserId());
 		productInfoService.save(productInfo);
 		
 		return R.ok();

@@ -3,7 +3,7 @@
 
 <mapper namespace="com.yunlaiquan.admin.product.dao.ProductInfoDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.yunlaiquan.admin.product.entity.ProductInfoEntity" id="productInfoMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
@@ -17,12 +17,12 @@
         <result property="updateTime" column="update_time"/>
         <result property="creatorId" column="creator_id"/>
         <result property="creatorName" column="creator_name"/>
-        <result property="updatorId" column="updator_id"/>
-        <result property="updatorName" column="updator_name"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateName" column="update_name"/>
     </resultMap>
 
-	<select id="queryObject" resultType="com.yunlaiquan.admin.product.entity.ProductInfoEntity">
-		select
+    <select id="queryObject" resultType="com.yunlaiquan.admin.product.entity.ProductInfoEntity">
+		          select
 					`id`, 
 					`name`, 
 					`amount_show`, 
@@ -35,46 +35,49 @@
 					`update_time`, 
 					`creator_id`, 
 					`creator_name`, 
-					`updator_id`, 
-					`updator_name`
-				from product_info where id = #{value}
+					`update_id`, 
+					`update_name`
+				from
+				product_info
+				where id = #{value}
 	</select>
 
-	<select id="queryList" resultType="com.yunlaiquan.admin.product.entity.ProductInfoEntity">
-		select
-		            `id`, 
-		            `name`, 
-		            `amount_show`, 
-		            `amount`, 
-		            `brand_id`, 
-		            `brand_name`, 
-		            `bucket_type`, 
-		            `delivery_fee`, 
-		            `creation_time`, 
-		            `update_time`, 
-		            `creator_id`, 
-		            `creator_name`, 
-		            `updator_id`, 
-		            `updator_name`
-				from product_info
+    <select id="queryList" resultType="com.yunlaiquan.admin.product.entity.ProductInfoEntity">
+        select
+        `id`,
+        `name`,
+        `amount_show`,
+        `amount`,
+        `brand_id`,
+        `brand_name`,
+        `bucket_type`,
+        `delivery_fee`,
+        `creation_time`,
+        `update_time`,
+        `creator_id`,
+        `creator_name`,
+        `update_id`,
+        `update_name`
+        from product_info
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
             </when>
-			<otherwise>
+            <otherwise>
                 order by id desc
-			</otherwise>
+            </otherwise>
         </choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
-	</select>
-	
- 	<select id="queryTotal" resultType="int">
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
 		select count(*) from product_info 
 	</select>
-	 
-	<insert id="save" parameterType="com.yunlaiquan.admin.product.entity.ProductInfoEntity" useGeneratedKeys="true" keyProperty="id">
+
+    <insert id="save" parameterType="com.yunlaiquan.admin.product.entity.ProductInfoEntity" useGeneratedKeys="true"
+            keyProperty="id">
 		insert into product_info
 		(
 			`name`, 
@@ -88,8 +91,8 @@
 			`update_time`, 
 			`creator_id`, 
 			`creator_name`, 
-			`updator_id`, 
-			`updator_name`
+			`update_id`, 
+			`update_name`
 		)
 		values
 		(
@@ -104,40 +107,40 @@
 			#{updateTime}, 
 			#{creatorId}, 
 			#{creatorName}, 
-			#{updatorId}, 
-			#{updatorName}
+			#{updateId}, 
+			#{updateName}
 		)
 	</insert>
-	 
-	<update id="update" parameterType="com.yunlaiquan.admin.product.entity.ProductInfoEntity">
-		update product_info 
-		<set>
-			<if test="name != null">`name` = #{name}, </if>
-			<if test="amountShow != null">`amount_show` = #{amountShow}, </if>
-			<if test="amount != null">`amount` = #{amount}, </if>
-			<if test="brandId != null">`brand_id` = #{brandId}, </if>
-			<if test="brandName != null">`brand_name` = #{brandName}, </if>
-			<if test="bucketType != null">`bucket_type` = #{bucketType}, </if>
-			<if test="deliveryFee != null">`delivery_fee` = #{deliveryFee}, </if>
-			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
-			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
-			<if test="creatorId != null">`creator_id` = #{creatorId}, </if>
-			<if test="creatorName != null">`creator_name` = #{creatorName}, </if>
-			<if test="updatorId != null">`updator_id` = #{updatorId}, </if>
-			<if test="updatorName != null">`updator_name` = #{updatorName}</if>
-		</set>
-		where id = #{id}
-	</update>
-	
-	<delete id="delete">
+
+    <update id="update" parameterType="com.yunlaiquan.admin.product.entity.ProductInfoEntity">
+        update product_info
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="amountShow != null">`amount_show` = #{amountShow},</if>
+            <if test="amount != null">`amount` = #{amount},</if>
+            <if test="brandId != null">`brand_id` = #{brandId},</if>
+            <if test="brandName != null">`brand_name` = #{brandName},</if>
+            <if test="bucketType != null">`bucket_type` = #{bucketType},</if>
+            <if test="deliveryFee != null">`delivery_fee` = #{deliveryFee},</if>
+            <if test="creationTime != null">`creation_time` = #{creationTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="creatorId != null">`creator_id` = #{creatorId},</if>
+            <if test="creatorName != null">`creator_name` = #{creatorName},</if>
+            <if test="updateId != null">`update_id` = #{updateId},</if>
+            <if test="updateName != null">`update_name` = #{updateName}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
 		delete from product_info where id = #{value}
 	</delete>
-	
-	<delete id="deleteBatch">
-		delete from product_info where id in 
-		<foreach item="id" collection="array" open="(" separator="," close=")">
-			#{id}
-		</foreach>
-	</delete>
+
+    <delete id="deleteBatch">
+        delete from product_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 
 </mapper>
