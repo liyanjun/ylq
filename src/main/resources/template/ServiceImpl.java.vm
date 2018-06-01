@@ -20,7 +20,7 @@ public class ${className}ServiceImpl implements ${className}Service {
 	
 	@Override
 	public ${className}Entity queryObject(${pk.attrType} ${pk.attrname}){
-		return ${classname}Dao.queryObject(${pk.attrname});
+		return ${classname}Dao.queryObject(${pk.attrname},false);
 	}
 	
 	@Override
