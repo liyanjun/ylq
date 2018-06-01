@@ -5,6 +5,7 @@ import com.yunlaiquan.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunlaiquan.admin.delivery.service.DeliveryEndpointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 
 @Service("deliveryEndpointService")
+@Transactional(rollbackFor = Exception.class)
 public class DeliveryEndpointServiceImpl implements DeliveryEndpointService {
 	@Autowired
 	private DeliveryEndpointDao deliveryEndpointDao;

@@ -2,6 +2,7 @@ package com.yunlaiquan.admin.product.service;
 
 
 import com.yunlaiquan.admin.product.entity.ProductInfoEntity;
+import com.yunlaiquan.admin.product.entity.ProductInfoVO;
 
 import java.util.List;
 import java.util.Map;
@@ -15,15 +16,15 @@ import java.util.Map;
  */
 public interface ProductInfoService {
 	
-	ProductInfoEntity queryObject(Integer id);
+	ProductInfoVO queryObject(Integer id);
 	
 	List<ProductInfoEntity> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);
 	
-	void save(ProductInfoEntity productInfo);
+	void save(ProductInfoVO productInfoVO);
 	
-	void update(ProductInfoEntity productInfo);
+	void update(ProductInfoVO productInfoVO);
 	
 	void delete(Integer id);
 	

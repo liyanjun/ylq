@@ -24,6 +24,10 @@ public class ProductInfoEntity implements Serializable {
      * 设置：商品名称
      */
 	private String name;
+	/**
+	 * 商品主图
+	 */
+	private String img;
     /**
      * 设置：标价
      */
@@ -97,6 +101,23 @@ public class ProductInfoEntity implements Serializable {
 	public String getName() {
 		return name;
 	}
+
+	/**
+	 * 商品主图
+	 * @return
+	 */
+	public String getImg() {
+		return img;
+	}
+
+	/**
+	 * 商品主图
+	 * @return
+	 */
+	public void setImg(String img) {
+		this.img = img;
+	}
+
 	/**
 	 * 设置：标价
 	 */

@@ -7,6 +7,7 @@
     <resultMap type="com.yunlaiquan.admin.product.entity.ProductInfoEntity" id="productInfoMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
+        <result property="img" column="img"/>
         <result property="amountShow" column="amount_show"/>
         <result property="amount" column="amount"/>
         <result property="brandId" column="brand_id"/>
@@ -24,7 +25,8 @@
     <select id="queryObject" resultType="com.yunlaiquan.admin.product.entity.ProductInfoEntity">
 		          select
 					`id`, 
-					`name`, 
+					`name`,
+					`img`,
 					`amount_show`, 
 					`amount`, 
 					`brand_id`, 
@@ -46,6 +48,7 @@
         select
         `id`,
         `name`,
+        `img`,
         `amount_show`,
         `amount`,
         `brand_id`,
@@ -80,7 +83,8 @@
             keyProperty="id">
 		insert into product_info
 		(
-			`name`, 
+			`name`,
+			`img`,
 			`amount_show`, 
 			`amount`, 
 			`brand_id`, 
@@ -96,7 +100,8 @@
 		)
 		values
 		(
-			#{name}, 
+			#{name},
+			#{img},
 			#{amountShow}, 
 			#{amount}, 
 			#{brandId}, 
@@ -116,6 +121,7 @@
         update product_info
         <set>
             <if test="name != null">`name` = #{name},</if>
+            <if test="img != null">`img` = #{img},</if>
             <if test="amountShow != null">`amount_show` = #{amountShow},</if>
             <if test="amount != null">`amount` = #{amount},</if>
             <if test="brandId != null">`brand_id` = #{brandId},</if>

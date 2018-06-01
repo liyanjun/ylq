@@ -16,6 +16,7 @@ import com.yunlaiquan.utils.validator.group.AliyunGroup;
 import com.yunlaiquan.utils.validator.group.QcloudGroup;
 import com.yunlaiquan.utils.validator.group.QiniuGroup;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -124,6 +125,28 @@ public class SysOssController {
 		sysOssService.save(ossEntity);
 
 		return R.ok().put("url", url);
+	}
+
+	/**
+	 * 富文本编辑器上传文件
+	 */
+	@RequestMapping("/editor/upload")
+	@RequiresPermissions("sys:oss:all")
+	public R editorUpload(@RequestParam("file") MultipartFile file) throws Exception {
+		if (file.isEmpty()) {
+			throw new RRException("上传文件不能为空");
+		}
+
+		//上传文件
+		String url = OSSFactory.build().upload(file.getBytes());
+
+		//保存文件信息
+		SysOssEntity ossEntity = new SysOssEntity();
+		ossEntity.setUrl(url);
+		ossEntity.setCreateDate(new Date());
+		sysOssService.save(ossEntity);
+
+		return R.ok().put("errno", 0).put("data",Collections.singleton(url));
 	}
 
 

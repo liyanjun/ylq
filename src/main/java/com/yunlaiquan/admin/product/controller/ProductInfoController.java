@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.yunlaiquan.admin.AbstractController;
 import com.yunlaiquan.admin.product.entity.ProductInfoEntity;
+import com.yunlaiquan.admin.product.entity.ProductInfoVO;
 import com.yunlaiquan.admin.product.service.ProductInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +58,9 @@ public class ProductInfoController extends AbstractController {
 	@RequestMapping("/info/{id}")
 	@RequiresPermissions("productinfo:info")
 	public R info(@PathVariable("id") Integer id){
-		ProductInfoEntity productInfo = productInfoService.queryObject(id);
+		ProductInfoVO productInfoVO = productInfoService.queryObject(id);
 		
-		return R.ok().put("productInfo", productInfo);
+		return R.ok().put("productInfo", productInfoVO);
 	}
 	
 	/**
@@ -67,12 +68,13 @@ public class ProductInfoController extends AbstractController {
 	 */
 	@RequestMapping("/save")
 	@RequiresPermissions("productinfo:save")
-	public R save(@RequestBody ProductInfoEntity productInfo){
-
-		productInfo.setCreationTime(new Date());
-		productInfo.setCreatorName(getUser().getUsername());
-		productInfo.setCreatorId(getUserId());
-		productInfoService.save(productInfo);
+	public R save(@RequestBody ProductInfoVO productInfoVO){
+		ProductInfoEntity productInfoEntity = productInfoVO.getProductInfoEntity();
+		productInfoEntity.setCreationTime(new Date());
+		productInfoEntity.setCreatorName(getUser().getUsername());
+		productInfoEntity.setCreatorId(getUserId());
+		productInfoVO.setProductInfoEntity(productInfoEntity);
+		productInfoService.save(productInfoVO);
 		
 		return R.ok();
 	}
@@ -82,8 +84,8 @@ public class ProductInfoController extends AbstractController {
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("productinfo:update")
-	public R update(@RequestBody ProductInfoEntity productInfo){
-		productInfoService.update(productInfo);
+	public R update(@RequestBody ProductInfoVO productInfoVO){
+		productInfoService.update(productInfoVO);
 		
 		return R.ok();
 	}
