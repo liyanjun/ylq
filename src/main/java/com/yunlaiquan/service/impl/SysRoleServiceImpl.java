@@ -39,7 +39,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 
 	@Override
 	public SysRoleEntity queryObject(Long roleId) {
-		return sysRoleDao.queryObject(roleId);
+		return sysRoleDao.queryObject(roleId, false);
 	}
 
 	@Override

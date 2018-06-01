@@ -17,7 +17,7 @@ public class ScheduleJobLogServiceImpl implements ScheduleJobLogService {
 	
 	@Override
 	public ScheduleJobLogEntity queryObject(Long jobId) {
-		return scheduleJobLogDao.queryObject(jobId);
+		return scheduleJobLogDao.queryObject(jobId, false);
 	}
 
 	@Override

@@ -16,7 +16,8 @@
 			`$column.columnName`#if($velocityCount != $columns.size()), #end
 
 		#end
-		from ${tableName} where ${pk.columnName} = #{value}
+		from ${tableName} where ${pk.columnName} = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
 	</select>
 
 	<select id="queryList" resultType="${package}.entity.${className}Entity">

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunlaiquan.admin.product.dao.ProductStockDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.yunlaiquan.admin.product.entity.ProductStockEntity" id="productStockMap">
+        <result property="id" column="id"/>
+        <result property="productInfoId" column="product_info_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="deliveryEndpointId" column="delivery_endpoint_id"/>
+        <result property="deliveryName" column="delivery_name"/>
+        <result property="count" column="count"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.yunlaiquan.admin.product.entity.ProductStockEntity">
+        select
+        `id`,
+        `product_info_id`,
+        `product_name`,
+        `delivery_endpoint_id`,
+        `delivery_name`,
+        `count`
+        from product_stock where id = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
+    </select>
+
+    <select id="queryList" resultType="com.yunlaiquan.admin.product.entity.ProductStockEntity">
+        select
+        `id`,
+        `product_info_id`,
+        `product_name`,
+        `delivery_endpoint_id`,
+        `delivery_name`,
+        `count`
+        from product_stock
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+		select count(*) from product_stock 
+	</select>
+
+    <insert id="save" parameterType="com.yunlaiquan.admin.product.entity.ProductStockEntity" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into product_stock
+		(
+			`product_info_id`,
+			`product_name`,
+			`delivery_endpoint_id`,
+			`delivery_name`,
+			`count`
+		)
+		values
+		(
+			#{productInfoId},
+			#{productName},
+			#{deliveryEndpointId},
+			#{deliveryName},
+			#{count}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.yunlaiquan.admin.product.entity.ProductStockEntity">
+        update product_stock
+        <set>
+            <if test="productInfoId != null">`product_info_id` = #{productInfoId},</if>
+            <if test="productName != null">`product_name` = #{productName},</if>
+            <if test="deliveryEndpointId != null">`delivery_endpoint_id` = #{deliveryEndpointId},</if>
+            <if test="deliveryName != null">`delivery_name` = #{deliveryName},</if>
+            <if test="count != null">`count` = #{count}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="addStock" parameterType="com.yunlaiquan.admin.product.entity.ProductStockEntity">
+        update product_stock
+        <set>
+            `count` = 'count' + #{countAdd}
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from product_stock where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from product_stock where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

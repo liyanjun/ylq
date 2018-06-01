@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public UserEntity queryObject(Long userId){
-		return userDao.queryObject(userId);
+		return userDao.queryObject(userId, false);
 	}
 	
 	@Override

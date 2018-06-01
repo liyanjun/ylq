@@ -49,7 +49,7 @@ public class SysConfigServiceImpl implements SysConfigService {
 
 	@Override
 	public SysConfigEntity queryObject(Long id) {
-		return sysConfigDao.queryObject(id);
+		return sysConfigDao.queryObject(id, false);
 	}
 
 	@Override

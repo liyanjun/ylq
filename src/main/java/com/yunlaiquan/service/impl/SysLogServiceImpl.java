@@ -18,7 +18,7 @@ public class SysLogServiceImpl implements SysLogService {
 	
 	@Override
 	public SysLogEntity queryObject(Long id){
-		return sysLogDao.queryObject(id);
+		return sysLogDao.queryObject(id, false);
 	}
 	
 	@Override

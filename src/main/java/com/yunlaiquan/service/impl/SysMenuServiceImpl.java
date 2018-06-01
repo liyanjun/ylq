@@ -84,7 +84,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	
 	@Override
 	public SysMenuEntity queryObject(Long menuId) {
-		return sysMenuDao.queryObject(menuId);
+		return sysMenuDao.queryObject(menuId, false);
 	}
 
 	@Override

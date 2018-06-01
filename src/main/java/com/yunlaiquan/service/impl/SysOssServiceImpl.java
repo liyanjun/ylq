@@ -19,7 +19,7 @@ public class SysOssServiceImpl implements SysOssService {
 	
 	@Override
 	public SysOssEntity queryObject(Long id){
-		return sysOssDao.queryObject(id);
+		return sysOssDao.queryObject(id, false);
 	}
 	
 	@Override

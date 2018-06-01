@@ -54,7 +54,7 @@ public class SysUserServiceImpl implements SysUserService {
 	
 	@Override
 	public SysUserEntity queryObject(Long userId) {
-		return sysUserDao.queryObject(userId);
+		return sysUserDao.queryObject(userId, false);
 	}
 
 	@Override

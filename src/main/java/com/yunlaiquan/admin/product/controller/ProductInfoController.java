@@ -85,6 +85,11 @@ public class ProductInfoController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("productinfo:update")
 	public R update(@RequestBody ProductInfoVO productInfoVO){
+		ProductInfoEntity productInfoEntity = productInfoVO.getProductInfoEntity();
+		productInfoEntity.setUpdateTime(new Date());
+		productInfoEntity.setUpdateName(getUser().getUsername());
+		productInfoEntity.setUpdateId(getUserId());
+		productInfoVO.setProductInfoEntity(productInfoEntity);
 		productInfoService.update(productInfoVO);
 		
 		return R.ok();
