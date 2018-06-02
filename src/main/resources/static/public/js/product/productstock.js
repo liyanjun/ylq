@@ -59,7 +59,7 @@ var vm = new Vue({
 			}
 			vm.showList = false;
             vm.title = "修改";
-            
+            $("#toFlow").attr("href","productstockflow.html?"+id);
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {

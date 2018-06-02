@@ -71,25 +71,25 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">广告轮播图1</div>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" v-model="productInfo.banner1" placeholder="广告轮播图1"/>
+                    <input type="text" class="form-control" v-model="productInfo.banner1" placeholder="广告轮播图1"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">广告轮播图2</div>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" v-model="productInfo.banner2" placeholder="广告轮播图2"/>
+                    <input type="text" class="form-control" v-model="productInfo.banner2" placeholder="广告轮播图2"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">广告轮播图3</div>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" v-model="productInfo.banner3" placeholder="广告轮播图3"/>
+                    <input type="text" class="form-control" v-model="productInfo.banner3" placeholder="广告轮播图3"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">广告轮播图4</div>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" v-model="productInfo.banner4" placeholder="广告轮播图4"/>
+                    <input type="text" class="form-control" v-model="productInfo.banner4" placeholder="广告轮播图4"/>
                 </div>
             </div>
             <div class="form-group">
@@ -110,6 +110,17 @@
                     </label>
                     <label class="radio-inline">
                         <input type="radio" name="bucketType" value="20" v-model="productInfo.bucketType"/> 可回收桶
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">支持一键送水</div>
+                <div class="col-sm-10">
+                    <label class="radio-inline">
+                        <input type="radio" name="isQuick" value="10" v-model="productInfo.isQuick"/> 是
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="isQuick" value="20" v-model="productInfo.isQuick"/> 否
                     </label>
                 </div>
             </div>

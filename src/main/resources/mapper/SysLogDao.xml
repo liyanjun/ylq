@@ -4,7 +4,8 @@
 <mapper namespace="com.yunlaiquan.dao.SysLogDao">
 
 	<select id="queryObject" resultType="com.yunlaiquan.entity.SysLogEntity">
-		select * from sys_log where id = #{value}
+		select * from sys_log where id = #{id}
+		<if test="isLock != null and isLock == true">for update</if>
 	</select>
 
 	<select id="queryList" resultType="com.yunlaiquan.entity.SysLogEntity">

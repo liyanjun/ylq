@@ -4,7 +4,8 @@
 <mapper namespace="com.yunlaiquan.dao.SysRoleDao">
 
 	<select id="queryObject" resultType="com.yunlaiquan.entity.SysRoleEntity">
-		select * from sys_role where role_id = #{value}
+		select * from sys_role where id = #{id}
+		<if test="isLock != null and isLock == true">for update</if>
 	</select>
 	
 	<select id="queryList" resultType="com.yunlaiquan.entity.SysRoleEntity">

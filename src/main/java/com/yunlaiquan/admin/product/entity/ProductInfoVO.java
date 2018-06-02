@@ -221,4 +221,12 @@ public class ProductInfoVO implements Serializable {
     public void setBanner4(String banner4) {
         this.banner4 = banner4;
     }
+
+    public Integer getIsQuick() {
+        return productInfoEntity.getIsQuick();
+    }
+
+    public void setIsQuick(Integer isQuick) {
+        productInfoEntity.setIsQuick(isQuick);
+    }
 }

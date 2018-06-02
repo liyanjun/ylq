@@ -2,6 +2,7 @@ package com.yunlaiquan.admin.product.service;
 
 
 import com.yunlaiquan.admin.product.entity.ProductStockEntity;
+import com.yunlaiquan.entity.SysUserEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -29,5 +30,5 @@ public interface ProductStockService {
 	
 	void deleteBatch(Long[] ids);
 
-    void addStock(ProductStockEntity productStock);
+    void addStock(ProductStockEntity productStock, SysUserEntity user);
 }

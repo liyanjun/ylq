@@ -78,6 +78,11 @@ public class ProductInfoEntity implements Serializable {
 	private String updateName;
 
 	/**
+	 * 是否是一键送水产品，10：是，20：不是
+	 */
+	private Integer isQuick;
+
+	/**
 	 * 设置：主键ID
 	 */
 	public void setId(Long id) {
@@ -261,5 +266,13 @@ public class ProductInfoEntity implements Serializable {
 	 */
 	public String getUpdateName() {
 		return updateName;
+	}
+
+	public Integer getIsQuick() {
+		return isQuick;
+	}
+
+	public void setIsQuick(Integer isQuick) {
+		this.isQuick = isQuick;
 	}
 }

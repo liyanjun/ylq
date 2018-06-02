@@ -14,6 +14,7 @@
         <result property="brandName" column="brand_name"/>
         <result property="bucketType" column="bucket_type"/>
         <result property="deliveryFee" column="delivery_fee"/>
+        <result property="isQuick" column="is_quick"/>
         <result property="creationTime" column="creation_time"/>
         <result property="updateTime" column="update_time"/>
         <result property="creatorId" column="creator_id"/>
@@ -32,7 +33,8 @@
 					`brand_id`, 
 					`brand_name`, 
 					`bucket_type`, 
-					`delivery_fee`, 
+					`delivery_fee`,
+					`is_quick`,
 					`creation_time`, 
 					`update_time`, 
 					`creator_id`, 
@@ -41,7 +43,8 @@
 					`update_name`
 				from
 				product_info
-				where id = #{value}
+				where id = #{id}
+                <if test="isLock != null and isLock == true">for update</if>
 	</select>
 
     <select id="queryList" resultType="com.yunlaiquan.admin.product.entity.ProductInfoEntity">
@@ -55,6 +58,7 @@
         `brand_name`,
         `bucket_type`,
         `delivery_fee`,
+        `is_quick`,
         `creation_time`,
         `update_time`,
         `creator_id`,
@@ -90,7 +94,8 @@
 			`brand_id`, 
 			`brand_name`, 
 			`bucket_type`, 
-			`delivery_fee`, 
+			`delivery_fee`,
+			`is_quick`,
 			`creation_time`, 
 			`update_time`, 
 			`creator_id`, 
@@ -107,8 +112,9 @@
 			#{brandId}, 
 			#{brandName}, 
 			#{bucketType}, 
-			#{deliveryFee}, 
-			#{creationTime}, 
+			#{deliveryFee},
+			#{isQuick},
+			#{creationTime},
 			#{updateTime}, 
 			#{creatorId}, 
 			#{creatorName}, 
@@ -128,6 +134,7 @@
             <if test="brandName != null">`brand_name` = #{brandName},</if>
             <if test="bucketType != null">`bucket_type` = #{bucketType},</if>
             <if test="deliveryFee != null">`delivery_fee` = #{deliveryFee},</if>
+            <if test="isQuick != null">`is_quick` = #{isQuick},</if>
             <if test="creationTime != null">`creation_time` = #{creationTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
             <if test="creatorId != null">`creator_id` = #{creatorId},</if>

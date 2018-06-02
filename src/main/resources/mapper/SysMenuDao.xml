@@ -4,7 +4,8 @@
 <mapper namespace="com.yunlaiquan.dao.SysMenuDao">
 
 	<select id="queryObject" resultType="com.yunlaiquan.entity.SysMenuEntity">
-		select * from sys_menu where menu_id = #{value}
+		select * from sys_menu where menu_id = #{id}
+		<if test="isLock != null and isLock == true">for update</if>
 	</select>
 	
 	<insert id="save" parameterType="com.yunlaiquan.entity.SysMenuEntity">

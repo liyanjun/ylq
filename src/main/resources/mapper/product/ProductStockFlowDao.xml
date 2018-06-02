@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunlaiquan.admin.product.dao.ProductStockFlowDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.yunlaiquan.admin.product.entity.ProductStockFlowEntity" id="productStockFlowMap">
+        <result property="id" column="id"/>
+        <result property="productStockId" column="product_stock_id"/>
+        <result property="count" column="count"/>
+        <result property="type" column="type"/>
+        <result property="beforeCount" column="before_count"/>
+        <result property="afterCount" column="after_count"/>
+        <result property="creationTime" column="creation_time"/>
+        <result property="opreator" column="opreator"/>
+        <result property="opreatorId" column="opreator_id"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.yunlaiquan.admin.product.entity.ProductStockFlowEntity">
+		select
+					`id`, 
+					`product_stock_id`,
+					`count`,
+					`type`, 
+					`before_count`, 
+					`after_count`, 
+					`creation_time`, 
+					`opreator`, 
+					`opreator_id`
+				from product_stock_flow where id = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
+	</select>
+
+	<select id="queryList" resultType="com.yunlaiquan.admin.product.entity.ProductStockFlowEntity">
+		select
+		            `id`, 
+		            `product_stock_id`,
+		            `count`,
+		            `type`, 
+		            `before_count`, 
+		            `after_count`, 
+		            `creation_time`, 
+		            `opreator`, 
+		            `opreator_id`
+				from product_stock_flow
+		<where>
+			<if test="productStockId != null">
+				and `product_stock_id` = #{productStockId}
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from product_stock_flow 
+	</select>
+	 
+	<insert id="save" parameterType="com.yunlaiquan.admin.product.entity.ProductStockFlowEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into product_stock_flow
+		(
+			`product_stock_id`,
+			`count`,
+			`type`, 
+			`before_count`, 
+			`after_count`, 
+			`creation_time`, 
+			`opreator`, 
+			`opreator_id`
+		)
+		values
+		(
+			#{productStockId},
+			#{count},
+			#{type}, 
+			#{beforeCount}, 
+			#{afterCount}, 
+			#{creationTime}, 
+			#{opreator}, 
+			#{opreatorId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunlaiquan.admin.product.entity.ProductStockFlowEntity">
+		update product_stock_flow 
+		<set>
+			<if test="productStockId != null">`product_stock_id` = #{productStockId}, </if>
+			<if test="count != null">`count` = #{count}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="beforeCount != null">`before_count` = #{beforeCount}, </if>
+			<if test="afterCount != null">`after_count` = #{afterCount}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="opreator != null">`opreator` = #{opreator}, </if>
+			<if test="opreatorId != null">`opreator_id` = #{opreatorId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from product_stock_flow where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from product_stock_flow where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -137,6 +137,17 @@ $(function () {
                     return value + '元';
                 }
             },
+            {
+                label: '一键送水',
+                name: 'isQuick',
+                index: 'isQuick',
+                width: 80,
+                formatter: function (value, options, row) {
+                    return value === 10 ?
+                        '是' :
+                        '否';
+                }
+            },
             {label: '创建时间', name: 'creationTime', index: 'creation_time', width: 120},
             {label: '最后更新时间', name: 'updateTime', index: 'update_time', width: 120}
         ],

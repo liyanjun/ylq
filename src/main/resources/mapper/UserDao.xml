@@ -21,7 +21,8 @@
 	</insert>
 
 	<select id="queryObject" resultType="com.yunlaiquan.entity.UserEntity">
-		select * from tb_user where user_id = #{value}
+		select * from tb_user where id = #{id}
+		<if test="isLock != null and isLock == true">for update</if>
 	</select>
 
 	<select id="queryByMobile" resultType="com.yunlaiquan.entity.UserEntity">

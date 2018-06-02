@@ -17,7 +17,8 @@
 					`banner`, 
 					`content`, 
 					`product_info_id`
-				from product_detail where id = #{value}
+				from product_detail where id = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
 	</select>
     <select id="queryObjectByProductInfoId" resultType="com.yunlaiquan.admin.product.entity.ProductDetailEntity">
 		select

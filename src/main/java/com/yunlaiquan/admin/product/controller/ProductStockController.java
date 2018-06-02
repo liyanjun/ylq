@@ -67,7 +67,7 @@ public class ProductStockController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("productstock:update")
 	public R update(@RequestBody ProductStockEntity productStock){
-		productStockService.addStock(productStock);
+		productStockService.addStock(productStock,getUser());
 		
 		return R.ok();
 	}

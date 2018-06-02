@@ -4,7 +4,8 @@
 <mapper namespace="com.yunlaiquan.dao.TokenDao">
 
 	<select id="queryByUserId" resultType="com.yunlaiquan.entity.TokenEntity">
-		select * from tb_token where user_id = #{value}
+		select * from tb_token where id = #{id}
+		<if test="isLock != null and isLock == true">for update</if>
 	</select>
 
 	<select id="queryByToken" resultType="com.yunlaiquan.entity.TokenEntity">

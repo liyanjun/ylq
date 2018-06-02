@@ -15,7 +15,8 @@
 					`id`, 
 					`name`, 
 					`remark`
-				from product_brand where id = #{value}
+				from product_brand where id = #{id}
+		<if test="isLock != null and isLock == true">for update</if>
 	</select>
 
 	<select id="queryList" resultType="com.yunlaiquan.admin.product.entity.ProductBrandEntity">
