@@ -1,7 +1,7 @@
 package com.yunquanlai.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.yunquanlai.entity.ScheduleJobEntity;
+import com.yunquanlai.admin.system.entity.ScheduleJobEntity;
 import com.yunquanlai.utils.Constant.ScheduleStatus;
 import org.quartz.*;
 

@@ -1,9 +1,9 @@
 package com.yunquanlai.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.yunquanlai.entity.ScheduleJobEntity;
-import com.yunquanlai.entity.ScheduleJobLogEntity;
-import com.yunquanlai.service.ScheduleJobLogService;
+import com.yunquanlai.admin.system.entity.ScheduleJobEntity;
+import com.yunquanlai.admin.system.entity.ScheduleJobLogEntity;
+import com.yunquanlai.admin.system.service.ScheduleJobLogService;
 import org.apache.commons.lang.StringUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

@@ -1,8 +1,8 @@
 package com.yunquanlai.utils.shiro;
 
-import com.yunquanlai.entity.SysUserEntity;
-import com.yunquanlai.service.SysMenuService;
-import com.yunquanlai.service.SysUserService;
+import com.yunquanlai.admin.system.entity.SysUserEntity;
+import com.yunquanlai.admin.system.service.SysMenuService;
+import com.yunquanlai.admin.system.service.SysUserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;

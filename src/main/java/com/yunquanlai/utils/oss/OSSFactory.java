@@ -1,6 +1,6 @@
 package com.yunquanlai.utils.oss;
 
-import com.yunquanlai.service.SysConfigService;
+import com.yunquanlai.admin.system.service.SysConfigService;
 import com.yunquanlai.utils.ConfigConstant;
 import com.yunquanlai.utils.Constant;
 import com.yunquanlai.utils.SpringContextUtils;

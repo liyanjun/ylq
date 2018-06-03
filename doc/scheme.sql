@@ -84,8 +84,8 @@ DROP TABLE IF EXISTS `delivery_endpoint`;
 CREATE TABLE `delivery_endpoint` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `name` varchar(32) NOT NULL COMMENT '配送点名',
-  `location_x` decimal(20,2) NOT NULL COMMENT '配送点坐标x',
-  `location_y` decimal(20,2) NOT NULL COMMENT '配送点坐标y',
+  `location_x` decimal(20,10) NOT NULL COMMENT '配送点坐标x',
+  `location_y` decimal(20,10) NOT NULL COMMENT '配送点坐标y',
   `remark` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='配送点信息';

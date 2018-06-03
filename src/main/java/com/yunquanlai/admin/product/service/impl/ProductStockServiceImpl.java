@@ -5,7 +5,7 @@ import com.yunquanlai.admin.product.dao.ProductStockFlowDao;
 import com.yunquanlai.admin.product.entity.ProductStockEntity;
 import com.yunquanlai.admin.product.entity.ProductStockFlowEntity;
 import com.yunquanlai.admin.product.service.ProductStockService;
-import com.yunquanlai.entity.SysUserEntity;
+import com.yunquanlai.admin.system.entity.SysUserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -57,8 +57,7 @@ var vm = new Vue({
                 if (loc && loc.module == 'locationPicker') {//防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
                     vm.deliveryEndpoint.locationX = loc.latlng.lat;
                     vm.deliveryEndpoint.locationY = loc.latlng.lng;
-                    alert(vm.deliveryEndpoint.locationX);
-                    // console.log('location', loc);
+                    alert("已选择："+loc.poiaddress);
                 }
             }, false);
 		},

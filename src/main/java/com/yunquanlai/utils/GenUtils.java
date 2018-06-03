@@ -1,7 +1,7 @@
 package com.yunquanlai.utils;
 
-import com.yunquanlai.entity.ColumnEntity;
-import com.yunquanlai.entity.TableEntity;
+import com.yunquanlai.admin.system.entity.ColumnEntity;
+import com.yunquanlai.admin.system.entity.TableEntity;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;

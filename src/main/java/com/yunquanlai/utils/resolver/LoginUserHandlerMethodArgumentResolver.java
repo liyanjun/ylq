@@ -1,7 +1,7 @@
 package com.yunquanlai.utils.resolver;
 
-import com.yunquanlai.entity.UserEntity;
-import com.yunquanlai.service.UserService;
+import com.yunquanlai.admin.system.entity.UserEntity;
+import com.yunquanlai.admin.system.service.UserService;
 import com.yunquanlai.utils.annotation.LoginUser;
 import com.yunquanlai.utils.interceptor.AuthorizationInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;

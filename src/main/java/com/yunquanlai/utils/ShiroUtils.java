@@ -1,6 +1,6 @@
 package com.yunquanlai.utils;
 
-import com.yunquanlai.entity.SysUserEntity;
+import com.yunquanlai.admin.system.entity.SysUserEntity;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;

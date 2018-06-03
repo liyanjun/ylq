@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunquanlai.admin.system.dao.ScheduleJobLogDao">
+	<select id="queryObject" resultType="com.yunquanlai.admin.system.entity.ScheduleJobLogEntity" >
+		select * from schedule_job_log where id = #{id}
+		<if test="isLock != null and isLock == true">for update</if>
+	</select> 
+
+	<select id="queryList" resultType="com.yunquanlai.admin.system.entity.ScheduleJobLogEntity" >
+		select * from schedule_job_log 
+		<where>
+			<if test="jobId != null">
+				and job_id = #{jobId}
+			</if>
+		</where>
+		order by log_id desc 
+		<if test="offset != null and limit != null ">
+		limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(1) from schedule_job_log 
+		<where>
+			<if test="jobId != null">
+				and job_id = #{jobId}
+			</if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunquanlai.admin.system.entity.ScheduleJobLogEntity">
+		insert into schedule_job_log
+		(
+			`job_id`, 
+			`bean_name`, 
+			`method_name`, 
+			`params`, 
+			`status`, 
+			`error`, 
+			`times`, 
+			`create_time`
+		)
+		values
+		(
+			#{jobId}, 
+			#{beanName}, 
+			#{methodName}, 
+			#{params}, 
+			#{status}, 
+			#{error}, 
+			#{times}, 
+			#{createTime}
+		)
+	</insert>
+	
+</mapper>

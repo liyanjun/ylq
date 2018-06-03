@@ -1,7 +1,7 @@
 package com.yunquanlai.admin.delivery.dao;
 
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
-import com.yunquanlai.dao.BaseDao;
+import com.yunquanlai.admin.system.dao.BaseDao;
 
 /**
  * 配送点信息

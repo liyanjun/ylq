@@ -1,7 +1,7 @@
 package com.yunquanlai.admin.product.dao;
 
 import com.yunquanlai.admin.product.entity.ProductDetailEntity;
-import com.yunquanlai.dao.BaseDao;
+import com.yunquanlai.admin.system.dao.BaseDao;
 
 /**
  * @author liyanjun

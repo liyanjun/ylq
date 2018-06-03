@@ -1,7 +1,7 @@
 package com.yunquanlai.utils.interceptor;
 
-import com.yunquanlai.entity.TokenEntity;
-import com.yunquanlai.service.TokenService;
+import com.yunquanlai.admin.system.entity.TokenEntity;
+import com.yunquanlai.admin.system.service.TokenService;
 import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
 import org.apache.commons.lang.StringUtils;

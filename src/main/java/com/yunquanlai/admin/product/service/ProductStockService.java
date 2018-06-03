@@ -2,7 +2,7 @@ package com.yunquanlai.admin.product.service;
 
 
 import com.yunquanlai.admin.product.entity.ProductStockEntity;
-import com.yunquanlai.entity.SysUserEntity;
+import com.yunquanlai.admin.system.entity.SysUserEntity;
 
 import java.util.List;
 import java.util.Map;

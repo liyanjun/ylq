@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.yunquanlai.admin.AbstractController;
+import com.yunquanlai.admin.common.AbstractController;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.product.entity.ProductInfoVO;
 import com.yunquanlai.admin.product.service.ProductInfoService;

@@ -1,87 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>配送点信息</title>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
-<link rel="stylesheet" href="../public/css/bootstrap.min.css">
-<link rel="stylesheet" href="../public/css/font-awesome.min.css">
-<link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
-<link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
-<link rel="stylesheet" href="../public/css/main.css">
-<script src="../public/libs/jquery.min.js"></script>
-<script src="../public/plugins/layer/layer.js"></script>
-<script src="../public/libs/bootstrap.min.js"></script>
-<script src="../public/libs/vue.min.js"></script>
-<script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
-<script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
-<script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
-<script src="../public/js/common.js"></script>
-	<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+    <title>配送点信息</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" href="../public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
+    <link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" href="../public/css/main.css">
+    <script src="../public/libs/jquery.min.js"></script>
+    <script src="../public/plugins/layer/layer.js"></script>
+    <script src="../public/libs/bootstrap.min.js"></script>
+    <script src="../public/libs/vue.min.js"></script>
+    <script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
+    <script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+    <script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script src="../public/js/common.js"></script>
+    <script type="text/javascript"
+            src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
 </head>
-<body >
+<body>
 <div id="rrapp" v-cloak>
-	<div v-show="showList">
-		<div class="grid-btn">
-			<a v-if="hasPermission('deliveryendpoint:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
-			<a v-if="hasPermission('deliveryendpoint:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-			<a v-if="hasPermission('deliveryendpoint:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-		</div>
-	    <table id="jqGrid"></table>
-	    <div id="jqGridPager"></div>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <a v-if="hasPermission('deliveryendpoint:save')" class="btn btn-primary" @click="add"><i
+                    class="fa fa-plus"></i>&nbsp;新增</a>
+            <a v-if="hasPermission('deliveryendpoint:update')" class="btn btn-primary" @click="update"><i
+                    class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            <a v-if="hasPermission('deliveryendpoint:delete')" class="btn btn-primary" @click="del"><i
+                    class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
     </div>
-    
+
     <div v-show="!showList" class="panel panel-default">
-		<div class="panel-heading">{{title}}</div>
-		<form class="form-horizontal">
-											<div class="form-group">
-			   	<div class="col-sm-2 control-label">配送点名</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="deliveryEndpoint.name" placeholder="配送点名"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">配送点坐标x</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="deliveryEndpoint.locationX" placeholder="配送点坐标x"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">配送点坐标y</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="deliveryEndpoint.locationY" placeholder="配送点坐标y"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">备注</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="deliveryEndpoint.remark" placeholder="备注"/>
-			    </div>
-			</div>
-							<div class="form-group">
-				<div class="col-sm-2 control-label"></div> 
-				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
-				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
-			</div>
-		</form>
-		<div>
-			<iframe id="mapPage" width="100%" height="100%" frameborder=0
-					src="http://apis.map.qq.com/tools/locpicker?search=1&type=1&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
-			</iframe>
-			<!--<script>
-                window.addEventListener('message', function(event) {
-                    // 接收位置信息，用户选择确认位置点后选点组件会触发该事件，回传用户的位置信息
-                    var loc = event.data;
-                    if (loc && loc.module == 'locationPicker') {//防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
-                       // alert(loc.latlng.lat);
-                        console.log('location', loc);
-                    }
-                }, false);
-			</script>-->
-		</div>
-	</div>
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">配送点名</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="deliveryEndpoint.name" placeholder="配送点名"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">备注</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="deliveryEndpoint.remark" placeholder="备注"/>
+                </div>
+            </div>
+            <div style="margin-left: 45px;margin-bottom: 10px">
+                <iframe id="mapPage" width="600px" height="400px" frameborder=0
+                        src="http://apis.map.qq.com/tools/locpicker?search=1&type=1&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
+                </iframe>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+
+    </div>
 </div>
 
 <script src="../public/js/delivery/deliveryendpoint.js"></script>

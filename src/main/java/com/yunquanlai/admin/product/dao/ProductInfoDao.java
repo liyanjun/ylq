@@ -1,7 +1,7 @@
 package com.yunquanlai.admin.product.dao;
 
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
-import com.yunquanlai.dao.BaseDao;
+import com.yunquanlai.admin.system.dao.BaseDao;
 
 /**
  * 商品信息表表

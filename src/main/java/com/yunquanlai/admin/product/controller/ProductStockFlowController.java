@@ -3,7 +3,7 @@ package com.yunquanlai.admin.product.controller;
 import java.util.List;
 import java.util.Map;
 
-import com.yunquanlai.admin.AbstractController;
+import com.yunquanlai.admin.common.AbstractController;
 import com.yunquanlai.admin.product.entity.ProductStockFlowEntity;
 import com.yunquanlai.admin.product.service.ProductStockFlowService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
