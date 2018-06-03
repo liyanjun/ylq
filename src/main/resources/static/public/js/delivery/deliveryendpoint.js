@@ -7,7 +7,7 @@ $(function () {
 			{ label: '配送点名', name: 'name', index: 'name', width: 80 }, 			
 			{ label: '配送点坐标x', name: 'locationX', index: 'location_x', width: 80 }, 			
 			{ label: '配送点坐标y', name: 'locationY', index: 'location_y', width: 80 }, 			
-			{ label: '', name: 'remark', index: 'remark', width: 80 }			
+			{ label: '', name: '备注', index: 'remark', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -57,6 +57,7 @@ var vm = new Vue({
                 if (loc && loc.module == 'locationPicker') {//防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
                     vm.deliveryEndpoint.locationX = loc.latlng.lat;
                     vm.deliveryEndpoint.locationY = loc.latlng.lng;
+                    alert(vm.deliveryEndpoint.locationX);
                     // console.log('location', loc);
                 }
             }, false);
@@ -114,7 +115,7 @@ var vm = new Vue({
 			});
 		},
 		getInfo: function(id){
-			$.get("../deliveryendpoint/info/"+id, function(r){
+			$.get("../deliveryendpoint/info/"+id,{}, function(r){
                 vm.deliveryEndpoint = r.deliveryEndpoint;
             });
 		},
