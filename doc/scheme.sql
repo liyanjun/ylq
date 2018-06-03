@@ -15,6 +15,70 @@ Date: 2018-06-03 14:50:26
 
 SET FOREIGN_KEY_CHECKS=0;
 
+CREATE TABLE `user_info` (
+`id` int NOT NULL AUTO_INCREMENT,
+`username` varchar(32) NOT NULL COMMENT '用户名(从小程序过来是就是微信昵称)',
+`phone` varchar(32) NULL COMMENT '用户绑定手机号',
+`uid` varchar(64) NOT NULL COMMENT '用户微信 ID',
+`status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '用户状态：0：启用，1：禁用',
+`deposit_amount` decimal(20,2) NULL DEFAULT 0.00 COMMENT '总押金金额',
+`enable_deposit_amount` decimal(20,2) NULL DEFAULT 0.00 COMMENT '可用押金金额',
+`disable_deposit_amout` decimal(20,2) NULL DEFAULT 0.00 COMMENT '不可用押金金额',
+`empty_bucket_number` int(11) NULL DEFAULT 0 COMMENT '持有空桶数',
+`creation_time` datetime NOT NULL COMMENT '用户注册时间',
+PRIMARY KEY (`id`)
+)
+COMMENT='客户信息表'
+;
+
+CREATE TABLE `user_address` (
+`id` int NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+`location_x` decimal(20,2) NOT NULL COMMENT '地址坐标x值',
+`location_y` decimal(20,2) NOT NULL COMMENT '地址坐标y值',
+`address` varchar(256) NOT NULL COMMENT '地址描述',
+`name` varchar(32) NOT NULL COMMENT '收货人姓名',
+`phone` varchar(32) NOT NULL COMMENT '收货人电话',
+`user_info_id` int NOT NULL COMMENT '对应用户ID',
+PRIMARY KEY (`id`)
+)
+COMMENT='客户地址信息表'
+;
+
+CREATE TABLE `user_deposit` (
+`id` int NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+`user_info_id` int NOT NULL COMMENT '对应用户 ID',
+`deposit_amount` decimal(20,2) NOT NULL DEFAULT 0 COMMENT '押金总额',
+`enable_deposit_amount` decimal(20,2) NOT NULL DEFAULT 0 COMMENT '有效的押金',
+`disable_deposit_amount` decimal(20,2) NOT NULL DEFAULT 0 COMMENT '无效的押金（空桶没退回）',
+`empty_bucket_number` int NOT NULL DEFAULT 0 COMMENT '用户持有空桶数',
+PRIMARY KEY (`id`)
+)
+COMMENT='客户押金信息表'
+;
+
+CREATE TABLE `user_deposit_flow` (
+`id` int NOT NULL AUTO_INCREMENT,
+`type` tinyint(4) NOT NULL COMMENT '流水类型，101：押金充值，2：押金提现，3：归还空桶，4：订水（等价于获取空桶）',
+`before_deposit` varchar(512) NOT NULL COMMENT '流水前押金信息',
+`after_deposit` varchar(512) NOT NULL COMMENT '流水号押金信息',
+`user_info_id` int NOT NULL COMMENT '关联用户 ID',
+`creation_time` datetime NOT NULL COMMENT '流水时间',
+PRIMARY KEY (`id`)
+)
+COMMENT='客户押金流水信息表'
+;
+
+CREATE TABLE `user_withdraw_deposit` (
+`id` int NOT NULL COMMENT '主键 ID',
+`user_info_id` int NOT NULL COMMENT '对应用户 ID',
+`is_handle` tinyint(1) NOT NULL COMMENT '是否处理，0：未处理，1：已处理',
+`creation_time` datetime NULL COMMENT '创建时间',
+`handle_time` datetime NOT NULL COMMENT '处理时间',
+PRIMARY KEY (`id`)
+)
+COMMENT='客户押金提现申请表'
+;
+
 -- ----------------------------
 -- Table structure for delivery_count_info
 -- ----------------------------
