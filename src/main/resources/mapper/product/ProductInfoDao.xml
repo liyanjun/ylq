@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yunlaiquan.admin.product.dao.ProductInfoDao">
+<mapper namespace="com.yunquanlai.admin.product.dao.ProductInfoDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.yunlaiquan.admin.product.entity.ProductInfoEntity" id="productInfoMap">
+    <resultMap type="com.yunquanlai.admin.product.entity.ProductInfoEntity" id="productInfoMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="img" column="img"/>
@@ -23,7 +23,7 @@
         <result property="updateName" column="update_name"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.yunlaiquan.admin.product.entity.ProductInfoEntity">
+    <select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductInfoEntity">
 		          select
 					`id`, 
 					`name`,
@@ -47,7 +47,7 @@
                 <if test="isLock != null and isLock == true">for update</if>
 	</select>
 
-    <select id="queryList" resultType="com.yunlaiquan.admin.product.entity.ProductInfoEntity">
+    <select id="queryList" resultType="com.yunquanlai.admin.product.entity.ProductInfoEntity">
         select
         `id`,
         `name`,
@@ -83,7 +83,7 @@
 		select count(*) from product_info 
 	</select>
 
-    <insert id="save" parameterType="com.yunlaiquan.admin.product.entity.ProductInfoEntity" useGeneratedKeys="true"
+    <insert id="save" parameterType="com.yunquanlai.admin.product.entity.ProductInfoEntity" useGeneratedKeys="true"
             keyProperty="id">
 		insert into product_info
 		(
@@ -123,7 +123,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.yunlaiquan.admin.product.entity.ProductInfoEntity">
+    <update id="update" parameterType="com.yunquanlai.admin.product.entity.ProductInfoEntity">
         update product_info
         <set>
             <if test="name != null">`name` = #{name},</if>

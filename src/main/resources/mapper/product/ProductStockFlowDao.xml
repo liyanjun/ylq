@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yunlaiquan.admin.product.dao.ProductStockFlowDao">
+<mapper namespace="com.yunquanlai.admin.product.dao.ProductStockFlowDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.yunlaiquan.admin.product.entity.ProductStockFlowEntity" id="productStockFlowMap">
+    <resultMap type="com.yunquanlai.admin.product.entity.ProductStockFlowEntity" id="productStockFlowMap">
         <result property="id" column="id"/>
         <result property="productStockId" column="product_stock_id"/>
         <result property="count" column="count"/>
@@ -16,7 +16,7 @@
         <result property="opreatorId" column="opreator_id"/>
     </resultMap>
 
-	<select id="queryObject" resultType="com.yunlaiquan.admin.product.entity.ProductStockFlowEntity">
+	<select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductStockFlowEntity">
 		select
 					`id`, 
 					`product_stock_id`,
@@ -31,7 +31,7 @@
         <if test="isLock != null and isLock == true">for update</if>
 	</select>
 
-	<select id="queryList" resultType="com.yunlaiquan.admin.product.entity.ProductStockFlowEntity">
+	<select id="queryList" resultType="com.yunquanlai.admin.product.entity.ProductStockFlowEntity">
 		select
 		            `id`, 
 		            `product_stock_id`,
@@ -65,7 +65,7 @@
 		select count(*) from product_stock_flow 
 	</select>
 	 
-	<insert id="save" parameterType="com.yunlaiquan.admin.product.entity.ProductStockFlowEntity" useGeneratedKeys="true" keyProperty="id">
+	<insert id="save" parameterType="com.yunquanlai.admin.product.entity.ProductStockFlowEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into product_stock_flow
 		(
 			`product_stock_id`,
@@ -90,7 +90,7 @@
 		)
 	</insert>
 	 
-	<update id="update" parameterType="com.yunlaiquan.admin.product.entity.ProductStockFlowEntity">
+	<update id="update" parameterType="com.yunquanlai.admin.product.entity.ProductStockFlowEntity">
 		update product_stock_flow 
 		<set>
 			<if test="productStockId != null">`product_stock_id` = #{productStockId}, </if>

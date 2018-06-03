@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yunlaiquan.dao.ScheduleJobLogDao">
-	<select id="queryObject" resultType="com.yunlaiquan.entity.ScheduleJobLogEntity" >
+<mapper namespace="com.yunquanlai.dao.ScheduleJobLogDao">
+	<select id="queryObject" resultType="com.yunquanlai.entity.ScheduleJobLogEntity" >
 		select * from schedule_job_log where id = #{id}
 		<if test="isLock != null and isLock == true">for update</if>
 	</select> 
 
-	<select id="queryList" resultType="com.yunlaiquan.entity.ScheduleJobLogEntity" >
+	<select id="queryList" resultType="com.yunquanlai.entity.ScheduleJobLogEntity" >
 		select * from schedule_job_log 
 		<where>
 			<if test="jobId != null">
@@ -29,7 +29,7 @@
 		</where>
 	</select>
 	 
-	<insert id="save" parameterType="com.yunlaiquan.entity.ScheduleJobLogEntity">
+	<insert id="save" parameterType="com.yunquanlai.entity.ScheduleJobLogEntity">
 		insert into schedule_job_log
 		(
 			`job_id`, 

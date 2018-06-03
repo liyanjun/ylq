@@ -25,5 +25,5 @@ mybatis:
     mapperLocations: classpath:mapper/**/*.xml
     configLocation: classpath:mybatis.xml
 
-#logging.level.com.yunlaiquan=DEBUG
+#logging.level.com.yunquanlai=DEBUG
 

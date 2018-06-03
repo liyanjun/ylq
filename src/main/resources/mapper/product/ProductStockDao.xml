@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yunlaiquan.admin.product.dao.ProductStockDao">
+<mapper namespace="com.yunquanlai.admin.product.dao.ProductStockDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.yunlaiquan.admin.product.entity.ProductStockEntity" id="productStockMap">
+    <resultMap type="com.yunquanlai.admin.product.entity.ProductStockEntity" id="productStockMap">
         <result property="id" column="id"/>
         <result property="productInfoId" column="product_info_id"/>
         <result property="productName" column="product_name"/>
@@ -13,7 +13,7 @@
         <result property="count" column="count"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.yunlaiquan.admin.product.entity.ProductStockEntity">
+    <select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductStockEntity">
         select
         `id`,
         `product_info_id`,
@@ -25,7 +25,7 @@
         <if test="isLock != null and isLock == true">for update</if>
     </select>
 
-    <select id="queryList" resultType="com.yunlaiquan.admin.product.entity.ProductStockEntity">
+    <select id="queryList" resultType="com.yunquanlai.admin.product.entity.ProductStockEntity">
         select
         `id`,
         `product_info_id`,
@@ -51,7 +51,7 @@
 		select count(*) from product_stock 
 	</select>
 
-    <insert id="save" parameterType="com.yunlaiquan.admin.product.entity.ProductStockEntity" useGeneratedKeys="true"
+    <insert id="save" parameterType="com.yunquanlai.admin.product.entity.ProductStockEntity" useGeneratedKeys="true"
             keyProperty="id">
 		insert into product_stock
 		(
@@ -71,7 +71,7 @@
 		)
 	</insert>
 
-    <update id="update" parameterType="com.yunlaiquan.admin.product.entity.ProductStockEntity">
+    <update id="update" parameterType="com.yunquanlai.admin.product.entity.ProductStockEntity">
         update product_stock
         <set>
             <if test="productInfoId != null">`product_info_id` = #{productInfoId},</if>
@@ -83,7 +83,7 @@
         where id = #{id}
     </update>
 
-    <update id="addStock" parameterType="com.yunlaiquan.admin.product.entity.ProductStockEntity">
+    <update id="addStock" parameterType="com.yunquanlai.admin.product.entity.ProductStockEntity">
         update product_stock
         <set>
             `count` = 'count' + #{countAdd}

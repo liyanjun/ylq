@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yunlaiquan.dao.UserDao">
+<mapper namespace="com.yunquanlai.dao.UserDao">
 
-	<insert id="save" parameterType="com.yunlaiquan.entity.UserEntity" useGeneratedKeys="true" keyProperty="userId">
+	<insert id="save" parameterType="com.yunquanlai.entity.UserEntity" useGeneratedKeys="true" keyProperty="userId">
 		insert into tb_user
 		(
 			`username`,
@@ -20,12 +20,12 @@
 			)
 	</insert>
 
-	<select id="queryObject" resultType="com.yunlaiquan.entity.UserEntity">
+	<select id="queryObject" resultType="com.yunquanlai.entity.UserEntity">
 		select * from tb_user where id = #{id}
 		<if test="isLock != null and isLock == true">for update</if>
 	</select>
 
-	<select id="queryByMobile" resultType="com.yunlaiquan.entity.UserEntity">
+	<select id="queryByMobile" resultType="com.yunquanlai.entity.UserEntity">
 		select * from tb_user where mobile = #{value}
 	</select>
 

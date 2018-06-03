@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yunlaiquan.dao.ScheduleJobDao">
-	<select id="queryObject" resultType="com.yunlaiquan.entity.ScheduleJobEntity" >
+<mapper namespace="com.yunquanlai.dao.ScheduleJobDao">
+	<select id="queryObject" resultType="com.yunquanlai.entity.ScheduleJobEntity" >
 		select * from schedule_job where id = #{id}
 		<if test="isLock != null and isLock == true">for update</if>
 	</select> 
 
-	<select id="queryList" resultType="com.yunlaiquan.entity.ScheduleJobEntity" >
+	<select id="queryList" resultType="com.yunquanlai.entity.ScheduleJobEntity" >
 		select * from schedule_job
 		<where>
 			<if test="beanName != null and beanName.trim() != ''">
@@ -28,7 +28,7 @@
 		</where>
 	</select>
 	 
-	<insert id="save" parameterType="com.yunlaiquan.entity.ScheduleJobEntity" useGeneratedKeys="true" keyProperty="jobId">
+	<insert id="save" parameterType="com.yunquanlai.entity.ScheduleJobEntity" useGeneratedKeys="true" keyProperty="jobId">
 		insert into schedule_job
 		(
 			`bean_name`, 
@@ -51,7 +51,7 @@
 		)
 	</insert>
 	 
-	<update id="update" parameterType="com.yunlaiquan.entity.ScheduleJobEntity">
+	<update id="update" parameterType="com.yunquanlai.entity.ScheduleJobEntity">
 		update schedule_job 
 		<set> 
 			<if test="beanName != null">`bean_name` = #{beanName}, </if>
