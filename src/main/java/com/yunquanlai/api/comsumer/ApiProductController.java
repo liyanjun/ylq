@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  * @desc
  **/
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/client/api")
 @Api("商品接口")
 public class ApiProductController {
     @Autowired

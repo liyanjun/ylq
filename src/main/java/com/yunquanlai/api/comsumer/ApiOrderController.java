@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @desc
  **/
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/client/api")
 @Api("订单接口")
 public class ApiOrderController {
 
