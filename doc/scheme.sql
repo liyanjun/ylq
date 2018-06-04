@@ -614,3 +614,90 @@ CREATE TABLE `schedule_job_log` (
   PRIMARY KEY (`log_id`),
   KEY `job_id` (`job_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='定时任务日志';
+
+-- ----------------------------
+-- Table structure for user_address
+-- ----------------------------
+DROP TABLE IF EXISTS `user_address`;
+CREATE TABLE `user_address` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `location_x` decimal(20,2) NOT NULL COMMENT '地址坐标x值',
+  `location_y` decimal(20,2) NOT NULL COMMENT '地址坐标y值',
+  `address` varchar(256) NOT NULL COMMENT '地址描述',
+  `name` varchar(32) NOT NULL COMMENT '收货人姓名',
+  `phone` varchar(32) NOT NULL COMMENT '收货人电话',
+  `user_info_id` bigint(11) NOT NULL COMMENT '对应用户ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户地址信息表';
+
+-- ----------------------------
+-- Table structure for user_client_token
+-- ----------------------------
+DROP TABLE IF EXISTS `user_client_token`;
+CREATE TABLE `user_client_token` (
+  `id` bigint(20) NOT NULL,
+  `token` varchar(256) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `expire_time` datetime NOT NULL,
+  `creation_time` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for user_deposit
+-- ----------------------------
+DROP TABLE IF EXISTS `user_deposit`;
+CREATE TABLE `user_deposit` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `user_info_id` bigint(20) NOT NULL COMMENT '对应用户 ID',
+  `deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '押金总额',
+  `enable_deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '有效的押金',
+  `disable_deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '无效的押金（空桶没退回）',
+  `empty_bucket_number` int(11) NOT NULL DEFAULT '0' COMMENT '用户持有空桶数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户押金信息表';
+
+-- ----------------------------
+-- Table structure for user_deposit_flow
+-- ----------------------------
+DROP TABLE IF EXISTS `user_deposit_flow`;
+CREATE TABLE `user_deposit_flow` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `type` tinyint(4) NOT NULL COMMENT '流水类型，101：押金充值，2：押金提现，3：归还空桶，4：订水（等价于获取空桶）',
+  `before_deposit` varchar(512) NOT NULL COMMENT '流水前押金信息',
+  `after_deposit` varchar(512) NOT NULL COMMENT '流水号押金信息',
+  `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
+  `creation_time` datetime NOT NULL COMMENT '流水时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户押金流水信息表';
+
+-- ----------------------------
+-- Table structure for user_info
+-- ----------------------------
+DROP TABLE IF EXISTS `user_info`;
+CREATE TABLE `user_info` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username` varchar(32) NOT NULL COMMENT '用户名(从小程序过来是就是微信昵称)',
+  `phone` varchar(32) DEFAULT NULL COMMENT '用户绑定手机号',
+  `uid` varchar(64) NOT NULL COMMENT '用户微信 ID',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户状态：0：启用，1：禁用',
+  `deposit_amount` decimal(20,2) DEFAULT '0.00' COMMENT '总押金金额',
+  `enable_deposit_amount` decimal(20,2) DEFAULT '0.00' COMMENT '可用押金金额',
+  `disable_deposit_amout` decimal(20,2) DEFAULT '0.00' COMMENT '不可用押金金额',
+  `empty_bucket_number` int(11) DEFAULT '0' COMMENT '持有空桶数',
+  `creation_time` datetime NOT NULL COMMENT '用户注册时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户信息表';
+
+-- ----------------------------
+-- Table structure for user_withdraw_deposit
+-- ----------------------------
+DROP TABLE IF EXISTS `user_withdraw_deposit`;
+CREATE TABLE `user_withdraw_deposit` (
+  `id` bigint(20) NOT NULL COMMENT '主键 ID',
+  `user_info_id` bigint(20) NOT NULL COMMENT '对应用户 ID',
+  `is_handle` tinyint(1) NOT NULL COMMENT '是否处理，0：未处理，1：已处理',
+  `creation_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `handle_time` datetime NOT NULL COMMENT '处理时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户押金提现申请表';
