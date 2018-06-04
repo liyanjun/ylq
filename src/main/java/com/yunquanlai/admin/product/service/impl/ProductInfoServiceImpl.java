@@ -98,5 +98,10 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 	public void deleteBatch(Integer[] ids){
 		productInfoDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public List<ProductInfoEntity> queryListForClient(Map<String, Object> map) {
+		return productInfoDao.queryListForClient(map);
+	}
+
 }

@@ -2,6 +2,8 @@ package com.yunquanlai.utils.resolver;
 
 import com.yunquanlai.admin.system.entity.UserEntity;
 import com.yunquanlai.admin.system.service.UserService;
+import com.yunquanlai.admin.user.entity.UserInfoEntity;
+import com.yunquanlai.admin.user.service.UserInfoService;
 import com.yunquanlai.utils.annotation.LoginUser;
 import com.yunquanlai.utils.interceptor.AuthorizationInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
     @Autowired
-    private UserService userService;
+    private UserInfoService userInfoService;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -39,7 +41,7 @@ public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgu
         }
 
         //获取用户信息
-        UserEntity user = userService.queryObject((Long)object);
+        UserInfoEntity user = userInfoService.queryObject((Long)object);
 
         return user;
     }

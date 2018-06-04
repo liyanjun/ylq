@@ -29,4 +29,6 @@ public interface ProductInfoService {
 	void delete(Integer id);
 	
 	void deleteBatch(Integer[] ids);
+
+	List<ProductInfoEntity> queryListForClient(Map<String, Object> map);
 }

@@ -1,7 +1,8 @@
 package com.yunquanlai.utils.interceptor;
 
 import com.yunquanlai.admin.system.entity.TokenEntity;
-import com.yunquanlai.admin.system.service.TokenService;
+import com.yunquanlai.admin.user.entity.UserClientTokenEntity;
+import com.yunquanlai.admin.user.service.UserClientTokenService;
 import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
 import org.apache.commons.lang.StringUtils;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     @Autowired
-    private TokenService tokenService;
+    private UserClientTokenService userClientTokenService;
 
     public static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";
 
@@ -53,7 +54,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         }
 
         //查询token信息
-        TokenEntity tokenEntity = tokenService.queryByToken(token);
+        UserClientTokenEntity tokenEntity = userClientTokenService.queryByToken(token);
         if(tokenEntity == null || tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()){
             throw new RRException("token失效，请重新登录");
         }

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunquanlai.admin.user.dao.UserClientTokenDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.yunquanlai.admin.user.entity.UserClientTokenEntity" id="userClientTokenMap">
+        <result property="id" column="id"/>
+        <result property="token" column="token"/>
+        <result property="userId" column="user_id"/>
+        <result property="expireTime" column="expire_time"/>
+        <result property="creationTime" column="creation_time"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="com.yunquanlai.admin.user.entity.UserClientTokenEntity">
+        select
+        `id`,
+        `token`,
+        `user_id`,
+        `expire_time`,
+        `creation_time`
+        from user_client_token where id = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
+    </select>
+
+    <select id="queryObjectByUserId" resultType="com.yunquanlai.admin.user.entity.UserClientTokenEntity">
+		select
+					`id`,
+					`token`,
+					`user_id`,
+					`expire_time`,
+					`creation_time`
+				from user_client_token where user_id = #{value}
+	</select>
+
+    <select id="queryObjectByToken" resultType="com.yunquanlai.admin.user.entity.UserClientTokenEntity">
+		select
+					`id`,
+					`token`,
+					`user_id`,
+					`expire_time`,
+					`creation_time`
+				from user_client_token where token = #{value}
+	</select>
+
+    <select id="queryList" resultType="com.yunquanlai.admin.user.entity.UserClientTokenEntity">
+        select
+        `id`,
+        `token`,
+        `user_id`,
+        `expire_time`,
+        `creation_time`
+        from user_client_token
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+		select count(*) from user_client_token 
+	</select>
+
+    <insert id="save" parameterType="com.yunquanlai.admin.user.entity.UserClientTokenEntity">
+		insert into user_client_token
+		(
+			`id`, 
+			`token`, 
+			`user_id`, 
+			`expire_time`, 
+			`creation_time`
+		)
+		values
+		(
+			#{id}, 
+			#{token}, 
+			#{userId}, 
+			#{expireTime}, 
+			#{creationTime}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.yunquanlai.admin.user.entity.UserClientTokenEntity">
+        update user_client_token
+        <set>
+            <if test="token != null">`token` = #{token},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="expireTime != null">`expire_time` = #{expireTime},</if>
+            <if test="creationTime != null">`creation_time` = #{creationTime}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from user_client_token where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from user_client_token where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
