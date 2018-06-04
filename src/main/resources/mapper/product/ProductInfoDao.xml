@@ -109,6 +109,9 @@
             <if test="brandId != null">
                 and brand_id = #{brandId}
             </if>
+            <if test="isQuick != null">
+                and is_quick = #{isQuick}
+            </if>
             <if test="bucketType != null">
                 and bucket_type = #{bucketType}
             </if>

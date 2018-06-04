@@ -57,8 +57,8 @@ public class ProductInfoController extends AbstractController {
 	 */
 	@RequestMapping("/info/{id}")
 	@RequiresPermissions("productinfo:info")
-	public R info(@PathVariable("id") Integer id){
-		ProductInfoVO productInfoVO = productInfoService.queryObject(id);
+	public R info(@PathVariable("id") Long id){
+		ProductInfoVO productInfoVO = productInfoService.queryProductInfoVO(id);
 		
 		return R.ok().put("productInfo", productInfoVO);
 	}

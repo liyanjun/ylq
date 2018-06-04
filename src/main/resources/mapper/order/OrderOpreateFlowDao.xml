@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunquanlai.admin.order.dao.OrderOpreateFlowDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.yunquanlai.admin.order.entity.OrderOpreateFlowEntity" id="orderOpreateFlowMap">
+        <result property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="beforeStatus" column="before_status"/>
+        <result property="afterStatus" column="after_status"/>
+        <result property="remark" column="remark"/>
+        <result property="opreatorTime" column="opreator_time"/>
+        <result property="opreatorId" column="opreator_id"/>
+        <result property="opreatorName" column="opreator_name"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.yunquanlai.admin.order.entity.OrderOpreateFlowEntity">
+		select
+					`id`, 
+					`type`, 
+					`before_status`, 
+					`after_status`, 
+					`remark`, 
+					`opreator_time`, 
+					`opreator_id`, 
+					`opreator_name`
+				from order_opreate_flow where id = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
+	</select>
+
+	<select id="queryList" resultType="com.yunquanlai.admin.order.entity.OrderOpreateFlowEntity">
+		select
+		            `id`, 
+		            `type`, 
+		            `before_status`, 
+		            `after_status`, 
+		            `remark`, 
+		            `opreator_time`, 
+		            `opreator_id`, 
+		            `opreator_name`
+				from order_opreate_flow
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from order_opreate_flow 
+	</select>
+	 
+	<insert id="save" parameterType="com.yunquanlai.admin.order.entity.OrderOpreateFlowEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into order_opreate_flow
+		(
+			`type`, 
+			`before_status`, 
+			`after_status`, 
+			`remark`, 
+			`opreator_time`, 
+			`opreator_id`, 
+			`opreator_name`
+		)
+		values
+		(
+			#{type}, 
+			#{beforeStatus}, 
+			#{afterStatus}, 
+			#{remark}, 
+			#{opreatorTime}, 
+			#{opreatorId}, 
+			#{opreatorName}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunquanlai.admin.order.entity.OrderOpreateFlowEntity">
+		update order_opreate_flow 
+		<set>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="beforeStatus != null">`before_status` = #{beforeStatus}, </if>
+			<if test="afterStatus != null">`after_status` = #{afterStatus}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="opreatorTime != null">`opreator_time` = #{opreatorTime}, </if>
+			<if test="opreatorId != null">`opreator_id` = #{opreatorId}, </if>
+			<if test="opreatorName != null">`opreator_name` = #{opreatorName}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from order_opreate_flow where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from order_opreate_flow where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

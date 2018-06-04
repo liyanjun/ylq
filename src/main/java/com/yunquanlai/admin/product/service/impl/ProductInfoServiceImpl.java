@@ -40,7 +40,7 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 	private ProductStockDao productStockDao;
 
 	@Override
-	public ProductInfoVO queryObject(Integer id){
+	public ProductInfoVO queryProductInfoVO(Long id){
 		ProductInfoEntity productInfoEntity = productInfoDao.queryObject(id, false);
 		ProductDetailEntity productDetailEntity = productDetailDao.queryObjectByProductInfoId(id);
 		return new ProductInfoVO(productInfoEntity,productDetailEntity);

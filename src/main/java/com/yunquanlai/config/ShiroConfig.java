@@ -55,7 +55,7 @@ public class ShiroConfig {
         Map<String, String> filterMap = new LinkedHashMap<>();
         filterMap.put("/public/**", "anon");
         filterMap.put("/webjars/**", "anon");
-        filterMap.put("/api/**", "anon");
+        filterMap.put("/**/api/**", "anon");
 
         //swagger配置
         filterMap.put("/swagger**", "anon");

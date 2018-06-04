@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,8 +65,8 @@ public class ApiProductController {
     @IgnoreAuth
     @PostMapping("getProductDetail")
     @ApiOperation(value = "获取商品详细信息")
-    public R getProductDetail(@ApiParam(value = "商品 ID") Integer id) {
-        ProductInfoVO productInfoVO = productInfoService.queryObject(id);
+    public R getProductDetail(@ApiParam(value = "商品 ID") Long id) {
+        ProductInfoVO productInfoVO = productInfoService.queryProductInfoVO(id);
         return R.ok().put("productInfoVO", productInfoVO);
     }
 
@@ -77,19 +76,24 @@ public class ApiProductController {
     @IgnoreAuth
     @PostMapping("queryProduct")
     @ApiOperation(value = "商品查询")
-    public R trackProduct(@ApiParam(value = "商品名称") String name,
-                          @ApiParam(value = "商品品牌(传ID)") Integer brandId,
-                          @ApiParam(value = "排序类型，10：按价格排序，20：按销量排序") Integer orderType,
-                          @ApiParam(value = "桶型，10：一次性桶，20：可回收桶，不传为全部桶形") Integer bucketType,
-                          @ApiParam(value = "位移数") Integer offset,
-                          @ApiParam(value = "查询条数") Integer limit) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "name", value = "商品名称"),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "brandId", value = "商品品牌(传ID)"),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "orderType", value = "排序类型，10：按价格排序，20：按销量排序"),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "bucketType", value = "桶型，10：一次性桶，20：可回收桶，不传为全部桶形"),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "isQuick", value = "是否一键送水,是：10，否：20", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "offset", value = "位移数", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "limit", value = "查询条数", required = true)
+    })
+    public R queryProduct(String name, Integer brandId, Integer orderType, Integer bucketType, Integer isQuick, Integer offset, Integer limit) {
         Map map = new HashMap(16);
         map.put("name", name);
         map.put("brandId", brandId);
-        if(orderType == 10){
+        map.put("isQuick", isQuick);
+        if (orderType == 10) {
             map.put("sidx", "amount_show");
             map.put("order", "desc");
-        }else if(orderType == 20){
+        } else if (orderType == 20) {
             map.put("sidx", "count");
             map.put("order", "asc");
         }

@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public interface ProductInfoService {
 	
-	ProductInfoVO queryObject(Integer id);
+	ProductInfoVO queryProductInfoVO(Long id);
 	
 	List<ProductInfoEntity> queryList(Map<String, Object> map);
 	
