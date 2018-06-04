@@ -3,6 +3,9 @@ package com.yunquanlai.admin.product.dao;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.system.dao.BaseDao;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 商品信息表表
  * 
@@ -12,4 +15,5 @@ import com.yunquanlai.admin.system.dao.BaseDao;
  */
 public interface ProductInfoDao extends BaseDao<ProductInfoEntity> {
 
+    List<ProductInfoEntity> queryListForClient(Map<String, Object> map);
 }

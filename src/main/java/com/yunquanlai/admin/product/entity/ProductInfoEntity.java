@@ -52,6 +52,9 @@ public class ProductInfoEntity implements Serializable {
      * 设置：配送费
      */
 	private BigDecimal deliveryFee;
+
+	private Integer count;
+
     /**
      * 设置：商品创建时间
      */
@@ -274,5 +277,13 @@ public class ProductInfoEntity implements Serializable {
 
 	public void setIsQuick(Integer isQuick) {
 		this.isQuick = isQuick;
+	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
 	}
 }

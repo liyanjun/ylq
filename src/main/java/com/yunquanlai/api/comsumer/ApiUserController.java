@@ -56,8 +56,14 @@ public class ApiUserController {
     })
     public R wechatLogin(String uid, String username) {
         UserInfoEntity userInfoEntity = userInfoService.queryObjectByUid(uid);
-        if(userInfoEntity == null){
+        if (userInfoEntity == null) {
             //不存在用户就创建用户
+            userInfoEntity = new UserInfoEntity();
+            userInfoEntity.setStatus(0);
+            userInfoEntity.setCreationTime(new Date());
+            userInfoEntity.setUid(uid);
+            userInfoEntity.setUsername(username);
+            userInfoService.save(userInfoEntity);
         }
         return createToken(userInfoEntity.getId());
     }
@@ -67,13 +73,12 @@ public class ApiUserController {
         String token = UUID.randomUUID().toString();
         //当前时间
         Date now = new Date();
-
         //过期时间
         Date expireTime = new Date(now.getTime() + EXPIRE * 1000);
 
         //判断是否生成过token
         UserClientTokenEntity userClientTokenEntity = userClientTokenService.queryByUserId(userId);
-        if(userClientTokenEntity == null){
+        if (userClientTokenEntity == null) {
             userClientTokenEntity = new UserClientTokenEntity();
             userClientTokenEntity.setUserId(userId);
             userClientTokenEntity.setToken(token);
@@ -82,13 +87,13 @@ public class ApiUserController {
 
             //保存token
             userClientTokenService.save(userClientTokenEntity);
-        }else{
+        } else {
             String oldToken = userClientTokenEntity.getToken();
             userClientTokenEntity.setToken(token);
             userClientTokenEntity.setUpdateTime(now);
             userClientTokenEntity.setExpireTime(expireTime);
             //更新token
-            userClientTokenService.update(userClientTokenEntity,oldToken);
+            userClientTokenService.update(userClientTokenEntity, oldToken);
         }
 
         Map<String, Object> map = new HashMap<>(16);

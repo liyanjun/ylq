@@ -15,6 +15,7 @@
         <result property="bucketType" column="bucket_type"/>
         <result property="deliveryFee" column="delivery_fee"/>
         <result property="isQuick" column="is_quick"/>
+        <result property="count" column="count"/>
         <result property="creationTime" column="creation_time"/>
         <result property="updateTime" column="update_time"/>
         <result property="creatorId" column="creator_id"/>
@@ -35,7 +36,8 @@
 					`bucket_type`, 
 					`delivery_fee`,
 					`is_quick`,
-					`creation_time`, 
+					`count`,
+					`creation_time`,
 					`update_time`, 
 					`creator_id`, 
 					`creator_name`, 
@@ -59,6 +61,7 @@
         `bucket_type`,
         `delivery_fee`,
         `is_quick`,
+        `count`,
         `creation_time`,
         `update_time`,
         `creator_id`,
@@ -66,6 +69,50 @@
         `update_id`,
         `update_name`
         from product_info
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryListForClient" resultType="com.yunquanlai.admin.product.entity.ProductInfoEntity">
+        select
+        `id`,
+        `name`,
+        `img`,
+        `amount_show`,
+        `amount`,
+        `brand_id`,
+        `brand_name`,
+        `bucket_type`,
+        `delivery_fee`,
+        `is_quick`,
+        `count`,
+        `creation_time`,
+        `update_time`,
+        `creator_id`,
+        `creator_name`,
+        `update_id`,
+        `update_name`
+        from product_info
+        <where>
+            <if test="name != null and name.trim() != ''">
+                and name like concat('%', #{name}, '%')
+            </if>
+            <if test="brandId != null">
+                and brand_id = #{brandId}
+            </if>
+            <if test="bucketType != null">
+                and bucket_type = #{bucketType}
+            </if>
+        </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -96,7 +143,8 @@
 			`bucket_type`, 
 			`delivery_fee`,
 			`is_quick`,
-			`creation_time`, 
+			`count`,
+			`creation_time`,
 			`update_time`, 
 			`creator_id`, 
 			`creator_name`, 
@@ -114,6 +162,7 @@
 			#{bucketType}, 
 			#{deliveryFee},
 			#{isQuick},
+			#{count},
 			#{creationTime},
 			#{updateTime}, 
 			#{creatorId}, 
@@ -135,6 +184,7 @@
             <if test="bucketType != null">`bucket_type` = #{bucketType},</if>
             <if test="deliveryFee != null">`delivery_fee` = #{deliveryFee},</if>
             <if test="isQuick != null">`is_quick` = #{isQuick},</if>
+            <if test="count != null">`count` = #{count},</if>
             <if test="creationTime != null">`creation_time` = #{creationTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
             <if test="creatorId != null">`creator_id` = #{creatorId},</if>
