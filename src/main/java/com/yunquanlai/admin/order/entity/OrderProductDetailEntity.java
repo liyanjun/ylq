@@ -18,11 +18,11 @@ public class OrderProductDetailEntity implements Serializable {
     /**
      * 设置：主键 ID
      */
-	private Integer id;
+	private Long id;
     /**
      * 设置：对应商品 ID
      */
-	private Integer productInfoId;
+	private Long productInfoId;
     /**
      * 设置：商品名称
      */
@@ -34,30 +34,30 @@ public class OrderProductDetailEntity implements Serializable {
     /**
      * 设置：
      */
-	private Integer orderInfoId;
+	private Long orderInfoId;
 
 	/**
 	 * 设置：主键 ID
 	 */
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	/**
 	 * 获取：主键 ID
 	 */
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	/**
 	 * 设置：对应商品 ID
 	 */
-	public void setProductInfoId(Integer productInfoId) {
+	public void setProductInfoId(Long productInfoId) {
 		this.productInfoId = productInfoId;
 	}
 	/**
 	 * 获取：对应商品 ID
 	 */
-	public Integer getProductInfoId() {
+	public Long getProductInfoId() {
 		return productInfoId;
 	}
 	/**
@@ -87,13 +87,13 @@ public class OrderProductDetailEntity implements Serializable {
 	/**
 	 * 设置：
 	 */
-	public void setOrderInfoId(Integer orderInfoId) {
+	public void setOrderInfoId(Long orderInfoId) {
 		this.orderInfoId = orderInfoId;
 	}
 	/**
 	 * 获取：
 	 */
-	public Integer getOrderInfoId() {
+	public Long getOrderInfoId() {
 		return orderInfoId;
 	}
 }

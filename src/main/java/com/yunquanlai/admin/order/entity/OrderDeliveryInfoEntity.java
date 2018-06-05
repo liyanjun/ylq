@@ -15,7 +15,12 @@ import java.util.Date;
  */
 public class OrderDeliveryInfoEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
+	public static final Integer STATUS_NEW = 10;
+	public static final Integer STATUS_ON_DELIVERY = 30;
+	public static final Integer STATUS_DISTRIBUTION = 40;
+	public static final Integer STATUS_CLOSE = 50;
+
     /**
      * 设置：主键 ID
      */
@@ -45,7 +50,7 @@ public class OrderDeliveryInfoEntity implements Serializable {
      */
 	private BigDecimal locationY;
     /**
-     * 设置：配送单状态，10：未分配，20：配送中，30：已配送
+     * 设置：配送单状态，10：未分配，30：配送中，40：已配送，50：已关闭
      */
 	private Integer status;
     /**
@@ -71,7 +76,7 @@ public class OrderDeliveryInfoEntity implements Serializable {
     /**
      * 设置：关联用户 ID
      */
-	private String userInfoId;
+	private Long userInfoId;
 
 	/**
 	 * 设置：主键 ID
@@ -232,13 +237,13 @@ public class OrderDeliveryInfoEntity implements Serializable {
 	/**
 	 * 设置：关联用户 ID
 	 */
-	public void setUserInfoId(String userInfoId) {
+	public void setUserInfoId(Long userInfoId) {
 		this.userInfoId = userInfoId;
 	}
 	/**
 	 * 获取：关联用户 ID
 	 */
-	public String getUserInfoId() {
+	public Long getUserInfoId() {
 		return userInfoId;
 	}
 }

@@ -53,9 +53,9 @@ public class ApiOrderController {
     @PostMapping("order")
     @ApiOperation(value = "下单")
     @ApiImplicitParam(name = "orderVO", value = "订单信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderVO", paramType = "body")
-    public R order(@RequestBody OrderVO orderVO) {
+    public R order(@RequestBody OrderVO orderVO,@LoginUser UserInfoEntity user) {
 
-        if(orderInfoService.newOrder(orderVO)){
+        if(orderInfoService.newOrder(orderVO,user)){
             return R.ok();
         }
         // TODO 返回具体失败原因

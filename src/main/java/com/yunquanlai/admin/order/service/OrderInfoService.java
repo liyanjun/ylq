@@ -1,6 +1,7 @@
 package com.yunquanlai.admin.order.service;
 
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
+import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 
 import java.util.List;
@@ -29,5 +30,5 @@ public interface OrderInfoService {
 	
 	void deleteBatch(Integer[] ids);
 
-	boolean newOrder(OrderVO orderVO);
+	boolean newOrder(OrderVO orderVO, UserInfoEntity user);
 }

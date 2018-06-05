@@ -130,7 +130,7 @@ public class OrderVO {
 
     public class ProductOrderVO{
         private Long productInfoId;
-        private Long count;
+        private Integer count;
 
         public Long getProductInfoId() {
             return productInfoId;
@@ -140,11 +140,11 @@ public class OrderVO {
             this.productInfoId = productInfoId;
         }
 
-        public Long getCount() {
+        public Integer getCount() {
             return count;
         }
 
-        public void setCount(Long count) {
+        public void setCount(Integer count) {
             this.count = count;
         }
     }
