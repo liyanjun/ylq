@@ -46,9 +46,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Autowired
     private DeliveryEndpointDao deliveryEndpointDao;
 
-    @Autowired
-    private ProductStockDao productStockDao;
-
     @Override
     public OrderInfoEntity queryObject(Integer id) {
         return orderInfoDao.queryObject(id, false);
