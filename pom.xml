@@ -36,6 +36,7 @@
 		<qcloud.cos.version>4.4</qcloud.cos.version>
 		<velocity.version>1.7</velocity.version>
 		<getui.version>4.0.1.17</getui.version>
+		<commons-lang3.version>3.3.2</commons-lang3.version>
 
         <!--wagon plugin 配置-->
 		<service-path>deploy_path</service-path>
@@ -193,6 +194,27 @@
 			<groupId>com.gexin.platform</groupId>
 			<artifactId>gexin-rp-sdk-http</artifactId>
 			<version>${getui.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<!-- 微信公众号jar包 -->
+		<dependency>
+			<groupId>weixin</groupId>
+			<artifactId>weixin4j</artifactId>
+			<version>0.0.9.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/weixin4j-0.0.9.1.jar</systemPath>
 		</dependency>
 	</dependencies>
 

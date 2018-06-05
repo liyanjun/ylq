@@ -1,14 +1,11 @@
 package com.yunquanlai.api.comsumer;
 
-import com.yunquanlai.admin.system.entity.TokenEntity;
-import com.yunquanlai.admin.system.service.UserService;
 import com.yunquanlai.admin.user.entity.UserClientTokenEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.admin.user.service.UserClientTokenService;
 import com.yunquanlai.admin.user.service.UserInfoService;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
-import com.yunquanlai.utils.validator.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -30,7 +27,7 @@ import java.util.UUID;
  **/
 @RestController
 @RequestMapping("/client/api")
-@Api("用户接口")
+@Api("微信小程序接口-用户接口")
 public class ApiUserController {
 
     @Autowired

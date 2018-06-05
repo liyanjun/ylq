@@ -3,6 +3,7 @@ package com.yunquanlai.admin.order.service;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
+import com.yunquanlai.utils.R;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.Map;
  */
 public interface OrderInfoService {
 	
-	OrderInfoEntity queryObject(Integer id);
+	OrderInfoEntity queryObject(Long id);
 	
 	List<OrderInfoEntity> queryList(Map<String, Object> map);
 	
@@ -30,5 +31,5 @@ public interface OrderInfoService {
 	
 	void deleteBatch(Integer[] ids);
 
-	boolean newOrder(OrderVO orderVO, UserInfoEntity user);
+	R newOrder(OrderVO orderVO, UserInfoEntity user);
 }

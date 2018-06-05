@@ -6,7 +6,6 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.yunquanlai.admin.order.entity.OrderInfoEntity" id="orderInfoMap">
         <result property="id" column="id"/>
-        <result property="orderNo" column="order_no"/>
         <result property="amountTotal" column="amount_total"/>
         <result property="amount" column="amount"/>
         <result property="amountBenifit" column="amount_benifit"/>
@@ -25,8 +24,7 @@
 	<select id="queryObject" resultType="com.yunquanlai.admin.order.entity.OrderInfoEntity">
 		select
 					`id`, 
-					`order_no`, 
-					`amount_total`, 
+					`amount_total`,
 					`amount`, 
 					`amount_benifit`, 
 					`amount_activity`, 
@@ -46,8 +44,7 @@
 	<select id="queryList" resultType="com.yunquanlai.admin.order.entity.OrderInfoEntity">
 		select
 		            `id`, 
-		            `order_no`, 
-		            `amount_total`, 
+		            `amount_total`,
 		            `amount`, 
 		            `amount_benifit`, 
 		            `amount_activity`, 
@@ -81,8 +78,7 @@
 	<insert id="save" parameterType="com.yunquanlai.admin.order.entity.OrderInfoEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into order_info
 		(
-			`order_no`, 
-			`amount_total`, 
+			`amount_total`,
 			`amount`, 
 			`amount_benifit`, 
 			`amount_activity`, 
@@ -98,8 +94,7 @@
 		)
 		values
 		(
-			#{orderNo}, 
-			#{amountTotal}, 
+			#{amountTotal},
 			#{amount}, 
 			#{amountBenifit}, 
 			#{amountActivity}, 
@@ -118,7 +113,6 @@
 	<update id="update" parameterType="com.yunquanlai.admin.order.entity.OrderInfoEntity">
 		update order_info 
 		<set>
-			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
 			<if test="amountTotal != null">`amount_total` = #{amountTotal}, </if>
 			<if test="amount != null">`amount` = #{amount}, </if>
 			<if test="amountBenifit != null">`amount_benifit` = #{amountBenifit}, </if>

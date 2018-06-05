@@ -10,6 +10,8 @@ import com.yunquanlai.admin.product.dao.ProductStockDao;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
+import com.yunquanlai.api.comsumer.vo.ProductOrderVO;
+import com.yunquanlai.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +49,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private DeliveryEndpointDao deliveryEndpointDao;
 
     @Override
-    public OrderInfoEntity queryObject(Integer id) {
+    public OrderInfoEntity queryObject(Long id) {
         return orderInfoDao.queryObject(id, false);
     }
 
@@ -82,7 +84,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public boolean newOrder(OrderVO orderVO, UserInfoEntity user) {
+    public R newOrder(OrderVO orderVO, UserInfoEntity user) {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = new OrderDeliveryInfoEntity();
         OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
         List<OrderProductDetailEntity> orderProductDetailEntities = new ArrayList<>(16);
@@ -90,11 +92,16 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         BigDecimal amountTotal = BigDecimal.ZERO;
         BigDecimal amountDeliveryFee = BigDecimal.ZERO;
 
-        for (OrderVO.ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
+        for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
             // 计算订单总额
             ProductInfoEntity productInfoEntity = productInfoDao.queryObject(productOrderVO.getProductInfoId(), false);
+            if (productInfoEntity == null) {
+                return R.error("找不到购买的商品");
+            }
             amount = amount.add(productInfoEntity.getAmount().multiply(new BigDecimal(productOrderVO.getCount())));
-            amountTotal = amountTotal.add(productInfoEntity.getAmountShow().multiply(new BigDecimal(productOrderVO.getCount())));
+            if (productInfoEntity.getAmountShow() != null) {
+                amountTotal = amountTotal.add(productInfoEntity.getAmountShow().multiply(new BigDecimal(productOrderVO.getCount())));
+            }
             amountDeliveryFee = amountDeliveryFee.add(productInfoEntity.getDeliveryFee());
             OrderProductDetailEntity orderProductDetailEntity = new OrderProductDetailEntity();
             orderProductDetailEntity.setCount(productOrderVO.getCount());
@@ -123,6 +130,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderDeliveryInfoEntity.setSex(orderVO.getSex());
         orderDeliveryInfoEntity.setUserInfoId(user.getId());
         orderDeliveryInfoEntity.setOrderInfoId(orderInfoEntity.getId());
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_NEW);
+        orderDeliveryInfoEntity.setCreationTime(new Date());
         // 配送单
         orderDeliveryInfoDao.save(orderDeliveryInfoEntity);
         // TODO 发票，发票抬头
@@ -133,7 +142,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailDao.save(orderProductDetailEntity);
         }
 
-        return true;
+        return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities);
     }
 
 }

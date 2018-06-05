@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequestMapping("/client/api")
-@Api("订单接口")
+@Api("微信小程序接口-订单接口")
 public class ApiOrderController {
 
     @Autowired
@@ -52,13 +52,12 @@ public class ApiOrderController {
      */
     @PostMapping("order")
     @ApiOperation(value = "下单")
-    @ApiImplicitParam(name = "orderVO", value = "订单信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderVO", paramType = "body")
-    public R order(@RequestBody OrderVO orderVO,@LoginUser UserInfoEntity user) {
-
-        if(orderInfoService.newOrder(orderVO,user)){
-            return R.ok();
-        }
-        // TODO 返回具体失败原因
-        return R.error("下单失败");
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
+            @ApiImplicitParam(name = "orderVO", value = "订单信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderVO", paramType = "body")
+    })
+    public R order(@RequestBody OrderVO orderVO, @LoginUser UserInfoEntity user) {
+        return orderInfoService.newOrder(orderVO, user);
     }
+
 }
