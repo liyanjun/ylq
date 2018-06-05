@@ -27,11 +27,9 @@ public class Swagger2Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("renren-security-boot使用Swagger2构建RESTful API")
-                .description("人人编程：http://www.renren.io")
-                .termsOfServiceUrl("http://www.renren.io")
-                .contact("人人开源")
-                .version("2.0")
+                .title("运泉来API接口")
+                .description("运泉来API接口")
+                .version("1.0")
                 .build();
     }
 

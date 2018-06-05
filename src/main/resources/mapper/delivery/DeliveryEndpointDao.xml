@@ -20,6 +20,7 @@
 					`location_y`, 
 					`remark`
 				from delivery_endpoint where id = #{id}
+		<if test="isLock != null and isLock == true">for update</if>
 	</select>
 
 	<select id="queryList" resultType="com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity">

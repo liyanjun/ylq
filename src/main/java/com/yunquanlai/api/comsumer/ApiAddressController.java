@@ -32,7 +32,7 @@ import java.util.*;
  **/
 @RestController
 @RequestMapping("/client/api")
-@Api("用户地址管理接口")
+@Api("微信小程序接口-用户地址管理接口")
 public class ApiAddressController {
 
     @Autowired
