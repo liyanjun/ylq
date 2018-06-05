@@ -3,7 +3,7 @@
 
 <mapper namespace="com.yunquanlai.admin.user.dao.UserAddressDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.yunquanlai.admin.user.entity.UserAddressEntity" id="userAddressMap">
         <result property="id" column="id"/>
         <result property="locationX" column="location_x"/>
@@ -11,50 +11,67 @@
         <result property="address" column="address"/>
         <result property="name" column="name"/>
         <result property="phone" column="phone"/>
+        <result property="sex" column="sex"/>
         <result property="userInfoId" column="user_info_id"/>
     </resultMap>
 
-	<select id="queryObject" resultType="com.yunquanlai.admin.user.entity.UserAddressEntity">
-		select
-					`id`, 
-					`location_x`, 
-					`location_y`, 
-					`address`, 
-					`name`, 
-					`phone`, 
-					`user_info_id`
-				from user_address where id = #{id}
+    <select id="queryObject" resultType="com.yunquanlai.admin.user.entity.UserAddressEntity">
+        select
+        `id`,
+        `location_x`,
+        `location_y`,
+        `address`,
+        `name`,
+        `phone`,
+        `sex`,
+        `user_info_id`
+        from user_address where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
+    </select>
+
+    <select id="queryByUserId" resultType="com.yunquanlai.admin.user.entity.UserAddressEntity">
+		select
+					`id`,
+					`location_x`,
+					`location_y`,
+					`address`,
+					`name`,
+					`phone`,
+					`sex`,
+					`user_info_id`
+				from user_address where user_info_id = #{value}
 	</select>
 
-	<select id="queryList" resultType="com.yunquanlai.admin.user.entity.UserAddressEntity">
-		select
-		            `id`, 
-		            `location_x`, 
-		            `location_y`, 
-		            `address`, 
-		            `name`, 
-		            `phone`, 
-		            `user_info_id`
-				from user_address
+    <select id="queryList" resultType="com.yunquanlai.admin.user.entity.UserAddressEntity">
+        select
+        `id`,
+        `location_x`,
+        `location_y`,
+        `address`,
+        `name`,
+        `phone`,
+        `sex`,
+        `user_info_id`
+        from user_address
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
             </when>
-			<otherwise>
+            <otherwise>
                 order by id desc
-			</otherwise>
+            </otherwise>
         </choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
-	</select>
-	
- 	<select id="queryTotal" resultType="int">
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
 		select count(*) from user_address 
 	</select>
-	 
-	<insert id="save" parameterType="com.yunquanlai.admin.user.entity.UserAddressEntity" useGeneratedKeys="true" keyProperty="id">
+
+    <insert id="save" parameterType="com.yunquanlai.admin.user.entity.UserAddressEntity" useGeneratedKeys="true"
+            keyProperty="id">
 		insert into user_address
 		(
 			`location_x`, 
@@ -62,6 +79,7 @@
 			`address`, 
 			`name`, 
 			`phone`, 
+			`sex`,
 			`user_info_id`
 		)
 		values
@@ -71,32 +89,34 @@
 			#{address}, 
 			#{name}, 
 			#{phone}, 
+			#{sex},
 			#{userInfoId}
 		)
 	</insert>
-	 
-	<update id="update" parameterType="com.yunquanlai.admin.user.entity.UserAddressEntity">
-		update user_address 
-		<set>
-			<if test="locationX != null">`location_x` = #{locationX}, </if>
-			<if test="locationY != null">`location_y` = #{locationY}, </if>
-			<if test="address != null">`address` = #{address}, </if>
-			<if test="name != null">`name` = #{name}, </if>
-			<if test="phone != null">`phone` = #{phone}, </if>
-			<if test="userInfoId != null">`user_info_id` = #{userInfoId}</if>
-		</set>
-		where id = #{id}
-	</update>
-	
-	<delete id="delete">
+
+    <update id="update" parameterType="com.yunquanlai.admin.user.entity.UserAddressEntity">
+        update user_address
+        <set>
+            <if test="locationX != null">`location_x` = #{locationX},</if>
+            <if test="locationY != null">`location_y` = #{locationY},</if>
+            <if test="address != null">`address` = #{address},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="phone != null">`phone` = #{phone},</if>
+            <if test="sex != null">`sex` = #{sex},</if>
+            <if test="userInfoId != null">`user_info_id` = #{userInfoId}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
 		delete from user_address where id = #{value}
 	</delete>
-	
-	<delete id="deleteBatch">
-		delete from user_address where id in 
-		<foreach item="id" collection="array" open="(" separator="," close=")">
-			#{id}
-		</foreach>
-	</delete>
+
+    <delete id="deleteBatch">
+        delete from user_address where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 
 </mapper>

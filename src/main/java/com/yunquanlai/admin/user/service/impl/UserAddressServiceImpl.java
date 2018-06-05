@@ -53,5 +53,10 @@ public class UserAddressServiceImpl implements UserAddressService {
 	public void deleteBatch(Long[] ids){
 		userAddressDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public List<UserAddressEntity> queryByUserId(Long id) {
+		return userAddressDao.queryByUserId(id);
+	}
+
 }

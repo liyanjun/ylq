@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunquanlai.admin.order.dao.OrderProductDetailDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.yunquanlai.admin.order.entity.OrderProductDetailEntity" id="orderProductDetailMap">
+        <result property="id" column="id"/>
+        <result property="productInfoId" column="product_info_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="count" column="count"/>
+        <result property="orderInfoId" column="order_info_id"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.yunquanlai.admin.order.entity.OrderProductDetailEntity">
+		select
+					`id`, 
+					`product_info_id`, 
+					`product_name`, 
+					`count`, 
+					`order_info_id`
+				from order_product_detail where id = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
+	</select>
+
+	<select id="queryList" resultType="com.yunquanlai.admin.order.entity.OrderProductDetailEntity">
+		select
+		            `id`, 
+		            `product_info_id`, 
+		            `product_name`, 
+		            `count`, 
+		            `order_info_id`
+				from order_product_detail
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from order_product_detail 
+	</select>
+	 
+	<insert id="save" parameterType="com.yunquanlai.admin.order.entity.OrderProductDetailEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into order_product_detail
+		(
+			`product_info_id`, 
+			`product_name`, 
+			`count`, 
+			`order_info_id`
+		)
+		values
+		(
+			#{productInfoId}, 
+			#{productName}, 
+			#{count}, 
+			#{orderInfoId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunquanlai.admin.order.entity.OrderProductDetailEntity">
+		update order_product_detail 
+		<set>
+			<if test="productInfoId != null">`product_info_id` = #{productInfoId}, </if>
+			<if test="productName != null">`product_name` = #{productName}, </if>
+			<if test="count != null">`count` = #{count}, </if>
+			<if test="orderInfoId != null">`order_info_id` = #{orderInfoId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from order_product_detail where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from order_product_detail where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

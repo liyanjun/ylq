@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunquanlai.admin.order.dao.OrderDeliveryInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity" id="orderDeliveryInfoMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="sex" column="sex"/>
+        <result property="phone" column="phone"/>
+        <result property="locationX" column="location_x"/>
+        <result property="locationY" column="location_y"/>
+        <result property="status" column="status"/>
+        <result property="remark" column="remark"/>
+        <result property="creationTime" column="creation_time"/>
+        <result property="deliveryTime" column="delivery_time"/>
+        <result property="deliveryDistributorId" column="delivery_distributor_id"/>
+        <result property="orderInfoId" column="order_info_id"/>
+        <result property="userInfoId" column="user_info_id"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity">
+		select
+					`id`, 
+					`name`, 
+					`address`, 
+					`sex`, 
+					`phone`, 
+					`location_x`, 
+					`location_y`, 
+					`status`, 
+					`remark`, 
+					`creation_time`, 
+					`delivery_time`, 
+					`delivery_distributor_id`, 
+					`order_info_id`, 
+					`user_info_id`
+				from order_delivery_info where id = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
+	</select>
+
+	<select id="queryList" resultType="com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity">
+		select
+		            `id`, 
+		            `name`, 
+		            `address`, 
+		            `sex`, 
+		            `phone`, 
+		            `location_x`, 
+		            `location_y`, 
+		            `status`, 
+		            `remark`, 
+		            `creation_time`, 
+		            `delivery_time`, 
+		            `delivery_distributor_id`, 
+		            `order_info_id`, 
+		            `user_info_id`
+				from order_delivery_info
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from order_delivery_info 
+	</select>
+	 
+	<insert id="save" parameterType="com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into order_delivery_info
+		(
+			`name`, 
+			`address`, 
+			`sex`, 
+			`phone`, 
+			`location_x`, 
+			`location_y`, 
+			`status`, 
+			`remark`, 
+			`creation_time`, 
+			`delivery_time`, 
+			`delivery_distributor_id`, 
+			`order_info_id`, 
+			`user_info_id`
+		)
+		values
+		(
+			#{name}, 
+			#{address}, 
+			#{sex}, 
+			#{phone}, 
+			#{locationX}, 
+			#{locationY}, 
+			#{status}, 
+			#{remark}, 
+			#{creationTime}, 
+			#{deliveryTime}, 
+			#{deliveryDistributorId}, 
+			#{orderInfoId}, 
+			#{userInfoId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity">
+		update order_delivery_info 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="address != null">`address` = #{address}, </if>
+			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="locationX != null">`location_x` = #{locationX}, </if>
+			<if test="locationY != null">`location_y` = #{locationY}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="deliveryTime != null">`delivery_time` = #{deliveryTime}, </if>
+			<if test="deliveryDistributorId != null">`delivery_distributor_id` = #{deliveryDistributorId}, </if>
+			<if test="orderInfoId != null">`order_info_id` = #{orderInfoId}, </if>
+			<if test="userInfoId != null">`user_info_id` = #{userInfoId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from order_delivery_info where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from order_delivery_info where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

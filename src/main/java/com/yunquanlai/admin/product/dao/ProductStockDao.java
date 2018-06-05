@@ -13,4 +13,5 @@ import com.yunquanlai.admin.system.dao.BaseDao;
 public interface ProductStockDao extends BaseDao<ProductStockEntity> {
 
 
+    ProductStockEntity queryByDeliveryEndpointIdAndProductId(Long id, Long id1);
 }
