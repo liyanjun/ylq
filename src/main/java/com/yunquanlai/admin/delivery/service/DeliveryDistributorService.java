@@ -27,4 +27,7 @@ public interface DeliveryDistributorService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+	List<DeliveryDistributorEntity> queryListForDeliveryEndpoint(Map<String, Object> map);
+
 }

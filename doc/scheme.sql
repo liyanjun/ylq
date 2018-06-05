@@ -701,3 +701,15 @@ CREATE TABLE `user_withdraw_deposit` (
   `handle_time` datetime NOT NULL COMMENT '处理时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户押金提现申请表';
+
+-- 修改配送员信息表birthday字段类型
+ALTER TABLE `delivery_distributor`
+MODIFY COLUMN `birthday`  varchar(10) NOT NULL COMMENT '配送员生日' AFTER `password`;
+
+-- 新增停用字段disable
+ALTER TABLE delivery_distributor
+ADD COLUMN `disable`  tinyint(2) NULL DEFAULT 2 COMMENT '0:停用    1：启用    2：新创建（默认）' AFTER `delivery_endpoint_id`;
+
+-- 新增配送點信息delivery_endpoint_name字段
+ALTER TABLE `delivery_distributor`
+ADD COLUMN `delivery_endpoint_name`  varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '配送点名' AFTER `disable`;

@@ -3,7 +3,6 @@ package com.yunquanlai.admin.delivery.entity;
 import java.io.Serializable;
 
 
-
 /**
  * 配送员信息
  * 
@@ -37,7 +36,7 @@ public class DeliveryDistributorEntity implements Serializable {
     /**
      * 设置：用于点对点登录时的推送，由APP在登录的时候一起上传
      */
-	private String clientid;
+	private String clientId;
     /**
      * 设置：当前状态，10：可配送，20：不可配送
      */
@@ -55,11 +54,19 @@ public class DeliveryDistributorEntity implements Serializable {
      */
 	private String healthUrl;
     /**
-     * 设置：所属配送点
+     * 设置：所属配送点id
      */
 	private Long deliveryEndpointId;
-
 	/**
+	 * 设置：停用状态
+	 */
+	private byte disable;
+    /**
+     * 设置：所属配送点名
+     */
+    private String deliveryEndpointName;
+
+    /**
 	 * 设置：
 	 */
 	public void setId(Long id) {
@@ -122,15 +129,11 @@ public class DeliveryDistributorEntity implements Serializable {
 	/**
 	 * 设置：用于点对点登录时的推送，由APP在登录的时候一起上传
 	 */
-	public void setClientid(String clientid) {
-		this.clientid = clientid;
-	}
+	public void setClientId(String clientId) { this.clientId = clientId; }
 	/**
 	 * 获取：用于点对点登录时的推送，由APP在登录的时候一起上传
 	 */
-	public String getClientid() {
-		return clientid;
-	}
+	public String getClientId() { return clientId; }
 	/**
 	 * 设置：当前状态，10：可配送，20：不可配送
 	 */
@@ -180,15 +183,38 @@ public class DeliveryDistributorEntity implements Serializable {
 		return healthUrl;
 	}
 	/**
-	 * 设置：所属配送点
+	 * 设置：所属配送点id
 	 */
 	public void setDeliveryEndpointId(Long deliveryEndpointId) {
 		this.deliveryEndpointId = deliveryEndpointId;
 	}
 	/**
-	 * 获取：所属配送点
+	 * 获取：所属配送点id
 	 */
 	public Long getDeliveryEndpointId() {
 		return deliveryEndpointId;
 	}
+	/**
+	 * 设置：停用状态
+	 */
+	public void setDisable(byte disable) { this.disable = disable; }
+
+	/**
+	 * 获取：停用状态
+	 */
+	public byte getDisable() {
+		return disable;
+	}
+
+    /**
+     * 设置：配送点名
+     */
+    public void setDeliveryEndpointName(String deliveryEndpointName) {
+        this.deliveryEndpointName = deliveryEndpointName;
+    }
+
+    /**
+     * 获取：配送点名
+     */
+    public String getDeliveryEndpointName() { return deliveryEndpointName; }
 }

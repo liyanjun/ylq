@@ -4,7 +4,6 @@ import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.utils.R;
-import com.yunquanlai.utils.annotation.IgnoreAuth;
 import com.yunquanlai.utils.annotation.LoginUser;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
