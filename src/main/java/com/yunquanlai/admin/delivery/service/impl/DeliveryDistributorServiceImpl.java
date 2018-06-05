@@ -52,8 +52,8 @@ public class DeliveryDistributorServiceImpl implements DeliveryDistributorServic
 		deliveryDistributorDao.deleteBatch(ids);
 	}
 
-	@Override
-	public List<DeliveryDistributorEntity> queryListForDeliveryEndpoint(Map<String, Object> map){
-		return deliveryDistributorDao.queryList(map);
-	}
+    @Override
+    public void updateDeliveryEndpointName(Map<String, Object> map) {
+
+    }
 }

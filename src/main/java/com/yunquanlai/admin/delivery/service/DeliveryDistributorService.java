@@ -28,6 +28,6 @@ public interface DeliveryDistributorService {
 	
 	void deleteBatch(Long[] ids);
 
-	List<DeliveryDistributorEntity> queryListForDeliveryEndpoint(Map<String, Object> map);
+	void updateDeliveryEndpointName(Map<String, Object> map);
 
 }

@@ -81,13 +81,11 @@ public class DeliveryEndpointController {
 
         //更新配送点信息同时更新配送员表中的配送点名
         Long delivery_endpoint_id = deliveryEndpoint.getId();
+        String delivery_endpoint_name = deliveryEndpoint.getName();
         Map map = new HashMap(16);
-        map.put("delivery_endpoint_id", delivery_endpoint_id);
-        List<DeliveryDistributorEntity> deliveryDistributorEntities = deliveryDistributorDao.queryListForDeliveryEndpoint(map);
-        for(DeliveryDistributorEntity deliveryDistributorEntity : deliveryDistributorEntities){
-            deliveryDistributorEntity.setDeliveryEndpointName(deliveryEndpoint.getName());
-            deliveryDistributorDao.update(deliveryDistributorEntity);
-        }
+        map.put("deliveryEndpointId", delivery_endpoint_id);
+        map.put("deliveryEndpointName", delivery_endpoint_name);
+        deliveryDistributorDao.updateDeliveryEndpointName(map);
 
 		return R.ok();
 	}

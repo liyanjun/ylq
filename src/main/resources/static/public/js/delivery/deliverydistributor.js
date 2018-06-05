@@ -8,12 +8,12 @@ $(function () {
 			{ label: '手机号', name: 'phone', index: 'phone', width: 80 },
 			//{ label: '登录密码', name: 'password', index: 'password', width: 80 },
 			{ label: '生日', name: 'birthday', index: 'birthday', width: 80 },
-			{ label: '用于点对点登录时的推送，由APP在登录的时候一起上传', name: 'clientId', index: 'clientId', width: 80 },
-			{ label: '当前状态，10：可配送，20：不可配送', name: 'status', index: 'status', width: 80 }, 			
-			{ label: '身份证号（备用）', name: 'identifycation', index: 'identifycation', width: 80 }, 			
+			//{ label: '用于点对点登录时的推送，由APP在登录的时候一起上传', name: 'clientId', index: 'clientId', width: 80 },
+			//{ label: '当前状态，10：可配送，20：不可配送', name: 'status', index: 'status', width: 80 },
+			//{ label: '身份证号（备用）', name: 'identifycation', index: 'identifycation', width: 80 },
 			{ label: '身份证照片地址', name: 'identifycationUrl', index: 'identifycation_url', width: 80 }, 			
 			{ label: '健康证地址', name: 'healthUrl', index: 'health_url', width: 80 }, 			
-			{ label: '所属配送点', name: 'deliveryEndpointId', index: 'delivery_endpoint_id', width: 80 }			
+			{ label: '所属配送点', name: 'deliveryEndpointName', index: 'delivery_endpoint_name', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -47,7 +47,8 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		deliveryDistributor: {}
+		deliveryDistributor: {},
+        deliveryEndpointList: {}
 	},
 	methods: {
 		query: function () {
@@ -57,6 +58,8 @@ var vm = new Vue({
 			vm.showList = false;
 			vm.title = "新增";
 			vm.deliveryDistributor = {};
+			//获取配送点信息
+            /*this.getDeliveryEndpointList();*/
 		},
 		update: function (event) {
 			var id = getSelectedRow();
@@ -66,7 +69,9 @@ var vm = new Vue({
 			vm.showList = false;
             vm.title = "修改";
             
-            vm.getInfo(id)
+            vm.getInfo(id);
+            //获取配送点信息
+            /*this.getDeliveryEndpointList();*/
 		},
 		saveOrUpdate: function (event) {
 			var url = vm.deliveryDistributor.id == null ? "../deliverydistributor/save" : "../deliverydistributor/update";
@@ -113,9 +118,6 @@ var vm = new Vue({
 		getInfo: function(id){
 			$.get("../deliverydistributor/info/"+id, function(r){
                 vm.deliveryDistributor = r.deliveryDistributor;
-                //获取下拉列表对象
-                var selections = document.getElementById("selections");
-
             });
 		},
 		reload: function (event) {
@@ -124,6 +126,11 @@ var vm = new Vue({
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page
             }).trigger("reloadGrid");
-		}
+		},
+		/*getDeliveryEndpointList:function () {
+            $.get("../deliveryendpoint/list", function(r){
+                vm.deliveryEndpointList = r.deliveryEndpointList;
+            });
+        }*/
 	}
 });
