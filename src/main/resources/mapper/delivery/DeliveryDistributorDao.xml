@@ -59,21 +59,6 @@
         for update
     </select>
 
-    <select id="queryList" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
-        select
-        `id`,
-        `name`,
-        `phone`,
-        `password`,
-        `birthday`,
-        `clientId`,
-        `status`,
-        `order_count`,
-        `identifycation`,
-        `identifycation_url`,
-        `health_url`,
-        `delivery_endpoint_id`
-        from delivery_distributor
 	<select id="queryList" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
 		select
 		            `id`,
@@ -83,6 +68,7 @@
 		            `birthday`,
 		            `clientId`,
 		            `status`,
+                    `order_count`,
 		            `identifycation`,
 		            `identifycation_url`,
 		            `health_url`,
@@ -102,8 +88,6 @@
             limit #{offset}, #{limit}
         </if>
     </select>
-
- 	<select id="queryTotal" resultType="int">
 
     <select id="queryListForDeliveryEndpoint"
             resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">

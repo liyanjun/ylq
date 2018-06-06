@@ -42,6 +42,10 @@ public class DeliveryDistributorEntity implements Serializable {
      */
 	private Integer status;
     /**
+     * 当前配送订单数
+     */
+    private Integer orderCount;
+    /**
      * 设置：身份证号（备用）
      */
 	private String identifycation;
@@ -134,7 +138,16 @@ public class DeliveryDistributorEntity implements Serializable {
 	 * 获取：用于点对点登录时的推送，由APP在登录的时候一起上传
 	 */
 	public String getClientId() { return clientId; }
-	/**
+
+    public Integer getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(Integer orderCount) {
+        this.orderCount = orderCount;
+    }
+
+    /**
 	 * 设置：当前状态，10：可配送，20：不可配送
 	 */
 	public void setStatus(Integer status) {
