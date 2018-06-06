@@ -43,7 +43,18 @@
 			limit #{offset}, #{limit}
 		</if>
 	</select>
-	
+
+	<select id="queryListByOrderId" resultType="com.yunquanlai.admin.order.entity.OrderProductDetailEntity">
+		select
+		            `id`,
+		            `product_info_id`,
+		            `product_name`,
+		            `count`,
+		            `order_info_id`
+				from order_product_detail
+      		where order_info_id =  #{value}
+	</select>
+
  	<select id="queryTotal" resultType="int">
 		select count(*) from order_product_detail 
 	</select>

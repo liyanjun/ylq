@@ -24,7 +24,7 @@ public class OrderDeliveryInfoEntity implements Serializable {
     /**
      * 设置：主键 ID
      */
-    private Integer id;
+    private Long id;
     /**
      * 设置：收货人姓名
      */
@@ -81,14 +81,14 @@ public class OrderDeliveryInfoEntity implements Serializable {
     /**
      * 设置：主键 ID
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     /**
      * 获取：主键 ID
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

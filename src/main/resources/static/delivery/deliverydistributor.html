@@ -89,10 +89,10 @@
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">所属配送点</div><font color="red">*</font>
+			   	<div class="col-sm-2 control-label">所属配送点{{deliveryEndpointId}}</div><font color="red">*</font>
 			   	<div class="col-sm-10">
-					<select class="form-control">
-						<option v-for="deliveryEndpoint in deliveryEndpointList" :value="deliveryEndpoint.id" v-model="deliveryDistributor.deliveryEndpointId" >{{deliveryEndpoint.name}}</option>
+					<select v-model="deliveryEndpointId" class="form-control">
+						<option v-for="deliveryEndpoint in deliveryEndpointList" :value="deliveryEndpoint.id" >{{deliveryEndpoint.name}}</option>
 					</select>
 				</div>
 			</div>

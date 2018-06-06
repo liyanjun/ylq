@@ -3,6 +3,8 @@ package com.yunquanlai.admin.order.dao;
 import com.yunquanlai.admin.order.entity.OrderProductDetailEntity;
 import com.yunquanlai.admin.system.dao.BaseDao;
 
+import java.util.List;
+
 /**
  * 订单商品信息表
  *
@@ -12,4 +14,10 @@ import com.yunquanlai.admin.system.dao.BaseDao;
  */
 public interface OrderProductDetailDao extends BaseDao<OrderProductDetailEntity> {
 
+    /**
+     * 根据订单 ID 查询
+     * @param orderInfoId
+     * @return
+     */
+    List<OrderProductDetailEntity> queryListByOrderId(Long orderInfoId);
 }

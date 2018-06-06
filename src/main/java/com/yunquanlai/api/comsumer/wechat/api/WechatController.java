@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,7 @@ import org.weixin4j.WeixinSupport;
 import org.weixin4j.http.HttpsClient;
 import org.weixin4j.http.Response;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
@@ -231,7 +233,6 @@ public class WechatController extends WeixinSupport {
                 if (PayUtil.verify(PayUtil.createLinkString(map), (String) map.get("sign"), WxPayConfig.key, "utf-8")) {
                     /**业务逻辑 start**/
                     orderInfoService.orderPay(map.get("out_trade_no"), map.get("total_fee"));
-                    orderInfoService.orderDelivery(map.get("out_trade_no"));
                     /**逻辑 end**/
 
                     //通知微信服务器已经支付成功

@@ -25,6 +25,18 @@
         <if test="isLock != null and isLock == true">for update</if>
     </select>
 
+    <select id="queryByDeliveryEndpointIdAndProductId" resultType="com.yunquanlai.admin.product.entity.ProductStockEntity">
+        select
+        `id`,
+        `product_info_id`,
+        `product_name`,
+        `delivery_endpoint_id`,
+        `delivery_name`,
+        `count`
+        from product_stock where product_info_id = #{productId} and delivery_endpoint_id = #{endpointId}
+        <if test="isLock != null and isLock == true">for update</if>
+    </select>
+
     <select id="queryList" resultType="com.yunquanlai.admin.product.entity.ProductStockEntity">
         select
         `id`,
