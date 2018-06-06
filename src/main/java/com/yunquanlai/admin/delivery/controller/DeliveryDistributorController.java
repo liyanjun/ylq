@@ -102,6 +102,7 @@ public class DeliveryDistributorController extends AbstractController {
 	public R update(@RequestBody DeliveryDistributorEntity deliveryDistributor){
         //校验配送员信息
         ValidatorUtils.validateEntity(deliveryDistributor, UpdateGroup.class);
+
 		deliveryDistributorService.update(deliveryDistributor);
 		
 		return R.ok();

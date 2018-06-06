@@ -4,6 +4,8 @@ import com.yunquanlai.utils.validator.group.AddGroup;
 import com.yunquanlai.utils.validator.group.UpdateGroup;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 
@@ -29,14 +31,19 @@ public class DeliveryDistributorEntity implements Serializable {
     /**
      * 设置：配送员手机号
      */
+	@NotBlank(message="手机号码不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    @Pattern(regexp="[1][3|4|5|7|8][0-9]{9}",message="手机号码格式不正确",groups = {AddGroup.class, UpdateGroup.class})
 	private String phone;
     /**
      * 设置：配送员登录密码
      */
+	//@NotBlank(message="密码不能为空",groups = {AddGroup.class, UpdateGroup.class})
+	//@Length(min=6,max=18,message="密码长度必须在6~18位之间",groups = {AddGroup.class, UpdateGroup.class})
 	private String password;
     /**
      * 设置：配送员生日
      */
+	@NotBlank(message="生日不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String birthday;
     /**
      * 设置：用于点对点登录时的推送，由APP在登录的时候一起上传
@@ -53,6 +60,7 @@ public class DeliveryDistributorEntity implements Serializable {
     /**
      * 设置：身份证号（备用）
      */
+	//@Pattern(regexp="(^\\\\d{18}$)|(^\\\\d{15}$)",message="身份证号格式不正确",groups = {AddGroup.class, UpdateGroup.class})
 	private String identifycation;
     /**
      * 设置：身份证照片地址
@@ -65,6 +73,7 @@ public class DeliveryDistributorEntity implements Serializable {
     /**
      * 设置：所属配送点id
      */
+	@NotNull(message="配送点id不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Long deliveryEndpointId;
 	/**
 	 * 设置：停用状态
@@ -73,6 +82,7 @@ public class DeliveryDistributorEntity implements Serializable {
     /**
      * 设置：所属配送点名
      */
+	@NotBlank(message="配送点名不能为空", groups = {AddGroup.class, UpdateGroup.class})
     private String deliveryEndpointName;
 
     /**

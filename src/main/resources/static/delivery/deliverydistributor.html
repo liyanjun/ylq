@@ -23,6 +23,10 @@
 <div id="rrapp" v-cloak>
 	<div v-show="showList">
 		<div class="grid-btn">
+            <div class="form-group col-sm-2">
+                <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="姓名、手机号、所属配送点">
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
 			<a v-if="hasPermission('deliverydistributor:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
 			<a v-if="hasPermission('deliverydistributor:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
 			<a v-if="hasPermission('deliverydistributor:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
@@ -38,13 +42,13 @@
 			   	<div class="col-sm-2 control-label">姓名</div>
 			   	<div class="col-sm-10">
 			      <input type="text" class="form-control" v-model="deliveryDistributor.name" placeholder="姓名"/>
-			    </div>
+			    </div><font color="red">*</font>
 			</div>
 									<div class="form-group">
 			   	<div class="col-sm-2 control-label">手机号</div>
 			   	<div class="col-sm-10">
 			      <input type="text" class="form-control" v-model="deliveryDistributor.phone" placeholder="手机号"/>
-			    </div>
+			    </div><font color="red">*</font>
 			</div>
 									<div class="form-group" style="display: none">
 			   	<div class="col-sm-2 control-label">登录密码</div>
@@ -56,7 +60,7 @@
 			   	<div class="col-sm-2 control-label">生日</div>
 			   	<div class="col-sm-10">
 			      <input type="date" class="form-control" v-model="deliveryDistributor.birthday" placeholder="生日"/>
-			    </div>
+			    </div><font color="red">*</font>
 			</div>
 									<!--<div class="form-group">
 			   	<div class="col-sm-2 control-label">用于点对点登录时的推送，由APP在登录的时候一起上传</div>

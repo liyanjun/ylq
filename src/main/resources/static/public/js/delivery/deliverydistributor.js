@@ -45,6 +45,9 @@ $(function () {
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
+        q:{
+            key: null
+        },
 		showList: true,
 		title: null,
 		deliveryDistributor: {},
@@ -125,7 +128,8 @@ var vm = new Vue({
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{ 
+			$("#jqGrid").jqGrid('setGridParam',{
+                postData:{'key': vm.q.key},
                 page:page
             }).trigger("reloadGrid");
 		},
