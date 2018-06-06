@@ -6,6 +6,9 @@ import com.yunquanlai.admin.delivery.service.DeliveryDistributorService;
 import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.validator.ValidatorUtils;
+import com.yunquanlai.utils.validator.group.AddGroup;
+import com.yunquanlai.utils.validator.group.UpdateGroup;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -66,7 +69,15 @@ public class DeliveryDistributorController extends AbstractController {
 	@RequestMapping("/save")
 	@RequiresPermissions("deliverydistributor:save")
 	public R save(@RequestBody DeliveryDistributorEntity deliveryDistributor){
+	    //校验配送员信息
+        ValidatorUtils.validateEntity(deliveryDistributor, AddGroup.class);
+
 		if (deliveryDistributor != null){
+			//status状态默认为20
+			deliveryDistributor.setStatus(20);
+			//暂时默认给值
+			deliveryDistributor.setDeliveryEndpointName("公路局配送点");
+			//deliveryDistributor.setDeliveryEndpointId(Integer.toUnsignedLong(1000));
 			//新创建停用状态，默认值为2
 			deliveryDistributor.setDisable((byte) 2);
 			String pwd = deliveryDistributor.getPassword();
@@ -89,6 +100,8 @@ public class DeliveryDistributorController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("deliverydistributor:update")
 	public R update(@RequestBody DeliveryDistributorEntity deliveryDistributor){
+        //校验配送员信息
+        ValidatorUtils.validateEntity(deliveryDistributor, UpdateGroup.class);
 		deliveryDistributorService.update(deliveryDistributor);
 		
 		return R.ok();

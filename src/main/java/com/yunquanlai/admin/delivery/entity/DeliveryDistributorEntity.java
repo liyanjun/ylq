@@ -1,5 +1,9 @@
 package com.yunquanlai.admin.delivery.entity;
 
+import com.yunquanlai.utils.validator.group.AddGroup;
+import com.yunquanlai.utils.validator.group.UpdateGroup;
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.io.Serializable;
 
 
@@ -20,6 +24,7 @@ public class DeliveryDistributorEntity implements Serializable {
     /**
      * 设置：配送员姓名
      */
+	@NotBlank(message="姓名不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String name;
     /**
      * 设置：配送员手机号

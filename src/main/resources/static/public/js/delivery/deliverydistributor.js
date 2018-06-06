@@ -48,7 +48,7 @@ var vm = new Vue({
 		showList: true,
 		title: null,
 		deliveryDistributor: {},
-        deliveryEndpointList: {}
+        deliveryEndpointList: []
 	},
 	methods: {
 		query: function () {
@@ -59,7 +59,7 @@ var vm = new Vue({
 			vm.title = "新增";
 			vm.deliveryDistributor = {};
 			//获取配送点信息
-            /*this.getDeliveryEndpointList();*/
+            this.getDeliveryEndpointList();
 		},
 		update: function (event) {
 			var id = getSelectedRow();
@@ -71,9 +71,11 @@ var vm = new Vue({
             
             vm.getInfo(id);
             //获取配送点信息
-            /*this.getDeliveryEndpointList();*/
+            this.getDeliveryEndpointList();
 		},
 		saveOrUpdate: function (event) {
+            vm.deliveryDistributor.deliveryEndpointId = $("option:selected").val();
+
 			var url = vm.deliveryDistributor.id == null ? "../deliverydistributor/save" : "../deliverydistributor/update";
 			$.ajax({
 				type: "POST",
@@ -127,10 +129,11 @@ var vm = new Vue({
                 page:page
             }).trigger("reloadGrid");
 		},
-		/*getDeliveryEndpointList:function () {
-            $.get("../deliveryendpoint/list", function(r){
-                vm.deliveryEndpointList = r.deliveryEndpointList;
+		getDeliveryEndpointList:function () {
+            $.get("../deliveryendpoint/select", function(r){
+                vm.deliveryEndpointList = r.deliveryEndpointEntities;
+                //alert(r.deliveryEndpointEntities[0].id)
             });
-        }*/
+        }
 	}
 });

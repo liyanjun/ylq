@@ -1,7 +1,6 @@
 package com.yunquanlai.admin.delivery.controller;
 
 import com.yunquanlai.admin.delivery.dao.DeliveryDistributorDao;
-import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunquanlai.admin.delivery.service.DeliveryEndpointService;
 import com.yunquanlai.utils.PageUtils;
@@ -47,7 +46,18 @@ public class DeliveryEndpointController {
 		
 		return R.ok().put("page", pageUtil);
 	}
-	
+
+	/**
+	 * 所有配送点记录
+	 * @return
+	 */
+    @RequestMapping("/select")
+    @RequiresPermissions("deliveryendpoint:list")
+	public R select(){
+		Map<String, Object> map = new HashMap<>();
+		List<DeliveryEndpointEntity> deliveryEndpointEntities = deliveryEndpointService.queryList(map);
+		return R.ok().put("deliveryEndpointEntities", deliveryEndpointEntities);
+	}
 	
 	/**
 	 * 信息
