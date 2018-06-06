@@ -50,7 +50,9 @@ var vm = new Vue({
         },
 		showList: true,
 		title: null,
-		deliveryDistributor: {},
+        deliveryEndpointId:"",
+		deliveryDistributor: {
+		},
         deliveryEndpointList: []
 	},
 	methods: {
@@ -77,7 +79,7 @@ var vm = new Vue({
             this.getDeliveryEndpointList();
 		},
 		saveOrUpdate: function (event) {
-            vm.deliveryDistributor.deliveryEndpointId = $("option:selected").val();
+            vm.deliveryDistributor.deliveryEndpointId = vm.deliveryEndpointId;
 
 			var url = vm.deliveryDistributor.id == null ? "../deliverydistributor/save" : "../deliverydistributor/update";
 			$.ajax({
