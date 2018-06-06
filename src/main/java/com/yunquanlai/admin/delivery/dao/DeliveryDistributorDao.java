@@ -11,5 +11,6 @@ import com.yunquanlai.admin.system.dao.BaseDao;
  * @date 2018-06-04 08:25:11
  */
 public interface DeliveryDistributorDao extends BaseDao<DeliveryDistributorEntity> {
-	
+
+    DeliveryDistributorEntity pickOne(Long id);
 }

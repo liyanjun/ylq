@@ -20,6 +20,7 @@ public class OrderInfoEntity implements Serializable {
     public static final Integer STATUS_ON_DELIVERY = 30;
     public static final Integer STATUS_DISTRIBUTION = 40;
     public static final Integer STATUS_CLOSE = 50;
+    public static final Integer STATUS_EXCEPTION = 60;
 
     /**
      * 设置：主键 ID

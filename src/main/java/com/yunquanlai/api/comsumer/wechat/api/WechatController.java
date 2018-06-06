@@ -2,13 +2,13 @@ package com.yunquanlai.api.comsumer.wechat.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.api.comsumer.wechat.utils.IpUtils;
 import com.yunquanlai.api.comsumer.wechat.utils.StringUtils;
 import com.yunquanlai.api.comsumer.wechat.utils.weixin.PayUtil;
 import com.yunquanlai.api.comsumer.wechat.utils.weixin.config.WxPayConfig;
 import com.yunquanlai.api.comsumer.wechat.utils.weixin.vo.OAuthJsToken;
-import com.yunquanlai.api.comsumer.wechat.vo.Json;
 import com.yunquanlai.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -26,13 +26,13 @@ import org.weixin4j.WeixinSupport;
 import org.weixin4j.http.HttpsClient;
 import org.weixin4j.http.Response;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,17 +111,19 @@ public class WechatController extends WeixinSupport {
             @ApiImplicitParam(paramType = "query", name = "orderId", value = "需要支付的订单 ID ", required = true)
     })
     public R wxPay(@RequestParam String openid, @RequestParam Long orderId, HttpServletRequest request) {
-        orderInfoService.queryObject(orderId);
+        // TODO 已关闭不能发起支付
+        OrderInfoEntity orderInfoEntity = orderInfoService.queryObject(orderId);
         try {
             //生成的随机字符串
             String nonce_str = StringUtils.getRandomStringByLength(32);
             //商品名称
-            String body = "测试商品名称";
+            String body = "云泉来-" + orderInfoEntity.getId();
             //获取本机的ip地址
             String spbill_create_ip = IpUtils.getIpAddr(request);
 
-            String orderNo = "123456789";
-            String money = "1";//支付金额，单位：分，这边需要转成字符串类型，否则后面的签名会失败
+            String orderNo = orderInfoEntity.getId() + "";
+            String money = orderInfoEntity.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN).toString();
+            //支付金额，单位：分，这边需要转成字符串类型，否则后面的签名会失败
 
             Map<String, String> packageParams = new HashMap<String, String>();
             packageParams.put("appid", WxPayConfig.appid);
@@ -192,7 +194,7 @@ public class WechatController extends WeixinSupport {
 
             response.put("appid", WxPayConfig.appid);
 
-            return R.ok("发起微信支付成功");
+            return R.ok("发起微信支付成功").put("response", response);
         } catch (Exception e) {
             logger.error("发起微信支付失败", e);
             return R.ok("发起微信支付失败");
@@ -224,16 +226,21 @@ public class WechatController extends WeixinSupport {
 
         String returnCode = (String) map.get("return_code");
         if ("SUCCESS".equals(returnCode)) {
-            //验证签名是否正确
-            if (PayUtil.verify(PayUtil.createLinkString(map), (String) map.get("sign"), WxPayConfig.key, "utf-8")) {
-                /**此处添加自己的业务逻辑代码start**/
+            try {
+                //验证签名是否正确
+                if (PayUtil.verify(PayUtil.createLinkString(map), (String) map.get("sign"), WxPayConfig.key, "utf-8")) {
+                    /**业务逻辑 start**/
+                    orderInfoService.orderPay(map.get("out_trade_no"), map.get("total_fee"));
+                    orderInfoService.orderDelivery(map.get("out_trade_no"));
+                    /**逻辑 end**/
 
-
-                /**此处添加自己的业务逻辑代码end**/
-
-                //通知微信服务器已经支付成功
-                resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
-                        + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+                    //通知微信服务器已经支付成功
+                    resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
+                            + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+                }
+            } catch (Exception e) {
+                resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
+                        + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
             }
         } else {
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"

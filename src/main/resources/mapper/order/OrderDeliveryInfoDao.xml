@@ -41,6 +41,26 @@
         <if test="isLock != null and isLock == true">for update</if>
 	</select>
 
+	<select id="queryObjectByOrderId" resultType="com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity">
+		select
+					`id`,
+					`name`,
+					`address`,
+					`sex`,
+					`phone`,
+					`location_x`,
+					`location_y`,
+					`status`,
+					`remark`,
+					`creation_time`,
+					`delivery_time`,
+					`delivery_distributor_id`,
+					`order_info_id`,
+					`user_info_id`
+				from order_delivery_info where order_info_id = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
+	</select>
+
 	<select id="queryList" resultType="com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity">
 		select
 		            `id`, 
