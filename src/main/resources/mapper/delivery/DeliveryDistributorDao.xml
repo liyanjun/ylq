@@ -3,7 +3,7 @@
 
 <mapper namespace="com.yunquanlai.admin.delivery.dao.DeliveryDistributorDao">
 
-    <!-- 可根据自己的需求，是否要使用 -->
+	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity" id="deliveryDistributorMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
@@ -17,24 +17,27 @@
         <result property="identifycationUrl" column="identifycation_url"/>
         <result property="healthUrl" column="health_url"/>
         <result property="deliveryEndpointId" column="delivery_endpoint_id"/>
+        <result property="disable" column="disable"/>
         <result property="deliveryEndpointName" column="delivery_endpoint_name"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
-        select
-        `id`,
-        `name`,
-        `phone`,
-        `password`,
-        `birthday`,
-        `clientId`,
-        `status`,
-        `order_count`,
-        `identifycation`,
-        `identifycation_url`,
-        `health_url`,
-        `delivery_endpoint_id`
-        from delivery_distributor where id = #{id}
+	<select id="queryObject" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
+		select
+					`id`, 
+					`name`, 
+					`phone`, 
+					`password`, 
+					`birthday`, 
+					`clientId`, 
+					`status`,
+                    `order_count`,
+					`identifycation`,
+					`identifycation_url`,
+					`health_url`,
+					`delivery_endpoint_id`,
+					`disable`,
+					`delivery_endpoint_name`
+				from delivery_distributor where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
     </select>
 
@@ -71,6 +74,22 @@
         `health_url`,
         `delivery_endpoint_id`
         from delivery_distributor
+	<select id="queryList" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
+		select
+		            `id`,
+		            `name`,
+		            `phone`,
+		            `password`,
+		            `birthday`,
+		            `clientId`,
+		            `status`,
+		            `identifycation`,
+		            `identifycation_url`,
+		            `health_url`,
+		            `delivery_endpoint_id`,
+					`disable`,
+					`delivery_endpoint_name`
+				from delivery_distributor
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -83,6 +102,8 @@
             limit #{offset}, #{limit}
         </if>
     </select>
+
+ 	<select id="queryTotal" resultType="int">
 
     <select id="queryListForDeliveryEndpoint"
             resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
@@ -115,7 +136,7 @@
     </select>
 
     <select id="queryTotal" resultType="int">
-		select count(*) from delivery_distributor 
+		select count(*) from delivery_distributor
 	</select>
 
     <insert id="save" parameterType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity"
@@ -132,7 +153,9 @@
 			`identifycation`,
 			`identifycation_url`, 
 			`health_url`, 
-			`delivery_endpoint_id`
+			`delivery_endpoint_id`,
+			`disable`,
+			`delivery_endpoint_name`
 		)
 		values
 		(
@@ -147,30 +170,40 @@
 			#{identifycationUrl}, 
 			#{healthUrl}, 
 			#{deliveryEndpointId},
+			#{disable},
 			#{deliveryEndpointName}
 		)
 	</insert>
-
-    <update id="update" parameterType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
-        update delivery_distributor
-        <set>
-            <if test="name != null">`name` = #{name},</if>
-            <if test="phone != null">`phone` = #{phone},</if>
-            <if test="password != null">`password` = #{password},</if>
-            <if test="birthday != null">`birthday` = #{birthday},</if>
-            <if test="clientId != null">`clientId` = #{clientId},</if>
-            <if test="status != null">`status` = #{status},</if>
+	 
+	<update id="update" parameterType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
+		update delivery_distributor 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="password != null">`password` = #{password}, </if>
+			<if test="birthday != null">`birthday` = #{birthday}, </if>
+			<if test="clientId != null">`clientId` = #{clientId}, </if>
+			<if test="status != null">`status` = #{status}, </if>
             <if test="orderCount != null">`order_count` = #{orderCount},</if>
-            <if test="identifycation != null">`identifycation` = #{identifycation},</if>
-            <if test="identifycationUrl != null">`identifycation_url` = #{identifycationUrl},</if>
-            <if test="healthUrl != null">`health_url` = #{healthUrl},</if>
-            <if test="deliveryEndpointId != null">`delivery_endpoint_id` = #{deliveryEndpointId}</if>
-            <if test="deliveryEndpointName != null">`delivery_endpoint_id` = #{deliveryEndpointName}</if>
-        </set>
-        where id = #{id}
-    </update>
+			<if test="identifycation != null">`identifycation` = #{identifycation}, </if>
+			<if test="identifycationUrl != null">`identifycation_url` = #{identifycationUrl}, </if>
+			<if test="healthUrl != null">`health_url` = #{healthUrl}, </if>
+			<if test="deliveryEndpointId != null">`delivery_endpoint_id` = #{deliveryEndpointId},</if>
+			<if test="disable != null">`disable` = #{disable},</if>
+			<if test="deliveryEndpointName != null">`delivery_endpoint_name` = #{deliveryEndpointName}</if>
+		</set>
+		where id = #{id}
+	</update>
 
-    <delete id="delete">
+	<update id="updateDeliveryEndpointName" parameterType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
+		update delivery_distributor
+		<set>
+			<if test="deliveryEndpointName != null">`delivery_endpoint_name` = #{deliveryEndpointName}</if>
+		</set>
+		where delivery_endpoint_id = #{deliveryEndpointId}
+	</update>
+	
+	<delete id="delete">
 		delete from delivery_distributor where id = #{value}
 	</delete>
 

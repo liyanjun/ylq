@@ -36,7 +36,7 @@ CREATE TABLE `delivery_distributor` (
   `name` varchar(32) NOT NULL COMMENT '配送员姓名',
   `phone` varchar(32) NOT NULL COMMENT '配送员手机号',
   `password` varchar(64) NOT NULL COMMENT '配送员登录密码',
-  `birthday` datetime NOT NULL COMMENT '配送员生日',
+  `birthday` varchar(10) NOT NULL COMMENT '配送员生日',
   `clientId` varchar(64) DEFAULT NULL COMMENT '用于点对点登录时的推送，由APP在登录的时候一起上传',
   `order_count` int(11) DEFAULT '0' COMMENT '当前在配送订单数',
   `status` tinyint(4) NOT NULL DEFAULT '20' COMMENT '当前状态，10：可配送，20：不可配送',
@@ -44,8 +44,10 @@ CREATE TABLE `delivery_distributor` (
   `identifycation_url` varchar(512) DEFAULT NULL COMMENT '身份证照片地址',
   `health_url` varchar(512) DEFAULT NULL COMMENT '健康证地址',
   `delivery_endpoint_id` bigint(11) NOT NULL COMMENT '所属配送点',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='配送员信息';
+  `disable` tinyint(2) DEFAULT '2' COMMENT '0:停用    1：启用    2：新创建（默认）',
+  `delivery_endpoint_name` varchar(32) NOT NULL COMMENT '配送点名',
+  PRIMARY KEY (`id`,`password`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='配送员信息';
 
 -- ----------------------------
 -- Table structure for delivery_distributor_financial_flow

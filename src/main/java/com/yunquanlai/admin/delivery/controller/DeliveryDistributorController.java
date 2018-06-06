@@ -42,7 +42,7 @@ public class DeliveryDistributorController extends AbstractController {
 
 		List<DeliveryDistributorEntity> deliveryDistributorList = deliveryDistributorService.queryList(query);
 		int total = deliveryDistributorService.queryTotal(query);
-		
+
 		PageUtils pageUtil = new PageUtils(deliveryDistributorList, total, query.getLimit(), query.getPage());
 		
 		return R.ok().put("page", pageUtil);
@@ -67,8 +67,10 @@ public class DeliveryDistributorController extends AbstractController {
 	@RequiresPermissions("deliverydistributor:save")
 	public R save(@RequestBody DeliveryDistributorEntity deliveryDistributor){
 		if (deliveryDistributor != null){
+			//新创建停用状态，默认值为2
+			deliveryDistributor.setDisable((byte) 2);
 			String pwd = deliveryDistributor.getPassword();
-			//初始密码
+			//初始密码：123456
 			if(StringUtils.isEmpty(pwd)){
 				pwd = "123456";
 			}

@@ -1,5 +1,7 @@
 package com.yunquanlai.admin.delivery.controller;
 
+import com.yunquanlai.admin.delivery.dao.DeliveryDistributorDao;
+import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunquanlai.admin.delivery.service.DeliveryEndpointService;
 import com.yunquanlai.utils.PageUtils;
@@ -9,6 +11,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +28,9 @@ import java.util.Map;
 public class DeliveryEndpointController {
 	@Autowired
 	private DeliveryEndpointService deliveryEndpointService;
-	
+
+    @Autowired
+	private DeliveryDistributorDao deliveryDistributorDao;
 	/**
 	 * 列表
 	 */
@@ -62,7 +67,7 @@ public class DeliveryEndpointController {
 	@RequiresPermissions("deliveryendpoint:save")
 	public R save(@RequestBody DeliveryEndpointEntity deliveryEndpoint){
 		deliveryEndpointService.save(deliveryEndpoint);
-		
+
 		return R.ok();
 	}
 	
@@ -73,7 +78,15 @@ public class DeliveryEndpointController {
 	@RequiresPermissions("deliveryendpoint:update")
 	public R update(@RequestBody DeliveryEndpointEntity deliveryEndpoint){
 		deliveryEndpointService.update(deliveryEndpoint);
-		
+
+        //更新配送点信息同时更新配送员表中的配送点名
+        Long delivery_endpoint_id = deliveryEndpoint.getId();
+        String delivery_endpoint_name = deliveryEndpoint.getName();
+        Map map = new HashMap(16);
+        map.put("deliveryEndpointId", delivery_endpoint_id);
+        map.put("deliveryEndpointName", delivery_endpoint_name);
+        deliveryDistributorDao.updateDeliveryEndpointName(map);
+
 		return R.ok();
 	}
 	

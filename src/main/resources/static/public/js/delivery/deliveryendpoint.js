@@ -40,6 +40,7 @@ var vm = new Vue({
 	el:'#rrapp',
 	data:{
 		showList: true,
+        showMap: false,
 		title: null,
 		deliveryEndpoint: {}
 	},
@@ -49,6 +50,7 @@ var vm = new Vue({
 		},
 		add: function(){
 			vm.showList = false;
+			vm.showMap = true;
 			vm.title = "新增";
 			vm.deliveryEndpoint = {};
             window.addEventListener('message', function(event) {
@@ -67,6 +69,7 @@ var vm = new Vue({
 				return ;
 			}
 			vm.showList = false;
+            vm.showMap = false;
             vm.title = "修改";
             
             vm.getInfo(id)

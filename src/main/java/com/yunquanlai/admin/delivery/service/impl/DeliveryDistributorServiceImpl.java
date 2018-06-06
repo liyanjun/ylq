@@ -51,5 +51,9 @@ public class DeliveryDistributorServiceImpl implements DeliveryDistributorServic
 	public void deleteBatch(Long[] ids){
 		deliveryDistributorDao.deleteBatch(ids);
 	}
-	
+
+    @Override
+    public void updateDeliveryEndpointName(Map<String, Object> map) {
+
+    }
 }

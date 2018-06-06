@@ -27,4 +27,7 @@ public interface DeliveryDistributorService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+	void updateDeliveryEndpointName(Map<String, Object> map);
+
 }
