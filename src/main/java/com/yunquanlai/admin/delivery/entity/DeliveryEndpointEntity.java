@@ -1,5 +1,9 @@
 package com.yunquanlai.admin.delivery.entity;
 
+import com.yunquanlai.utils.validator.group.AddGroup;
+import com.yunquanlai.utils.validator.group.UpdateGroup;
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -21,6 +25,7 @@ public class DeliveryEndpointEntity implements Serializable, Comparable<Delivery
     /**
      * 设置：配送点名
      */
+    @NotBlank(message="配送点名不能为空", groups = {AddGroup.class, UpdateGroup.class})
     private String name;
     /**
      * 设置：配送点坐标x

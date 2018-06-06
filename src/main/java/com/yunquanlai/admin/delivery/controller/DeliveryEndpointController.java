@@ -6,6 +6,8 @@ import com.yunquanlai.admin.delivery.service.DeliveryEndpointService;
 import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.validator.ValidatorUtils;
+import com.yunquanlai.utils.validator.group.AddGroup;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +40,6 @@ public class DeliveryEndpointController {
 	public R list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
-
 		List<DeliveryEndpointEntity> deliveryEndpointList = deliveryEndpointService.queryList(query);
 		int total = deliveryEndpointService.queryTotal(query);
 		
@@ -76,6 +77,9 @@ public class DeliveryEndpointController {
 	@RequestMapping("/save")
 	@RequiresPermissions("deliveryendpoint:save")
 	public R save(@RequestBody DeliveryEndpointEntity deliveryEndpoint){
+		//校验配送点信息
+		ValidatorUtils.validateEntity(deliveryEndpoint, AddGroup.class);
+
 		deliveryEndpointService.save(deliveryEndpoint);
 
 		return R.ok();
@@ -87,6 +91,9 @@ public class DeliveryEndpointController {
 	@RequestMapping("/update")
 	@RequiresPermissions("deliveryendpoint:update")
 	public R update(@RequestBody DeliveryEndpointEntity deliveryEndpoint){
+		//校验配送点信息
+		ValidatorUtils.validateEntity(deliveryEndpoint, AddGroup.class);
+
 		deliveryEndpointService.update(deliveryEndpoint);
 
         //更新配送点信息同时更新配送员表中的配送点名
