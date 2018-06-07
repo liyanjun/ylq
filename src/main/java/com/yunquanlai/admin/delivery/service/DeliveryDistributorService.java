@@ -30,4 +30,5 @@ public interface DeliveryDistributorService {
 
 	void updateDeliveryEndpointName(Map<String, Object> map);
 
+    DeliveryDistributorEntity queryObjectByPhone(String mobile);
 }

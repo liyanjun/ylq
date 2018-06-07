@@ -1,6 +1,7 @@
 package com.yunquanlai.config;
 
 import com.yunquanlai.utils.interceptor.AuthorizationInterceptor;
+import com.yunquanlai.utils.interceptor.DeliveryAuthorizationInterceptor;
 import com.yunquanlai.utils.resolver.LoginUserHandlerMethodArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -21,12 +22,16 @@ import java.util.List;
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private AuthorizationInterceptor authorizationInterceptor;
+
+    @Autowired
+    private DeliveryAuthorizationInterceptor deliveryAuthorizationInterceptor;
     @Autowired
     private LoginUserHandlerMethodArgumentResolver loginUserHandlerMethodArgumentResolver;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authorizationInterceptor).addPathPatterns("/client/api/**");
+        registry.addInterceptor(deliveryAuthorizationInterceptor).addPathPatterns("/delivery/api/**");
     }
 
     @Override
