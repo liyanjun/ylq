@@ -63,12 +63,12 @@ INSERT INTO `sys_menu` VALUES ('40', '39', '查看', null, 'productbrand:list,pr
 INSERT INTO `sys_menu` VALUES ('41', '39', '新增', null, 'productbrand:save', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('42', '39', '修改', null, 'productbrand:update', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('43', '39', '删除', null, 'productbrand:delete', '2', null, '6');
-INSERT INTO `sys_menu` VALUES ('44', '60', '配送员信息', 'delivery/deliverydistributor.html', 'deliverydistributor:list', '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('44', '60', '配送员信息管理', 'delivery/deliverydistributor.html', 'deliverydistributor:list', '1', 'fa fa-file-code-o', '6');
 INSERT INTO `sys_menu` VALUES ('45', '44', '查看', null, 'deliverydistributor:list,deliverydistributor:info', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('46', '44', '新增', null, 'deliverydistributor:save,deliveryendpoint:select', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('47', '44', '修改', null, 'deliverydistributor:update,deliveryendpoint:select', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('48', '44', '删除', null, 'deliverydistributor:delete', '2', null, '6');
-INSERT INTO `sys_menu` VALUES ('49', '60', '配送点信息', 'delivery/deliveryendpoint.html', 'deliveryendpoint:list', '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('49', '60', '配送点信息管理', 'delivery/deliveryendpoint.html', 'deliveryendpoint:list', '1', 'fa fa-file-code-o', '6');
 INSERT INTO `sys_menu` VALUES ('50', '49', '查看', null, 'deliveryendpoint:list,deliveryendpoint:info', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('51', '49', '新增', null, 'deliveryendpoint:save', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('52', '49', '修改', null, 'deliveryendpoint:update', '2', null, '6');
@@ -80,7 +80,15 @@ INSERT INTO `sys_menu` VALUES ('57', '54', '修改', null, 'productstock:update'
 INSERT INTO `sys_menu` VALUES ('58', '54', '删除', null, 'productstock:delete', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('59', '0', '商品管理', null, null, '0', null, '0');
 INSERT INTO `sys_menu` VALUES ('60', '0', '配送管理', null, null, '0', null, '0');
-
+INSERT INTO `sys_menu` VALUES ('61', '0', '客户管理', null, null, '0', null, '0');
+INSERT INTO `sys_menu` VALUES ('62', '61', '客户信息表管理', 'user/userinfo.html', 'userinfo:list', '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('63', '62', '查看', null, 'userinfo:list,userinfo:info', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('64', '0', '押金管理', null, null, '0', null, '0');
+INSERT INTO `sys_menu` VALUES ('65', '64', '客户押金信息表管理', 'userdeposit/userdeposit.html', 'userdeposit:list', '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('66', '65', '查看', null, 'userdeposit:list,userdeposit:info', '2', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('67', '64', '押金提现申请表管理', 'user/userwithdrawdeposit.html', 'userwithdrawdeposit:list', '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('68', '67', '查看', null, 'userwithdrawdeposit:list,userwithdrawdeposit:info', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('69', '67', '修改', null, 'userwithdrawdeposit:update', '2', null, '6');
 
 -- ----------------------------
 -- Records of sys_role_menu
