@@ -46,8 +46,9 @@ CREATE TABLE `delivery_distributor` (
   `delivery_endpoint_id` bigint(11) NOT NULL COMMENT '所属配送点',
   `disable` tinyint(2) DEFAULT '2' COMMENT '0:停用    1：启用    2：新创建（默认）',
   `delivery_endpoint_name` varchar(32) NOT NULL COMMENT '配送点名',
+  `device_identification` tinyint(4) NOT NULL DEFAULT '10' COMMENT '设备标识， 10：安卓， 20苹果',
   PRIMARY KEY (`id`,`password`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='配送员信息';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='配送员信息';
 
 -- ----------------------------
 -- Table structure for delivery_distributor_financial_flow
