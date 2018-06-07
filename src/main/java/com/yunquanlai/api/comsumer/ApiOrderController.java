@@ -37,8 +37,7 @@ public class ApiOrderController {
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "status", value = "订单状态")
     })
-    public R queryOrder(@LoginUser UserInfoEntity user,
-                        @ApiParam("订单状态") Integer status) {
+    public R queryOrder(@LoginUser @ApiParam(hidden = true) UserInfoEntity user, Integer status) {
         // TODO 判断当前请求是否是由该用户发起的
         return R.ok();
     }
@@ -50,12 +49,12 @@ public class ApiOrderController {
      * @return
      */
     @PostMapping("order")
-    @ApiOperation(value = "下单")
+    @ApiOperation(value = "下单orderVO样例{ \"address\": \"南宁市幸福里\", \"name\": \"李有钱\", \"sex\": 10, \"locationX\": 22.156487, \"locationY\": 23.458798, \"phone\": \"15677188594\", \"remark\": \"水里多放辣椒\", \"deliveryTime\": null, \"productOrderVOList\":[ {\"productInfoId\": 10001, \"count\": 2}, {\"productInfoId\": 10003, \"count\": 1} ] }")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
             @ApiImplicitParam(name = "orderVO", value = "订单信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderVO", paramType = "body")
     })
-    public R order(@RequestBody OrderVO orderVO, @LoginUser UserInfoEntity user) {
+    public R order(@RequestBody OrderVO orderVO, @LoginUser @ApiParam(hidden = true) UserInfoEntity user) {
         return orderInfoService.newOrder(orderVO, user);
     }
 

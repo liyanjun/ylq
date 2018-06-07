@@ -66,7 +66,8 @@ public class ApiProductController {
     @IgnoreAuth
     @PostMapping("getProductDetail")
     @ApiOperation(value = "获取商品详细信息")
-    public R getProductDetail(@ApiParam(value = "商品 ID") Long id) {
+    @ApiImplicitParam(paramType = "query", dataType = "long", name = "id", value = "商品 ID",required = true)
+    public R getProductDetail(@RequestParam Long id) {
         ProductInfoVO productInfoVO = productInfoService.queryProductInfoVO(id);
         return R.ok().put("productInfoVO", productInfoVO);
     }

@@ -106,7 +106,7 @@ public class WechatController extends WeixinSupport {
      * @param request
      * @return
      */
-    @PostMapping("wxPay")
+    @PostMapping("发起微信支付")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
             @ApiImplicitParam(paramType = "query", name = "openid", value = "用户唯一标识openid ", required = true),
