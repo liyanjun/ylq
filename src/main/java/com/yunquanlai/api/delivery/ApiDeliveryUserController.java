@@ -27,14 +27,12 @@ import java.util.UUID;
 /**
  * 注册
  *
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-03-26 17:27
+ * @author liyanjun
  */
 @RestController
 @RequestMapping("/delivery/api")
-@Api("登录接口")
-public class ApiDeliveryLoginController {
+@Api(value = "配送端-用户", description = "用户相关接口")
+public class ApiDeliveryUserController {
 
     @Autowired
     private DeliveryDistributorService deliveryDistributorService;

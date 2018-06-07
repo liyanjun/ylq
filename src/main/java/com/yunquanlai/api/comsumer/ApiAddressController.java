@@ -27,7 +27,7 @@ import java.util.*;
  **/
 @RestController
 @RequestMapping("/client/api")
-@Api("微信小程序接口-用户地址管理接口")
+@Api(value = "客户端-地址", description = "配送地址相关接口")
 public class ApiAddressController {
 
     @Autowired

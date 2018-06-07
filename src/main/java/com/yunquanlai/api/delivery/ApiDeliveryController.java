@@ -22,12 +22,10 @@ import java.util.Map;
 
 /**
  * @author liyanjun
- * @date 2018/5/30 22:05
- * @desc
  **/
 @RestController
 @RequestMapping("/delivery/api")
-@Api("配送接口")
+@Api(value = "配送端-业务", description = "业务接口")
 public class ApiDeliveryController {
 
     @Autowired
@@ -70,11 +68,11 @@ public class ApiDeliveryController {
                                   @RequestParam Integer offset,
                                   @RequestParam Integer limit) {
         Map<String, Object> filter = new HashMap(16);
-        filter.put("deliveryDistributorId",deliveryDistributorEntity.getId());
+        filter.put("deliveryDistributorId", deliveryDistributorEntity.getId());
         filter.put("offset", offset);
         filter.put("limit", limit);
         List<OrderDeliveryInfoEntity> orderDeliveryInfoEntityList = orderDeliveryInfoService.queryByDistributorId(filter);
-        return R.ok().put("orderDeliveryInfoList",orderDeliveryInfoEntityList);
+        return R.ok().put("orderDeliveryInfoList", orderDeliveryInfoEntityList);
     }
 
     /**
@@ -82,7 +80,7 @@ public class ApiDeliveryController {
      *
      * @return
      */
-    @PostMapping("queryOrderDeliveries")
+    @PostMapping("markerOrderDelivery")
     @ApiOperation(value = "标记订单送达")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
@@ -90,15 +88,13 @@ public class ApiDeliveryController {
             @ApiImplicitParam(paramType = "header", name = "版本", value = "platform", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "long", name = "orderDeliveryId", value = "orderDeliveryId", required = true)
     })
-    public R orderDelivery(@LoginDelivery DeliveryDistributorEntity deliveryDistributorEntity,
-                           @RequestParam Long orderDeliveryId){
+    public R markerOrderDelivery(@LoginDelivery DeliveryDistributorEntity deliveryDistributorEntity,
+                                 @RequestParam Long orderDeliveryId) {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoService.queryObject(orderDeliveryId);
-        Assert.isEqual(deliveryDistributorEntity.getId().longValue(),orderDeliveryInfoEntity.getDeliveryDistributorId().longValue(), "请不要标记别人的订单。");
-        orderDeliveryInfoService.orderDelivery(deliveryDistributorEntity,orderDeliveryInfoEntity);
+        Assert.isEqual(deliveryDistributorEntity.getId().longValue(), orderDeliveryInfoEntity.getDeliveryDistributorId().longValue(), "请不要标记别人的订单。");
+        orderDeliveryInfoService.orderDelivery(deliveryDistributorEntity, orderDeliveryInfoEntity);
         return R.ok();
     }
-
-
 
 
 }

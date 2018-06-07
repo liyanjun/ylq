@@ -1,6 +1,9 @@
 package com.yunquanlai.admin.order.service;
 
+import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
+import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
+import com.yunquanlai.admin.order.entity.OrderProductDetailEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.utils.R;
@@ -41,9 +44,13 @@ public interface OrderInfoService {
      */
     void orderPay(Object out_trade_no, Object total_fee);
 
+
     /**
-     * 处理订单配送逻辑
-     * @param orderId
+     * 判断该配送点是否有充足库存和人手，如果充足完成配送单分配
+     *
+     * @param orderProductDetailEntities 购买商品信息
+     * @param orderDeliveryInfoEntity    配送单信息
+     * @param deliveryEndpointEntity     配送点信息
      */
-    void orderDelivery(Object orderId);
+    boolean findDeliveryDistributor(List<OrderProductDetailEntity> orderProductDetailEntities, OrderDeliveryInfoEntity orderDeliveryInfoEntity, DeliveryEndpointEntity deliveryEndpointEntity);
 }

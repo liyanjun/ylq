@@ -25,7 +25,7 @@ import java.util.Map;
  **/
 @RestController
 @RequestMapping("/client/api")
-@Api("微信小程序接口-商品接口")
+@Api(value = "客户端-产品", description = "产品相关接口")
 public class ApiProductController {
     @Autowired
     private ProductInfoService productInfoService;

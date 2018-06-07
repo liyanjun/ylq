@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequestMapping("/client/api")
-@Api("微信小程序接口-订单接口")
+@Api(value = "客户端-订单", description = "订单相关接口")
 public class ApiOrderController {
 
     @Autowired

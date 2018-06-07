@@ -194,95 +194,36 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public void orderDelivery(Object orderId) {
-        OrderDeliveryInfoEntity orderDeliveryInfoEntity = null;
-        try {
-            orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderId, true);
-            if (orderDeliveryInfoEntity == null) {
-                logger.error("找不到对应的派送单，订单编号【" + orderId + "】");
-                return;
-            }
+    public boolean findDeliveryDistributor(List<OrderProductDetailEntity> orderProductDetailEntities, OrderDeliveryInfoEntity orderDeliveryInfoEntity, DeliveryEndpointEntity deliveryEndpointEntity) {
+        //先锁配送点，再开始锁配送点库存，否则有可能造成死锁
+        deliveryEndpointDao.queryObject(deliveryEndpointEntity.getId(), true);
+        DeliveryDistributorEntity deliveryDistributorEntity;
+        List<ProductStockEntity> productStockEntities;
 
-            if (OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE != orderDeliveryInfoEntity.getStatus()) {
-                logger.error("配送单" + orderDeliveryInfoEntity.getId() + "已处理派送【" + orderDeliveryInfoEntity.getStatus() + "】");
-                return;
-            }
-
-            // 准备选出的配送员
-            DeliveryDistributorEntity deliveryDistributorEntity = pickDeliveryDistributor(orderDeliveryInfoEntity);
-            if (deliveryDistributorEntity == null) {
-                // 找不到配送员，标记异常
-                orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_EXCEPTION);
-                orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
-                return;
-            }
-            orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
-            orderDeliveryInfoEntity.setDeliveryDistributorId(deliveryDistributorEntity.getId());
-            orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
-            applicationContext.publishEvent(new OrderDeliveryNotifyEvent(deliveryDistributorEntity.getClientId()));
-        } catch (Exception e) {
-            logger.error("订单派送异常", e);
-            if (orderDeliveryInfoEntity != null) {
-                orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_EXCEPTION);
-                orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
-            }
-        }
-    }
-
-    /**
-     * 寻找一个最近的，有可用派送员的，有库存的，派送点进行派送
-     *
-     * @param orderDeliveryInfoEntity 派送单信息
-     * @return 派送员实体
-     */
-    private DeliveryDistributorEntity pickDeliveryDistributor(OrderDeliveryInfoEntity orderDeliveryInfoEntity) {
-        // 找出订单购买的商品，便于计算库存
-        List<OrderProductDetailEntity> orderProductDetailEntities = orderProductDetailDao.queryListByOrderId(orderDeliveryInfoEntity.getOrderInfoId());
-        // 找出所有配送点
-        List<DeliveryEndpointEntity> deliveryEndpointEntities = deliveryEndpointDao.queryList(null);
-        for (DeliveryEndpointEntity deliveryEndpointEntity : deliveryEndpointEntities) {
-            // 求出x,y的差值的绝对值，即为距离
-            BigDecimal x = orderDeliveryInfoEntity.getLocationX().subtract(deliveryEndpointEntity.getLocationX()).abs();
-            BigDecimal y = orderDeliveryInfoEntity.getLocationY().subtract(deliveryEndpointEntity.getLocationY()).abs();
-            BigDecimal distance = x.pow(2).add(y.pow(2));
-            // 不用开方，因为开方了对比大小还是一样的。
-            deliveryEndpointEntity.setDistance(distance);
-        }
-        // 按照距离排序
-        Collections.sort(deliveryEndpointEntities);
-        DeliveryDistributorEntity deliveryDistributorEntity = null;
-        List<ProductStockEntity> productStockEntities = Collections.emptyList();
-        synchronized (this) {
-            for (DeliveryEndpointEntity deliveryEndpointEntity : deliveryEndpointEntities) {
-
-                deliveryDistributorEntity = deliveryDistributorDao.pickOne(deliveryEndpointEntity.getId());
-                if (deliveryDistributorEntity == null) {
-                    continue;
-                    // 该配送点找不到能送的人，找下一个配送点
-                }
-
-                productStockEntities = checkStock(orderProductDetailEntities, deliveryEndpointEntity);
-                if (productStockEntities.isEmpty()) {
-                    // 库存不足，找下一个点
-                    continue;
-                }
-                //有配送员，有库存，跳出循环
-                break;
-            }
+        deliveryDistributorEntity = deliveryDistributorDao.pickOne(deliveryEndpointEntity.getId());
+        if (deliveryDistributorEntity == null) {
+            throw new RuntimeException();
+            // 该配送点找不到能送的人，找下一个配送点
         }
 
-        if (deliveryDistributorEntity != null && !productStockEntities.isEmpty()) {
-            //有配送员，有库存,扣库存
-            for (ProductStockEntity productStockEntity : productStockEntities) {
-                productStockDao.update(productStockEntity);
-            }
-            // 分配订单，配送中订单数加一
-            deliveryDistributorEntity.setOrderCount(deliveryDistributorEntity.getOrderCount() + 1);
-            deliveryDistributorDao.update(deliveryDistributorEntity);
-            return deliveryDistributorEntity;
+        productStockEntities = checkStock(orderProductDetailEntities, deliveryEndpointEntity);
+        if (productStockEntities.isEmpty()) {
+            // 库存不足，回滚之前扣的库存，找下一个点
+            throw new RuntimeException();
         }
-        // 全部都找不到，返回null
-        return null;
+        //有配送员，有库存,扣库存
+        for (ProductStockEntity productStockEntity : productStockEntities) {
+            productStockDao.update(productStockEntity);
+        }
+        // 分配订单，配送中订单数加一
+        deliveryDistributorEntity.setOrderCount(deliveryDistributorEntity.getOrderCount() + 1);
+        deliveryDistributorDao.update(deliveryDistributorEntity);
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
+        orderDeliveryInfoEntity.setDeliveryDistributorId(deliveryDistributorEntity.getId());
+        // TODO 更新订单分配时间
+        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+        applicationContext.publishEvent(new OrderDeliveryNotifyEvent(deliveryDistributorEntity.getClientId()));
+        return true;
     }
 
     /**

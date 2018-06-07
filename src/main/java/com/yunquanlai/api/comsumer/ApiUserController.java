@@ -27,7 +27,7 @@ import java.util.UUID;
  **/
 @RestController
 @RequestMapping("/client/api")
-@Api("微信小程序接口-用户接口")
+@Api(value = "客户端-用户", description = "用户相关接口")
 public class ApiUserController {
 
     @Autowired
