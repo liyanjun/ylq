@@ -20,7 +20,7 @@ public class RenrenApplicationTests {
 	private ApplicationContext applicationContext;
 	@Test
 	public void contextLoads() {
-		applicationContext.publishEvent(new OrderDeliveryNotifyEvent("c7a78eaace99133d894df15d087a2bba4fb2aa3b7d96ffde057c86a746c9cf9c"));
+		applicationContext.publishEvent(new OrderDeliveryNotifyEvent("9ef699f5451d755c8fe3690c0b8050ed"));
 	}
 
 }

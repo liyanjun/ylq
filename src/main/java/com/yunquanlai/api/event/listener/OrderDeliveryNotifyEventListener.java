@@ -3,10 +3,13 @@ package com.yunquanlai.api.event.listener;
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.SingleMessage;
 import com.gexin.rp.sdk.base.impl.Target;
+import com.gexin.rp.sdk.base.payload.APNPayload;
 import com.gexin.rp.sdk.exceptions.RequestException;
 import com.gexin.rp.sdk.http.IGtPush;
+import com.gexin.rp.sdk.template.APNTemplate;
 import com.gexin.rp.sdk.template.LinkTemplate;
 import com.gexin.rp.sdk.template.NotificationTemplate;
+import com.gexin.rp.sdk.template.TransmissionTemplate;
 import com.gexin.rp.sdk.template.style.Style0;
 import com.yunquanlai.api.event.OrderDeliveryNotifyEvent;
 import org.slf4j.Logger;
@@ -16,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * 监听订单派送通知事件
- *
  */
 @Component
 public class OrderDeliveryNotifyEventListener implements ApplicationListener<OrderDeliveryNotifyEvent> {
@@ -25,10 +27,11 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
     private static String appKey = "mwvxOxyxk89WiO612cGqY5";
     private static String masterSecret = "ZL0K1tV5y87fix2tpIgHg2";
     static String host = "http://sdk.open.api.igexin.com/apiex.htm";
+
     @Override
     public void onApplicationEvent(OrderDeliveryNotifyEvent applicationEvent) {
         IGtPush push = new IGtPush(host, appKey, masterSecret);
-        NotificationTemplate template = getNotificationTemplate();
+        TransmissionTemplate template = getTransmissionTemplate();
         SingleMessage message = new SingleMessage();
         message.setOffline(true);
         // 离线有效时间，单位为毫秒，可选
@@ -40,14 +43,20 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         target.setAppId(appId);
         target.setClientId(applicationEvent.getSource().toString());
         //target.setAlias(Alias);
-        IPushResult ret = null;
+        IPushResult ret;
         try {
             ret = push.pushMessageToSingle(message, target);
         } catch (RequestException e) {
-            logger.error("推送请求发送异常",e);
+            logger.error("推送请求发送异常", e);
             ret = push.pushMessageToSingle(message, target, e.getRequestId());
         }
+
         if (ret != null) {
+            if ("ok".equals(ret.getResponse().get("result"))) {
+
+            }
+            //TODO 标记订单为推送异常，要添加订单异常信息字段
+
             logger.debug(ret.getResponse().toString());
         } else {
             logger.error("推送请求发送异常");
@@ -55,7 +64,6 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
 
     }
 
-    
 
     public static NotificationTemplate getNotificationTemplate() {
         NotificationTemplate template = new NotificationTemplate();
@@ -75,6 +83,26 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         style.setVibrate(true);
         style.setClearable(true);
         template.setStyle(style);
+        return template;
+    }
+
+    /**
+     * 苹果用
+     *
+     * @return
+     */
+    public static TransmissionTemplate getTransmissionTemplate() {
+        TransmissionTemplate template = new TransmissionTemplate();
+        template.setAppId(appId);
+        template.setAppkey(appKey);
+        template.setTransmissionType(2);
+        template.setTransmissionContent("您有新的配送任务");
+        APNPayload apnPayload = new APNPayload();
+        apnPayload.setAutoBadge("+1");
+        apnPayload.setContentAvailable(1);
+        apnPayload.setSound("default");
+        apnPayload.setAlertMsg(new APNPayload.SimpleAlertMsg("我去买个橘子，你呆在这里不要动等我"));
+        template.setAPNInfo(apnPayload);
         return template;
     }
 }

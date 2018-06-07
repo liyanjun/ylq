@@ -56,4 +56,10 @@ public class DeliveryDistributorServiceImpl implements DeliveryDistributorServic
     public void updateDeliveryEndpointName(Map<String, Object> map) {
 
     }
+
+	@Override
+	public DeliveryDistributorEntity queryObjectByPhone(String mobile) {
+		//TODO 根据手机号查询配送员信息
+		return null;
+	}
 }
