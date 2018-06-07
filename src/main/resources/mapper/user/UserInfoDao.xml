@@ -61,14 +61,12 @@
 		            `empty_bucket_number`, 
 		            `creation_time`
 				from user_info
-        <choose>
-            <when test="sidx != null and sidx.trim() != ''">
-                order by ${sidx} ${order}
-            </when>
-			<otherwise>
-                order by id desc
-			</otherwise>
-        </choose>
+		<where>
+			<if test="key != null and key.trim() != ''">
+				`username` like concat('%',#{key},'%') or `phone` like concat('%',#{key},'%')
+			</if>
+		</where>
+		order by id desc
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
 		</if>
@@ -104,9 +102,9 @@
 			#{creationTime}
 		)
 	</insert>
-	 
-	<update id="update" parameterType="com.yunquanlai.admin.user.entity.UserInfoEntity">
-		update user_info 
+
+<!--	<update id="update" parameterType="com.yunquanlai.admin.user.entity.UserInfoEntity">
+		update user_info
 		<set>
 			<if test="username != null">`username` = #{username}, </if>
 			<if test="phone != null">`phone` = #{phone}, </if>
@@ -120,16 +118,16 @@
 		</set>
 		where id = #{id}
 	</update>
-	
+
 	<delete id="delete">
 		delete from user_info where id = #{value}
 	</delete>
-	
+
 	<delete id="deleteBatch">
-		delete from user_info where id in 
+		delete from user_info where id in
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>
-	</delete>
+	</delete>-->
 
 </mapper>

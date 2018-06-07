@@ -13,6 +13,15 @@
         <result property="emptyBucketNumber" column="empty_bucket_number"/>
     </resultMap>
 
+	<!--
+19     方式一：嵌套结果：使用嵌套结果映射来处理重复的联合结果的子集
+20              封装联表查询的数据(去除重复的数据)
+21         select * from class c, teacher t where c.teacher_id=t.t_id and c.c_id=1
+22     -->
+	<select id="queryDepositList" resultType="com.yunquanlai.admin.user.entity.UserDepositVO">
+         select uDep.*, uInfo.username from user_deposit uDep, user_info uInfo where uDep.user_info_id=uInfo.id and uDep.id=#{id}
+     </select>
+
 	<select id="queryObject" resultType="com.yunquanlai.admin.user.entity.UserDepositEntity">
 		select
 					`id`, 
