@@ -1,7 +1,5 @@
 package com.yunquanlai.utils.resolver;
 
-import com.yunquanlai.admin.system.entity.UserEntity;
-import com.yunquanlai.admin.system.service.UserService;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.admin.user.service.UserInfoService;
 import com.yunquanlai.utils.annotation.LoginUser;

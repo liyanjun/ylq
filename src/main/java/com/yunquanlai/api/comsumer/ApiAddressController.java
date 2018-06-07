@@ -1,14 +1,9 @@
 package com.yunquanlai.api.comsumer;
 
-import com.yunquanlai.admin.system.entity.UserEntity;
 import com.yunquanlai.admin.user.entity.UserAddressEntity;
-import com.yunquanlai.admin.user.entity.UserClientTokenEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.admin.user.service.UserAddressService;
-import com.yunquanlai.admin.user.service.UserClientTokenService;
-import com.yunquanlai.admin.user.service.UserInfoService;
 import com.yunquanlai.utils.R;
-import com.yunquanlai.utils.annotation.IgnoreAuth;
 import com.yunquanlai.utils.annotation.LoginUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

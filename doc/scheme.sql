@@ -424,7 +424,7 @@ CREATE TABLE `user_address` (
 DROP TABLE IF EXISTS `user_client_token`;
 CREATE TABLE `user_client_token` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `token` varchar(256) NOT NULL,
+  `token` varchar(128) NOT NULL,
   `user_id` bigint(20) NOT NULL,
   `expire_time` datetime NOT NULL,
   `update_time` datetime NOT NULL,

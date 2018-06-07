@@ -1,6 +1,5 @@
 package com.yunquanlai.utils.interceptor;
 
-import com.yunquanlai.admin.system.entity.TokenEntity;
 import com.yunquanlai.admin.user.entity.UserClientTokenEntity;
 import com.yunquanlai.admin.user.service.UserClientTokenService;
 import com.yunquanlai.utils.RRException;

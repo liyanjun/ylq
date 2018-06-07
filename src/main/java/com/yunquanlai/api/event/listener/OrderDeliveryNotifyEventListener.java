@@ -31,7 +31,7 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
     @Override
     public void onApplicationEvent(OrderDeliveryNotifyEvent applicationEvent) {
         IGtPush push = new IGtPush(host, appKey, masterSecret);
-        TransmissionTemplate template = getTransmissionTemplate();
+        NotificationTemplate template = getNotificationTemplate();
         SingleMessage message = new SingleMessage();
         message.setOffline(true);
         // 离线有效时间，单位为毫秒，可选

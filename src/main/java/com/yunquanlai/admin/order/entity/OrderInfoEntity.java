@@ -18,7 +18,7 @@ public class OrderInfoEntity implements Serializable {
     public static final Integer STATUS_NEW = 10;
     public static final Integer STATUS_PAID = 20;
     public static final Integer STATUS_ON_DELIVERY = 30;
-    public static final Integer STATUS_DISTRIBUTION = 40;
+    public static final Integer STATUS_DELIVERY_END = 40;
     public static final Integer STATUS_CLOSE = 50;
     public static final Integer STATUS_EXCEPTION = 60;
 
