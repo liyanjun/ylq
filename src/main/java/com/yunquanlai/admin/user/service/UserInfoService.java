@@ -20,14 +20,14 @@ public interface UserInfoService {
 	List<UserInfoEntity> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);
-	
+
 	void save(UserInfoEntity userInfo);
-	
-	void update(UserInfoEntity userInfo);
-	
+
+/*	void update(UserInfoEntity userInfo);
+
 	void delete(Long id);
-	
-	void deleteBatch(Long[] ids);
+
+	void deleteBatch(Long[] ids);*/
 
 	UserInfoEntity queryObjectByUid(String uid);
 }

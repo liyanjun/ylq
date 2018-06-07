@@ -1,5 +1,6 @@
 package com.yunquanlai.admin.user.service.impl;
 
+import com.yunquanlai.admin.user.entity.UserDepositVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,12 @@ public class UserDepositServiceImpl implements UserDepositService {
 	public List<UserDepositEntity> queryList(Map<String, Object> map){
 		return userDepositDao.queryList(map);
 	}
-	
+
+	@Override
+	public List<UserDepositVO> queryDepositList(Map<String, Object> map) {
+		return userDepositDao.queryDepositList(map);
+	}
+
 	@Override
 	public int queryTotal(Map<String, Object> map){
 		return userDepositDao.queryTotal(map);

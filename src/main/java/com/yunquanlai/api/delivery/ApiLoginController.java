@@ -5,7 +5,6 @@ import com.yunquanlai.admin.delivery.service.DeliveryDistributorService;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
-import com.yunquanlai.admin.system.service.UserService;
 import com.yunquanlai.utils.validator.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
