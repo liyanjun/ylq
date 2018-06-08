@@ -80,7 +80,7 @@ var vm = new Vue({
 		},
 		saveOrUpdate: function (event) {
             vm.deliveryDistributor.deliveryEndpointId = vm.deliveryEndpointId;
-
+            vm.deliveryDistributor.deliveryEndpointName = $("#selected option:selected").text();
 			var url = vm.deliveryDistributor.id == null ? "../deliverydistributor/save" : "../deliverydistributor/update";
 			$.ajax({
 				type: "POST",
