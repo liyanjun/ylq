@@ -42,7 +42,7 @@ public class ApiDeliveryController {
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "number", value = "空桶数", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "long", name = "orderDeliveryId", value = "配送单 ID", required = true)
     })
-    public R recyclingEmptyBarrels(Integer number, Long orderId) {
+    public R recyclingEmptyBarrels(Integer number, Long orderDeliveryId) {
         return R.ok();
     }
 

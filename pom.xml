@@ -213,8 +213,8 @@
 			<groupId>weixin</groupId>
 			<artifactId>weixin4j</artifactId>
 			<version>0.0.9.1</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/weixin4j-0.0.9.1.jar</systemPath>
+			<!--<scope>system</scope>-->
+			<!--<systemPath>${project.basedir}/lib/weixin4j-0.0.9.1.jar</systemPath>-->
 		</dependency>
 	</dependencies>
 

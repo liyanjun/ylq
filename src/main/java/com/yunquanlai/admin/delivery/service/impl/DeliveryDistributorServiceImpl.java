@@ -59,7 +59,6 @@ public class DeliveryDistributorServiceImpl implements DeliveryDistributorServic
 
 	@Override
 	public DeliveryDistributorEntity queryObjectByPhone(String mobile) {
-		//TODO 根据手机号查询配送员信息
-		return null;
+		return deliveryDistributorDao.queryObjectByPhone(mobile);
 	}
 }
