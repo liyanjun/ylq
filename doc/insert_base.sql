@@ -81,14 +81,11 @@ INSERT INTO `sys_menu` VALUES ('58', '54', '删除', null, 'productstock:delete'
 INSERT INTO `sys_menu` VALUES ('59', '0', '商品管理', null, null, '0', null, '0');
 INSERT INTO `sys_menu` VALUES ('60', '0', '配送管理', null, null, '0', null, '0');
 INSERT INTO `sys_menu` VALUES ('61', '0', '客户管理', null, null, '0', null, '0');
-INSERT INTO `sys_menu` VALUES ('62', '61', '客户信息表管理', 'user/userinfo.html', 'userinfo:list', '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('62', '61', '客户信息', 'user/userinfo.html', 'userinfo:list', '1', 'fa fa-file-code-o', '6');
 INSERT INTO `sys_menu` VALUES ('63', '62', '查看', null, 'userinfo:list,userinfo:info', '2', null, '6');
-INSERT INTO `sys_menu` VALUES ('64', '0', '押金管理', null, null, '0', null, '0');
-INSERT INTO `sys_menu` VALUES ('65', '64', '客户押金信息表管理', 'userdeposit/userdeposit.html', 'userdeposit:list', '1', 'fa fa-file-code-o', '6');
-INSERT INTO `sys_menu` VALUES ('66', '65', '查看', null, 'userdeposit:list,userdeposit:info', '2', 'fa fa-file-code-o', '6');
-INSERT INTO `sys_menu` VALUES ('67', '64', '押金提现申请表管理', 'user/userwithdrawdeposit.html', 'userwithdrawdeposit:list', '1', 'fa fa-file-code-o', '6');
-INSERT INTO `sys_menu` VALUES ('68', '67', '查看', null, 'userwithdrawdeposit:list,userwithdrawdeposit:info', '2', null, '6');
-INSERT INTO `sys_menu` VALUES ('69', '67', '修改', null, 'userwithdrawdeposit:update', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('64', '61', '押金提现申请', 'user/userwithdrawdeposit.html', 'userwithdrawdeposit:list', '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('65', '64', '查看', null, 'userwithdrawdeposit:list,userwithdrawdeposit:info', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('66', '64', '修改', null, 'userwithdrawdeposit:update', '2', null, '6');
 
 -- ----------------------------
 -- Records of sys_role_menu

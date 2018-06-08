@@ -237,8 +237,8 @@ DROP TABLE IF EXISTS `product_info`;
 CREATE TABLE `product_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `name` varchar(128) NOT NULL COMMENT '商品名称',
-  `amount_show` decimal(20,2) DEFAULT NULL COMMENT '标价',
-  `amount` decimal(20,2) NOT NULL COMMENT '实价',
+  `amount_show` decimal(20,2) DEFAULT NULL COMMENT '售价',
+  `amount` decimal(20,2) NOT NULL COMMENT '优惠价',
   `img` varchar(512) NOT NULL COMMENT '商品主图',
   `brand_id` int(11) NOT NULL COMMENT '商品品牌 ID',
   `brand_name` varchar(64) NOT NULL COMMENT '商品品牌',
