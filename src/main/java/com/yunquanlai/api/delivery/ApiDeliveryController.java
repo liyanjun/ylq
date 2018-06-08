@@ -44,6 +44,7 @@ public class ApiDeliveryController {
             @ApiImplicitParam(paramType = "query", dataType = "long", name = "orderDeliveryId", value = "配送单 ID", required = true)
     })
     public R recyclingEmptyBarrels(Integer number, Long orderDeliveryId) {
+        orderDeliveryInfoService.recyclingEmptyBarrels(number,orderDeliveryId);
         return R.ok();
     }
 

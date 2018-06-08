@@ -80,6 +80,7 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         deliveryDistributorEntity = deliveryDistributorDao.queryObject(deliveryDistributorEntity.getId(), true);
         Assert.isNull(orderDeliveryInfoEntity, "找不到配送员信息");
+        // 减掉配送员 当前配送订单数。
         deliveryDistributorEntity.setOrderCount(deliveryDistributorEntity.getOrderCount() - 1);
         deliveryDistributorDao.update(deliveryDistributorEntity);
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderDeliveryInfoEntity.getOrderInfoId(), true);
@@ -92,6 +93,13 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
     @Override
     public OrderDeliveryInfoEntity queryObjectByOrderId(Long orderId) {
         return orderDeliveryInfoDao.queryObjectByOrderId(orderId,false);
+    }
+
+    @Override
+    public void recyclingEmptyBarrels(Integer number, Long orderDeliveryId) {
+        // TODO 查询配送单信息，从而查到用户信息
+        // TODO 判断用户持有空桶数是否大于要回收的空桶
+        // TODO 扣除用户空桶数，释放用户押金
     }
 
 }

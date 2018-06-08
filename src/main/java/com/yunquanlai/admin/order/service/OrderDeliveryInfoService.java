@@ -34,4 +34,6 @@ public interface OrderDeliveryInfoService {
 	void orderDelivery(DeliveryDistributorEntity deliveryDistributorEntity, OrderDeliveryInfoEntity orderDeliveryInfoEntity);
 
 	OrderDeliveryInfoEntity queryObjectByOrderId(Long orderId);
+
+	void recyclingEmptyBarrels(Integer number, Long orderDeliveryId);
 }
