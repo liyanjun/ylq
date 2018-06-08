@@ -1,24 +1,22 @@
 package com.yunquanlai.admin.product.controller;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import com.yunquanlai.admin.common.AbstractController;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.product.entity.ProductInfoVO;
 import com.yunquanlai.admin.product.service.ProductInfoService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.validator.ValidatorUtils;
+import com.yunquanlai.utils.validator.group.AddGroup;
+import com.yunquanlai.utils.validator.group.UpdateGroup;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -70,6 +68,9 @@ public class ProductInfoController extends AbstractController {
 	@RequiresPermissions("productinfo:save")
 	public R save(@RequestBody ProductInfoVO productInfoVO){
 		ProductInfoEntity productInfoEntity = productInfoVO.getProductInfoEntity();
+		//校验商品信息
+		ValidatorUtils.validateEntity(productInfoEntity, AddGroup.class);
+
 		productInfoEntity.setCreationTime(new Date());
 		productInfoEntity.setCreatorName(getUser().getUsername());
 		productInfoEntity.setCreatorId(getUserId());
@@ -86,6 +87,9 @@ public class ProductInfoController extends AbstractController {
 	@RequiresPermissions("productinfo:update")
 	public R update(@RequestBody ProductInfoVO productInfoVO){
 		ProductInfoEntity productInfoEntity = productInfoVO.getProductInfoEntity();
+        //校验商品信息
+        ValidatorUtils.validateEntity(productInfoEntity, UpdateGroup.class);
+
 		productInfoEntity.setUpdateTime(new Date());
 		productInfoEntity.setUpdateName(getUser().getUsername());
 		productInfoEntity.setUpdateId(getUserId());

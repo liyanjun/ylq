@@ -1,5 +1,10 @@
 package com.yunquanlai.admin.product.entity;
 
+import com.yunquanlai.utils.validator.group.AddGroup;
+import com.yunquanlai.utils.validator.group.UpdateGroup;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,10 +28,12 @@ public class ProductInfoEntity implements Serializable {
     /**
      * 设置：商品名称
      */
+	@NotBlank(message="商品名不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String name;
 	/**
 	 * 商品主图
 	 */
+    @NotBlank(message="商品主图不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String img;
     /**
      * 设置：标价
@@ -35,22 +42,27 @@ public class ProductInfoEntity implements Serializable {
     /**
      * 设置：实价
      */
+    @NotNull(message="商品实价不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private BigDecimal amount;
     /**
      * 设置：商品品牌 ID
      */
+    @NotNull(message="商品品牌ID不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Long brandId;
     /**
      * 设置：商品品牌
      */
+    @NotBlank(message="商品品牌名不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String brandName;
     /**
      * 设置：桶类型，10：一次性桶，20：可回收桶
      */
+    @NotNull(message="桶类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer bucketType;
     /**
      * 设置：配送费
      */
+    @NotNull(message="配送费不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private BigDecimal deliveryFee;
 
 	private Integer count;
@@ -83,6 +95,7 @@ public class ProductInfoEntity implements Serializable {
 	/**
 	 * 是否是一键送水产品，10：是，20：不是
 	 */
+    @NotNull(message="是否一键送水不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer isQuick;
 
 	/**
@@ -195,6 +208,7 @@ public class ProductInfoEntity implements Serializable {
 	/**
 	 * 获取：配送费
 	 */
+
 	public BigDecimal getDeliveryFee() {
 		return deliveryFee;
 	}

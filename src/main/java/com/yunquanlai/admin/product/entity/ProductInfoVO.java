@@ -130,7 +130,18 @@ public class ProductInfoVO implements Serializable {
     public Long getBrandId() {
         return productInfoEntity.getBrandId();
     }
-
+    /**
+     * 设置：商品品牌
+     */
+    public void setBrandName(String brandName) {
+        productInfoEntity.setBrandName(brandName);
+    }
+    /**
+     * 获取：商品品牌
+     */
+    public String getBrandName() {
+        return productInfoEntity.getBrandName();
+    }
     /**
      * 设置：桶类型，10：一次性桶，20：可回收桶
      */

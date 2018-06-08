@@ -4,8 +4,9 @@ var vm = new Vue({
     data: {
         showList: true,
         title: null,
+        brandId: "",
         productInfo: {},
-        brandList: {}
+        brandList: []
     },
     methods: {
         query: function () {
@@ -38,6 +39,9 @@ var vm = new Vue({
             });
         },
         saveOrUpdate: function (event) {
+            vm.productInfo.brandId = vm.brandId;
+            vm.productInfo.brandName = $("#selected option:selected").text();
+            alert(vm.productInfo.brandName)
             var url = vm.productInfo.id == null ? "../productinfo/save" : "../productinfo/update";
             $.ajax({
                 type: "POST",
