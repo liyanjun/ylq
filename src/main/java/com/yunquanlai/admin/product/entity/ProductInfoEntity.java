@@ -36,13 +36,13 @@ public class ProductInfoEntity implements Serializable {
     @NotBlank(message="商品主图不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String img;
     /**
-     * 设置：标价
+     * 设置：售价
      */
+    @NotNull(message="商品售价不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private BigDecimal amountShow;
     /**
-     * 设置：实价
+     * 设置：优惠价
      */
-    @NotNull(message="商品实价不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private BigDecimal amount;
     /**
      * 设置：商品品牌 ID
@@ -140,25 +140,25 @@ public class ProductInfoEntity implements Serializable {
 	}
 
 	/**
-	 * 设置：标价
+	 * 设置：售价
 	 */
 	public void setAmountShow(BigDecimal amountShow) {
 		this.amountShow = amountShow;
 	}
 	/**
-	 * 获取：标价
+	 * 获取：售价
 	 */
 	public BigDecimal getAmountShow() {
 		return amountShow;
 	}
 	/**
-	 * 设置：实价
+	 * 设置：优惠价
 	 */
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 	/**
-	 * 获取：实价
+	 * 获取：优惠价
 	 */
 	public BigDecimal getAmount() {
 		return amount;

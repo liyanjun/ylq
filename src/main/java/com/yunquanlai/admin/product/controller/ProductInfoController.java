@@ -1,6 +1,7 @@
 package com.yunquanlai.admin.product.controller;
 
 import com.yunquanlai.admin.common.AbstractController;
+import com.yunquanlai.admin.product.entity.ProductDetailEntity;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.product.entity.ProductInfoVO;
 import com.yunquanlai.admin.product.service.ProductInfoService;
@@ -68,8 +69,10 @@ public class ProductInfoController extends AbstractController {
 	@RequiresPermissions("productinfo:save")
 	public R save(@RequestBody ProductInfoVO productInfoVO){
 		ProductInfoEntity productInfoEntity = productInfoVO.getProductInfoEntity();
+        ProductDetailEntity productDetailEntity = productInfoVO.getProductDetailEntity();
 		//校验商品信息
 		ValidatorUtils.validateEntity(productInfoEntity, AddGroup.class);
+		ValidatorUtils.validateEntity(productDetailEntity, AddGroup.class);
 
 		productInfoEntity.setCreationTime(new Date());
 		productInfoEntity.setCreatorName(getUser().getUsername());

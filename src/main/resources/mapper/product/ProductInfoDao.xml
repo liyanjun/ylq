@@ -69,14 +69,12 @@
         `update_id`,
         `update_name`
         from product_info
-        <choose>
-            <when test="sidx != null and sidx.trim() != ''">
-                order by ${sidx} ${order}
-            </when>
-            <otherwise>
-                order by id desc
-            </otherwise>
-        </choose>
+        <where>
+            <if test="key != null and key.trim() != ''">
+                `name` like concat('%',#{key},'%') or `brand_name` like concat('%',#{key},'%')
+            </if>
+        </where>
+        order by id desc
         <if test="offset != null and limit != null">
             limit #{offset}, #{limit}
         </if>

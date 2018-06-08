@@ -2,6 +2,9 @@ var editor;
 var vm = new Vue({
     el: '#rrapp',
     data: {
+        q:{
+            key: null
+        },
         showList: true,
         title: null,
         brandId: "",
@@ -41,7 +44,6 @@ var vm = new Vue({
         saveOrUpdate: function (event) {
             vm.productInfo.brandId = vm.brandId;
             vm.productInfo.brandName = $("#selected option:selected").text();
-            alert(vm.productInfo.brandName)
             var url = vm.productInfo.id == null ? "../productinfo/save" : "../productinfo/update";
             $.ajax({
                 type: "POST",
@@ -93,6 +95,7 @@ var vm = new Vue({
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
+                postData:{'key': vm.q.key},
                 page: page
             }).trigger("reloadGrid");
         }
