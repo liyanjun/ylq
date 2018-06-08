@@ -75,9 +75,6 @@ public class DeliveryDistributorController extends AbstractController {
 		if (deliveryDistributor != null){
 			//status状态默认为20
 			deliveryDistributor.setStatus(20);
-			//暂时默认给值
-			deliveryDistributor.setDeliveryEndpointName("公路局配送点");
-			//deliveryDistributor.setDeliveryEndpointId(Integer.toUnsignedLong(1000));
 			//新创建停用状态，默认值为2
 			deliveryDistributor.setDisable((byte) 2);
 			String pwd = deliveryDistributor.getPassword();
