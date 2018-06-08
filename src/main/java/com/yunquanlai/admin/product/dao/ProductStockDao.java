@@ -15,4 +15,8 @@ public interface ProductStockDao extends BaseDao<ProductStockEntity> {
 
 
     ProductStockEntity queryByDeliveryEndpointIdAndProductId(@Param("productId") Long id, @Param("endpointId") Long endpointId, @Param("isLock") boolean isLock);
+
+    void updateDeliveryEndpointName(ProductStockEntity productStockEntity);
+
+    void updateProductName(ProductStockEntity productStockEntity);
 }

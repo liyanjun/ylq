@@ -12,7 +12,7 @@ import java.util.Date;
  * @email 
  * @date 2018-06-04 22:42:21
  */
-public class OrderOpreateFlowEntity implements Serializable {
+public class OrderOperateFlowEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
     /**

@@ -26,7 +26,7 @@ CREATE TABLE `delivery_client_token` (
   `expire_time` datetime NOT NULL,
   `update_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='配送端token持久化';
 
 
 -- ----------------------------
@@ -163,21 +163,26 @@ CREATE TABLE `order_info` (
   `amount_activity` decimal(20,2) DEFAULT NULL COMMENT '订单活动优惠金额（即除了优惠标价外，使用的活动奖励）',
   `amount_delivery_fee` decimal(10,0) NOT NULL COMMENT '订单配送费',
   `status` tinyint(4) NOT NULL COMMENT '订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50已关闭',
+  `type` tinyint(4) NOT NULL COMMENT '订单状态类型，10：正常，20：异常',
   `delivery_distributor_id` bigint(11) DEFAULT NULL COMMENT '关联配送员 ID',
   `delivery_distributor_name` varchar(64) DEFAULT NULL COMMENT '关联配送员名',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
   `username` varchar(128) NOT NULL COMMENT '用户名',
   `remark` varchar(1024) DEFAULT NULL COMMENT '订单备注',
+  `exception` text DEFAULT NULL COMMENT '订单异常信息',
   `creation_time` datetime NOT NULL COMMENT '订单创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `paid_time` datetime COMMENT '订单支付时间',
+  `distribute_time` datetime COMMENT '订单分配时间',
+  `delivery_end_time` datetime COMMENT '订单配送结束时间',
+  `close_time` datetime COMMENT '订单关闭时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='订单信息表';
 
 -- ----------------------------
--- Table structure for order_opreate_flow
+-- Table structure for order_operate_flow
 -- ----------------------------
-DROP TABLE IF EXISTS `order_opreate_flow`;
-CREATE TABLE `order_opreate_flow` (
+DROP TABLE IF EXISTS `order_operate_flow`;
+CREATE TABLE `order_operate_flow` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `type` int(11) NOT NULL COMMENT '处理类型，10：手工选定配送员，20：取消订单',
   `before_status` int(11) NOT NULL COMMENT '手工操作前状态',

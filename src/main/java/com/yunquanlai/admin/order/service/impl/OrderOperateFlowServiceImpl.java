@@ -6,25 +6,25 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-import com.yunquanlai.admin.order.dao.OrderOpreateFlowDao;
-import com.yunquanlai.admin.order.entity.OrderOpreateFlowEntity;
-import com.yunquanlai.admin.order.service.OrderOpreateFlowService;
+import com.yunquanlai.admin.order.dao.OrderOperateFlowDao;
+import com.yunquanlai.admin.order.entity.OrderOperateFlowEntity;
+import com.yunquanlai.admin.order.service.OrderOperateFlowService;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("orderOpreateFlowService")
 @Transactional(rollbackFor = Exception.class)
-public class OrderOpreateFlowServiceImpl implements OrderOpreateFlowService {
+public class OrderOperateFlowServiceImpl implements OrderOperateFlowService {
 	@Autowired
-	private OrderOpreateFlowDao orderOpreateFlowDao;
+	private OrderOperateFlowDao orderOpreateFlowDao;
 	
 	@Override
-	public OrderOpreateFlowEntity queryObject(Integer id){
+	public OrderOperateFlowEntity queryObject(Integer id){
 		return orderOpreateFlowDao.queryObject(id,false);
 	}
 	
 	@Override
-	public List<OrderOpreateFlowEntity> queryList(Map<String, Object> map){
+	public List<OrderOperateFlowEntity> queryList(Map<String, Object> map){
 		return orderOpreateFlowDao.queryList(map);
 	}
 	
@@ -34,12 +34,12 @@ public class OrderOpreateFlowServiceImpl implements OrderOpreateFlowService {
 	}
 	
 	@Override
-	public void save(OrderOpreateFlowEntity orderOpreateFlow){
+	public void save(OrderOperateFlowEntity orderOpreateFlow){
 		orderOpreateFlowDao.save(orderOpreateFlow);
 	}
 	
 	@Override
-	public void update(OrderOpreateFlowEntity orderOpreateFlow){
+	public void update(OrderOperateFlowEntity orderOpreateFlow){
 		orderOpreateFlowDao.update(orderOpreateFlow);
 	}
 	

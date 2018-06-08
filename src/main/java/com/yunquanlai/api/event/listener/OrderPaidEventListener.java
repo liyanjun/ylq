@@ -80,14 +80,11 @@ public class OrderPaidEventListener implements ApplicationListener<OrderPaidEven
                 }
             }
 
-            // TODO 全部都找不到，标记异常,记录异常原因，并单独字段标记异常
-            orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_EXCEPTION);
-            orderDeliveryInfoService.update(orderDeliveryInfoEntity);
+            orderDeliveryInfoService.markerException(orderDeliveryInfoEntity,"找不到有库存并且有可配送人员的配送点");
         } catch (Exception e) {
             logger.error("订单派送异常", e);
             if (orderDeliveryInfoEntity != null) {
-                orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_EXCEPTION);
-                orderDeliveryInfoService.update(orderDeliveryInfoEntity);
+                orderDeliveryInfoService.markerException(orderDeliveryInfoEntity,e.getMessage());
             }
         }
     }

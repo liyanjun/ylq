@@ -1,5 +1,7 @@
 package com.yunquanlai.admin.product.entity;
 
+import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
+
 import java.io.Serializable;
 
 
@@ -43,7 +45,19 @@ public class ProductStockEntity implements Serializable {
 	 */
 	private Integer countAdd;
 
-	/**
+	public ProductStockEntity(){
+
+	}
+
+    public ProductStockEntity(ProductInfoEntity productInfoEntity, DeliveryEndpointEntity deliveryEndpoint) {
+		this.setProductInfoId(productInfoEntity.getId());
+		this.setProductName(productInfoEntity.getName());
+		this.setDeliveryName(deliveryEndpoint.getName());
+		this.setDeliveryEndpointId(deliveryEndpoint.getId());
+		this.setCount(0);
+    }
+
+    /**
 	 * 设置：主键ID
 	 */
 	public void setId(Long id) {

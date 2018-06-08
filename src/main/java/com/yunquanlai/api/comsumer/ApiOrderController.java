@@ -1,16 +1,15 @@
 package com.yunquanlai.api.comsumer;
 
+import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.LoginUser;
+import com.yunquanlai.utils.validator.Assert;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
@@ -39,7 +38,6 @@ public class ApiOrderController {
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "status", value = "订单状态")
     })
     public R queryOrder(@LoginUser @ApiIgnore UserInfoEntity user, Integer status) {
-        // TODO 判断当前请求是否是由该用户发起的
         return R.ok();
     }
 
@@ -57,6 +55,24 @@ public class ApiOrderController {
     })
     public R order(@RequestBody OrderVO orderVO, @LoginUser @ApiIgnore UserInfoEntity user) {
         return orderInfoService.newOrder(orderVO, user);
+    }
+
+    /**
+     * 关闭订单
+     *
+     * @param orderId
+     * @param user
+     * @return
+     */
+    @PostMapping("orderClose")
+    @ApiOperation(value = "关闭订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
+            @ApiImplicitParam(name = "orderId", value = "订单 ID", dataType = "long", paramType = "query", required = true)
+    })
+    public R orderClose(@RequestParam Long orderId, @LoginUser @ApiIgnore UserInfoEntity user) {
+        orderInfoService.closeOrder(orderId);
+        return R.ok();
     }
 
 }

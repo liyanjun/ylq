@@ -67,25 +67,26 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 		productDetailDao.save(productDetailEntity);
 		List<DeliveryEndpointEntity> deliveryEndpoints = deliveryEndpointDao.queryList(null);
 		for (DeliveryEndpointEntity deliveryEndpointEntity: deliveryEndpoints) {
-			ProductStockEntity productStockEntity = new ProductStockEntity();
-			productStockEntity.setProductInfoId(productInfoEntity.getId());
-			productStockEntity.setProductName(productInfoEntity.getName());
-			productStockEntity.setDeliveryName(deliveryEndpointEntity.getName());
-			productStockEntity.setDeliveryEndpointId(deliveryEndpointEntity.getId());
-			productStockEntity.setCount(0);
+			ProductStockEntity productStockEntity = new ProductStockEntity(productInfoEntity,deliveryEndpointEntity);
 			productStockDao.save(productStockEntity);
 		}
 	}
 
 	@Override
 	public void update(ProductInfoVO productInfoVO){
-		// TODO 修改商品名称时要级联修改，库存里面的名称
+		ProductInfoEntity temp = productInfoDao.queryObject(productInfoVO.getProductInfoEntity().getId(),true);
 		ProductInfoEntity productInfoEntity = productInfoVO.getProductInfoEntity();
 		ProductDetailEntity productDetailEntityEdit = productInfoVO.getProductDetailEntity();
 		ProductDetailEntity productDetailEntity = productDetailDao.queryObjectByProductInfoId(productInfoEntity.getId());
 		productInfoDao.update(productInfoEntity);
 		productDetailEntityEdit.setId(productDetailEntity.getId());
 		productDetailDao.update(productDetailEntityEdit);
+		if(!temp.getName().equals(productInfoEntity.getName())){
+			ProductStockEntity p = new ProductStockEntity();
+			p.setProductInfoId(productInfoEntity.getId());
+			p.setProductName(productInfoEntity.getName());
+			productStockDao.updateProductName(p);
+		}
 	}
 
 	@Override

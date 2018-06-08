@@ -18,6 +18,8 @@ import com.yunquanlai.api.comsumer.vo.ProductOrderVO;
 import com.yunquanlai.api.event.OrderDeliveryNotifyEvent;
 import com.yunquanlai.api.event.OrderPaidEvent;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.validator.Assert;
+import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,11 +138,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoEntity.setUserInfoId(user.getId());
         orderInfoEntity.setCreationTime(new Date());
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_NEW);
+        orderInfoEntity.setType(OrderInfoEntity.TYPE_NORMAL);
         orderInfoEntity.setRemark(orderVO.getRemark());
         // 订单
         orderInfoDao.save(orderInfoEntity);
         orderDeliveryInfoEntity.setAddress(orderVO.getAddress());
-        // TODO orderDeliveryInfoEntity.setDeliveryTime(orderVO.getDeliveryTime());
+        // TODO orderDeliveryInfoEntity.setDeliveryTime(orderVO.getDeliveryTime()); 可能需要一个待配送订单表
         orderDeliveryInfoEntity.setLocationX(orderVO.getLocationX());
         orderDeliveryInfoEntity.setLocationY(orderVO.getLocationY());
         orderDeliveryInfoEntity.setOrderInfoId(orderInfoEntity.getId());
@@ -182,6 +185,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
 
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_PAID);
+        orderInfoEntity.setPaidTime(new Date());
         orderInfoDao.update(orderInfoEntity);
 
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderInfoEntity.getId(), true);
@@ -218,12 +222,29 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         // 分配订单，配送中订单数加一
         deliveryDistributorEntity.setOrderCount(deliveryDistributorEntity.getOrderCount() + 1);
         deliveryDistributorDao.update(deliveryDistributorEntity);
+
+        // 更新订单分配时间
+        OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
+        orderInfoEntity.setId(orderDeliveryInfoEntity.getOrderInfoId());
+        orderInfoEntity.setDistributeTime(new Date());
+        orderInfoEntity.setStatus(OrderInfoEntity.STATUS_ON_DELIVERY);
+        orderInfoDao.update(orderInfoEntity);
+
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
         orderDeliveryInfoEntity.setDeliveryDistributorId(deliveryDistributorEntity.getId());
-        // TODO 更新订单分配时间
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         applicationContext.publishEvent(new OrderDeliveryNotifyEvent(deliveryDistributorEntity.getClientId()));
         return true;
+    }
+
+    @Override
+    public void closeOrder(Long orderId, Long userId) {
+        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderId, true);
+        Assert.isEqual(orderInfoEntity.getUserInfoId(), userId, "不能关闭别人的订单");
+        Assert.isEqual(orderInfoEntity.getStatus(), OrderInfoEntity.STATUS_NEW, "订单不是可关闭状态");
+        orderInfoEntity.setStatus(OrderInfoEntity.STATUS_CLOSE);
+        orderInfoEntity.setCloseTime(new Date());
+        orderInfoDao.update(orderInfoEntity);
     }
 
     /**

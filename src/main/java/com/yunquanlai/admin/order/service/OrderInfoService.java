@@ -53,4 +53,11 @@ public interface OrderInfoService {
      * @param deliveryEndpointEntity     配送点信息
      */
     boolean findDeliveryDistributor(List<OrderProductDetailEntity> orderProductDetailEntities, OrderDeliveryInfoEntity orderDeliveryInfoEntity, DeliveryEndpointEntity deliveryEndpointEntity);
+
+    /**
+     * 关闭订单
+     *
+     * @param orderId
+     */
+    void closeOrder(Long orderId, Long userId);
 }

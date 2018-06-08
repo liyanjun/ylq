@@ -12,31 +12,41 @@
         <result property="amountActivity" column="amount_activity"/>
         <result property="amountDeliveryFee" column="amount_delivery_fee"/>
         <result property="status" column="status"/>
+        <result property="type" column="type"/>
         <result property="deliveryDistributorId" column="delivery_distributor_id"/>
         <result property="deliveryDistributorName" column="delivery_distributor_name"/>
         <result property="userInfoId" column="user_info_id"/>
         <result property="username" column="username"/>
         <result property="remark" column="remark"/>
+        <result property="exception" column="exception"/>
         <result property="creationTime" column="creation_time"/>
-        <result property="updateTime" column="update_time"/>
+        <result property="paidTime" column="paid_time"/>
+        <result property="distributeTime" column="distribute_time"/>
+        <result property="deliveryEndTime" column="delivery_end_time"/>
+        <result property="closeTime" column="close_time"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.yunquanlai.admin.order.entity.OrderInfoEntity">
 		select
 					`id`, 
-					`amount_total`,
+					`amount_total`, 
 					`amount`, 
 					`amount_benifit`, 
 					`amount_activity`, 
 					`amount_delivery_fee`, 
 					`status`, 
+					`type`, 
 					`delivery_distributor_id`, 
 					`delivery_distributor_name`, 
 					`user_info_id`, 
 					`username`, 
 					`remark`, 
+					`exception`, 
 					`creation_time`, 
-					`update_time`
+					`paid_time`, 
+					`distribute_time`, 
+					`delivery_end_time`, 
+					`close_time`
 				from order_info where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
 	</select>
@@ -44,19 +54,24 @@
 	<select id="queryList" resultType="com.yunquanlai.admin.order.entity.OrderInfoEntity">
 		select
 		            `id`, 
-		            `amount_total`,
+		            `amount_total`, 
 		            `amount`, 
 		            `amount_benifit`, 
 		            `amount_activity`, 
 		            `amount_delivery_fee`, 
 		            `status`, 
+		            `type`, 
 		            `delivery_distributor_id`, 
 		            `delivery_distributor_name`, 
 		            `user_info_id`, 
 		            `username`, 
 		            `remark`, 
+		            `exception`, 
 		            `creation_time`, 
-		            `update_time`
+		            `paid_time`, 
+		            `distribute_time`, 
+		            `delivery_end_time`, 
+		            `close_time`
 				from order_info
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -78,35 +93,45 @@
 	<insert id="save" parameterType="com.yunquanlai.admin.order.entity.OrderInfoEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into order_info
 		(
-			`amount_total`,
+			`amount_total`, 
 			`amount`, 
 			`amount_benifit`, 
 			`amount_activity`, 
 			`amount_delivery_fee`, 
 			`status`, 
+			`type`, 
 			`delivery_distributor_id`, 
 			`delivery_distributor_name`, 
 			`user_info_id`, 
 			`username`, 
 			`remark`, 
+			`exception`, 
 			`creation_time`, 
-			`update_time`
+			`paid_time`, 
+			`distribute_time`, 
+			`delivery_end_time`, 
+			`close_time`
 		)
 		values
 		(
-			#{amountTotal},
+			#{amountTotal}, 
 			#{amount}, 
 			#{amountBenifit}, 
 			#{amountActivity}, 
 			#{amountDeliveryFee}, 
 			#{status}, 
+			#{type}, 
 			#{deliveryDistributorId}, 
 			#{deliveryDistributorName}, 
 			#{userInfoId}, 
 			#{username}, 
 			#{remark}, 
+			#{exception}, 
 			#{creationTime}, 
-			#{updateTime}
+			#{paidTime}, 
+			#{distributeTime}, 
+			#{deliveryEndTime}, 
+			#{closeTime}
 		)
 	</insert>
 	 
@@ -119,13 +144,18 @@
 			<if test="amountActivity != null">`amount_activity` = #{amountActivity}, </if>
 			<if test="amountDeliveryFee != null">`amount_delivery_fee` = #{amountDeliveryFee}, </if>
 			<if test="status != null">`status` = #{status}, </if>
+			<if test="type != null">`type` = #{type}, </if>
 			<if test="deliveryDistributorId != null">`delivery_distributor_id` = #{deliveryDistributorId}, </if>
 			<if test="deliveryDistributorName != null">`delivery_distributor_name` = #{deliveryDistributorName}, </if>
 			<if test="userInfoId != null">`user_info_id` = #{userInfoId}, </if>
 			<if test="username != null">`username` = #{username}, </if>
 			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="exception != null">`exception` = #{exception}, </if>
 			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
-			<if test="updateTime != null">`update_time` = #{updateTime}</if>
+			<if test="paidTime != null">`paid_time` = #{paidTime}, </if>
+			<if test="distributeTime != null">`distribute_time` = #{distributeTime}, </if>
+			<if test="deliveryEndTime != null">`delivery_end_time` = #{deliveryEndTime}, </if>
+			<if test="closeTime != null">`close_time` = #{closeTime}</if>
 		</set>
 		where id = #{id}
 	</update>

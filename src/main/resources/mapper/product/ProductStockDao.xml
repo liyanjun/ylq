@@ -95,6 +95,24 @@
         where id = #{id}
     </update>
 
+    <update id="updateDeliveryEndpointName" parameterType="com.yunquanlai.admin.product.entity.ProductStockEntity">
+        update product_stock
+        <set>
+            <if test="deliveryName != null">`delivery_name` = #{deliveryName},</if>
+        </set>
+        where delivery_endpoint_id = #{deliveryEndpointId}
+    </update>
+
+    <update id="updateProductName" parameterType="com.yunquanlai.admin.product.entity.ProductStockEntity">
+        update product_stock
+        <set>
+            <if test="productName != null">`product_name` = #{productName},</if>
+        </set>
+        where product_info_id = #{productInfoId}
+    </update>
+
+
+
     <update id="addStock" parameterType="com.yunquanlai.admin.product.entity.ProductStockEntity">
         update product_stock
         <set>

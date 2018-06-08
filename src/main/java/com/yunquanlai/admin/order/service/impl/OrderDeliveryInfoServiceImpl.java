@@ -4,11 +4,11 @@ import com.yunquanlai.admin.delivery.dao.DeliveryDistributorDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.order.dao.OrderInfoDao;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
-import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.validator.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -85,13 +85,23 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderDeliveryInfoEntity.getOrderInfoId(), true);
         Assert.isNull(orderDeliveryInfoEntity, "找不到订单信息");
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_DELIVERY_END);
-        // TODO 记录送达时间
+        orderInfoEntity.setDeliveryEndTime(new Date());
         orderInfoDao.update(orderInfoEntity);
     }
 
     @Override
     public OrderDeliveryInfoEntity queryObjectByOrderId(Long orderId) {
         return orderDeliveryInfoDao.queryObjectByOrderId(orderId,false);
+    }
+
+    @Override
+    public void markerException(OrderDeliveryInfoEntity orderDeliveryInfoEntity, String exception) {
+        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderDeliveryInfoEntity.getOrderInfoId(),true);
+        orderInfoEntity.setType(OrderInfoEntity.TYPE_EXCEPTION);
+        orderInfoEntity.setException(exception);
+        orderInfoDao.update(orderInfoEntity);
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_EXCEPTION);
+        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
     }
 
 }
