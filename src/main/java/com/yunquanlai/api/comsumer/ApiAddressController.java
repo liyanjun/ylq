@@ -54,7 +54,7 @@ public class ApiAddressController {
     @ApiOperation(value = "添加用户收货地址")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "string", name = "userAddressId", value = "用户地址ID（修改不用填）"),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "userAddressId", value = "用户地址ID（添加不用填）"),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "name", value = "姓名", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "phone", value = "手机号", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "address", value = "地址", required = true),
