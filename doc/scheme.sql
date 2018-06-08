@@ -16,6 +16,20 @@ Date: 2018-06-06 11:35:31
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
+-- Table structure for delivery_client_token
+-- ----------------------------
+DROP TABLE IF EXISTS `delivery_client_token`;
+CREATE TABLE `delivery_client_token` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `token` varchar(256) NOT NULL,
+  `delivery_distributor_id` bigint(20) NOT NULL,
+  `expire_time` datetime NOT NULL,
+  `update_time` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
 -- Table structure for delivery_count_info
 -- ----------------------------
 DROP TABLE IF EXISTS `delivery_count_info`;

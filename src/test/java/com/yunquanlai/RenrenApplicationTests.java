@@ -13,15 +13,15 @@ import javax.annotation.Resource;
 @SpringBootTest
 public class RenrenApplicationTests {
 
-	/**
-	 * 上下文对象
-	 */
-	@Resource
-	private ApplicationContext applicationContext;
+//	/**
+//	 * 上下文对象
+//	 */
+//	@Resource
+//	private ApplicationContext applicationContext;
 	@Test
 	public void contextLoads() {
 //		applicationContext.publishEvent(new OrderDeliveryNotifyEvent("9ef699f5451d755c8fe3690c0b8050ed"));
-		applicationContext.publishEvent(new OrderDeliveryNotifyEvent("c758f22fe07a1d2fcb9c2bf100882647"));
+//		applicationContext.publishEvent(new OrderDeliveryNotifyEvent("c758f22fe07a1d2fcb9c2bf100882647"));
 	}
 
 }

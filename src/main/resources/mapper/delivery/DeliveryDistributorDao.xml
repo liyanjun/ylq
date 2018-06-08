@@ -40,6 +40,24 @@
 				from delivery_distributor where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
     </select>
+	<select id="queryObjectByPhone" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
+		select
+					`id`,
+					`name`,
+					`phone`,
+					`password`,
+					`birthday`,
+					`clientId`,
+					`status`,
+                    `order_count`,
+					`identifycation`,
+					`identifycation_url`,
+					`health_url`,
+					`delivery_endpoint_id`,
+					`disable`,
+					`delivery_endpoint_name`
+				from delivery_distributor where phone = #{value}
+    </select>
 
     <select id="pickOne" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
         select

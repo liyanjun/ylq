@@ -51,10 +51,10 @@ public class ApiDeliveryUserController {
      */
     @IgnoreAuth
     @PostMapping("login")
-    @ApiOperation(value = "配送员登录")
+    @ApiOperation(value = "配送员登录,disable字段含义（0:停用    1：启用    2：新创建（默认））")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", dataType = "string",name = "platform", value = "平台标识", required = true),
-            @ApiImplicitParam(paramType = "header", dataType = "string",name = "version", value = "版本", required = true),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "platform", value = "平台标识", required = true),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "version", value = "版本", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "mobile", value = "手机号", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "password", value = "密码", required = true)
     })
@@ -64,11 +64,16 @@ public class ApiDeliveryUserController {
 
         DeliveryDistributorEntity deliveryDistributorEntity = deliveryDistributorService.queryObjectByPhone(mobile);
 
-        //密码错误
+        if (deliveryDistributorEntity == null) {
+            throw new RRException("用户不存在");
+        }
         if (!deliveryDistributorEntity.getPassword().equals(DigestUtils.sha256Hex(password))) {
             throw new RRException("手机号或密码错误");
         }
-        return createToken(deliveryDistributorEntity.getId());
+        if(deliveryDistributorEntity.getDisable() == 0){
+            throw new RRException("账号已停用");
+        }
+        return createToken(deliveryDistributorEntity.getId()).put("disable",deliveryDistributorEntity.getDisable());
     }
 
     private R createToken(Long distributorId) {
@@ -80,7 +85,7 @@ public class ApiDeliveryUserController {
         Date expireTime = new Date(now.getTime() + EXPIRE * 1000);
 
         DeliveryClientTokenEntity deliveryClientTokenEntity = deliveryClientTokenService.queryByDistributorId(distributorId);
-        if (deliveryClientTokenEntity != null) {
+        if (deliveryClientTokenEntity == null) {
             deliveryClientTokenEntity = new DeliveryClientTokenEntity();
             deliveryClientTokenEntity.setDeliveryDistributorId(distributorId);
             deliveryClientTokenEntity.setToken(token);
