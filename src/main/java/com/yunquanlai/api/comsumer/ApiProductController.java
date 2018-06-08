@@ -25,7 +25,7 @@ import java.util.Map;
  **/
 @RestController
 @RequestMapping("/client/api")
-@Api("微信小程序接口-商品接口")
+@Api(value = "客户端-产品", description = "产品相关接口")
 public class ApiProductController {
     @Autowired
     private ProductInfoService productInfoService;
@@ -66,7 +66,8 @@ public class ApiProductController {
     @IgnoreAuth
     @PostMapping("getProductDetail")
     @ApiOperation(value = "获取商品详细信息")
-    public R getProductDetail(@ApiParam(value = "商品 ID") Long id) {
+    @ApiImplicitParam(paramType = "query", dataType = "long", name = "id", value = "商品 ID",required = true)
+    public R getProductDetail(@RequestParam Long id) {
         ProductInfoVO productInfoVO = productInfoService.queryProductInfoVO(id);
         return R.ok().put("productInfoVO", productInfoVO);
     }

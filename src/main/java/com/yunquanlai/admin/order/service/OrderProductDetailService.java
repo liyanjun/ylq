@@ -27,4 +27,6 @@ public interface OrderProductDetailService {
 	void delete(Integer id);
 	
 	void deleteBatch(Integer[] ids);
+
+    List<OrderProductDetailEntity> queryListByOrderId(Long orderInfoId);
 }

@@ -27,7 +27,7 @@ import java.util.UUID;
  **/
 @RestController
 @RequestMapping("/client/api")
-@Api("微信小程序接口-用户接口")
+@Api(value = "客户端-用户", description = "用户相关接口")
 public class ApiUserController {
 
     @Autowired
@@ -99,53 +99,5 @@ public class ApiUserController {
 
         return R.ok(map);
     }
-
-//    /**
-//     * 支付
-//     *
-//     * @param money
-//     * @param pay_password
-//     *
-//     * @return
-//     */
-//    @IgnoreAuth
-//    @PostMapping("pay")
-//    @ApiOperation(value = "支付")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(paramType = "query", dataType = "string", name = "money", value = "支付金额", required = true),
-//            @ApiImplicitParam(paramType = "query", dataType = "string", name = "pay_password", value = "支付密码", required = true)
-//    })
-//    public R pay(String money, String pay_password) {
-//        Assert.isBlank(money, "支付金额不能为空");
-//        Assert.isBlank(pay_password, "支付密码不能为空");
-//
-//        userService.save(money, pay_password);
-//
-//        return R.ok();
-//    }
-//
-//    /**
-//     * 修改用户信息
-//     *
-//     * @param username
-//     * @param phone
-//     *
-//     * @return
-//     */
-//    @IgnoreAuth
-//    @PostMapping("modifyUserInfo")
-//    @ApiOperation(value = "修改用户信息")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "用户名", required = true),
-//            @ApiImplicitParam(paramType = "query", dataType = "string", name = "phone", value = "电话", required = true)
-//    })
-//    public R modifyUserInfo(String username, String age, String phone) {
-//        Assert.isBlank(username, "用户名不能为空");
-//        Assert.isBlank(phone, "电话不能为空");
-//
-//        userService.save(username, phone);
-//
-//        return R.ok();
-//    }
 
 }

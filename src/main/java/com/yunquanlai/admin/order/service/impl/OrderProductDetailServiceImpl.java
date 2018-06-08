@@ -52,5 +52,10 @@ public class OrderProductDetailServiceImpl implements OrderProductDetailService 
 	public void deleteBatch(Integer[] ids){
 		orderProductDetailDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public List<OrderProductDetailEntity> queryListByOrderId(Long orderInfoId) {
+		return orderProductDetailDao.queryListByOrderId(orderInfoId);
+	}
+
 }

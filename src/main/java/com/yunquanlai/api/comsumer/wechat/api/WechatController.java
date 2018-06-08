@@ -39,13 +39,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description: 本示例仅供参考，请根据自己的使用情景进行修改
- * @Date: 2018/4/8
- * @Author: wcf
+ * 微信支付Controller
+ *
+ * @author liyanjun
  */
-@RequestMapping("/client/api/pay")
 @RestController
-@Api("微信小程序接口-支付接口")
+@RequestMapping("/client/api/pay")
+@Api(value = "客户端-支付" ,description = "微信支付相关接口")
 public class WechatController extends WeixinSupport {
 
     private Logger logger = LoggerFactory.getLogger(WechatController.class);
@@ -106,7 +106,7 @@ public class WechatController extends WeixinSupport {
      * @param request
      * @return
      */
-    @PostMapping("wxPay")
+    @PostMapping("发起微信支付")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
             @ApiImplicitParam(paramType = "query", name = "openid", value = "用户唯一标识openid ", required = true),
