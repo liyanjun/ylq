@@ -77,6 +77,14 @@ var vm = new Vue({
             vm.getInfo(id);
             //获取配送点信息
             this.getDeliveryEndpointList();
+            for (var i=0;i<vm.deliveryEndpointList.length;i++)
+            {
+                if(vm.deliveryEndpointList[i].id===vm.deliveryDistributor.deliveryEndpointId){//循环找出配送员所属配送点
+                    vm.deliveryEndpointId = vm.deliveryDistributor.deliveryEndpointId ;
+                    $("#selected option:selected").text = vm.deliveryDistributor.deliveryEndpointName ;
+                    break;
+                }
+            }
 		},
 		saveOrUpdate: function (event) {
             vm.deliveryDistributor.deliveryEndpointId = vm.deliveryEndpointId;
