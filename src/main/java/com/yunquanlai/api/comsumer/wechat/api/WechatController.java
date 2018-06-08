@@ -106,7 +106,8 @@ public class WechatController extends WeixinSupport {
      * @param request
      * @return
      */
-    @PostMapping("发起微信支付")
+    @PostMapping("wxPay")
+    @ApiOperation(value = "发起微信支付")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
             @ApiImplicitParam(paramType = "query", name = "openid", value = "用户唯一标识openid ", required = true),
@@ -132,8 +133,10 @@ public class WechatController extends WeixinSupport {
             packageParams.put("mch_id", WxPayConfig.mch_id);
             packageParams.put("nonce_str", nonce_str);
             packageParams.put("body", body);
-            packageParams.put("out_trade_no", orderNo);//商户订单号
-            packageParams.put("total_fee", money);//支付金额，这边需要转成字符串类型，否则后面的签名会失败
+            //商户订单号
+            packageParams.put("out_trade_no", orderNo);
+            //支付金额，这边需要转成字符串类型，否则后面的签名会失败
+            packageParams.put("total_fee", money);
             packageParams.put("spbill_create_ip", spbill_create_ip);
             packageParams.put("notify_url", WxPayConfig.notify_url);
             packageParams.put("trade_type", WxPayConfig.TRADETYPE);
@@ -141,7 +144,8 @@ public class WechatController extends WeixinSupport {
 
             // 除去数组中的空值和签名参数
             packageParams = PayUtil.paraFilter(packageParams);
-            String prestr = PayUtil.createLinkString(packageParams); // 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+            // 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+            String prestr = PayUtil.createLinkString(packageParams);
 
             //MD5运算生成签名，这里是第一次签名，用于调用统一下单接口
             String mysign = PayUtil.sign(prestr, WxPayConfig.key, "utf-8").toUpperCase();
@@ -171,17 +175,20 @@ public class WechatController extends WeixinSupport {
             // 将解析结果存储在HashMap中
             Map map = PayUtil.doXMLParse(result);
 
-            String return_code = (String) map.get("return_code");//返回状态码
+            //返回状态码
+            String return_code = (String) map.get("return_code");
 
             //返回给移动端需要的参数
             Map<String, Object> response = new HashMap<String, Object>();
             if (return_code == "SUCCESS" || return_code.equals(return_code)) {
                 // 业务结果
-                String prepay_id = (String) map.get("prepay_id");//返回的预付单信息
+                //返回的预付单信息
+                String prepay_id = (String) map.get("prepay_id");
                 response.put("nonceStr", nonce_str);
                 response.put("package", "prepay_id=" + prepay_id);
                 Long timeStamp = System.currentTimeMillis() / 1000;
-                response.put("timeStamp", timeStamp + "");//这边要将返回的时间戳转化成字符串，不然小程序端调用wx.requestPayment方法会报签名错误
+                //这边要将返回的时间戳转化成字符串，不然小程序端调用wx.requestPayment方法会报签名错误
+                response.put("timeStamp", timeStamp + "");
 
                 String stringSignTemp = "appId=" + WxPayConfig.appid + "&nonceStr=" + nonce_str + "&package=prepay_id=" + prepay_id + "&signType=" + WxPayConfig.SIGNTYPE + "&timeStamp=" + timeStamp;
                 //再次签名，这个签名用于小程序端调用wx.requesetPayment方法

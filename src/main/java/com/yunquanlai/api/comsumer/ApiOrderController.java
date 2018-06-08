@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @author weicc
@@ -37,7 +38,7 @@ public class ApiOrderController {
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "status", value = "订单状态")
     })
-    public R queryOrder(@LoginUser @ApiParam(hidden = true) UserInfoEntity user, Integer status) {
+    public R queryOrder(@LoginUser @ApiIgnore UserInfoEntity user, Integer status) {
         // TODO 判断当前请求是否是由该用户发起的
         return R.ok();
     }
@@ -54,7 +55,7 @@ public class ApiOrderController {
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
             @ApiImplicitParam(name = "orderVO", value = "订单信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderVO", paramType = "body")
     })
-    public R order(@RequestBody OrderVO orderVO, @LoginUser @ApiParam(hidden = true) UserInfoEntity user) {
+    public R order(@RequestBody OrderVO orderVO, @LoginUser @ApiIgnore UserInfoEntity user) {
         return orderInfoService.newOrder(orderVO, user);
     }
 

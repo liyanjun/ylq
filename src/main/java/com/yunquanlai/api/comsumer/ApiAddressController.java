@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -39,7 +40,7 @@ public class ApiAddressController {
     @PostMapping("getAddress")
     @ApiOperation(value = "获取用户收货地址")
     @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true)
-    public R getAddress(@LoginUser @ApiParam(hidden = true) UserInfoEntity user) {
+    public R getAddress(@LoginUser @ApiIgnore UserInfoEntity user) {
         List<UserAddressEntity> userAddressEntityList = userAddressService.queryByUserId(user.getId());
         return R.ok().put("userAddressEntityList", userAddressEntityList);
     }
@@ -61,7 +62,7 @@ public class ApiAddressController {
             @ApiImplicitParam(paramType = "query", dataType = "double", name = "locationY", value = "腾讯地图坐标（loc.latlng.lng）", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "sex", value = "性别，10：男，20：女", required = true)
     })
-    public R saveAddress(@LoginUser @ApiParam(hidden = true) UserInfoEntity user,
+    public R saveAddress(@LoginUser @ApiIgnore UserInfoEntity user,
                          Long userAddressId,
                          @RequestParam String name,
                          @RequestParam String phone,
@@ -95,7 +96,7 @@ public class ApiAddressController {
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "userAddressId", value = "用户地址ID"),
     })
-    public R removeAddress(@LoginUser @ApiParam(hidden = true) UserInfoEntity user, @RequestParam Long userAddressId) {
+    public R removeAddress(@LoginUser @ApiIgnore UserInfoEntity user, @RequestParam Long userAddressId) {
         UserAddressEntity userAddressEntity = userAddressService.queryObject(userAddressId);
         if (user.getId().longValue() != userAddressEntity.getUserInfoId().longValue()) {
             return R.error("不能删除别人的地址");

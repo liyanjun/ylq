@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +62,7 @@ public class ApiDeliveryController {
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "offset", value = "位移数", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "limit", value = "查询条数", required = true)
     })
-    public R queryOrderDeliveries(@LoginDelivery @ApiParam(hidden = true) DeliveryDistributorEntity deliveryDistributorEntity,
+    public R queryOrderDeliveries(@LoginDelivery @ApiIgnore DeliveryDistributorEntity deliveryDistributorEntity,
                                   @RequestParam Integer offset,
                                   @RequestParam Integer limit) {
         Map<String, Object> filter = new HashMap(16);
@@ -85,7 +86,7 @@ public class ApiDeliveryController {
             @ApiImplicitParam(paramType = "header", dataType = "string",name = "version", value = "版本", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "long", name = "orderDeliveryId", value = "配送单 ID", required = true)
     })
-    public R markerOrderDelivery(@LoginDelivery @ApiParam(hidden = true) DeliveryDistributorEntity deliveryDistributorEntity,
+    public R markerOrderDelivery(@LoginDelivery @ApiIgnore DeliveryDistributorEntity deliveryDistributorEntity,
                                  @RequestParam Long orderDeliveryId) {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoService.queryObject(orderDeliveryId);
         Assert.isEqual(deliveryDistributorEntity.getId().longValue(), orderDeliveryInfoEntity.getDeliveryDistributorId().longValue(), "请不要标记别人的订单。");
