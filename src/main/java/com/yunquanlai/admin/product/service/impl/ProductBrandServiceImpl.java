@@ -1,7 +1,9 @@
 package com.yunquanlai.admin.product.service.impl;
 
 import com.yunquanlai.admin.product.dao.ProductBrandDao;
+import com.yunquanlai.admin.product.dao.ProductInfoDao;
 import com.yunquanlai.admin.product.entity.ProductBrandEntity;
+import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.product.service.ProductBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.util.Map;
 public class ProductBrandServiceImpl implements ProductBrandService {
     @Autowired
     private ProductBrandDao productBrandDao;
+    @Autowired
+    private ProductInfoDao productInfoDao;
 
     @Override
     public ProductBrandEntity queryObject(Long id) {
@@ -37,6 +41,10 @@ public class ProductBrandServiceImpl implements ProductBrandService {
 
     @Override
     public void update(ProductBrandEntity productBrand) {
+        ProductInfoEntity productInfoEntity = new ProductInfoEntity();
+        productInfoEntity.setBrandName(productBrand.getName());
+        productInfoEntity.setBrandId(productBrand.getId());
+        productInfoDao.updateBrandName(productInfoEntity);
         productBrandDao.update(productBrand);
     }
 

@@ -5,6 +5,7 @@ import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.product.entity.ProductInfoVO;
 import com.yunquanlai.admin.product.service.ProductBrandService;
 import com.yunquanlai.admin.product.service.ProductInfoService;
+import com.yunquanlai.admin.system.service.SysConfigService;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
 import io.swagger.annotations.*;
@@ -33,6 +34,9 @@ public class ApiProductController {
     @Autowired
     private ProductBrandService productBrandService;
 
+    @Autowired
+    private SysConfigService sysConfigService;
+
     /**
      * 获取商品首页轮播图
      *
@@ -42,7 +46,8 @@ public class ApiProductController {
     @PostMapping("getProductBanner")
     @ApiOperation(value = "商品轮播图信息")
     public R getProductBanner() {
-        return R.ok();
+        String banner = sysConfigService.getValue("banner", "");
+        return R.ok().put("banner", banner);
     }
 
     /**
@@ -66,7 +71,7 @@ public class ApiProductController {
     @IgnoreAuth
     @PostMapping("getProductDetail")
     @ApiOperation(value = "获取商品详细信息")
-    @ApiImplicitParam(paramType = "query", dataType = "long", name = "id", value = "商品 ID",required = true)
+    @ApiImplicitParam(paramType = "query", dataType = "long", name = "id", value = "商品 ID", required = true)
     public R getProductDetail(@RequestParam Long id) {
         ProductInfoVO productInfoVO = productInfoService.queryProductInfoVO(id);
         return R.ok().put("productInfoVO", productInfoVO);
@@ -81,23 +86,27 @@ public class ApiProductController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "name", value = "商品名称"),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "brandId", value = "商品品牌(传ID)"),
-            @ApiImplicitParam(paramType = "query", dataType = "int", name = "orderType", value = "排序类型，10：按价格排序，20：按销量排序"),
-            @ApiImplicitParam(paramType = "query", dataType = "int", name = "bucketType", value = "桶型，10：一次性桶，20：可回收桶，不传为全部桶形"),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "orderType", value = "排序类型，10：按价格升序，20：按价格降序"),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "bucketType", value = "规格，10：一次性桶装水，20：循环桶装水，30：瓶装谁，40：全部"),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "isQuick", value = "是否一键送水,是：10，否：20", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "offset", value = "位移数", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "limit", value = "查询条数", required = true)
     })
-    public R queryProduct(String name, Integer brandId, Integer orderType, Integer bucketType, Integer isQuick, @RequestParam Integer offset,@RequestParam Integer limit) {
+    public R queryProduct(String name, Integer brandId, Integer orderType, Integer bucketType, Integer isQuick, @RequestParam Integer offset, @RequestParam Integer limit) {
         Map map = new HashMap(16);
         map.put("name", name);
         map.put("brandId", brandId);
-        map.put("isQuick", isQuick);
-        if (orderType == 10) {
+        if (isQuick == 10) {
+            map.put("isQuick", isQuick);
+        }
+
+        if (orderType != null) {
             map.put("sidx", "amount_show");
-            map.put("order", "desc");
-        } else if (orderType == 20) {
-            map.put("sidx", "count");
-            map.put("order", "asc");
+            if (orderType == 10) {
+                map.put("order", "desc");
+            } else if (orderType == 20) {
+                map.put("order", "asc");
+            }
         }
 
         map.put("bucketType", bucketType);

@@ -178,7 +178,8 @@ CREATE TABLE `order_info` (
   `close_time` datetime COMMENT '订单关闭时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='订单信息表';
-
+ALTER TABLE `order_info`
+AUTO_INCREMENT=10000;
 -- ----------------------------
 -- Table structure for order_operate_flow
 -- ----------------------------
@@ -243,9 +244,10 @@ CREATE TABLE `product_info` (
   `img` varchar(512) NOT NULL COMMENT '商品主图',
   `brand_id` int(11) NOT NULL COMMENT '商品品牌 ID',
   `brand_name` varchar(64) NOT NULL COMMENT '商品品牌',
-  `bucket_type` tinyint(4) NOT NULL COMMENT '桶类型，10：一次性桶，20：可回收桶',
+  `bucket_type` tinyint(4) NOT NULL COMMENT '规格，10：一次性桶装水，20：循环桶装水，30：瓶装水',
   `delivery_fee` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '配送费',
   `count` int(11) DEFAULT '0' COMMENT '销售数量',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
   `is_quick` tinyint(4) NOT NULL COMMENT '是否一键送水,是：10，否：20',
   `creation_time` datetime NOT NULL COMMENT '商品创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '商品最后一次更新时间',
@@ -255,6 +257,8 @@ CREATE TABLE `product_info` (
   `update_name` varchar(32) DEFAULT NULL COMMENT '商品更新人名',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='商品信息表表';
+ALTER TABLE `product_info`
+AUTO_INCREMENT=10000;
 
 DROP TABLE IF EXISTS `product_ticket`;
 CREATE TABLE `product_ticket` (

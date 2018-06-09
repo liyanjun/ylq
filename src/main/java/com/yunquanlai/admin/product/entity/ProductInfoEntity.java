@@ -55,7 +55,7 @@ public class ProductInfoEntity implements Serializable {
     @NotBlank(message="商品品牌名不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String brandName;
     /**
-     * 设置：桶类型，10：一次性桶，20：可回收桶
+     * 设置：规格，10：一次性桶装水，20：循环桶装水，30：瓶装水
      */
     @NotNull(message="桶类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer bucketType;
@@ -66,6 +66,8 @@ public class ProductInfoEntity implements Serializable {
 	private BigDecimal deliveryFee;
 
 	private Integer count;
+
+	private Integer sort;
 
     /**
      * 设置：商品创建时间
@@ -299,5 +301,13 @@ public class ProductInfoEntity implements Serializable {
 
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 }
