@@ -2,7 +2,7 @@ var editor;
 var vm = new Vue({
     el: '#rrapp',
     data: {
-        q:{
+        q: {
             key: null
         },
         showList: true,
@@ -32,9 +32,8 @@ var vm = new Vue({
             vm.showList = false;
             vm.title = "修改";
 
-            vm.getInfo(id)
-            //获取品牌信息
             this.getBrandList();
+            vm.getInfo(id)
         },
         getBrandList: function () {
             $.get("../productbrand/queryAll", function (r) {
@@ -89,13 +88,14 @@ var vm = new Vue({
             $.get("../productinfo/info/" + id, function (r) {
                 vm.productInfo = r.productInfo;
                 editor.txt.html(r.productInfo.content);
+                vm.brandId = vm.productInfo.brandId;
             });
         },
         reload: function (event) {
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
-                postData:{'key': vm.q.key},
+                postData: {'key': vm.q.key},
                 page: page
             }).trigger("reloadGrid");
         }
@@ -128,11 +128,15 @@ $(function () {
                 label: '桶类型',
                 name: 'bucketType',
                 index: 'bucket_type',
-                width: 60,
+                width: 80,
                 formatter: function (value, options, row) {
-                    return value === 10 ?
-                        '一次性' :
-                        '可回收';
+                    if (value === 10) {
+                        return '一次性桶装水';
+                    } else if (value === 20) {
+                        return '循环桶装水'
+                    } else {
+                        return '瓶装水';
+                    }
                 }
             },
             {
@@ -155,8 +159,9 @@ $(function () {
                         '否';
                 }
             },
-            {label: '创建时间', name: 'creationTime', index: 'creation_time', width: 120},
-            {label: '最后更新时间', name: 'updateTime', index: 'update_time', width: 120}
+            {label: '创建时间', name: 'creationTime', index: 'creation_time', width: 130},
+            {label: '最后更新时间', name: 'updateTime', index: 'update_time', width: 130},
+            {label: '排序', name: 'sort', index: 'sort', width: 60}
         ],
         viewrecords: true,
         height: 385,

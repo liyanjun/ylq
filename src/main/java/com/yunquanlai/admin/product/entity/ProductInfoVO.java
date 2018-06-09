@@ -239,4 +239,12 @@ public class ProductInfoVO implements Serializable {
     public void setIsQuick(Integer isQuick) {
         productInfoEntity.setIsQuick(isQuick);
     }
+
+    public Integer getSort() {
+        return productInfoEntity.getSort();
+    }
+
+    public void setSort(Integer sort) {
+        productInfoEntity.setSort(sort);
+    }
 }
