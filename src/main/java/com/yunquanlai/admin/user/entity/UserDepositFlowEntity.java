@@ -1,6 +1,7 @@
 package com.yunquanlai.admin.user.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -20,7 +21,7 @@ public class UserDepositFlowEntity implements Serializable {
      */
 	private Long id;
     /**
-     * 设置：流水类型，101：押金充值，2：押金提现，3：归还空桶，4：订水（等价于获取空桶）
+     * 设置：流水类型，10：押金充值，20：押金提现，
      */
 	private Integer type;
     /**
@@ -40,7 +41,15 @@ public class UserDepositFlowEntity implements Serializable {
      */
 	private Date creationTime;
 
-	/**
+	public UserDepositFlowEntity(){
+
+	}
+
+    public UserDepositFlowEntity(UserInfoEntity userInfoEntity, BigDecimal deposit) {
+
+    }
+
+    /**
 	 * 设置：
 	 */
 	public void setId(Long id) {

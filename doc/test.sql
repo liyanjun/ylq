@@ -50,7 +50,8 @@ INSERT INTO `product_stock_flow` VALUES ('1', '4', '3', '0', '0', '3', '2018-06-
 
 
 INSERT INTO `sys_config` VALUES ('1', 'CLOUD_STORAGE_CONFIG_KEY', '{\"aliyunAccessKeyId\":\"\",\"aliyunAccessKeySecret\":\"\",\"aliyunBucketName\":\"\",\"aliyunDomain\":\"\",\"aliyunEndPoint\":\"\",\"aliyunPrefix\":\"\",\"qcloudBucketName\":\"\",\"qcloudDomain\":\"\",\"qcloudPrefix\":\"\",\"qcloudSecretId\":\"\",\"qcloudSecretKey\":\"\",\"qiniuAccessKey\":\"zYvETuLHzwarNl9ZQQHdJ6ZQDIL0EpYRA0x3jVxb\",\"qiniuBucketName\":\"yunquanlai\",\"qiniuDomain\":\"http://pa23ubi36.bkt.clouddn.com\",\"qiniuPrefix\":\"upload\",\"qiniuSecretKey\":\"yDOw7KMRox8wGZsAyudGRQ8OiFMnJpDAZ_wXWnj7\",\"type\":1}', '0', '云存储配置信息');
-INSERT INTO `sys_config` VALUES ('2', 'banner', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/120f31b821d74673ab29b44d7253fc6f,http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg, http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg, http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg', '1', null);
+INSERT INTO `sys_config` VALUES ('2', 'banner', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/120f31b821d74673ab29b44d7253fc6f,http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg, http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg, http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg', '1', '首页banner图使用‘,’隔开');
+INSERT INTO `sys_config` VALUES ('3', 'emptyValue', '10', '1', '单个空桶价值');
 
 
 INSERT INTO `sys_log` VALUES ('1', 'admin', '保存配置', 'com.yunquanlai.admin.system.contorller.SysConfigController.save()', '{\"key\":\"banner\",\"value\":\"http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg, http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg, http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg\"}', '0:0:0:0:0:0:0:1', '2018-06-09 22:04:43');

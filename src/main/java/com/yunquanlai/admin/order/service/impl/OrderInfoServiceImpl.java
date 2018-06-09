@@ -12,12 +12,18 @@ import com.yunquanlai.admin.product.dao.ProductInfoDao;
 import com.yunquanlai.admin.product.dao.ProductStockDao;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.product.entity.ProductStockEntity;
+import com.yunquanlai.admin.system.dao.SysConfigDao;
+import com.yunquanlai.admin.system.service.SysConfigService;
+import com.yunquanlai.admin.user.dao.UserDepositFlowDao;
+import com.yunquanlai.admin.user.dao.UserInfoDao;
+import com.yunquanlai.admin.user.entity.UserDepositFlowEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.api.comsumer.vo.ProductOrderVO;
 import com.yunquanlai.api.event.OrderDeliveryNotifyEvent;
 import com.yunquanlai.api.event.OrderPaidEvent;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.validator.Assert;
 import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
@@ -62,6 +68,14 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Autowired
     private DeliveryDistributorDao deliveryDistributorDao;
 
+    @Autowired
+    private SysConfigDao sysConfigDao;
+
+    @Autowired
+    private UserInfoDao userInfoDao;
+
+    @Autowired
+    private UserDepositFlowDao userDepositFlowDao;
 
     /**
      * 上下文对象
@@ -110,9 +124,16 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = new OrderDeliveryInfoEntity();
         OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
         List<OrderProductDetailEntity> orderProductDetailEntities = new ArrayList<>(16);
+        BigDecimal bEmptyValue;
+        String emptyValue = sysConfigDao.queryByKey("emptyValue");
+        if (emptyValue == null) {
+            throw new RRException("单个空桶价值未配置");
+        }
+        bEmptyValue = new BigDecimal(emptyValue);
         BigDecimal amount = BigDecimal.ZERO;
         BigDecimal amountTotal = BigDecimal.ZERO;
         BigDecimal amountDeliveryFee = BigDecimal.ZERO;
+        BigDecimal deposit = BigDecimal.ZERO;
 
         for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
             // 计算订单总额
@@ -124,6 +145,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             if (productInfoEntity.getAmountShow() != null) {
                 amountTotal = amountTotal.add(productInfoEntity.getAmountShow().multiply(new BigDecimal(productOrderVO.getCount())));
             }
+            if (productInfoEntity.getBucketType() == ProductInfoEntity.BUCKET_TYPE_RECYCLE) {
+                deposit = deposit.add(bEmptyValue.multiply(new BigDecimal(productOrderVO.getCount())));
+            }
+
             amountDeliveryFee = amountDeliveryFee.add(productInfoEntity.getDeliveryFee());
             OrderProductDetailEntity orderProductDetailEntity = new OrderProductDetailEntity();
             orderProductDetailEntity.setCount(productOrderVO.getCount());
@@ -131,6 +156,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntity.setProductName(productInfoEntity.getName());
             orderProductDetailEntities.add(orderProductDetailEntity);
         }
+        orderInfoEntity.setDeposit(deposit);
         orderInfoEntity.setAmount(amount);
         orderInfoEntity.setAmountTotal(amountTotal);
         orderInfoEntity.setAmountDeliveryFee(amountDeliveryFee);
@@ -158,7 +184,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderDeliveryInfoEntity.setCreationTime(new Date());
         // 配送单
         orderDeliveryInfoDao.save(orderDeliveryInfoEntity);
-        // TODO 发票，发票抬头
+        // TODO 发票，发票抬头(先不做)
 
         for (OrderProductDetailEntity orderProductDetailEntity : orderProductDetailEntities) {
             orderProductDetailEntity.setOrderInfoId(orderInfoEntity.getId());
@@ -166,7 +192,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailDao.save(orderProductDetailEntity);
         }
 
-        return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities);
+        return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities).put("minDeposit", deposit);
     }
 
     @Override
@@ -179,12 +205,24 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_NEW || orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_CLOSE) {
             return;
         }
-        BigDecimal wechatBackFee = new BigDecimal(Integer.parseInt(totalFee.toString()));
-        wechatBackFee = wechatBackFee.divide(BigDecimal.TEN).divide(BigDecimal.TEN);
-        if (!orderInfoEntity.getAmount().equals(wechatBackFee)) {
-            throw new RuntimeException("支付金额不等于订单金额");
+        // 校验金额，微信返回的金额单位是分，我们先除以100
+        BigDecimal wechatBackFee = new BigDecimal(totalFee.toString()).divide(BigDecimal.TEN).divide(BigDecimal.TEN);
+        if (orderInfoEntity.getDeposit() != null && !orderInfoEntity.getDeposit().equals(BigDecimal.ZERO)) {
+            // 订单包含押金
+            if (!(orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit())).equals(wechatBackFee)) {
+                throw new RuntimeException("支付金额不等于订单金额");
+            }
+            // 更新用户押金
+            UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderInfoEntity.getUserInfoId(), true);
+            userInfoEntity.setDepositAmount(userInfoEntity.getDepositAmount().add(orderInfoEntity.getDeposit()));
+            userInfoEntity.setEnableDepositAmount(userInfoEntity.getEnableDepositAmount().add(orderInfoEntity.getDeposit()));
+            userInfoDao.update(userInfoEntity);
+        } else {
+            // 订单不包含押金
+            if (!orderInfoEntity.getAmount().equals(wechatBackFee)) {
+                throw new RuntimeException("支付金额不等于订单金额");
+            }
         }
-
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_PAID);
         orderInfoEntity.setPaidTime(new Date());
         orderInfoDao.update(orderInfoEntity);

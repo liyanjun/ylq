@@ -20,7 +20,10 @@ import java.util.Date;
  */
 public class ProductInfoEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
+	public static final int BUCKET_TYPE_ONCE = 10;
+	public static final int BUCKET_TYPE_RECYCLE = 20;
+	public static final int BUCKET_TYPE_BOTTLE = 30;
     /**
      * 设置：主键ID
      */

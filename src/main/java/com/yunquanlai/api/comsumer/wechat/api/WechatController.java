@@ -4,16 +4,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.order.service.OrderInfoService;
+import com.yunquanlai.admin.system.service.SysConfigService;
 import com.yunquanlai.api.comsumer.wechat.utils.IpUtils;
 import com.yunquanlai.api.comsumer.wechat.utils.StringUtils;
 import com.yunquanlai.api.comsumer.wechat.utils.weixin.PayUtil;
 import com.yunquanlai.api.comsumer.wechat.utils.weixin.config.WxPayConfig;
 import com.yunquanlai.api.comsumer.wechat.utils.weixin.vo.OAuthJsToken;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.RRException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +46,16 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/client/api/pay")
-@Api(value = "客户端-支付" ,description = "微信支付相关接口")
+@Api(value = "客户端-支付", description = "微信支付相关接口")
 public class WechatController extends WeixinSupport {
 
     private Logger logger = LoggerFactory.getLogger(WechatController.class);
 
     @Autowired
     OrderInfoService orderInfoService;
+
+    @Autowired
+    SysConfigService sysConfigService;
 
     /**
      * 小程序后台登录，向微信平台发送获取access_token请求，并返回openId
@@ -107,13 +113,31 @@ public class WechatController extends WeixinSupport {
     @PostMapping("wxPay")
     @ApiOperation(value = "发起微信支付")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
-            @ApiImplicitParam(paramType = "query", name = "openid", value = "用户唯一标识openid ", required = true),
-            @ApiImplicitParam(paramType = "query", name = "orderId", value = "需要支付的订单 ID ", required = true)
+            @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", value = "token", required = true),
+            @ApiImplicitParam(paramType = "query", name = "openid", dataType = "string", value = "用户唯一标识 openid", required = true),
+            @ApiImplicitParam(paramType = "query", name = "orderId", dataType = "long", value = "需要支付的订单 ID", required = true),
+            @ApiImplicitParam(paramType = "query", name = "depositCount", dataType = "int", value = "押金桶数"),
+            @ApiImplicitParam(paramType = "query", name = "depositAmount", dataType = "double", value = "押金金额")
     })
-    public R wxPay(@RequestParam String openid, @RequestParam Long orderId, HttpServletRequest request) {
-        // TODO 已关闭不能发起支付
+    public R wxPay(@RequestParam String openid, @RequestParam Long orderId, Integer depositCount,BigDecimal depositAmount, HttpServletRequest request) {
+        BigDecimal bEmptyValue;
+        String emptyValue = sysConfigService.getValue("emptyValue","");
+        if (org.apache.commons.lang3.StringUtils.isBlank(emptyValue)) {
+            throw new RRException("单个空桶价值未配置");
+        }
+        bEmptyValue = new BigDecimal(emptyValue);
+        if(!bEmptyValue.multiply(new BigDecimal(depositCount)).equals(depositAmount)){
+            throw new RRException("押金金额计算错误");
+        }
+
         OrderInfoEntity orderInfoEntity = orderInfoService.queryObject(orderId);
+        if(orderInfoEntity.getStatus() == OrderInfoEntity.STATUS_CLOSE){
+            // 已关闭的订单不能发起请求，但是发起支付请求以后，关闭的订单，然后支付回调了，是要把订单从新拉起来到待分配状态的。
+            throw new RRException("订单已关闭，不能发起支付请求");
+        }
+        orderInfoEntity.setDeposit(depositAmount);
+        // 更新订单押金金额
+        orderInfoService.update(orderInfoEntity);
         try {
             //生成的随机字符串
             String nonce_str = StringUtils.getRandomStringByLength(32);

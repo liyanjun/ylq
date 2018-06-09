@@ -6,6 +6,7 @@ import com.yunquanlai.admin.user.service.UserClientTokenService;
 import com.yunquanlai.admin.user.service.UserInfoService;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
+import com.yunquanlai.utils.annotation.LoginUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -63,6 +64,16 @@ public class ApiUserController {
             userInfoService.save(userInfoEntity);
         }
         return createToken(userInfoEntity.getId());
+    }
+
+    @PostMapping("user/withdraw")
+    @ApiOperation(value = "用户提交押金提现申请（只能一次全部提取）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true)
+    })
+    public R depositoryWithdraw(@LoginUser UserInfoEntity userInfoEntity){
+        // TODO 用户提现申请
+        return R.ok();
     }
 
     private R createToken(Long userId) {

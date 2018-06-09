@@ -3,7 +3,12 @@ package com.yunquanlai.admin.order.service.impl;
 import com.yunquanlai.admin.delivery.dao.DeliveryDistributorDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.order.dao.OrderInfoDao;
+import com.yunquanlai.admin.order.dao.OrderProductDetailDao;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
+import com.yunquanlai.admin.order.entity.OrderProductDetailEntity;
+import com.yunquanlai.admin.product.entity.ProductInfoEntity;
+import com.yunquanlai.admin.user.dao.UserInfoDao;
+import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.utils.validator.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +34,12 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
 
     @Autowired
     private OrderInfoDao orderInfoDao;
+
+    @Autowired
+    private OrderProductDetailDao orderProductDetailDao;
+
+    @Autowired
+    private UserInfoDao userInfoDao;
 
     @Override
     public OrderDeliveryInfoEntity queryObject(Long id) {
@@ -87,6 +98,17 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_DELIVERY_END);
         orderInfoEntity.setDeliveryEndTime(new Date());
         orderInfoDao.update(orderInfoEntity);
+        int emptyBucketNumber = 0;
+        List<OrderProductDetailEntity> orderProductDetailEntities = orderProductDetailDao.queryListByOrderId(orderInfoEntity.getId());
+        UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderInfoEntity.getUserInfoId(),true);
+        for (OrderProductDetailEntity orderProductDetailEntity: orderProductDetailEntities) {
+            if(orderProductDetailEntity.getBucketType() == ProductInfoEntity.BUCKET_TYPE_RECYCLE){
+                emptyBucketNumber += orderProductDetailEntity.getCount();
+            }
+        }
+        //TODO 记空桶流水
+        userInfoEntity.setEmptyBucketNumber(userInfoEntity.getEmptyBucketNumber() + emptyBucketNumber);
+        userInfoDao.update(userInfoEntity);
     }
 
     @Override

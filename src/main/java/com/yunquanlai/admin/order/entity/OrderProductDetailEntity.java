@@ -30,6 +30,10 @@ public class OrderProductDetailEntity implements Serializable {
      * 设置：商品数量
      */
 	private Integer count;
+	/**
+	 * 设置：商品规格
+	 */
+	private Integer bucketType;
     /**
      * 设置：
      */
@@ -94,5 +98,13 @@ public class OrderProductDetailEntity implements Serializable {
 	 */
 	public Long getOrderInfoId() {
 		return orderInfoId;
+	}
+
+	public Integer getBucketType() {
+		return bucketType;
+	}
+
+	public void setBucketType(Integer bucketType) {
+		this.bucketType = bucketType;
 	}
 }
