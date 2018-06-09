@@ -37,7 +37,7 @@
         <if test="isLock != null and isLock == true">for update</if>
     </select>
 
-    <select id="queryList" resultType="com.yunquanlai.admin.product.entity.ProductStockEntity">
+    <select id="queryList" resultType="com.yunquanlai.admin.product.entity.ProductStockEntity" parameterType="Map">
         select
         `id`,
         `product_info_id`,
@@ -46,14 +46,15 @@
         `delivery_name`,
         `count`
         from product_stock
-        <choose>
-            <when test="sidx != null and sidx.trim() != ''">
-                order by ${sidx} ${order}
-            </when>
-            <otherwise>
-                order by id desc
-            </otherwise>
-        </choose>
+        <where>
+            <if test="productName != null and productName.trim() != ''">
+                `product_name` like concat('%',#{productName},'%')
+            </if>
+            <if test="deliveryEndpointName != null and deliveryEndpointName.trim() != ''">
+                and `delivery_name` like concat('%',#{deliveryEndpointName},'%')
+            </if>
+        </where>
+        order by id desc
         <if test="offset != null and limit != null">
             limit #{offset}, #{limit}
         </if>

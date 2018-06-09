@@ -39,6 +39,10 @@ $(function () {
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
+        q:{
+            productName: null,
+			deliveryEndpointName: null
+        },
 		showList: true,
 		title: null,
 		productStock: {}
@@ -112,7 +116,11 @@ var vm = new Vue({
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{ 
+			$("#jqGrid").jqGrid('setGridParam',{
+                postData:{
+                	'productName': vm.q.productName,
+					'deliveryEndpointName': vm.q.deliveryEndpointName
+				},
                 page:page
             }).trigger("reloadGrid");
 		}

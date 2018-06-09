@@ -4,7 +4,7 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '商品名', name: 'name', index: 'name', width: 80 }, 			
+			{ label: '品牌名', name: 'name', index: 'name', width: 80 },
 			{ label: '备注', name: 'remark', index: 'remark', width: 80 }			
         ],
 		viewrecords: true,
