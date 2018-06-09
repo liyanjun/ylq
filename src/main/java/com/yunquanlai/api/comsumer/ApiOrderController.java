@@ -57,6 +57,8 @@ public class ApiOrderController {
         return orderInfoService.newOrder(orderVO, user);
     }
 
+    // TODO 订单详情接口
+
     /**
      * 关闭订单
      *
@@ -71,7 +73,7 @@ public class ApiOrderController {
             @ApiImplicitParam(name = "orderId", value = "订单 ID", dataType = "long", paramType = "query", required = true)
     })
     public R orderClose(@RequestParam Long orderId, @LoginUser @ApiIgnore UserInfoEntity user) {
-        orderInfoService.closeOrder(orderId,user.getId());
+        orderInfoService.closeOrder(orderId, user.getId());
         return R.ok();
     }
 
