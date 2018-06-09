@@ -164,6 +164,7 @@ CREATE TABLE `order_info` (
   `amount_delivery_fee` decimal(10,0) NOT NULL COMMENT '订单配送费',
   `status` tinyint(4) NOT NULL COMMENT '订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50已关闭',
   `type` tinyint(4) NOT NULL COMMENT '订单状态类型，10：正常，20：异常',
+  `pay_type` tinyint(4) NOT NULL COMMENT '订单支付类型，10：现金，20：水票',
   `delivery_distributor_id` bigint(11) DEFAULT NULL COMMENT '关联配送员 ID',
   `delivery_distributor_name` varchar(64) DEFAULT NULL COMMENT '关联配送员名',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
@@ -254,6 +255,17 @@ CREATE TABLE `product_info` (
   `update_name` varchar(32) DEFAULT NULL COMMENT '商品更新人名',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='商品信息表表';
+
+DROP TABLE IF EXISTS `product_ticket`;
+CREATE TABLE `product_ticket` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` varchar(128) NOT NULL COMMENT '水票标题',
+  `cout` int(11) NOT NULL COMMENT '包含产品数量（如买5送二）这里就应该是7',
+  `amout` decimal(20,2) NOT NULL COMMENT '水票价格',
+  `product_info_id` bigint(20) NOT NULL COMMENT '关联产品 ID',
+  `creation_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品水票信息表';
 
 -- ----------------------------
 -- Table structure for product_stock
@@ -509,3 +521,24 @@ CREATE TABLE `user_withdraw_deposit` (
   `handle_time` datetime NOT NULL COMMENT '处理时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户押金提现申请表';
+
+DROP TABLE IF EXISTS `user_product_ticket_flow`;
+CREATE TABLE `user_product_ticket_flow` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `cout` int(11) NOT NULL COMMENT '使用数量',
+  `order_info_id` bigint(20) NOT NULL COMMENT '关联产品 ID',
+  `creation_time` datetime NOT NULL COMMENT '购买时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户水票消费流水';
+
+DROP TABLE IF EXISTS `user_product_ticket`;
+CREATE TABLE `user_product_ticket` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `product_ticket_name` varchar(128) NOT NULL COMMENT '水票名称',
+  `cout` int(11) NOT NULL COMMENT '剩余数量',
+  `amount` decimal(20,2) NOT NULL COMMENT '购买价格',
+  `status` tinyint(4) NOT NULL COMMENT '用户水票状态，10：新下单，20：已支付，30：已关闭',
+  `product_info_id` bigint(20) NOT NULL COMMENT '关联产品 ID',
+  `creation_time` datetime NOT NULL COMMENT '购买时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户水票信息表';

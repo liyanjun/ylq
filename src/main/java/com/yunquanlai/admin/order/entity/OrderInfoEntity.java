@@ -25,6 +25,9 @@ public class OrderInfoEntity implements Serializable {
     public static final Integer TYPE_NORMAL = 10;
     public static final Integer TYPE_EXCEPTION = 20;
 
+    public static final Integer PAY_TYPE_CASH = 10;
+    public static final Integer PAY_TYPE_TICKET = 20;
+
     /**
      * 设置：主键 ID
      */
@@ -57,6 +60,10 @@ public class OrderInfoEntity implements Serializable {
      * 设置：订单状态类型，10：正常，20：异常
      */
     private Integer type;
+    /**
+     * 设置：订单支付类型，10：现金，20：水票
+     */
+    private Integer payType;
     /**
      * 设置：关联配送员 ID
      */
@@ -198,6 +205,15 @@ public class OrderInfoEntity implements Serializable {
     public Integer getType() {
         return type;
     }
+
+    public Integer getPayType() {
+        return payType;
+    }
+
+    public void setPayType(Integer payType) {
+        this.payType = payType;
+    }
+
     /**
      * 设置：关联配送员 ID
      */

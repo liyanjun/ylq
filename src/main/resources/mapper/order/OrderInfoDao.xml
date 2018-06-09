@@ -13,6 +13,7 @@
         <result property="amountDeliveryFee" column="amount_delivery_fee"/>
         <result property="status" column="status"/>
         <result property="type" column="type"/>
+        <result property="payType" column="pay_type"/>
         <result property="deliveryDistributorId" column="delivery_distributor_id"/>
         <result property="deliveryDistributorName" column="delivery_distributor_name"/>
         <result property="userInfoId" column="user_info_id"/>
@@ -36,7 +37,8 @@
 					`amount_delivery_fee`, 
 					`status`, 
 					`type`, 
-					`delivery_distributor_id`, 
+					`pay_type`,
+					`delivery_distributor_id`,
 					`delivery_distributor_name`, 
 					`user_info_id`, 
 					`username`, 
@@ -61,7 +63,8 @@
 		            `amount_delivery_fee`, 
 		            `status`, 
 		            `type`, 
-		            `delivery_distributor_id`, 
+		            `pay_type`,
+		            `delivery_distributor_id`,
 		            `delivery_distributor_name`, 
 		            `user_info_id`, 
 		            `username`, 
@@ -100,7 +103,8 @@
 			`amount_delivery_fee`, 
 			`status`, 
 			`type`, 
-			`delivery_distributor_id`, 
+			`pay_type`,
+			`delivery_distributor_id`,
 			`delivery_distributor_name`, 
 			`user_info_id`, 
 			`username`, 
@@ -121,7 +125,8 @@
 			#{amountDeliveryFee}, 
 			#{status}, 
 			#{type}, 
-			#{deliveryDistributorId}, 
+			#{payType},
+			#{deliveryDistributorId},
 			#{deliveryDistributorName}, 
 			#{userInfoId}, 
 			#{username}, 
@@ -145,6 +150,7 @@
 			<if test="amountDeliveryFee != null">`amount_delivery_fee` = #{amountDeliveryFee}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="type != null">`type` = #{type}, </if>
+			<if test="pay_type != null">`pay_type` = #{payType}, </if>
 			<if test="deliveryDistributorId != null">`delivery_distributor_id` = #{deliveryDistributorId}, </if>
 			<if test="deliveryDistributorName != null">`delivery_distributor_name` = #{deliveryDistributorName}, </if>
 			<if test="userInfoId != null">`user_info_id` = #{userInfoId}, </if>

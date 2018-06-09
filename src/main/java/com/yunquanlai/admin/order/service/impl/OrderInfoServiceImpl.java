@@ -139,6 +139,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoEntity.setCreationTime(new Date());
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_NEW);
         orderInfoEntity.setType(OrderInfoEntity.TYPE_NORMAL);
+        orderInfoEntity.setPayType(OrderInfoEntity.PAY_TYPE_CASH);
         orderInfoEntity.setRemark(orderVO.getRemark());
         // 订单
         orderInfoDao.save(orderInfoEntity);
