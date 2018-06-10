@@ -210,6 +210,20 @@ CREATE TABLE `order_product_detail` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='订单商品信息表';
 
 -- ----------------------------
+-- Table structure for order_manual_handling
+-- ----------------------------
+DROP TABLE IF EXISTS `order_manual_handling`;
+CREATE TABLE `order_manual_handling` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `order_id` bigint(20) NOT NULL COMMENT '人工处理订单ID',
+  `operator_id` bigint(20) NOT NULL COMMENT '处理人id',
+  `operator_name` varchar(32) NOT NULL COMMENT '操作人姓名',
+  `operator_time` datetime NOT NULL,
+  `processing` varchar(1024) DEFAULT NULL COMMENT '处理过程',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单人工处理记录表';
+
+-- ----------------------------
 -- Table structure for product_brand
 -- ----------------------------
 DROP TABLE IF EXISTS `product_brand`;
@@ -484,9 +498,11 @@ DROP TABLE IF EXISTS `user_withdraw_deposit`;
 CREATE TABLE `user_withdraw_deposit` (
   `id` bigint(20) NOT NULL COMMENT '主键 ID',
   `user_info_id` bigint(20) NOT NULL COMMENT '对应用户 ID',
-  `is_handle` tinyint(1) NOT NULL COMMENT '是否处理，0：未处理，1：已处理',
+  `is_handle` tinyint(1) NOT NULL COMMENT '是否处理，10：未处理，20：已处理',
   `creation_time` datetime DEFAULT NULL COMMENT '创建时间',
   `handle_time` datetime NOT NULL COMMENT '处理时间',
+  `handler_id` bigint(20) DEFAULT NULL COMMENT '处理人ID',
+  `handler_name` varchar(32) DEFAULT NULL COMMENT '处理人姓名',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户押金提现申请表';
 

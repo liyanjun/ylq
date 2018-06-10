@@ -86,6 +86,26 @@ INSERT INTO `sys_menu` VALUES ('63', '62', '查看', null, 'userinfo:list,userin
 INSERT INTO `sys_menu` VALUES ('64', '61', '押金提现申请', 'user/userwithdrawdeposit.html', 'userwithdrawdeposit:list', '1', 'fa fa-file-code-o', '6');
 INSERT INTO `sys_menu` VALUES ('65', '64', '查看', null, 'userwithdrawdeposit:list,userwithdrawdeposit:info', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('66', '64', '修改', null, 'userwithdrawdeposit:update', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('67', '0', '评价管理', null, null, '0', null, '0');
+INSERT INTO `sys_menu` VALUES ('68', '67', '配送员评价', 'comment/commentdelivery.html', NULL, '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('69', '68', '查看', null, 'commentdelivery:list,commentdelivery:info', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('70', '68', '删除', null, 'commentdelivery:delete', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('71', '67', '商品评价', 'comment/commentproduct.html', NULL, '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('72', '71', '查看', null, 'commentproduct:list,commentproduct:info', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('73', '71', '删除', null, 'commentproduct:delete', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('74', '0', '订单管理', null, null, '0', null, '0');
+INSERT INTO `sys_menu` VALUES ('75', '74', '订单信息', 'order/orderinfo.html', NULL, '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('76', '75', '查看', null, 'orderinfo:list,orderinfo:info', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('77', '75', '修改', null, 'orderinfo:update', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('78', '74', '订单配送信息', 'order/orderdeliveryinfo.html', NULL, '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('79', '78', '查看', null, 'orderdeliveryinfo:list,orderdeliveryinfo:info', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('80', '78', '修改', null, 'orderdeliveryinfo:update', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('81', '74', '订单订单商品信息', 'order/orderproductdetail.html', NULL, '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('82', '81', '查看', null, 'orderproductdetail:list,orderproductdetail:info', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('83', '81', '修改', null, 'orderproductdetail:update', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('84', '74', '订单手工处理流水记录', 'order/orderoperateflow.html', NULL, '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('85', '84', '查看', null, 'orderoperateflow:list,orderoperateflow:info', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('86', '84', '修改', null, 'orderoperateflow:update', '2', null, '6');
 
 -- ----------------------------
 -- Records of sys_role_menu
