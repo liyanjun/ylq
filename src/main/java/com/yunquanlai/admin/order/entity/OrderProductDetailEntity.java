@@ -1,7 +1,7 @@
 package com.yunquanlai.admin.order.entity;
 
 import java.io.Serializable;
-
+import java.math.BigDecimal;
 
 
 /**
@@ -38,6 +38,11 @@ public class OrderProductDetailEntity implements Serializable {
      * 设置：
      */
 	private Long orderInfoId;
+
+	/**
+	 * 商品价格，用于显示
+	 */
+	private BigDecimal amount;
 
 	/**
 	 * 设置：主键 ID
@@ -106,5 +111,13 @@ public class OrderProductDetailEntity implements Serializable {
 
 	public void setBucketType(Integer bucketType) {
 		this.bucketType = bucketType;
+	}
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
 	}
 }

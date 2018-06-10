@@ -3,7 +3,7 @@
 
 <mapper namespace="com.yunquanlai.admin.user.dao.UserWithdrawDepositDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity" id="userWithdrawDepositMap">
         <result property="id" column="id"/>
         <result property="userInfoId" column="user_info_id"/>
@@ -12,43 +12,53 @@
         <result property="handleTime" column="handle_time"/>
     </resultMap>
 
-	<select id="queryObject" resultType="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity">
-		select
-					`id`, 
-					`user_info_id`, 
-					`is_handle`, 
-					`creation_time`, 
-					`handle_time`
-				from user_withdraw_deposit where id = #{id}
+    <select id="queryObject" resultType="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity">
+        select
+        `id`,
+        `user_info_id`,
+        `is_handle`,
+        `creation_time`,
+        `handle_time`
+        from user_withdraw_deposit where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
+    </select>
+
+    <select id="queryObjectByUserId" resultType="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity">
+		select
+					`id`,
+					`user_info_id`,
+					`is_handle`,
+					`creation_time`,
+					`handle_time`
+				from user_withdraw_deposit where user_info_id = #{value} and is_handle = 10
 	</select>
 
-	<select id="queryList" resultType="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity">
-		select
-		            `id`, 
-		            `user_info_id`, 
-		            `is_handle`, 
-		            `creation_time`, 
-		            `handle_time`
-				from user_withdraw_deposit
+    <select id="queryList" resultType="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity">
+        select
+        `id`,
+        `user_info_id`,
+        `is_handle`,
+        `creation_time`,
+        `handle_time`
+        from user_withdraw_deposit
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
             </when>
-			<otherwise>
+            <otherwise>
                 order by id desc
-			</otherwise>
+            </otherwise>
         </choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
-	</select>
-	
- 	<select id="queryTotal" resultType="int">
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
 		select count(*) from user_withdraw_deposit 
 	</select>
-	 
-	<insert id="save" parameterType="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity">
+
+    <insert id="save" parameterType="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity">
 		insert into user_withdraw_deposit
 		(
 			`id`, 
@@ -66,27 +76,27 @@
 			#{handleTime}
 		)
 	</insert>
-	 
-	<update id="update" parameterType="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity">
-		update user_withdraw_deposit 
-		<set>
-			<if test="userInfoId != null">`user_info_id` = #{userInfoId}, </if>
-			<if test="isHandle != null">`is_handle` = #{isHandle}, </if>
-			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
-			<if test="handleTime != null">`handle_time` = #{handleTime}</if>
-		</set>
-		where id = #{id}
-	</update>
-	
-	<delete id="delete">
+
+    <update id="update" parameterType="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity">
+        update user_withdraw_deposit
+        <set>
+            <if test="userInfoId != null">`user_info_id` = #{userInfoId},</if>
+            <if test="isHandle != null">`is_handle` = #{isHandle},</if>
+            <if test="creationTime != null">`creation_time` = #{creationTime},</if>
+            <if test="handleTime != null">`handle_time` = #{handleTime}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
 		delete from user_withdraw_deposit where id = #{value}
 	</delete>
-	
-	<delete id="deleteBatch">
-		delete from user_withdraw_deposit where id in 
-		<foreach item="id" collection="array" open="(" separator="," close=")">
-			#{id}
-		</foreach>
-	</delete>
+
+    <delete id="deleteBatch">
+        delete from user_withdraw_deposit where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 
 </mapper>

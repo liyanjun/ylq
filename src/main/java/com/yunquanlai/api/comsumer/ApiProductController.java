@@ -92,7 +92,7 @@ public class ApiProductController {
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "offset", value = "位移数", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "limit", value = "查询条数", required = true)
     })
-    public R queryProduct(String name, Integer brandId, Integer orderType, Integer bucketType, Integer isQuick, @RequestParam Integer offset, @RequestParam Integer limit) {
+    public R queryProduct(String name, Integer brandId, Integer orderType, Integer bucketType,@RequestParam Integer isQuick, @RequestParam Integer offset, @RequestParam Integer limit) {
         Map map = new HashMap(16);
         map.put("name", name);
         map.put("brandId", brandId);

@@ -28,4 +28,6 @@ public interface UserWithdrawDepositService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+    UserWithdrawDepositEntity queryObjectByUserId(Long id);
 }

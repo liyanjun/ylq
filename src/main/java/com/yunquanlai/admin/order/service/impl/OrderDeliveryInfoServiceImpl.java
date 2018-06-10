@@ -7,7 +7,9 @@ import com.yunquanlai.admin.order.dao.OrderProductDetailDao;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderProductDetailEntity;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
+import com.yunquanlai.admin.user.dao.UserEmptyBucketFlowDao;
 import com.yunquanlai.admin.user.dao.UserInfoDao;
+import com.yunquanlai.admin.user.entity.UserEmptyBucketFlowEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.utils.validator.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,9 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
 
     @Autowired
     private UserInfoDao userInfoDao;
+
+    @Autowired
+    private UserEmptyBucketFlowDao userEmptyBucketFlowDao;
 
     @Override
     public OrderDeliveryInfoEntity queryObject(Long id) {
@@ -86,7 +91,7 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
 
         orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObject(orderDeliveryInfoEntity.getId(), true);
         Assert.isNull(orderDeliveryInfoEntity, "找不到配送单信息");
-        Assert.isEqual(orderDeliveryInfoEntity.getStatus(), OrderDeliveryInfoEntity.STATUS_ON_DELIVERY, "配送单不是配送中状态，无法标记送达");
+        Assert.isNotEqual(orderDeliveryInfoEntity.getStatus(), OrderDeliveryInfoEntity.STATUS_ON_DELIVERY, "配送单不是配送中状态，无法标记送达");
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_DELIVERY_END);
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         deliveryDistributorEntity = deliveryDistributorDao.queryObject(deliveryDistributorEntity.getId(), true);
@@ -100,25 +105,34 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         orderInfoDao.update(orderInfoEntity);
         int emptyBucketNumber = 0;
         List<OrderProductDetailEntity> orderProductDetailEntities = orderProductDetailDao.queryListByOrderId(orderInfoEntity.getId());
-        UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderInfoEntity.getUserInfoId(),true);
-        for (OrderProductDetailEntity orderProductDetailEntity: orderProductDetailEntities) {
-            if(orderProductDetailEntity.getBucketType() == ProductInfoEntity.BUCKET_TYPE_RECYCLE){
+        UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderInfoEntity.getUserInfoId(), true);
+        Assert.isNull(orderDeliveryInfoEntity, "找不到订单用户信息");
+        for (OrderProductDetailEntity orderProductDetailEntity : orderProductDetailEntities) {
+            if (orderProductDetailEntity.getBucketType() == ProductInfoEntity.BUCKET_TYPE_RECYCLE) {
                 emptyBucketNumber += orderProductDetailEntity.getCount();
             }
         }
-        //TODO 记空桶流水
+        UserEmptyBucketFlowEntity userEmptyBucketFlowEntity = new UserEmptyBucketFlowEntity();
+        userEmptyBucketFlowEntity.setBeforeEmptyBucket(userInfoEntity.getEmptyBucketNumber());
+        userEmptyBucketFlowEntity.setUserInfoId(userInfoEntity.getId());
+        userEmptyBucketFlowEntity.setEmptyBucketNumber(emptyBucketNumber);
+        userEmptyBucketFlowEntity.setType(20);
+        userEmptyBucketFlowEntity.setOpreatorId(orderDeliveryInfoEntity.getOrderInfoId());
         userInfoEntity.setEmptyBucketNumber(userInfoEntity.getEmptyBucketNumber() + emptyBucketNumber);
+        userEmptyBucketFlowEntity.setAfterEmptyBucket(userInfoEntity.getEmptyBucketNumber());
+        userEmptyBucketFlowEntity.setCreationTime(new Date());
+        userEmptyBucketFlowDao.save(userEmptyBucketFlowEntity);
         userInfoDao.update(userInfoEntity);
     }
 
     @Override
     public OrderDeliveryInfoEntity queryObjectByOrderId(Long orderId) {
-        return orderDeliveryInfoDao.queryObjectByOrderId(orderId,false);
+        return orderDeliveryInfoDao.queryObjectByOrderId(orderId, false);
     }
 
     @Override
     public void markerException(OrderDeliveryInfoEntity orderDeliveryInfoEntity, String exception) {
-        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderDeliveryInfoEntity.getOrderInfoId(),true);
+        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderDeliveryInfoEntity.getOrderInfoId(), true);
         orderInfoEntity.setType(OrderInfoEntity.TYPE_EXCEPTION);
         orderInfoEntity.setException(exception);
         orderInfoDao.update(orderInfoEntity);

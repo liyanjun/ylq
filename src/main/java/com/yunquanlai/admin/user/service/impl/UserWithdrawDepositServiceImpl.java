@@ -52,5 +52,10 @@ public class UserWithdrawDepositServiceImpl implements UserWithdrawDepositServic
 	public void deleteBatch(Long[] ids){
 		userWithdrawDepositDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public UserWithdrawDepositEntity queryObjectByUserId(Long id) {
+		return userWithdrawDepositDao.queryObjectByUserId(id);
+	}
+
 }

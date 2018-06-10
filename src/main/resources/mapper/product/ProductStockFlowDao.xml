@@ -108,7 +108,11 @@
 	<delete id="delete">
 		delete from product_stock_flow where id = #{value}
 	</delete>
-	
+
+	<delete id="deleteByStockId">
+		delete from product_stock_flow where productStockId = #{value}
+	</delete>
+
 	<delete id="deleteBatch">
 		delete from product_stock_flow where id in 
 		<foreach item="id" collection="array" open="(" separator="," close=")">

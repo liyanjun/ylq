@@ -26,9 +26,9 @@ public interface ProductInfoService {
 	
 	void update(ProductInfoVO productInfoVO);
 	
-	void delete(Integer id);
+	void delete(Long id);
 	
-	void deleteBatch(Integer[] ids);
+	void deleteBatch(Long[] ids);
 
 	List<ProductInfoEntity> queryListForClient(Map<String, Object> map);
 }

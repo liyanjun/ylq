@@ -25,13 +25,13 @@ public abstract class Assert {
     }
 
     /**
-     * 判断两个对象是否相等，不相等抛出异常
+     * 判断两个对象是否不相等，不相等抛出异常
      *
      * @param object
      * @param object1
      * @param message
      */
-    public static void isEqual(Object object, Object object1, String message) {
+    public static void isNotEqual(Object object, Object object1, String message) {
         if (!object.equals(object1) && object != object1) {
             throw new RRException(message);
         }

@@ -2,10 +2,7 @@ package com.yunquanlai.admin.product.service.impl;
 
 import com.yunquanlai.admin.delivery.dao.DeliveryEndpointDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
-import com.yunquanlai.admin.product.dao.ProductBrandDao;
-import com.yunquanlai.admin.product.dao.ProductDetailDao;
-import com.yunquanlai.admin.product.dao.ProductInfoDao;
-import com.yunquanlai.admin.product.dao.ProductStockDao;
+import com.yunquanlai.admin.product.dao.*;
 import com.yunquanlai.admin.product.entity.ProductDetailEntity;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.product.entity.ProductInfoVO;
@@ -38,6 +35,9 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 
 	@Autowired
 	private ProductStockDao productStockDao;
+
+	@Autowired
+	private ProductStockFlowDao productStockFlowDao;
 
 	@Override
 	public ProductInfoVO queryProductInfoVO(Long id){
@@ -90,13 +90,19 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 	}
 
 	@Override
-	public void delete(Integer id){
+	public void delete(Long id){
 		productInfoDao.delete(id);
-		// TODO 删除对应库存信息
 	}
 
 	@Override
-	public void deleteBatch(Integer[] ids){
+	public void deleteBatch(Long[] ids){
+		for (Long id : ids) {
+			List<ProductStockEntity> productStockEntities = productStockDao.queryByProductId(id);
+			for (ProductStockEntity productStockEntity : productStockEntities) {
+				productStockDao.delete(productStockEntity.getId());
+				productStockFlowDao.deleteByStockId(productStockEntity.getId());
+			}
+		}
 		productInfoDao.deleteBatch(ids);
 	}
 

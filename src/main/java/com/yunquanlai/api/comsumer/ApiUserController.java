@@ -2,11 +2,14 @@ package com.yunquanlai.api.comsumer;
 
 import com.yunquanlai.admin.user.entity.UserClientTokenEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
+import com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity;
 import com.yunquanlai.admin.user.service.UserClientTokenService;
 import com.yunquanlai.admin.user.service.UserInfoService;
+import com.yunquanlai.admin.user.service.UserWithdrawDepositService;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
 import com.yunquanlai.utils.annotation.LoginUser;
+import com.yunquanlai.utils.validator.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,6 +39,9 @@ public class ApiUserController {
 
     @Autowired
     private UserClientTokenService userClientTokenService;
+
+    @Autowired
+    private UserWithdrawDepositService userWithdrawDepositService;
 
     //12小时后过期
     private final static int EXPIRE = 3600 * 12;
@@ -72,12 +78,14 @@ public class ApiUserController {
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true)
     })
     public R depositoryWithdraw(@LoginUser UserInfoEntity userInfoEntity){
-        // TODO 用户提现申请
+        UserWithdrawDepositEntity temp = userWithdrawDepositService.queryObjectByUserId(userInfoEntity.getId());
+        Assert.isNull(temp,"已存在未处理的押金提现申请，请耐心等待。");
+        UserWithdrawDepositEntity userWithdrawDepositEntity = new UserWithdrawDepositEntity();
+        userWithdrawDepositEntity.setUserInfoId(userInfoEntity.getId());
+        userWithdrawDepositEntity.setCreationTime(new Date());
+        userWithdrawDepositService.save(new UserWithdrawDepositEntity());
         return R.ok();
     }
-
-    // TODO 押金充值
-    // TODO 押金提现申请
 
     private R createToken(Long userId) {
         //生成一个token

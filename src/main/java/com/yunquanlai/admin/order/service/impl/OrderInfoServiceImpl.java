@@ -13,10 +13,7 @@ import com.yunquanlai.admin.product.dao.ProductStockDao;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.product.entity.ProductStockEntity;
 import com.yunquanlai.admin.system.dao.SysConfigDao;
-import com.yunquanlai.admin.system.service.SysConfigService;
-import com.yunquanlai.admin.user.dao.UserDepositFlowDao;
 import com.yunquanlai.admin.user.dao.UserInfoDao;
-import com.yunquanlai.admin.user.entity.UserDepositFlowEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.api.comsumer.vo.ProductOrderVO;
@@ -25,7 +22,6 @@ import com.yunquanlai.api.event.OrderPaidEvent;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.validator.Assert;
-import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,9 +69,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Autowired
     private UserInfoDao userInfoDao;
-
-    @Autowired
-    private UserDepositFlowDao userDepositFlowDao;
 
     /**
      * 上下文对象
@@ -279,11 +272,44 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public void closeOrder(Long orderId, Long userId) {
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderId, true);
-        Assert.isEqual(orderInfoEntity.getUserInfoId(), userId, "不能关闭别人的订单");
-        Assert.isEqual(orderInfoEntity.getStatus(), OrderInfoEntity.STATUS_NEW, "订单不是可关闭状态");
+        Assert.isNotEqual(orderInfoEntity.getUserInfoId(), userId, "不能关闭别人的订单");
+        Assert.isNotEqual(orderInfoEntity.getStatus(), OrderInfoEntity.STATUS_NEW, "订单不是可关闭状态");
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_CLOSE);
         orderInfoEntity.setCloseTime(new Date());
         orderInfoDao.update(orderInfoEntity);
+    }
+
+    @Override
+    public R confirm(OrderVO orderVO, UserInfoEntity user) {
+        List<OrderProductDetailEntity> orderProductDetailEntities = new ArrayList<>(16);
+        BigDecimal bEmptyValue;
+        String emptyValue = sysConfigDao.queryByKey("emptyValue");
+        if (emptyValue == null) {
+            throw new RRException("单个空桶价值未配置");
+        }
+        bEmptyValue = new BigDecimal(emptyValue);
+        BigDecimal amount = BigDecimal.ZERO;
+        BigDecimal deposit = BigDecimal.ZERO;
+
+        for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
+            // 计算订单总额，押金总额
+            ProductInfoEntity productInfoEntity = productInfoDao.queryObject(productOrderVO.getProductInfoId(), false);
+            if (productInfoEntity == null) {
+                return R.error("找不到购买的商品【" + productOrderVO.getProductInfoId() + "】");
+            }
+            amount = amount.add(productInfoEntity.getAmount().multiply(new BigDecimal(productOrderVO.getCount())));
+            if (productInfoEntity.getBucketType() == ProductInfoEntity.BUCKET_TYPE_RECYCLE) {
+                deposit = deposit.add(bEmptyValue.multiply(new BigDecimal(productOrderVO.getCount())));
+            }
+
+            OrderProductDetailEntity orderProductDetailEntity = new OrderProductDetailEntity();
+            orderProductDetailEntity.setCount(productOrderVO.getCount());
+            orderProductDetailEntity.setProductInfoId(productInfoEntity.getId());
+            orderProductDetailEntity.setProductName(productInfoEntity.getName());
+            orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
+            orderProductDetailEntities.add(orderProductDetailEntity);
+        }
+        return R.ok().put("orderProductDetails", orderProductDetailEntities).put("deposit", deposit).put("amount", amount);
     }
 
     /**

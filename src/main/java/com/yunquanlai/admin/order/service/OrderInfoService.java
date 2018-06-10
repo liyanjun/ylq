@@ -60,4 +60,13 @@ public interface OrderInfoService {
      * @param orderId
      */
     void closeOrder(Long orderId, Long userId);
+
+    /**
+     * 订单内容确定，计算押金
+     *
+     * @param orderVO
+     * @param user
+     * @return
+     */
+    R confirm(OrderVO orderVO, UserInfoEntity user);
 }

@@ -3,6 +3,7 @@ package com.yunquanlai.api.delivery;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
+import com.yunquanlai.admin.user.service.UserInfoService;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.LoginDelivery;
 import com.yunquanlai.utils.validator.Assert;
@@ -29,6 +30,9 @@ public class ApiDeliveryController {
     @Autowired
     OrderDeliveryInfoService orderDeliveryInfoService;
 
+    @Autowired
+    UserInfoService userInfoService;
+
     /**
      * 回收空桶接口
      *
@@ -43,10 +47,10 @@ public class ApiDeliveryController {
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "number", value = "空桶数", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "long", name = "orderDeliveryId", value = "配送单 ID", required = true)
     })
-    public R recyclingEmptyBarrels(Integer number, Long orderDeliveryId) {
-        //TODO 扣减用户空桶数
-        //TODO 记空桶流水
-        return R.ok();
+    public R recyclingEmptyBarrels(@LoginDelivery DeliveryDistributorEntity deliveryDistributorEntity, Integer number, Long orderDeliveryId) {
+        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoService.queryObject(orderDeliveryId);
+        return userInfoService.recyclingEmptyBarrels(orderDeliveryInfoEntity.getUserInfoId(), number,deliveryDistributorEntity.getId());
+
     }
 
 
@@ -91,7 +95,7 @@ public class ApiDeliveryController {
     public R markerOrderDelivery(@LoginDelivery @ApiIgnore DeliveryDistributorEntity deliveryDistributorEntity,
                                  @RequestParam Long orderDeliveryId) {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoService.queryObject(orderDeliveryId);
-        Assert.isEqual(deliveryDistributorEntity.getId().longValue(), orderDeliveryInfoEntity.getDeliveryDistributorId().longValue(), "请不要标记别人的订单。");
+        Assert.isNotEqual(deliveryDistributorEntity.getId().longValue(), orderDeliveryInfoEntity.getDeliveryDistributorId().longValue(), "请不要标记别人的订单。");
         orderDeliveryInfoService.orderDelivery(deliveryDistributorEntity, orderDeliveryInfoEntity);
         return R.ok();
     }

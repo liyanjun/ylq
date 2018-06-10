@@ -411,33 +411,6 @@ CREATE TABLE `sys_user_role` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户与角色对应关系';
 
 -- ----------------------------
--- Table structure for tb_token
--- ----------------------------
-DROP TABLE IF EXISTS `tb_token`;
-CREATE TABLE `tb_token` (
-  `user_id` bigint(20) NOT NULL,
-  `token` varchar(100) NOT NULL COMMENT 'token',
-  `expire_time` datetime DEFAULT NULL COMMENT '过期时间',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`user_id`),
-  UNIQUE KEY `token` (`token`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户Token';
-
--- ----------------------------
--- Table structure for tb_user
--- ----------------------------
-DROP TABLE IF EXISTS `tb_user`;
-CREATE TABLE `tb_user` (
-  `user_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL COMMENT '用户名',
-  `mobile` varchar(20) NOT NULL COMMENT '手机号',
-  `password` varchar(64) DEFAULT NULL COMMENT '密码',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`user_id`),
-  UNIQUE KEY `username` (`username`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='用户';
-
--- ----------------------------
 -- Table structure for user_address
 -- ----------------------------
 DROP TABLE IF EXISTS `user_address`;
@@ -466,33 +439,22 @@ CREATE TABLE `user_client_token` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for user_deposit
--- ----------------------------
-DROP TABLE IF EXISTS `user_deposit`;
-CREATE TABLE `user_deposit` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
-  `user_info_id` bigint(20) NOT NULL COMMENT '对应用户 ID',
-  `deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '押金总额',
-  `enable_deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '有效的押金',
-  `disable_deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '无效的押金（空桶没退回）',
-  `empty_bucket_number` int(11) NOT NULL DEFAULT '0' COMMENT '用户持有空桶数',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户押金信息表';
 
 -- ----------------------------
 -- Table structure for user_deposit_flow
 -- ----------------------------
-DROP TABLE IF EXISTS `user_deposit_flow`;
-CREATE TABLE `user_deposit_flow` (
+DROP TABLE IF EXISTS `user_empty_bucket_flow`;
+CREATE TABLE `user_empty_bucket_flow` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `type` tinyint(4) NOT NULL COMMENT '流水类型，101：押金充值，2：押金提现，3：归还空桶，4：订水（等价于获取空桶）',
-  `before_deposit` varchar(512) NOT NULL COMMENT '流水前押金信息',
-  `after_deposit` varchar(512) NOT NULL COMMENT '流水号押金信息',
+  `type` tinyint(4) NOT NULL COMMENT '流水类型，10：归还空桶，20：获取空桶',
+  `before_empty_bucket` varchar(512) NOT NULL COMMENT '流水前空桶数',
+  `after_empty_bucket` varchar(512) NOT NULL COMMENT '流水后空桶数',
+  `empty_bucket_number` varchar(512) NOT NULL COMMENT '操作空桶数',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
+  `opreator_id` bigint(20) NOT NULL COMMENT '操作关联 ID（如果为归还关联配送员用户 ID，如果是获取关联订单 ID）',
   `creation_time` datetime NOT NULL COMMENT '流水时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户押金流水信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户空桶流水信息表';
 
 -- ----------------------------
 -- Table structure for user_info
