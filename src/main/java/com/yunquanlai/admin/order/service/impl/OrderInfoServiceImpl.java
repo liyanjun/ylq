@@ -184,7 +184,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             // 订单商品明细
             orderProductDetailDao.save(orderProductDetailEntity);
         }
-
+        // todo 测试用，下单后直接走支付完成流程
+        orderPay(orderInfoEntity.getId(),orderInfoEntity.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
         return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities).put("minDeposit", deposit);
     }
 
@@ -195,7 +196,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             throw new RuntimeException("找不到有效的订单");
         }
         // 订单不是可支付状态,幂等性返回(已关闭的订单，如果收到支付完成通知，把它拉起来到已支付，然后配送，已关闭指的是不能发起支付)
-        if (orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_NEW || orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_CLOSE) {
+        if (orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_NEW && orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_CLOSE) {
             return;
         }
         // 校验金额，微信返回的金额单位是分，我们先除以100
@@ -226,6 +227,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             return;
         }
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
+        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         applicationContext.publishEvent(new OrderPaidEvent(orderInfoEntity.getId()));
     }
 

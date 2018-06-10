@@ -159,7 +159,7 @@
             <if test="amountDeliveryFee != null">`amount_delivery_fee` = #{amountDeliveryFee},</if>
             <if test="status != null">`status` = #{status},</if>
             <if test="type != null">`type` = #{type},</if>
-            <if test="pay_type != null">`pay_type` = #{payType},</if>
+            <if test="payType != null">`pay_type` = #{payType},</if>
             <if test="deliveryDistributorId != null">`delivery_distributor_id` = #{deliveryDistributorId},</if>
             <if test="deliveryDistributorName != null">`delivery_distributor_name` = #{deliveryDistributorName},</if>
             <if test="userInfoId != null">`user_info_id` = #{userInfoId},</if>

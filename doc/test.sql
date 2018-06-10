@@ -48,8 +48,6 @@ INSERT INTO `product_stock` VALUES ('6', '1', '哇哈哈桶装水', '2', '琅东
 
 INSERT INTO `product_stock_flow` VALUES ('1', '4', '3', '0', '0', '3', '2018-06-09 21:12:08', 'admin', '1');
 
-
-INSERT INTO `sys_config` VALUES ('1', 'CLOUD_STORAGE_CONFIG_KEY', '{\"aliyunAccessKeyId\":\"\",\"aliyunAccessKeySecret\":\"\",\"aliyunBucketName\":\"\",\"aliyunDomain\":\"\",\"aliyunEndPoint\":\"\",\"aliyunPrefix\":\"\",\"qcloudBucketName\":\"\",\"qcloudDomain\":\"\",\"qcloudPrefix\":\"\",\"qcloudSecretId\":\"\",\"qcloudSecretKey\":\"\",\"qiniuAccessKey\":\"zYvETuLHzwarNl9ZQQHdJ6ZQDIL0EpYRA0x3jVxb\",\"qiniuBucketName\":\"yunquanlai\",\"qiniuDomain\":\"http://pa23ubi36.bkt.clouddn.com\",\"qiniuPrefix\":\"upload\",\"qiniuSecretKey\":\"yDOw7KMRox8wGZsAyudGRQ8OiFMnJpDAZ_wXWnj7\",\"type\":1}', '0', '云存储配置信息');
 INSERT INTO `sys_config` VALUES ('2', 'banner', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/120f31b821d74673ab29b44d7253fc6f,http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg, http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg, http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg', '1', '首页banner图使用‘,’隔开');
 INSERT INTO `sys_config` VALUES ('3', 'emptyValue', '10', '1', '单个空桶价值');
 
@@ -65,3 +63,5 @@ INSERT INTO `sys_oss` VALUES ('4', 'http://pa23n5htw.bkt.clouddn.com/upload/2018
 INSERT INTO `sys_oss` VALUES ('5', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/34eb2e56c3fb4abebddd51d5d13d22ee', '2018-06-09 20:52:20');
 INSERT INTO `sys_oss` VALUES ('6', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/6c35aa47a0e44c6fb946b0cdef52927a', '2018-06-09 21:10:21');
 INSERT INTO `sys_oss` VALUES ('7', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/120f31b821d74673ab29b44d7253fc6f', '2018-06-09 22:08:37');
+
+INSERT INTO `delivery_distributor` VALUES ('11', '章鱼', '15677187487', 'bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a', '2018-06-10', 'c758f22fe07a1d2fcb9c2bf100882647', null, '10', null, null, null, '1', '1', '广西大学配送站', null);

@@ -43,7 +43,8 @@ public class SysRoleController extends AbstractController {
 		if(getUserId() != Constant.SUPER_ADMIN){
 			params.put("createUserId", getUserId());
 		}
-		
+
+
 		//查询列表数据
 		Query query = new Query(params);
 		List<SysRoleEntity> list = sysRoleService.queryList(query);

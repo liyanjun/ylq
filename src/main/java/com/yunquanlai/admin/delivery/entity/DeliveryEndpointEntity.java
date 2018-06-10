@@ -125,6 +125,6 @@ public class DeliveryEndpointEntity implements Serializable, Comparable<Delivery
 
     @Override
     public int compareTo(DeliveryEndpointEntity o) {
-        return distance.subtract(o.getDistance()).intValue();
+        return distance.compareTo(o.getDistance());
     }
 }
