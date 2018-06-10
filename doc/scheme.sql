@@ -468,7 +468,7 @@ CREATE TABLE `user_info` (
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户状态：0：启用，1：禁用',
   `deposit_amount` decimal(20,2) DEFAULT '0.00' COMMENT '总押金金额',
   `enable_deposit_amount` decimal(20,2) DEFAULT '0.00' COMMENT '可用押金金额',
-  `disable_deposit_amout` decimal(20,2) DEFAULT '0.00' COMMENT '不可用押金金额',
+  `disable_deposit_amount` decimal(20,2) DEFAULT '0.00' COMMENT '不可用押金金额',
   `empty_bucket_number` int(11) DEFAULT '0' COMMENT '持有空桶数',
   `creation_time` datetime NOT NULL COMMENT '用户注册时间',
   `recommenderID` bigint(20) DEFAULT NULL COMMENT '推荐人ID',
