@@ -19,7 +19,7 @@ public class OrderProductDetailServiceImpl implements OrderProductDetailService 
 	private OrderProductDetailDao orderProductDetailDao;
 	
 	@Override
-	public OrderProductDetailEntity queryObject(Integer id){
+	public OrderProductDetailEntity queryObject(Long id){
 		return orderProductDetailDao.queryObject(id,false);
 	}
 	
@@ -44,12 +44,12 @@ public class OrderProductDetailServiceImpl implements OrderProductDetailService 
 	}
 	
 	@Override
-	public void delete(Integer id){
+	public void delete(Long id){
 		orderProductDetailDao.delete(id);
 	}
 	
 	@Override
-	public void deleteBatch(Integer[] ids){
+	public void deleteBatch(Long[] ids){
 		orderProductDetailDao.deleteBatch(ids);
 	}
 

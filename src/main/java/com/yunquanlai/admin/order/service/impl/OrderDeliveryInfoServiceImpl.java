@@ -72,12 +72,12 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         orderDeliveryInfoDao.delete(id);
     }
 
     @Override
-    public void deleteBatch(Integer[] ids) {
+    public void deleteBatch(Long[] ids) {
         orderDeliveryInfoDao.deleteBatch(ids);
     }
 
@@ -117,7 +117,7 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         userEmptyBucketFlowEntity.setUserInfoId(userInfoEntity.getId());
         userEmptyBucketFlowEntity.setEmptyBucketNumber(emptyBucketNumber);
         userEmptyBucketFlowEntity.setType(20);
-        userEmptyBucketFlowEntity.setOpreatorId(orderDeliveryInfoEntity.getOrderInfoId());
+        userEmptyBucketFlowEntity.setOperatorId(orderDeliveryInfoEntity.getOrderInfoId());
         userInfoEntity.setEmptyBucketNumber(userInfoEntity.getEmptyBucketNumber() + emptyBucketNumber);
         userEmptyBucketFlowEntity.setAfterEmptyBucket(userInfoEntity.getEmptyBucketNumber());
         userEmptyBucketFlowEntity.setCreationTime(new Date());

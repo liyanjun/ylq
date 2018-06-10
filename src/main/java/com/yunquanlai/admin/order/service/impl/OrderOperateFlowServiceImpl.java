@@ -12,45 +12,45 @@ import com.yunquanlai.admin.order.service.OrderOperateFlowService;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@Service("orderOpreateFlowService")
+@Service("orderOperateFlowService")
 @Transactional(rollbackFor = Exception.class)
 public class OrderOperateFlowServiceImpl implements OrderOperateFlowService {
 	@Autowired
-	private OrderOperateFlowDao orderOpreateFlowDao;
+	private OrderOperateFlowDao orderOperateFlowDao;
 	
 	@Override
-	public OrderOperateFlowEntity queryObject(Integer id){
-		return orderOpreateFlowDao.queryObject(id,false);
+	public OrderOperateFlowEntity queryObject(Long id){
+		return orderOperateFlowDao.queryObject(id,false);
 	}
 	
 	@Override
 	public List<OrderOperateFlowEntity> queryList(Map<String, Object> map){
-		return orderOpreateFlowDao.queryList(map);
+		return orderOperateFlowDao.queryList(map);
 	}
 	
 	@Override
 	public int queryTotal(Map<String, Object> map){
-		return orderOpreateFlowDao.queryTotal(map);
+		return orderOperateFlowDao.queryTotal(map);
 	}
 	
 	@Override
-	public void save(OrderOperateFlowEntity orderOpreateFlow){
-		orderOpreateFlowDao.save(orderOpreateFlow);
+	public void save(OrderOperateFlowEntity orderOperateFlow){
+		orderOperateFlowDao.save(orderOperateFlow);
 	}
 	
 	@Override
-	public void update(OrderOperateFlowEntity orderOpreateFlow){
-		orderOpreateFlowDao.update(orderOpreateFlow);
+	public void update(OrderOperateFlowEntity orderOperateFlow){
+		orderOperateFlowDao.update(orderOperateFlow);
 	}
 	
 	@Override
-	public void delete(Integer id){
-		orderOpreateFlowDao.delete(id);
+	public void delete(Long id){
+		orderOperateFlowDao.delete(id);
 	}
 	
 	@Override
-	public void deleteBatch(Integer[] ids){
-		orderOpreateFlowDao.deleteBatch(ids);
+	public void deleteBatch(Long[] ids){
+		orderOperateFlowDao.deleteBatch(ids);
 	}
 	
 }

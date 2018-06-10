@@ -42,7 +42,7 @@ public class UserEmptyBucketFlowEntity implements Serializable {
     /**
      * 设置：操作关联 ID（如果为归还关联配送员用户 ID，如果是获取关联订单 ID）
      */
-	private Long opreatorId;
+	private Long operatorId;
     /**
      * 设置：流水时间
      */
@@ -123,14 +123,14 @@ public class UserEmptyBucketFlowEntity implements Serializable {
 	/**
 	 * 设置：操作关联 ID（如果为归还关联配送员用户 ID，如果是获取关联订单 ID）
 	 */
-	public void setOpreatorId(Long opreatorId) {
-		this.opreatorId = opreatorId;
+	public void setOperatorId(Long operatorId) {
+		this.operatorId = operatorId;
 	}
 	/**
 	 * 获取：操作关联 ID（如果为归还关联配送员用户 ID，如果是获取关联订单 ID）
 	 */
-	public Long getOpreatorId() {
-		return opreatorId;
+	public Long getOperatorId() {
+		return operatorId;
 	}
 	/**
 	 * 设置：流水时间

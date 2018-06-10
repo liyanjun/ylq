@@ -4,15 +4,15 @@
 <mapper namespace="com.yunquanlai.admin.order.dao.OrderOperateFlowDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.yunquanlai.admin.order.entity.OrderOperateFlowEntity" id="orderOpreateFlowMap">
+    <resultMap type="com.yunquanlai.admin.order.entity.OrderOperateFlowEntity" id="orderOperateFlowMap">
         <result property="id" column="id"/>
         <result property="type" column="type"/>
         <result property="beforeStatus" column="before_status"/>
         <result property="afterStatus" column="after_status"/>
         <result property="remark" column="remark"/>
-        <result property="opreatorTime" column="opreator_time"/>
-        <result property="opreatorId" column="opreator_id"/>
-        <result property="opreatorName" column="opreator_name"/>
+        <result property="operatorTime" column="operator_time"/>
+        <result property="operatorId" column="operator_id"/>
+        <result property="operatorName" column="operator_name"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.yunquanlai.admin.order.entity.OrderOperateFlowEntity">
@@ -22,10 +22,10 @@
 					`before_status`, 
 					`after_status`, 
 					`remark`, 
-					`opreator_time`, 
-					`opreator_id`, 
-					`opreator_name`
-				from order_opreate_flow where id = #{id}
+					`operator_time`,
+					`operator_id`,
+					`operator_name`
+				from order_operate_flow where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
 	</select>
 
@@ -36,10 +36,10 @@
 		            `before_status`, 
 		            `after_status`, 
 		            `remark`, 
-		            `opreator_time`, 
-		            `opreator_id`, 
-		            `opreator_name`
-				from order_opreate_flow
+		            `operator_time`,
+		            `operator_id`,
+		            `operator_name`
+				from order_operate_flow
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -54,19 +54,19 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from order_opreate_flow 
+		select count(*) from order_operate_flow
 	</select>
 	 
 	<insert id="save" parameterType="com.yunquanlai.admin.order.entity.OrderOperateFlowEntity" useGeneratedKeys="true" keyProperty="id">
-		insert into order_opreate_flow
+		insert into order_operate_flow
 		(
 			`type`, 
 			`before_status`, 
 			`after_status`, 
 			`remark`, 
-			`opreator_time`, 
-			`opreator_id`, 
-			`opreator_name`
+			`operator_time`,
+			`operator_id`,
+			`operator_name`
 		)
 		values
 		(
@@ -74,32 +74,32 @@
 			#{beforeStatus}, 
 			#{afterStatus}, 
 			#{remark}, 
-			#{opreatorTime}, 
-			#{opreatorId}, 
-			#{opreatorName}
+			#{operatorTime},
+			#{operatorId},
+			#{operatorName}
 		)
 	</insert>
 	 
 	<update id="update" parameterType="com.yunquanlai.admin.order.entity.OrderOperateFlowEntity">
-		update order_opreate_flow 
+		update order_operate_flow
 		<set>
 			<if test="type != null">`type` = #{type}, </if>
 			<if test="beforeStatus != null">`before_status` = #{beforeStatus}, </if>
 			<if test="afterStatus != null">`after_status` = #{afterStatus}, </if>
 			<if test="remark != null">`remark` = #{remark}, </if>
-			<if test="opreatorTime != null">`opreator_time` = #{opreatorTime}, </if>
-			<if test="opreatorId != null">`opreator_id` = #{opreatorId}, </if>
-			<if test="opreatorName != null">`opreator_name` = #{opreatorName}</if>
+			<if test="operatorTime != null">`operator_time` = #{operatorTime}, </if>
+			<if test="operatorId != null">`operator_id` = #{operatorId}, </if>
+			<if test="operatorName != null">`operator_name` = #{operatorName}</if>
 		</set>
 		where id = #{id}
 	</update>
 	
 	<delete id="delete">
-		delete from order_opreate_flow where id = #{value}
+		delete from order_operate_flow where id = #{value}
 	</delete>
 	
 	<delete id="deleteBatch">
-		delete from order_opreate_flow where id in 
+		delete from order_operate_flow where id in
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>

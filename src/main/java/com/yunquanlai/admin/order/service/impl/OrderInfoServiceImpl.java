@@ -103,12 +103,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         orderInfoDao.delete(id);
     }
 
     @Override
-    public void deleteBatch(Integer[] ids) {
+    public void deleteBatch(Long[] ids) {
         orderInfoDao.deleteBatch(ids);
     }
 

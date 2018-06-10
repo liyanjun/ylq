@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunquanlai.dao.CommentProductDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.yunquanlai.admin.comment.entity.CommentProductEntity" id="commentProductMap">
+        <result property="id" column="id"/>
+        <result property="productId" column="product_id"/>
+        <result property="comment" column="comment"/>
+        <result property="level" column="level"/>
+        <result property="creationTime" column="creation_time"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.yunquanlai.admin.comment.entity.CommentProductEntity">
+		select
+					`id`, 
+					`product_id`, 
+					`comment`, 
+					`level`, 
+					`creation_time`
+				from comment_product where id = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
+	</select>
+
+	<select id="queryList" resultType="com.yunquanlai.admin.comment.entity.CommentProductEntity">
+		select
+		            `id`, 
+		            `product_id`, 
+		            `comment`, 
+		            `level`, 
+		            `creation_time`
+				from comment_product
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from comment_product 
+	</select>
+	 
+	<insert id="save" parameterType="com.yunquanlai.admin.comment.entity.CommentProductEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into comment_product
+		(
+			`product_id`, 
+			`comment`, 
+			`level`, 
+			`creation_time`
+		)
+		values
+		(
+			#{productId}, 
+			#{comment}, 
+			#{level}, 
+			#{creationTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunquanlai.admin.comment.entity.CommentProductEntity">
+		update comment_product 
+		<set>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="comment != null">`comment` = #{comment}, </if>
+			<if test="level != null">`level` = #{level}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from comment_product where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from comment_product where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

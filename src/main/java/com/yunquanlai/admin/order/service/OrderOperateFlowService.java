@@ -14,17 +14,17 @@ import java.util.Map;
  */
 public interface OrderOperateFlowService {
 	
-	OrderOperateFlowEntity queryObject(Integer id);
+	OrderOperateFlowEntity queryObject(Long id);
 	
 	List<OrderOperateFlowEntity> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);
 	
-	void save(OrderOperateFlowEntity orderOpreateFlow);
+	void save(OrderOperateFlowEntity orderOperateFlow);
 	
-	void update(OrderOperateFlowEntity orderOpreateFlow);
+	void update(OrderOperateFlowEntity orderOperateFlow);
 	
-	void delete(Integer id);
+	void delete(Long id);
 	
-	void deleteBatch(Integer[] ids);
+	void deleteBatch(Long[] ids);
 }

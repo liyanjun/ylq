@@ -38,15 +38,15 @@ public class OrderOperateFlowEntity implements Serializable {
     /**
      * 设置：操作时间
      */
-	private Date opreatorTime;
+	private Date operatorTime;
     /**
      * 设置：操作人 ID
      */
-	private Integer opreatorId;
+	private Integer operatorId;
     /**
      * 设置：操作人名
      */
-	private String opreatorName;
+	private String operatorName;
 
 	/**
 	 * 设置：主键 ID
@@ -111,37 +111,37 @@ public class OrderOperateFlowEntity implements Serializable {
 	/**
 	 * 设置：操作时间
 	 */
-	public void setOpreatorTime(Date opreatorTime) {
-		this.opreatorTime = opreatorTime;
+	public void setOperatorTime(Date operatorTime) {
+		this.operatorTime = operatorTime;
 	}
 	/**
 	 * 获取：操作时间
 	 */
-	public Date getOpreatorTime() {
-		return opreatorTime;
+	public Date getOperatorTime() {
+		return operatorTime;
 	}
 	/**
 	 * 设置：操作人 ID
 	 */
-	public void setOpreatorId(Integer opreatorId) {
-		this.opreatorId = opreatorId;
+	public void setOperatorId(Integer operatorId) {
+		this.operatorId = operatorId;
 	}
 	/**
 	 * 获取：操作人 ID
 	 */
-	public Integer getOpreatorId() {
-		return opreatorId;
+	public Integer getOperatorId() {
+		return operatorId;
 	}
 	/**
 	 * 设置：操作人名
 	 */
-	public void setOpreatorName(String opreatorName) {
-		this.opreatorName = opreatorName;
+	public void setOperatorName(String operatorName) {
+		this.operatorName = operatorName;
 	}
 	/**
 	 * 获取：操作人名
 	 */
-	public String getOpreatorName() {
-		return opreatorName;
+	public String getOperatorName() {
+		return operatorName;
 	}
 }

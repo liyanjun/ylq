@@ -30,9 +30,9 @@ public interface OrderInfoService {
 
     void update(OrderInfoEntity orderInfo);
 
-    void delete(Integer id);
+    void delete(Long id);
 
-    void deleteBatch(Integer[] ids);
+    void deleteBatch(Long[] ids);
 
     R newOrder(OrderVO orderVO, UserInfoEntity user);
 

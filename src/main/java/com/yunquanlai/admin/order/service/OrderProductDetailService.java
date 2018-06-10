@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public interface OrderProductDetailService {
 	
-	OrderProductDetailEntity queryObject(Integer id);
+	OrderProductDetailEntity queryObject(Long id);
 	
 	List<OrderProductDetailEntity> queryList(Map<String, Object> map);
 	
@@ -24,9 +24,9 @@ public interface OrderProductDetailService {
 	
 	void update(OrderProductDetailEntity orderProductDetail);
 	
-	void delete(Integer id);
+	void delete(Long id);
 	
-	void deleteBatch(Integer[] ids);
+	void deleteBatch(Long[] ids);
 
     List<OrderProductDetailEntity> queryListByOrderId(Long orderInfoId);
 }

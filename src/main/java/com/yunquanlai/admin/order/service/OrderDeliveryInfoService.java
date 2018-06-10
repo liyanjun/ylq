@@ -25,9 +25,9 @@ public interface OrderDeliveryInfoService {
 
     void update(OrderDeliveryInfoEntity orderDeliveryInfo);
 
-    void delete(Integer id);
+    void delete(Long id);
 
-    void deleteBatch(Integer[] ids);
+    void deleteBatch(Long[] ids);
 
     List<OrderDeliveryInfoEntity> queryByDistributorId(Map<String, Object> filter);
 

@@ -83,7 +83,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		userEmptyBucketFlowEntity.setUserInfoId(userInfoEntity.getId());
 		userEmptyBucketFlowEntity.setEmptyBucketNumber(number);
 		userEmptyBucketFlowEntity.setType(10);
-		userEmptyBucketFlowEntity.setOpreatorId(deliveryDistributorId);
+		userEmptyBucketFlowEntity.setOperatorId(deliveryDistributorId);
 		userEmptyBucketFlowEntity.setAfterEmptyBucket(userInfoEntity.getEmptyBucketNumber());
 		userEmptyBucketFlowEntity.setCreationTime(new Date());
 		userEmptyBucketFlowDao.save(userEmptyBucketFlowEntity);

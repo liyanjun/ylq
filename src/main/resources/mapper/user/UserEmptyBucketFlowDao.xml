@@ -11,7 +11,7 @@
         <result property="afterEmptyBucket" column="after_empty_bucket"/>
         <result property="emptyBucketNumber" column="empty_bucket_number"/>
         <result property="userInfoId" column="user_info_id"/>
-        <result property="opreatorId" column="opreator_id"/>
+        <result property="operatorId" column="operator_id"/>
         <result property="creationTime" column="creation_time"/>
     </resultMap>
 
@@ -23,7 +23,7 @@
 					`after_empty_bucket`, 
 					`empty_bucket_number`, 
 					`user_info_id`, 
-					`opreator_id`, 
+					`operator_id`,
 					`creation_time`
 				from user_empty_bucket_flow where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
@@ -37,7 +37,7 @@
 		            `after_empty_bucket`, 
 		            `empty_bucket_number`, 
 		            `user_info_id`, 
-		            `opreator_id`, 
+		            `operator_id`,
 		            `creation_time`
 				from user_empty_bucket_flow
         <choose>
@@ -65,7 +65,7 @@
 			`after_empty_bucket`, 
 			`empty_bucket_number`, 
 			`user_info_id`, 
-			`opreator_id`, 
+			`operator_id`,
 			`creation_time`
 		)
 		values
@@ -75,7 +75,7 @@
 			#{afterEmptyBucket}, 
 			#{emptyBucketNumber}, 
 			#{userInfoId}, 
-			#{opreatorId}, 
+			#{operatorId},
 			#{creationTime}
 		)
 	</insert>
@@ -88,7 +88,7 @@
 			<if test="afterEmptyBucket != null">`after_empty_bucket` = #{afterEmptyBucket}, </if>
 			<if test="emptyBucketNumber != null">`empty_bucket_number` = #{emptyBucketNumber}, </if>
 			<if test="userInfoId != null">`user_info_id` = #{userInfoId}, </if>
-			<if test="opreatorId != null">`opreator_id` = #{opreatorId}, </if>
+			<if test="operatorId != null">`operator_id` = #{operatorId}, </if>
 			<if test="creationTime != null">`creation_time` = #{creationTime}</if>
 		</set>
 		where id = #{id}
