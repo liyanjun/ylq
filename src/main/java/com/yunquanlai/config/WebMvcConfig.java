@@ -2,6 +2,7 @@ package com.yunquanlai.config;
 
 import com.yunquanlai.utils.interceptor.AuthorizationInterceptor;
 import com.yunquanlai.utils.interceptor.DeliveryAuthorizationInterceptor;
+import com.yunquanlai.utils.resolver.LoginDeliveryHandlerMethodArgumentResolver;
 import com.yunquanlai.utils.resolver.LoginUserHandlerMethodArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +26,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private DeliveryAuthorizationInterceptor deliveryAuthorizationInterceptor;
+
     @Autowired
     private LoginUserHandlerMethodArgumentResolver loginUserHandlerMethodArgumentResolver;
+
+    @Autowired
+    private LoginDeliveryHandlerMethodArgumentResolver loginDeliveryHandlerMethodArgumentResolver;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -37,5 +42,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(loginUserHandlerMethodArgumentResolver);
+        argumentResolvers.add(loginDeliveryHandlerMethodArgumentResolver);
     }
 }

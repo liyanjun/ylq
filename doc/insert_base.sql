@@ -13,11 +13,7 @@ File Encoding         : 65001
 Date: 2018-06-03 14:52:48
 */
 
-
--- ----------------------------
--- Records of sys_config
--- ----------------------------
-INSERT INTO `sys_config` VALUES ('1', 'CLOUD_STORAGE_CONFIG_KEY', '{\"aliyunAccessKeyId\":\"\",\"aliyunAccessKeySecret\":\"\",\"aliyunBucketName\":\"\",\"aliyunDomain\":\"\",\"aliyunEndPoint\":\"\",\"aliyunPrefix\":\"\",\"qcloudBucketName\":\"\",\"qcloudDomain\":\"\",\"qcloudPrefix\":\"\",\"qcloudSecretId\":\"\",\"qcloudSecretKey\":\"\",\"qiniuAccessKey\":\"nLtdODV1d9_FAfALJo_YcsDJllb5EEyJf79LQpM4\",\"qiniuBucketName\":\"3090717419\",\"qiniuDomain\":\"http://oqvkyp7u2.bkt.clouddn.com\",\"qiniuPrefix\":\"upload\",\"qiniuSecretKey\":\"tffLkwkkud2oichlZTRM7yzJdvFsM3-Nhubqo7d2\",\"type\":1}', '0', '云存储配置信息');
+INSERT INTO `sys_config` VALUES ('1', 'CLOUD_STORAGE_CONFIG_KEY', '{\"aliyunAccessKeyId\":\"\",\"aliyunAccessKeySecret\":\"\",\"aliyunBucketName\":\"\",\"aliyunDomain\":\"\",\"aliyunEndPoint\":\"\",\"aliyunPrefix\":\"\",\"qcloudBucketName\":\"\",\"qcloudDomain\":\"\",\"qcloudPrefix\":\"\",\"qcloudSecretId\":\"\",\"qcloudSecretKey\":\"\",\"qiniuAccessKey\":\"zYvETuLHzwarNl9ZQQHdJ6ZQDIL0EpYRA0x3jVxb\",\"qiniuBucketName\":\"yunquanlai\",\"qiniuDomain\":\"http://pa23ubi36.bkt.clouddn.com\",\"qiniuPrefix\":\"upload\",\"qiniuSecretKey\":\"yDOw7KMRox8wGZsAyudGRQ8OiFMnJpDAZ_wXWnj7\",\"type\":1}', '0', '云存储配置信息');
 
 
 -- ----------------------------

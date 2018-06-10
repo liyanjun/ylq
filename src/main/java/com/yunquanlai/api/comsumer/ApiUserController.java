@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -56,9 +57,9 @@ public class ApiUserController {
     @ApiOperation(value = "用户从小程序登录接口")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "uid", value = "微信 ID", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "微信名", required = true)
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "微信名" ),
     })
-    public R wechatLogin(String uid, String username) {
+    public R wechatLogin(@RequestParam String uid, String username) {
         UserInfoEntity userInfoEntity = userInfoService.queryObjectByUid(uid);
         if (userInfoEntity == null) {
             //不存在用户就创建用户

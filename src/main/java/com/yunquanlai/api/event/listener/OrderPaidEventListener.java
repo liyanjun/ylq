@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -36,6 +37,7 @@ public class OrderPaidEventListener implements ApplicationListener<OrderPaidEven
     @Autowired
     DeliveryEndpointService deliveryEndpointService;
 
+    @Async
     @Override
     public void onApplicationEvent(OrderPaidEvent applicationEvent) {
         Long orderId = Long.parseLong(applicationEvent.getSource().toString());
@@ -48,7 +50,7 @@ public class OrderPaidEventListener implements ApplicationListener<OrderPaidEven
             }
 
             if (OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE != orderDeliveryInfoEntity.getStatus()) {
-                logger.error("配送单" + orderDeliveryInfoEntity.getId() + "已处理派送【" + orderDeliveryInfoEntity.getStatus() + "】");
+                logger.error("配送单" + orderDeliveryInfoEntity.getId() + "，不是可以分配派送的状态【" + orderDeliveryInfoEntity.getStatus() + "】");
                 return;
             }
 
@@ -66,6 +68,7 @@ public class OrderPaidEventListener implements ApplicationListener<OrderPaidEven
             }
             // 按照距离排序
             Collections.sort(deliveryEndpointEntities);
+            //TODO 距离超远的不送
             //TODO 先更新为分配中，当一分钟分配不完时，用定时任务做补偿
             orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
             orderDeliveryInfoService.update(orderDeliveryInfoEntity);
@@ -75,6 +78,7 @@ public class OrderPaidEventListener implements ApplicationListener<OrderPaidEven
                     // 分配完成方法结束
                     return;
                 } catch (Exception e) {
+                    logger.error("配送点分配配送单失败",e);
                     // 该配送点分配失败，抛出异常回滚事务，continue进行下一个配送点的检查
                     continue;
                 }

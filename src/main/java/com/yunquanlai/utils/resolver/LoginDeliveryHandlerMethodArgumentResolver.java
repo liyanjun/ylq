@@ -31,7 +31,7 @@ public class LoginDeliveryHandlerMethodArgumentResolver implements HandlerMethod
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().isAssignableFrom(UserInfoEntity.class) && parameter.hasParameterAnnotation(LoginDelivery.class);
+        return parameter.getParameterType().isAssignableFrom(DeliveryDistributorEntity.class) && parameter.hasParameterAnnotation(LoginDelivery.class);
     }
 
     @Override

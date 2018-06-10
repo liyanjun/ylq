@@ -51,7 +51,7 @@ CREATE TABLE `delivery_distributor` (
   `phone` varchar(32) NOT NULL COMMENT '配送员手机号',
   `password` varchar(64) NOT NULL COMMENT '配送员登录密码',
   `birthday` varchar(10) NOT NULL COMMENT '配送员生日',
-  `clientId` varchar(64) DEFAULT NULL COMMENT '用于点对点登录时的推送，由APP在登录的时候一起上传',
+  `client_id` varchar(64) DEFAULT NULL COMMENT '用于点对点登录时的推送，由APP在登录的时候一起上传',
   `order_count` int(11) DEFAULT '0' COMMENT '当前在配送订单数',
   `status` tinyint(4) NOT NULL DEFAULT '20' COMMENT '当前状态，10：可配送，20：不可配送',
   `identifycation` varchar(32) DEFAULT NULL COMMENT '身份证号（备用）',
@@ -61,9 +61,10 @@ CREATE TABLE `delivery_distributor` (
   `disable` tinyint(2) DEFAULT '2' COMMENT '0:停用    1：启用    2：新创建（默认）',
   `delivery_endpoint_name` varchar(32) NOT NULL COMMENT '配送点名',
   `device_identification` tinyint(4) DEFAULT NULL COMMENT '设备标识，10：安卓，20：苹果',
-  PRIMARY KEY (`id`,`password`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='配送员信息';
-
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='配送员信息';
+ALTER TABLE `delivery_distributor`
+ADD INDEX `phone_unique` (`phone`) USING BTREE ;
 -- ----------------------------
 -- Table structure for delivery_distributor_financial_flow
 -- ----------------------------
