@@ -1,5 +1,6 @@
 package com.yunquanlai.utils.interceptor;
 
+import com.yunquanlai.admin.delivery.entity.DeliveryClientTokenEntity;
 import com.yunquanlai.admin.user.entity.UserClientTokenEntity;
 import com.yunquanlai.admin.user.service.UserClientTokenService;
 import com.yunquanlai.utils.RRException;
@@ -48,14 +49,17 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         }
 
         //token为空
-        if(StringUtils.isBlank(token)){
-            throw new RRException("token不能为空");
+        if (StringUtils.isBlank(token)) {
+            throw new RRException("token不能为空", 501);
         }
 
-        //查询token信息
         UserClientTokenEntity tokenEntity = userClientTokenService.queryByToken(token);
-        if(tokenEntity == null || tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()){
-            throw new RRException("token失效，请重新登录");
+        if (tokenEntity == null) {
+            throw new RRException("token失效，请重新登录", 502);
+        }
+
+        if (tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()) {
+            throw new RRException("token过期，请重新登录", 503);
         }
 
         //设置userId到request里，后续根据userId，获取用户信息
