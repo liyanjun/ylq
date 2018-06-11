@@ -1,5 +1,7 @@
 package com.yunquanlai.admin.product.entity;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -35,11 +37,13 @@ public class ProductInfoVO implements Serializable {
         this.productInfoEntity = productInfoEntity;
         this.productDetailEntity = productDetailEntity;
         String[] banners = productDetailEntity.getBanner().split(",");
-        banner1 = banners[0];
-        banner2 = banners[1];
-        banner3 = banners[2];
-        if(banners.length > 3){
-            banner4 = banners[3];
+        if (banners.length > 0) {
+            banner1 = "null".equals(banners[0]) ? "" : banners[0];
+            banner2 = "null".equals(banners[1]) ? "" : banners[1];
+            banner3 = "null".equals(banners[2]) ? "" : banners[2];
+            if (banners.length > 3) {
+                banner4 = "null".equals(banners[3]) ? "" : banners[3];
+            }
         }
     }
 
@@ -130,18 +134,21 @@ public class ProductInfoVO implements Serializable {
     public Long getBrandId() {
         return productInfoEntity.getBrandId();
     }
+
     /**
      * 设置：商品品牌
      */
     public void setBrandName(String brandName) {
         productInfoEntity.setBrandName(brandName);
     }
+
     /**
      * 获取：商品品牌
      */
     public String getBrandName() {
         return productInfoEntity.getBrandName();
     }
+
     /**
      * 设置：桶类型，10：一次性桶，20：可回收桶
      */
@@ -191,14 +198,14 @@ public class ProductInfoVO implements Serializable {
         return productDetailEntity;
     }
 
-    public void setProductDetailEntity(ProductDetailEntity productDetailEntity) {
-        String[] banners = productDetailEntity.getBanner().split(",");
-        banner1 = banners[0];
-        banner2 = banners[1];
-        banner3 = banners[2];
-        banner4 = banners[3];
-        this.productDetailEntity = productDetailEntity;
-    }
+//    public void setProductDetailEntity(ProductDetailEntity productDetailEntity) {
+//        String[] banners = productDetailEntity.getBanner().split(",");
+//        banner1 = banners[0];
+//        banner2 = banners[1];
+//        banner3 = banners[2];
+//        banner4 = banners[3];
+//        this.productDetailEntity = productDetailEntity;
+//    }
 
     public String getBanner1() {
         return banner1;

@@ -54,7 +54,7 @@ public class ApiDeliveryUserController {
      */
     @IgnoreAuth
     @PostMapping("login")
-    @ApiOperation(value = "配送员登录,disable字段含义（0:停用    1：启用    2：新创建（默认））")
+    @ApiOperation(value = "配送员登录,disable字段含义（0:停用    1：启用    2：新创建（默认））,status字段含义(10：可配送，20：不可配送)")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", dataType = "string", name = "platform", value = "平台标识(10：安卓，20：苹果)", required = true),
             @ApiImplicitParam(paramType = "header", dataType = "string", name = "version", value = "版本", required = true),
@@ -80,7 +80,10 @@ public class ApiDeliveryUserController {
         }
         deliveryDistributorEntity.setClientId(clientId);
         deliveryDistributorService.update(deliveryDistributorEntity);
-        return createToken(deliveryDistributorEntity.getId()).put("disable", deliveryDistributorEntity.getDisable());
+        return createToken(deliveryDistributorEntity.getId())
+                .put("disable", deliveryDistributorEntity.getDisable())
+                .put("name", deliveryDistributorEntity.getName())
+                .put("status",deliveryDistributorEntity.getStatus());
     }
 
     /**

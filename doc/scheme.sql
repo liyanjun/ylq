@@ -15,17 +15,6 @@ Date: 2018-06-06 11:35:31
 
 SET FOREIGN_KEY_CHECKS=0;
 
-DROP TABLE IF EXISTS `delivery_distributor_financial_flow`;
-CREATE TABLE `delivery_distributor_financial_flow` (
-`id` int NOT NULL AUTO_INCREMENT,
-`before_amount` decimal(20,2) NOT NULL COMMENT '流水前金额',
-`after_amount` decimal(20,2) NOT NULL COMMENT '流水后金额',
-`type` tinyint(4) NOT NULL COMMENT '流水类型，10：收益，20：发工资',
-`amount` decimal NOT NULL COMMENT '流水金额',
-`delivery_distributor_id` int NOT NULL COMMENT '配送员 ID',
-PRIMARY KEY (`id`)
-)
-COMMENT='配送员收入信息流水';
 
 -- ----------------------------
 -- Table structure for delivery_client_token
@@ -85,29 +74,12 @@ DROP TABLE IF EXISTS `delivery_distributor_financial_flow`;
 CREATE TABLE `delivery_distributor_financial_flow` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `before_amount` decimal(20,2) NOT NULL COMMENT '流水前金额',
-  `before_disable_amount` decimal(20,2) NOT NULL COMMENT '流水前冻结金额',
-  `before_enable_amount` decimal(20,2) NOT NULL COMMENT '流水前可用金额',
-  `after_enable_amount` decimal(20,2) NOT NULL COMMENT '流水后可用金额',
-  `after_disable_amount` decimal(20,2) NOT NULL COMMENT '流水后冻结金额',
   `after_amount` decimal(20,2) NOT NULL COMMENT '流水后金额',
-  `type` tinyint(4) NOT NULL COMMENT '流水类型，10：收益，20：提现申请，30：提现成功',
+  `type` tinyint(4) NOT NULL COMMENT '流水类型，10：收益，20：发工资',
   `amount` decimal(10,0) NOT NULL COMMENT '流水金额',
   `delivery_distributor_id` int(11) NOT NULL COMMENT '配送员 ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送员收入信息流水';
-
--- ----------------------------
--- Table structure for delivery_distributor_financial_info
--- ----------------------------
-DROP TABLE IF EXISTS `delivery_distributor_financial_info`;
-CREATE TABLE `delivery_distributor_financial_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `amount` decimal(20,2) NOT NULL COMMENT '当前金额',
-  `disable_amount` decimal(20,2) NOT NULL COMMENT '当前冻结金额',
-  `enable_amount` decimal(20,2) NOT NULL COMMENT '当前可用金额',
-  `delivery_distributor_id` int(11) NOT NULL COMMENT '配送员 ID',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送员收入信息';
 
 -- ----------------------------
 -- Table structure for delivery_endpoint
@@ -148,7 +120,7 @@ CREATE TABLE `order_delivery_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `name` varchar(32) NOT NULL COMMENT '收货人姓名',
   `address` varchar(256) NOT NULL COMMENT '订单地址信息（拼凑的用于在订单列表显示的）',
-  `sex` int(11) NOT NULL COMMENT '收货人性别',
+  `sex` int(11) NOT NULL COMMENT '收货人性别，10：男，20：女',
   `phone` varchar(32) NOT NULL COMMENT '用户手机号',
   `location_x` decimal(20,2) NOT NULL COMMENT '订单配送坐标x',
   `location_y` decimal(20,2) NOT NULL COMMENT '订单配送坐标y',
