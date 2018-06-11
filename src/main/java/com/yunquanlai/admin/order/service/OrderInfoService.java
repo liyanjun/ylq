@@ -69,4 +69,6 @@ public interface OrderInfoService {
      * @return
      */
     R confirm(OrderVO orderVO, UserInfoEntity user);
+
+    void markException(OrderInfoEntity orderInfoEntity, OrderDeliveryInfoEntity orderDeliveryInfoEntity);
 }

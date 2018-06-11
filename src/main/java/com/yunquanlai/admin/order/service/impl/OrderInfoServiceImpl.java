@@ -314,6 +314,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return R.ok().put("orderProductDetails", orderProductDetailEntities).put("deposit", deposit).put("amount", amount);
     }
 
+    @Override
+    public void markException(OrderInfoEntity orderInfoEntity, OrderDeliveryInfoEntity orderDeliveryInfoEntity) {
+        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+        orderInfoDao.update(orderInfoEntity);
+    }
+
     /**
      * 检查库存，并预生成要扣除的库存数
      *

@@ -64,4 +64,5 @@ INSERT INTO `sys_oss` VALUES ('5', 'http://pa23ubi36.bkt.clouddn.com/upload/2018
 INSERT INTO `sys_oss` VALUES ('6', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/6c35aa47a0e44c6fb946b0cdef52927a', '2018-06-09 21:10:21');
 INSERT INTO `sys_oss` VALUES ('7', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/120f31b821d74673ab29b44d7253fc6f', '2018-06-09 22:08:37');
 
-INSERT INTO `delivery_distributor` VALUES ('11', '章鱼', '15677187487', 'bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a', '2018-06-10', 'c758f22fe07a1d2fcb9c2bf100882647', null, '10', null, null, null, '1', '1', '广西大学配送站', null);
+
+INSERT INTO `delivery_distributor` VALUES ('11', '章鱼', '15677187487', 'bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a', '2018-06-10', 'c758f22fe07a1d2fcb9c2bf100882647', null, '10',10,0.00, null, null, null, '1', '1', '广西大学配送站', null);

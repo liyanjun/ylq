@@ -6,17 +6,22 @@ import com.gexin.rp.sdk.base.impl.Target;
 import com.gexin.rp.sdk.base.payload.APNPayload;
 import com.gexin.rp.sdk.exceptions.RequestException;
 import com.gexin.rp.sdk.http.IGtPush;
-import com.gexin.rp.sdk.template.APNTemplate;
-import com.gexin.rp.sdk.template.LinkTemplate;
-import com.gexin.rp.sdk.template.NotificationTemplate;
-import com.gexin.rp.sdk.template.TransmissionTemplate;
+import com.gexin.rp.sdk.template.*;
 import com.gexin.rp.sdk.template.style.Style0;
+import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
+import com.yunquanlai.admin.delivery.service.DeliveryDistributorService;
+import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
+import com.yunquanlai.admin.order.entity.OrderInfoEntity;
+import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
+import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.api.event.OrderDeliveryNotifyEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 监听订单派送通知事件
@@ -29,11 +34,28 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
     private static String masterSecret = "ZL0K1tV5y87fix2tpIgHg2";
     static String host = "http://sdk.open.api.igexin.com/apiex.htm";
 
+    @Autowired
+    private DeliveryDistributorService deliveryDistributorService;
+
+    @Autowired
+    private OrderDeliveryInfoService orderDeliveryInfoService;
+
+    @Autowired
+    private OrderInfoService orderInfoService;
     @Async
     @Override
     public void onApplicationEvent(OrderDeliveryNotifyEvent applicationEvent) {
+        Long orderDeliveryId = Long.parseLong(applicationEvent.getSource().toString());
+        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoService.queryObject(orderDeliveryId);
+        DeliveryDistributorEntity deliveryDistributorEntity = deliveryDistributorService.queryObject(orderDeliveryInfoEntity.getDeliveryDistributorId());
         IGtPush push = new IGtPush(host, appKey, masterSecret);
-        NotificationTemplate template = getNotificationTemplate();
+        AbstractTemplate template;
+        if (deliveryDistributorEntity.getPlatform() == 10) {
+            template = getNotificationTemplate();
+        } else {
+            template = getTransmissionTemplate();
+        }
+
         SingleMessage message = new SingleMessage();
         message.setOffline(true);
         // 离线有效时间，单位为毫秒，可选
@@ -54,19 +76,33 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         }
 
         if (ret != null) {
-            if ("ok".equals(ret.getResponse().get("result"))) {
-
+            if (!"ok".equals(ret.getResponse().get("result"))) {
+                OrderInfoEntity orderInfoEntity = orderInfoService.queryObject(orderDeliveryInfoEntity.getOrderInfoId());
+                orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_EXCEPTION);
+                orderDeliveryInfoEntity.setRemark("推送订单异常："+ret.getResponse().toString());
+                orderInfoEntity.setType(OrderInfoEntity.TYPE_EXCEPTION);
+                orderInfoEntity.setException("推送订单异常："+ret.getResponse().toString());
+                orderInfoService.markException(orderInfoEntity,orderDeliveryInfoEntity);
             }
-            //TODO 标记订单为推送异常，要添加订单异常信息字段
-
             logger.debug(ret.getResponse().toString());
         } else {
+            OrderInfoEntity orderInfoEntity = orderInfoService.queryObject(orderDeliveryInfoEntity.getOrderInfoId());
+            orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_EXCEPTION);
+            orderDeliveryInfoEntity.setRemark("推送订单异常："+"推送请求发送异常");
+            orderInfoEntity.setType(OrderInfoEntity.TYPE_EXCEPTION);
+            orderInfoEntity.setException("推送订单异常："+"推送请求发送异常");
+            orderInfoService.markException(orderInfoEntity,orderDeliveryInfoEntity);
             logger.error("推送请求发送异常");
         }
 
     }
 
 
+    /**
+     * 安卓用
+     *
+     * @return
+     */
     public static NotificationTemplate getNotificationTemplate() {
         NotificationTemplate template = new NotificationTemplate();
         // 设置APPID与APPKEY
@@ -74,8 +110,8 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         template.setAppkey(appKey);
         Style0 style = new Style0();
         // 设置通知栏标题与内容
-        style.setTitle("请输入通知栏标题");
-        style.setText("请输入通知栏内容");
+        style.setTitle("您有新的配送任务");
+        style.setText("您有新的配送任务,请注意查看");
         // 配置通知栏图标
         style.setLogo("icon.png");
         // 配置通知栏网络图标
@@ -103,7 +139,7 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         apnPayload.setAutoBadge("+1");
         apnPayload.setContentAvailable(1);
         apnPayload.setSound("default");
-        apnPayload.setAlertMsg(new APNPayload.SimpleAlertMsg("我去买个橘子，你呆在这里不要动等我"));
+        apnPayload.setAlertMsg(new APNPayload.SimpleAlertMsg("您有新的配送任务,请注意查看。"));
         template.setAPNInfo(apnPayload);
         return template;
     }

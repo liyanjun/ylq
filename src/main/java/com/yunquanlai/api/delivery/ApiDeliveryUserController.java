@@ -62,7 +62,7 @@ public class ApiDeliveryUserController {
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "password", value = "密码", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "clientId", value = "推送客户端 ID", required = true)
     })
-    public R login(@RequestHeader String platform, @RequestHeader String version,
+    public R login(@RequestHeader Integer platform, @RequestHeader String version,
                    @RequestParam String mobile, @RequestParam String password, @RequestParam String clientId) {
         Assert.isBlank(mobile, "手机号不能为空");
         Assert.isBlank(password, "密码不能为空");
@@ -79,6 +79,7 @@ public class ApiDeliveryUserController {
             throw new RRException("账号已停用");
         }
         deliveryDistributorEntity.setClientId(clientId);
+        deliveryDistributorEntity.setPlatform(platform);
         deliveryDistributorService.update(deliveryDistributorEntity);
         return createToken(deliveryDistributorEntity.getId())
                 .put("disable", deliveryDistributorEntity.getDisable())

@@ -8,6 +8,7 @@ import com.yunquanlai.admin.product.service.ProductInfoService;
 import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.validator.Assert;
 import com.yunquanlai.utils.validator.ValidatorUtils;
 import com.yunquanlai.utils.validator.group.AddGroup;
 import com.yunquanlai.utils.validator.group.UpdateGroup;
@@ -68,12 +69,13 @@ public class ProductInfoController extends AbstractController {
 	@RequestMapping("/save")
 	@RequiresPermissions("productinfo:save")
 	public R save(@RequestBody ProductInfoVO productInfoVO){
+
 		ProductInfoEntity productInfoEntity = productInfoVO.getProductInfoEntity();
         ProductDetailEntity productDetailEntity = productInfoVO.getProductDetailEntity();
 		//校验商品信息
 		ValidatorUtils.validateEntity(productInfoEntity, AddGroup.class);
 		ValidatorUtils.validateEntity(productDetailEntity, AddGroup.class);
-
+		Assert.isBlank(productInfoVO.getProductDetailEntity().getBanner().replace(",",""),"至少需要一张广告轮播图");
 		productInfoEntity.setCreationTime(new Date());
 		productInfoEntity.setCreatorName(getUser().getUsername());
 		productInfoEntity.setCreatorId(getUserId());
@@ -90,8 +92,11 @@ public class ProductInfoController extends AbstractController {
 	@RequiresPermissions("productinfo:update")
 	public R update(@RequestBody ProductInfoVO productInfoVO){
 		ProductInfoEntity productInfoEntity = productInfoVO.getProductInfoEntity();
+		ProductDetailEntity productDetailEntity = productInfoVO.getProductDetailEntity();
         //校验商品信息
         ValidatorUtils.validateEntity(productInfoEntity, UpdateGroup.class);
+		ValidatorUtils.validateEntity(productDetailEntity, UpdateGroup.class);
+		Assert.isBlank(productInfoVO.getProductDetailEntity().getBanner().replace(",",""),"至少需要一张广告轮播图");
 
 		productInfoEntity.setUpdateTime(new Date());
 		productInfoEntity.setUpdateName(getUser().getUsername());

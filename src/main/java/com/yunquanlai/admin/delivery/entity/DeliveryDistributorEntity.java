@@ -55,6 +55,10 @@ public class DeliveryDistributorEntity implements Serializable {
      */
 	private Integer status;
 	/**
+	 * 设置：登录平台，10：安卓，20：IOS
+	 */
+	private Integer platform;
+	/**
 	 * 配送员获得分润
 	 */
 	private BigDecimal amount;
@@ -259,4 +263,12 @@ public class DeliveryDistributorEntity implements Serializable {
      * 获取：配送点名
      */
     public String getDeliveryEndpointName() { return deliveryEndpointName; }
+
+	public Integer getPlatform() {
+		return platform;
+	}
+
+	public void setPlatform(Integer platform) {
+		this.platform = platform;
+	}
 }

@@ -50,7 +50,7 @@ public class OrderDeliveryInfoEntity implements Serializable {
      */
     private BigDecimal locationY;
     /**
-     * 设置：配送单状态，10：未支付，20：未分配，30：分配中，40：配送中，50：配送结束
+     * 设置：配送单状态，10：新创建，20：未分配，30：配送中，40：配送结束,50:异常
      */
     private Integer status;
     /**
@@ -177,14 +177,14 @@ public class OrderDeliveryInfoEntity implements Serializable {
     }
 
     /**
-     * 设置：配送单状态，10：未分配，20：配送中，30：已配送
+     * 设置：配送单状态，10：新创建，20：未分配，30：配送中，40：配送结束,50:异常
      */
     public void setStatus(Integer status) {
         this.status = status;
     }
 
     /**
-     * 获取：配送单状态，10：未分配，20：配送中，30：已配送
+     * 获取：配送单状态，10：新创建，20：未分配，30：配送中，40：配送结束,50:异常
      */
     public Integer getStatus() {
         return status;
