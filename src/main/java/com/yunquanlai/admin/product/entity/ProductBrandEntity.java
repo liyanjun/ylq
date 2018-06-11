@@ -1,5 +1,9 @@
 package com.yunquanlai.admin.product.entity;
 
+import com.yunquanlai.utils.validator.group.AddGroup;
+import com.yunquanlai.utils.validator.group.UpdateGroup;
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.io.Serializable;
 
 
@@ -19,8 +23,9 @@ public class ProductBrandEntity implements Serializable {
      */
 	private Long id;
     /**
-     * 设置：商品名
+     * 设置：品牌名
      */
+	@NotBlank(message="品牌名不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String name;
     /**
      * 设置：备注
@@ -40,13 +45,13 @@ public class ProductBrandEntity implements Serializable {
 		return id;
 	}
 	/**
-	 * 设置：商品名
+	 * 设置：品牌名
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-	/**
-	 * 获取：商品名
+	/**品牌名
+	 * 获取：
 	 */
 	public String getName() {
 		return name;

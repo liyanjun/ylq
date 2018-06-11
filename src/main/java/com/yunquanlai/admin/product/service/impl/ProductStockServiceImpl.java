@@ -69,8 +69,8 @@ public class ProductStockServiceImpl implements ProductStockService {
         ProductStockEntity temp = productStockDao.queryObject(productStock.getId(), true);
         productStockFlowEntity.setBeforeCount(temp.getCount());
         productStockFlowEntity.setCount(productStock.getCountAdd());
-        productStockFlowEntity.setOpreator(user.getUsername());
-        productStockFlowEntity.setOpreatorId(user.getUserId());
+        productStockFlowEntity.setOperator(user.getUsername());
+        productStockFlowEntity.setOperatorId(user.getUserId());
         productStockFlowEntity.setProductStockId(productStock.getId());
         productStockFlowEntity.setType(productStock.getCount() >= 0 ? 0 : 1);
         productStockFlowEntity.setCreationTime(new Date());

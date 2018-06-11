@@ -87,5 +87,16 @@ public class UserWithdrawDepositController extends AbstractController {
 		
 		return R.ok();
 	}
+
+	/**
+	 * 处理提现申请
+	 */
+	@RequestMapping("/handle")
+	@RequiresPermissions("userwithdrawdeposit:handle")
+	public R handleDepositoryWithdraw(@RequestBody UserWithdrawDepositEntity userWithdrawDepositEntity){
+		userWithdrawDepositEntity.setIsHandle(20);
+        // TODO: 2018/6/10 需要获取当前操作人id 和 name
+		return R.ok();
+	}
 	
 }

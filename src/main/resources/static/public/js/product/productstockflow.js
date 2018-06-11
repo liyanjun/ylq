@@ -17,8 +17,8 @@ $(function () {
 			{ label: '改变前值', name: 'beforeCount', index: 'before_count', width: 80 },
 			{ label: '改变后值', name: 'afterCount', index: 'after_count', width: 80 }, 			
 			{ label: '库存变动时间', name: 'creationTime', index: 'creation_time', width: 80 }, 			
-			{ label: '操作人名称', name: 'opreator', index: 'opreator', width: 80 }, 			
-			{ label: '操作人ID', name: 'opreatorId', index: 'opreator_id', width: 80 }
+			{ label: '操作人名称', name: 'operator', index: 'operator', width: 80 },
+			{ label: '操作人ID', name: 'operatorId', index: 'operator_id', width: 80 }
         ],
 		viewrecords: true,
         height: 385,

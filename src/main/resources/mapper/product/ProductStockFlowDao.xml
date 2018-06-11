@@ -12,8 +12,8 @@
         <result property="beforeCount" column="before_count"/>
         <result property="afterCount" column="after_count"/>
         <result property="creationTime" column="creation_time"/>
-        <result property="opreator" column="opreator"/>
-        <result property="opreatorId" column="opreator_id"/>
+        <result property="operator" column="operator"/>
+        <result property="operatorId" column="operator_id"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductStockFlowEntity">
@@ -25,8 +25,8 @@
 					`before_count`, 
 					`after_count`, 
 					`creation_time`, 
-					`opreator`, 
-					`opreator_id`
+					`operator`,
+					`operator_id`
 				from product_stock_flow where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
 	</select>
@@ -40,8 +40,8 @@
 		            `before_count`, 
 		            `after_count`, 
 		            `creation_time`, 
-		            `opreator`, 
-		            `opreator_id`
+		            `operator`,
+		            `operator_id`
 				from product_stock_flow
 		<where>
 			<if test="productStockId != null">
@@ -74,8 +74,8 @@
 			`before_count`, 
 			`after_count`, 
 			`creation_time`, 
-			`opreator`, 
-			`opreator_id`
+			`operator`,
+			`operator_id`
 		)
 		values
 		(
@@ -85,8 +85,8 @@
 			#{beforeCount}, 
 			#{afterCount}, 
 			#{creationTime}, 
-			#{opreator}, 
-			#{opreatorId}
+			#{operator},
+			#{operatorId}
 		)
 	</insert>
 	 
@@ -99,8 +99,8 @@
 			<if test="beforeCount != null">`before_count` = #{beforeCount}, </if>
 			<if test="afterCount != null">`after_count` = #{afterCount}, </if>
 			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
-			<if test="opreator != null">`opreator` = #{opreator}, </if>
-			<if test="opreatorId != null">`opreator_id` = #{opreatorId}</if>
+			<if test="operator != null">`operator` = #{operator}, </if>
+			<if test="operatorId != null">`operator_id` = #{operatorId}</if>
 		</set>
 		where id = #{id}
 	</update>
@@ -108,7 +108,11 @@
 	<delete id="delete">
 		delete from product_stock_flow where id = #{value}
 	</delete>
-	
+
+	<delete id="deleteByStockId">
+		delete from product_stock_flow where productStockId = #{value}
+	</delete>
+
 	<delete id="deleteBatch">
 		delete from product_stock_flow where id in 
 		<foreach item="id" collection="array" open="(" separator="," close=")">

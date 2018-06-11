@@ -36,8 +36,29 @@
         from product_stock where product_info_id = #{productId} and delivery_endpoint_id = #{endpointId}
         <if test="isLock != null and isLock == true">for update</if>
     </select>
+    <select id="queryByProductId" resultType="com.yunquanlai.admin.product.entity.ProductStockEntity">
+        select
+        `id`,
+        `product_info_id`,
+        `product_name`,
+        `delivery_endpoint_id`,
+        `delivery_name`,
+        `count`
+        from product_stock where product_info_id = #{productId}
+    </select>
 
-    <select id="queryList" resultType="com.yunquanlai.admin.product.entity.ProductStockEntity">
+    <select id="queryByDeliveryEndpointId" resultType="com.yunquanlai.admin.product.entity.ProductStockEntity">
+        select
+        `id`,
+        `product_info_id`,
+        `product_name`,
+        `delivery_endpoint_id`,
+        `delivery_name`,
+        `count`
+        from product_stock where delivery_endpoint_id = #{endpointId}
+    </select>
+
+    <select id="queryList" resultType="com.yunquanlai.admin.product.entity.ProductStockEntity" parameterType="Map">
         select
         `id`,
         `product_info_id`,
@@ -46,14 +67,15 @@
         `delivery_name`,
         `count`
         from product_stock
-        <choose>
-            <when test="sidx != null and sidx.trim() != ''">
-                order by ${sidx} ${order}
-            </when>
-            <otherwise>
-                order by id desc
-            </otherwise>
-        </choose>
+        <where>
+            <if test="productName != null and productName.trim() != ''">
+                `product_name` like concat('%',#{productName},'%')
+            </if>
+            <if test="deliveryEndpointName != null and deliveryEndpointName.trim() != ''">
+                and `delivery_name` like concat('%',#{deliveryEndpointName},'%')
+            </if>
+        </where>
+        order by id desc
         <if test="offset != null and limit != null">
             limit #{offset}, #{limit}
         </if>
@@ -95,6 +117,24 @@
         where id = #{id}
     </update>
 
+    <update id="updateDeliveryEndpointName" parameterType="com.yunquanlai.admin.product.entity.ProductStockEntity">
+        update product_stock
+        <set>
+            <if test="deliveryName != null">`delivery_name` = #{deliveryName},</if>
+        </set>
+        where delivery_endpoint_id = #{deliveryEndpointId}
+    </update>
+
+    <update id="updateProductName" parameterType="com.yunquanlai.admin.product.entity.ProductStockEntity">
+        update product_stock
+        <set>
+            <if test="productName != null">`product_name` = #{productName},</if>
+        </set>
+        where product_info_id = #{productInfoId}
+    </update>
+
+
+
     <update id="addStock" parameterType="com.yunquanlai.admin.product.entity.ProductStockEntity">
         update product_stock
         <set>
@@ -105,6 +145,11 @@
 
     <delete id="delete">
 		delete from product_stock where id = #{value}
+	</delete>
+
+
+    <delete id="deleteByDeliveryEndpointId">
+		delete from product_stock where delivery_endpoint_id = #{value}
 	</delete>
 
     <delete id="deleteBatch">

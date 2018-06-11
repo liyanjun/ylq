@@ -12,5 +12,6 @@ import com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity;
  * @date 2018-06-04 15:44:08
  */
 public interface UserWithdrawDepositDao extends BaseDao<UserWithdrawDepositEntity> {
-	
+
+    UserWithdrawDepositEntity queryObjectByUserId(Long id);
 }

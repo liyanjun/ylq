@@ -9,7 +9,19 @@ $(function () {
 			//{ label: '登录密码', name: 'password', index: 'password', width: 80 },
 			{ label: '生日', name: 'birthday', index: 'birthday', width: 80 },
 			//{ label: '用于点对点登录时的推送，由APP在登录的时候一起上传', name: 'clientId', index: 'clientId', width: 80 },
-			//{ label: '当前状态，10：可配送，20：不可配送', name: 'status', index: 'status', width: 80 },
+			{
+				label: '当前状态',
+				name: 'status',
+				index: 'status',
+				width: 80,
+                formatter: function (value, options, row) {
+                    if (value === 10) {
+                        return '<font color=green>可配送</font>';
+                    } else if (value === 20) {
+                        return '<font color="red">不可配送</font>'
+                    }
+                }
+			},
 			//{ label: '身份证号（备用）', name: 'identifycation', index: 'identifycation', width: 80 },
 			{ label: '身份证照片地址', name: 'identifycationUrl', index: 'identifycation_url', width: 80 }, 			
 			{ label: '健康证地址', name: 'healthUrl', index: 'health_url', width: 80 }, 			
@@ -77,6 +89,14 @@ var vm = new Vue({
             vm.getInfo(id);
             //获取配送点信息
             this.getDeliveryEndpointList();
+            for (var i=0;i<vm.deliveryEndpointList.length;i++)
+            {
+                if(vm.deliveryEndpointList[i].id===vm.deliveryDistributor.deliveryEndpointId){//循环找出配送员所属配送点
+                    vm.deliveryEndpointId = vm.deliveryDistributor.deliveryEndpointId ;
+                    $("#selected option:selected").text = vm.deliveryDistributor.deliveryEndpointName ;
+                    break;
+                }
+            }
 		},
 		saveOrUpdate: function (event) {
             vm.deliveryDistributor.deliveryEndpointId = vm.deliveryEndpointId;

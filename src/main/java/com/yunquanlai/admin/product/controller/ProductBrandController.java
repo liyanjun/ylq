@@ -1,21 +1,19 @@
 package com.yunquanlai.admin.product.controller;
 
-import java.util.List;
-import java.util.Map;
-
 import com.yunquanlai.admin.product.entity.ProductBrandEntity;
 import com.yunquanlai.admin.product.service.ProductBrandService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.validator.ValidatorUtils;
+import com.yunquanlai.utils.validator.group.AddGroup;
+import com.yunquanlai.utils.validator.group.UpdateGroup;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -77,6 +75,8 @@ public class ProductBrandController {
 	@RequestMapping("/save")
 	@RequiresPermissions("productbrand:save")
 	public R save(@RequestBody ProductBrandEntity productBrand){
+		//校验商品品牌信息
+		ValidatorUtils.validateEntity(productBrand, AddGroup.class);
 		productBrandService.save(productBrand);
 		
 		return R.ok();
@@ -88,6 +88,9 @@ public class ProductBrandController {
 	@RequestMapping("/update")
 	@RequiresPermissions("productbrand:update")
 	public R update(@RequestBody ProductBrandEntity productBrand){
+		//校验商品品牌信息
+		ValidatorUtils.validateEntity(productBrand, UpdateGroup.class);
+
 		productBrandService.update(productBrand);
 		
 		return R.ok();

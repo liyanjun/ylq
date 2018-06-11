@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>订单配送信息表</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../public/css/bootstrap.min.css">
+<link rel="stylesheet" href="../public/css/font-awesome.min.css">
+<link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../public/css/main.css">
+<script src="../public/libs/jquery.min.js"></script>
+<script src="../public/plugins/layer/layer.js"></script>
+<script src="../public/libs/bootstrap.min.js"></script>
+<script src="../public/libs/vue.min.js"></script>
+<script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../public/js/common.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<a v-if="hasPermission('orderdeliveryinfo:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a v-if="hasPermission('orderdeliveryinfo:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<a v-if="hasPermission('orderdeliveryinfo:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+											<div class="form-group">
+			   	<div class="col-sm-2 control-label">收货人姓名</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.name" placeholder="收货人姓名"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">订单地址信息（拼凑的用于在订单列表显示的）</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.address" placeholder="订单地址信息（拼凑的用于在订单列表显示的）"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">收货人性别</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.sex" placeholder="收货人性别"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">用户手机号</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.phone" placeholder="用户手机号"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">订单配送坐标x</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.locationX" placeholder="订单配送坐标x"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">订单配送坐标y</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.locationY" placeholder="订单配送坐标y"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">配送单状态，10：未支付，20：未分配，30：分配中，40：配送中，50：配送结束</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.status" placeholder="配送单状态，10：未支付，20：未分配，30：分配中，40：配送中，50：配送结束"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">配送单备注</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.remark" placeholder="配送单备注"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">配送单创建时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.creationTime" placeholder="配送单创建时间"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">期望配送时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.deliveryTime" placeholder="期望配送时间"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">关联配送员 ID</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.deliveryDistributorId" placeholder="关联配送员 ID"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">关联订单 ID</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.orderInfoId" placeholder="关联订单 ID"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">关联用户 ID</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="orderDeliveryInfo.userInfoId" placeholder="关联用户 ID"/>
+			    </div>
+			</div>
+							<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="../public/js/order/orderdeliveryinfo.js"></script>
+</body>
+</html>

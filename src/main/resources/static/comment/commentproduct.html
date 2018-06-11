@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>客户押金信息表</title>
+<title>配送员评价</title>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -23,16 +23,11 @@
 <div id="rrapp" v-cloak>
 	<div v-show="showList">
 		<div class="grid-btn">
-            <div class="form-group col-sm-2">
-                <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="用户名、手机号">
-            </div>
-            <a class="btn btn-default" @click="query">查询</a>
-			<a v-if="hasPermission('userdeposit:info')" class="btn btn-primary" @click="detail"><i class="fa fa-file-text-o"></i>&nbsp;详情</a>
-			<!--<a v-if="hasPermission('userdeposit:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
-			<a v-if="hasPermission('userdeposit:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-			<a v-if="hasPermission('userdeposit:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
--->
-        </div>
+			<a v-if="hasPermission('commentproduct:info')" class="btn btn-primary" @click="info"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a v-if="hasPermission('commentproduct:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a v-if="hasPermission('commentproduct:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<a v-if="hasPermission('commentproduct:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+		</div>
 	    <table id="jqGrid"></table>
 	    <div id="jqGridPager"></div>
     </div>
@@ -41,33 +36,27 @@
 		<div class="panel-heading">{{title}}</div>
 		<form class="form-horizontal">
 											<div class="form-group">
-			   	<div class="col-sm-2 control-label">对应用户 ID</div>
+			   	<div class="col-sm-2 control-label">商品品牌名称</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userDeposit.userInfoId" placeholder="对应用户 ID"/>
+			      <input type="text" disabled="disabled" class="form-control" v-model="commentProduct.productId" placeholder="商品品牌名称"/>
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">押金总额</div>
+			   	<div class="col-sm-2 control-label">评论内容</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userDeposit.depositAmount" placeholder="押金总额"/>
+			      <input type="text" disabled="disabled" class="form-control" v-model="commentProduct.comment" placeholder="评论内容"/>
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">有效的押金</div>
+			   	<div class="col-sm-2 control-label">打分，1-5分</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userDeposit.enableDepositAmount" placeholder="有效的押金"/>
+			      <input type="text" disabled="disabled" class="form-control" v-model="commentProduct.level" placeholder="打分，1-5分"/>
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">无效的押金</div>
+			   	<div class="col-sm-2 control-label">评论时间</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userDeposit.disableDepositAmount" placeholder="无效的押金"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">用户持有空桶数</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userDeposit.emptyBucketNumber" placeholder="用户持有空桶数"/>
+			      <input type="text" disabled="disabled" class="form-control" v-model="commentProduct.creationTime" placeholder="评论时间"/>
 			    </div>
 			</div>
 							<div class="form-group">
@@ -79,6 +68,6 @@
 	</div>
 </div>
 
-<script src="../public/js/user/userdeposit.js"></script>
+<script src="../public/js/comment/commentproduct.js"></script>
 </body>
 </html>

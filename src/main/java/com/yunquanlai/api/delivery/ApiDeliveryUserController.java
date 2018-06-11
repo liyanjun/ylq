@@ -8,6 +8,7 @@ import com.yunquanlai.admin.user.entity.UserClientTokenEntity;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
+import com.yunquanlai.utils.annotation.LoginDelivery;
 import com.yunquanlai.utils.validator.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -15,10 +16,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -53,12 +52,14 @@ public class ApiDeliveryUserController {
     @PostMapping("login")
     @ApiOperation(value = "配送员登录,disable字段含义（0:停用    1：启用    2：新创建（默认））")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", dataType = "string", name = "platform", value = "平台标识", required = true),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "platform", value = "平台标识(10：安卓，20：苹果)", required = true),
             @ApiImplicitParam(paramType = "header", dataType = "string", name = "version", value = "版本", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "mobile", value = "手机号", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "string", name = "password", value = "密码", required = true)
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "password", value = "密码", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "clientId", value = "推送客户端 ID", required = true)
     })
-    public R login(@RequestParam String mobile, @RequestParam String password) {
+    public R login(@RequestHeader String platform, @RequestHeader String version,
+                   @RequestParam String mobile, @RequestParam String password, @RequestParam String clientId) {
         Assert.isBlank(mobile, "手机号不能为空");
         Assert.isBlank(password, "密码不能为空");
 
@@ -70,10 +71,63 @@ public class ApiDeliveryUserController {
         if (!deliveryDistributorEntity.getPassword().equals(DigestUtils.sha256Hex(password))) {
             throw new RRException("手机号或密码错误");
         }
-        if(deliveryDistributorEntity.getDisable() == 0){
+        if (deliveryDistributorEntity.getDisable() == 0) {
             throw new RRException("账号已停用");
         }
-        return createToken(deliveryDistributorEntity.getId()).put("disable",deliveryDistributorEntity.getDisable());
+        deliveryDistributorEntity.setClientId(clientId);
+        deliveryDistributorService.update(deliveryDistributorEntity);
+        return createToken(deliveryDistributorEntity.getId()).put("disable", deliveryDistributorEntity.getDisable());
+    }
+
+    /**
+     * 修改密码
+     *
+     * @return
+     */
+    @PostMapping("editPassword")
+    @ApiOperation(value = "修改密码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "platform", value = "平台标识(10：安卓，20：苹果)", required = true),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "version", value = "版本", required = true),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "token", value = "token", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "passwordOld", value = "旧密码", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "password", value = "新密码", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "passwordRepeat", value = "新密码重复", required = true)
+    })
+    public R editPassword(@LoginDelivery @ApiIgnore DeliveryDistributorEntity deliveryDistributorEntity,
+                          @RequestParam String passwordOld, @RequestParam String password, @RequestParam String passwordRepeat) {
+        if (!deliveryDistributorEntity.getPassword().equals(DigestUtils.sha256Hex(passwordOld))) {
+            throw new RRException("旧密码错误");
+        }
+        if (!password.equals(passwordRepeat)) {
+            throw new RRException("两次输入密码不一致");
+        }
+        deliveryDistributorEntity.setPassword(DigestUtils.sha256Hex(password));
+        deliveryDistributorEntity.setDisable((byte) 1);
+        deliveryDistributorService.update(deliveryDistributorEntity);
+        return R.ok();
+    }
+
+    /**
+     * 更新配送员配送状态
+     *
+     * @return
+     */
+    @PostMapping("updateDeliverStatus")
+    @ApiOperation(value = "修改配送员配送状态")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "platform", value = "平台标识(10：安卓，20：苹果)", required = true),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "version", value = "版本", required = true),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "token", value = "token", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "status", value = "10：可配送，20：不可配送", required = true)
+    })
+    public R updateDeliverStatus(@LoginDelivery @ApiIgnore DeliveryDistributorEntity deliveryDistributorEntity, @RequestParam Integer status) {
+        if (status != 10 && status != 20) {
+            throw new RRException("不是合法的状态值");
+        }
+        deliveryDistributorEntity.setStatus(status);
+        deliveryDistributorService.update(deliveryDistributorEntity);
+        return R.ok();
     }
 
     private R createToken(Long distributorId) {

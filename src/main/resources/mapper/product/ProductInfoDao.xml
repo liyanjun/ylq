@@ -62,6 +62,7 @@
         `delivery_fee`,
         `is_quick`,
         `count`,
+        `sort`,
         `creation_time`,
         `update_time`,
         `creator_id`,
@@ -69,14 +70,12 @@
         `update_id`,
         `update_name`
         from product_info
-        <choose>
-            <when test="sidx != null and sidx.trim() != ''">
-                order by ${sidx} ${order}
-            </when>
-            <otherwise>
-                order by id desc
-            </otherwise>
-        </choose>
+        <where>
+            <if test="key != null and key.trim() != ''">
+                `name` like concat('%',#{key},'%') or `brand_name` like concat('%',#{key},'%')
+            </if>
+        </where>
+        order by sort desc,id desc
         <if test="offset != null and limit != null">
             limit #{offset}, #{limit}
         </if>
@@ -95,6 +94,7 @@
         `delivery_fee`,
         `is_quick`,
         `count`,
+        `sort`,
         `creation_time`,
         `update_time`,
         `creator_id`,
@@ -118,10 +118,10 @@
         </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
-                order by ${sidx} ${order}
+                order by ${sidx} ${order},sort desc
             </when>
             <otherwise>
-                order by id desc
+                order by sort desc,id desc
             </otherwise>
         </choose>
         <if test="offset != null and limit != null">
@@ -147,6 +147,7 @@
 			`delivery_fee`,
 			`is_quick`,
 			`count`,
+			`sort`,
 			`creation_time`,
 			`update_time`, 
 			`creator_id`, 
@@ -166,6 +167,7 @@
 			#{deliveryFee},
 			#{isQuick},
 			#{count},
+			#{sort},
 			#{creationTime},
 			#{updateTime}, 
 			#{creatorId}, 
@@ -188,6 +190,7 @@
             <if test="deliveryFee != null">`delivery_fee` = #{deliveryFee},</if>
             <if test="isQuick != null">`is_quick` = #{isQuick},</if>
             <if test="count != null">`count` = #{count},</if>
+            <if test="sort != null">`sort` = #{sort},</if>
             <if test="creationTime != null">`creation_time` = #{creationTime},</if>
             <if test="updateTime != null">`update_time` = #{updateTime},</if>
             <if test="creatorId != null">`creator_id` = #{creatorId},</if>
@@ -196,6 +199,14 @@
             <if test="updateName != null">`update_name` = #{updateName}</if>
         </set>
         where id = #{id}
+    </update>
+
+    <update id="updateBrandName" parameterType="com.yunquanlai.admin.product.entity.ProductInfoEntity">
+        update product_info
+        <set>
+            <if test="brandName != null">`brand_name` = #{brandName},</if>
+        </set>
+        where brand_id = #{brandId}
     </update>
 
     <delete id="delete">

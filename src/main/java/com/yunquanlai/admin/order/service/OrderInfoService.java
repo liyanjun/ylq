@@ -30,9 +30,9 @@ public interface OrderInfoService {
 
     void update(OrderInfoEntity orderInfo);
 
-    void delete(Integer id);
+    void delete(Long id);
 
-    void deleteBatch(Integer[] ids);
+    void deleteBatch(Long[] ids);
 
     R newOrder(OrderVO orderVO, UserInfoEntity user);
 
@@ -53,4 +53,20 @@ public interface OrderInfoService {
      * @param deliveryEndpointEntity     配送点信息
      */
     boolean findDeliveryDistributor(List<OrderProductDetailEntity> orderProductDetailEntities, OrderDeliveryInfoEntity orderDeliveryInfoEntity, DeliveryEndpointEntity deliveryEndpointEntity);
+
+    /**
+     * 关闭订单
+     *
+     * @param orderId
+     */
+    void closeOrder(Long orderId, Long userId);
+
+    /**
+     * 订单内容确定，计算押金
+     *
+     * @param orderVO
+     * @param user
+     * @return
+     */
+    R confirm(OrderVO orderVO, UserInfoEntity user);
 }

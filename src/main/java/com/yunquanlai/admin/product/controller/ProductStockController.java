@@ -1,22 +1,19 @@
 package com.yunquanlai.admin.product.controller;
 
-import java.util.List;
-import java.util.Map;
-
 import com.yunquanlai.admin.common.AbstractController;
 import com.yunquanlai.admin.product.entity.ProductStockEntity;
 import com.yunquanlai.admin.product.service.ProductStockService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.validator.ValidatorUtils;
+import com.yunquanlai.utils.validator.group.UpdateGroup;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -67,6 +64,9 @@ public class ProductStockController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("productstock:update")
 	public R update(@RequestBody ProductStockEntity productStock){
+		//校验配送点信息
+		ValidatorUtils.validateEntity(productStock, UpdateGroup.class);
+
 		productStockService.addStock(productStock,getUser());
 		
 		return R.ok();

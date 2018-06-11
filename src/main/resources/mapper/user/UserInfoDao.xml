@@ -12,7 +12,7 @@
         <result property="status" column="status"/>
         <result property="depositAmount" column="deposit_amount"/>
         <result property="enableDepositAmount" column="enable_deposit_amount"/>
-        <result property="disableDepositAmout" column="disable_deposit_amout"/>
+        <result property="disableDepositAmount" column="disable_deposit_amount"/>
         <result property="emptyBucketNumber" column="empty_bucket_number"/>
         <result property="creationTime" column="creation_time"/>
     </resultMap>
@@ -26,7 +26,7 @@
 					`status`, 
 					`deposit_amount`, 
 					`enable_deposit_amount`, 
-					`disable_deposit_amout`, 
+					`disable_deposit_amount`, 
 					`empty_bucket_number`, 
 					`creation_time`
 				from user_info where id = #{id}
@@ -42,7 +42,7 @@
 		`status`,
 		`deposit_amount`,
 		`enable_deposit_amount`,
-		`disable_deposit_amout`,
+		`disable_deposit_amount`,
 		`empty_bucket_number`,
 		`creation_time`
 		from user_info where uid = #{value}
@@ -57,7 +57,7 @@
 		            `status`, 
 		            `deposit_amount`, 
 		            `enable_deposit_amount`, 
-		            `disable_deposit_amout`, 
+		            `disable_deposit_amount`, 
 		            `empty_bucket_number`, 
 		            `creation_time`
 				from user_info
@@ -85,7 +85,7 @@
 			`status`, 
 			`deposit_amount`, 
 			`enable_deposit_amount`, 
-			`disable_deposit_amout`, 
+			`disable_deposit_amount`, 
 			`empty_bucket_number`, 
 			`creation_time`
 		)
@@ -97,7 +97,7 @@
 			#{status}, 
 			#{depositAmount}, 
 			#{enableDepositAmount}, 
-			#{disableDepositAmout}, 
+			#{disableDepositAmount}, 
 			#{emptyBucketNumber}, 
 			#{creationTime}
 		)
@@ -112,7 +112,7 @@
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="depositAmount != null">`deposit_amount` = #{depositAmount}, </if>
 			<if test="enableDepositAmount != null">`enable_deposit_amount` = #{enableDepositAmount}, </if>
-			<if test="disableDepositAmout != null">`disable_deposit_amout` = #{disableDepositAmout}, </if>
+			<if test="disableDepositAmount != null">`disable_deposit_amount` = #{disableDepositAmount}, </if>
 			<if test="emptyBucketNumber != null">`empty_bucket_number` = #{emptyBucketNumber}, </if>
 			<if test="creationTime != null">`creation_time` = #{creationTime}</if>
 		</set>

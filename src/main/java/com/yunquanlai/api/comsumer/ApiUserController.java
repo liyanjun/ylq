@@ -2,10 +2,14 @@ package com.yunquanlai.api.comsumer;
 
 import com.yunquanlai.admin.user.entity.UserClientTokenEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
+import com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity;
 import com.yunquanlai.admin.user.service.UserClientTokenService;
 import com.yunquanlai.admin.user.service.UserInfoService;
+import com.yunquanlai.admin.user.service.UserWithdrawDepositService;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
+import com.yunquanlai.utils.annotation.LoginUser;
+import com.yunquanlai.utils.validator.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -13,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -36,6 +41,9 @@ public class ApiUserController {
     @Autowired
     private UserClientTokenService userClientTokenService;
 
+    @Autowired
+    private UserWithdrawDepositService userWithdrawDepositService;
+
     //12小时后过期
     private final static int EXPIRE = 3600 * 12;
 
@@ -49,9 +57,9 @@ public class ApiUserController {
     @ApiOperation(value = "用户从小程序登录接口")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "uid", value = "微信 ID", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "微信名", required = true)
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "微信名" ),
     })
-    public R wechatLogin(String uid, String username) {
+    public R wechatLogin(@RequestParam String uid, String username) {
         UserInfoEntity userInfoEntity = userInfoService.queryObjectByUid(uid);
         if (userInfoEntity == null) {
             //不存在用户就创建用户
@@ -63,6 +71,21 @@ public class ApiUserController {
             userInfoService.save(userInfoEntity);
         }
         return createToken(userInfoEntity.getId());
+    }
+
+    @PostMapping("user/withdraw")
+    @ApiOperation(value = "用户提交押金提现申请（只能一次全部提取）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true)
+    })
+    public R depositoryWithdraw(@LoginUser UserInfoEntity userInfoEntity){
+        UserWithdrawDepositEntity temp = userWithdrawDepositService.queryObjectByUserId(userInfoEntity.getId());
+        Assert.isNull(temp,"已存在未处理的押金提现申请，请耐心等待。");
+        UserWithdrawDepositEntity userWithdrawDepositEntity = new UserWithdrawDepositEntity();
+        userWithdrawDepositEntity.setUserInfoId(userInfoEntity.getId());
+        userWithdrawDepositEntity.setCreationTime(new Date());
+        userWithdrawDepositService.save(new UserWithdrawDepositEntity());
+        return R.ok();
     }
 
     private R createToken(Long userId) {

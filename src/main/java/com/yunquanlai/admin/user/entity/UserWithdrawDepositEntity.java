@@ -24,7 +24,7 @@ public class UserWithdrawDepositEntity implements Serializable {
      */
 	private Long userInfoId;
     /**
-     * 设置：是否处理，0：未处理，1：已处理
+     * 设置：是否处理，10：未处理，20：已处理
      */
 	private Integer isHandle;
     /**
@@ -35,6 +35,14 @@ public class UserWithdrawDepositEntity implements Serializable {
      * 设置：处理时间
      */
 	private Date handleTime;
+	/**
+	 * 设置：处理人ID
+	 */
+	private Long handlerId;
+	/**
+	 * 设置：处理人姓名
+	 */
+	private String handlerName;
 
 	/**
 	 * 设置：主键 ID
@@ -61,13 +69,13 @@ public class UserWithdrawDepositEntity implements Serializable {
 		return userInfoId;
 	}
 	/**
-	 * 设置：是否处理，0：未处理，1：已处理
+	 * 设置：是否处理，10：未处理，20：已处理
 	 */
 	public void setIsHandle(Integer isHandle) {
 		this.isHandle = isHandle;
 	}
 	/**
-	 * 获取：是否处理，0：未处理，1：已处理
+	 * 获取：是否处理，10：未处理，20：已处理
 	 */
 	public Integer getIsHandle() {
 		return isHandle;
@@ -95,5 +103,30 @@ public class UserWithdrawDepositEntity implements Serializable {
 	 */
 	public Date getHandleTime() {
 		return handleTime;
+	}
+	/**
+	 * 设置：处理人ID
+	 */
+	public void setHandlerId(Long handlerId) {
+		this.handlerId = handlerId;
+	}
+	/**
+	 * 获取：处理人ID
+	 * @return
+	 */
+	public Long getHandlerId() {
+		return handlerId;
+	}
+	/**
+	 * 设置：处理人姓名
+	 */
+	public void setHandlerName(String handlerName) {
+		this.handlerName = handlerName;
+	}
+	/**
+	 * 获取：处理人姓名
+	 */
+	public String getHandlerName() {
+		return handlerName;
 	}
 }

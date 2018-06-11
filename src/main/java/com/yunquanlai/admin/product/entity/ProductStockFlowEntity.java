@@ -46,11 +46,11 @@ public class ProductStockFlowEntity implements Serializable {
     /**
      * 设置：操作人名称
      */
-	private String opreator;
+	private String operator;
     /**
      * 设置：
      */
-	private Long opreatorId;
+	private Long operatorId;
 
 	/**
 	 * 设置：主键ID
@@ -136,25 +136,25 @@ public class ProductStockFlowEntity implements Serializable {
 	/**
 	 * 设置：操作人名称
 	 */
-	public void setOpreator(String opreator) {
-		this.opreator = opreator;
+	public void setOperator(String operator) {
+		this.operator = operator;
 	}
 	/**
 	 * 获取：操作人名称
 	 */
-	public String getOpreator() {
-		return opreator;
+	public String getOperator() {
+		return operator;
 	}
 	/**
 	 * 设置：
 	 */
-	public void setOpreatorId(Long opreatorId) {
-		this.opreatorId = opreatorId;
+	public void setOperatorId(Long operatorId) {
+		this.operatorId = operatorId;
 	}
 	/**
 	 * 获取：
 	 */
-	public Long getOpreatorId() {
-		return opreatorId;
+	public Long getOperatorId() {
+		return operatorId;
 	}
 }

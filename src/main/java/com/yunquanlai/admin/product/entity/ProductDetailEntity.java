@@ -1,5 +1,9 @@
 package com.yunquanlai.admin.product.entity;
 
+import com.yunquanlai.utils.validator.group.AddGroup;
+import com.yunquanlai.utils.validator.group.UpdateGroup;
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.io.Serializable;
 
 
@@ -24,6 +28,7 @@ public class ProductDetailEntity implements Serializable {
     /**
      * 设置：
      */
+	@NotBlank(message="商品描述不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String content;
     /**
      * 设置：

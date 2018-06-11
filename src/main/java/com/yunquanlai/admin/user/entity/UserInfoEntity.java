@@ -47,7 +47,7 @@ public class UserInfoEntity implements Serializable {
     /**
      * 设置：不可用押金金额
      */
-	private BigDecimal disableDepositAmout;
+	private BigDecimal disableDepositAmount;
     /**
      * 设置：持有空桶数
      */
@@ -144,14 +144,14 @@ public class UserInfoEntity implements Serializable {
 	/**
 	 * 设置：不可用押金金额
 	 */
-	public void setDisableDepositAmout(BigDecimal disableDepositAmout) {
-		this.disableDepositAmout = disableDepositAmout;
+	public void setDisableDepositAmount(BigDecimal disableDepositAmount) {
+		this.disableDepositAmount = disableDepositAmount;
 	}
 	/**
 	 * 获取：不可用押金金额
 	 */
-	public BigDecimal getDisableDepositAmout() {
-		return disableDepositAmout;
+	public BigDecimal getDisableDepositAmount() {
+		return disableDepositAmount;
 	}
 	/**
 	 * 设置：持有空桶数

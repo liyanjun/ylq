@@ -15,6 +15,7 @@ import com.yunquanlai.api.event.OrderDeliveryNotifyEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,6 +29,7 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
     private static String masterSecret = "ZL0K1tV5y87fix2tpIgHg2";
     static String host = "http://sdk.open.api.igexin.com/apiex.htm";
 
+    @Async
     @Override
     public void onApplicationEvent(OrderDeliveryNotifyEvent applicationEvent) {
         IGtPush push = new IGtPush(host, appKey, masterSecret);

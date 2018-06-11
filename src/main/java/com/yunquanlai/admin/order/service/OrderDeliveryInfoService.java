@@ -8,32 +8,38 @@ import java.util.Map;
 
 /**
  * 订单配送信息表
- * 
+ *
  * @author liyanjun
- * @email 
+ * @email
  * @date 2018-06-04 22:42:21
  */
 public interface OrderDeliveryInfoService {
-	
-	OrderDeliveryInfoEntity queryObject(Long id);
-	
-	List<OrderDeliveryInfoEntity> queryList(Map<String, Object> map);
-	
-	int queryTotal(Map<String, Object> map);
-	
-	void save(OrderDeliveryInfoEntity orderDeliveryInfo);
-	
-	void update(OrderDeliveryInfoEntity orderDeliveryInfo);
-	
-	void delete(Integer id);
-	
-	void deleteBatch(Integer[] ids);
 
-    List<OrderDeliveryInfoEntity> queryByDistributorId(Map<String,Object> filter);
+    OrderDeliveryInfoEntity queryObject(Long id);
 
-	void orderDelivery(DeliveryDistributorEntity deliveryDistributorEntity, OrderDeliveryInfoEntity orderDeliveryInfoEntity);
+    List<OrderDeliveryInfoEntity> queryList(Map<String, Object> map);
 
-	OrderDeliveryInfoEntity queryObjectByOrderId(Long orderId);
+    int queryTotal(Map<String, Object> map);
 
-	void recyclingEmptyBarrels(Integer number, Long orderDeliveryId);
+    void save(OrderDeliveryInfoEntity orderDeliveryInfo);
+
+    void update(OrderDeliveryInfoEntity orderDeliveryInfo);
+
+    void delete(Long id);
+
+    void deleteBatch(Long[] ids);
+
+    List<OrderDeliveryInfoEntity> queryByDistributorId(Map<String, Object> filter);
+
+    void orderDelivery(DeliveryDistributorEntity deliveryDistributorEntity, OrderDeliveryInfoEntity orderDeliveryInfoEntity);
+
+    OrderDeliveryInfoEntity queryObjectByOrderId(Long orderId);
+
+    /**
+     * 标记订单异常
+     *
+     * @param orderDeliveryInfoEntity
+     * @param exception
+     */
+    void markerException(OrderDeliveryInfoEntity orderDeliveryInfoEntity, String exception);
 }

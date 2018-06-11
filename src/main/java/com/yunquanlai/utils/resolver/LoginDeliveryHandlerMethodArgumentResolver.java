@@ -1,5 +1,7 @@
 package com.yunquanlai.utils.resolver;
 
+import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
+import com.yunquanlai.admin.delivery.service.DeliveryDistributorService;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.admin.user.service.UserInfoService;
 import com.yunquanlai.utils.annotation.LoginDelivery;
@@ -25,11 +27,11 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class LoginDeliveryHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
     @Autowired
-    private UserInfoService userInfoService;
+    private DeliveryDistributorService deliveryDistributorService;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().isAssignableFrom(UserInfoEntity.class) && parameter.hasParameterAnnotation(LoginDelivery.class);
+        return parameter.getParameterType().isAssignableFrom(DeliveryDistributorEntity.class) && parameter.hasParameterAnnotation(LoginDelivery.class);
     }
 
     @Override
@@ -41,9 +43,8 @@ public class LoginDeliveryHandlerMethodArgumentResolver implements HandlerMethod
             return null;
         }
 
-        //TODO 获取配送员信息
-//        UserInfoEntity user = userInfoService.queryObject((Long)object);
+        DeliveryDistributorEntity deliveryDistributorEntity = deliveryDistributorService.queryObject((Long)object);
 
-        return null;
+        return deliveryDistributorEntity;
     }
 }

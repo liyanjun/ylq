@@ -11,5 +11,6 @@ import com.yunquanlai.admin.system.dao.BaseDao;
  * @date 2018-06-02 22:31:01
  */
 public interface ProductStockFlowDao extends BaseDao<ProductStockFlowEntity> {
-	
+
+    void deleteByStockId(Long id);
 }

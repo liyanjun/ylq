@@ -4,7 +4,7 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '商品名', name: 'name', index: 'name', width: 80 }, 			
+			{ label: '品牌名', name: 'name', index: 'name', width: 80 },
 			{ label: '备注', name: 'remark', index: 'remark', width: 80 }			
         ],
 		viewrecords: true,
@@ -37,6 +37,9 @@ $(function () {
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
+        q:{
+            brandName: null
+        },
 		showList: true,
 		title: null,
 		productBrand: {}
@@ -110,7 +113,8 @@ var vm = new Vue({
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{ 
+			$("#jqGrid").jqGrid('setGridParam',{
+                postData:{'name': vm.q.brandName},
                 page:page
             }).trigger("reloadGrid");
 		}

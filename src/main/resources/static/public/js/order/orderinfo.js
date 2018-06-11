@@ -1,14 +1,22 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: '../userdeposit/list',
+        url: '../orderinfo/list',
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '对应用户 ID', name: 'userInfoId', index: 'user_info_id', width: 80 }, 			
-			{ label: '押金总额', name: 'depositAmount', index: 'deposit_amount', width: 80 }, 			
-			{ label: '有效的押金', name: 'enableDepositAmount', index: 'enable_deposit_amount', width: 80 }, 			
-			{ label: '无效的押金', name: 'disableDepositAmount', index: 'disable_deposit_amount', width: 80 },
-			{ label: '用户持有空桶数', name: 'emptyBucketNumber', index: 'empty_bucket_number', width: 80 }			
+			{ label: '订单总额', name: 'amountTotal', index: 'amount_total', width: 80 }, 			
+			{ label: '订单金额', name: 'amount', index: 'amount', width: 80 }, 			
+			{ label: '订单折扣优惠金额', name: 'amountBenifit', index: 'amount_benifit', width: 80 }, 			
+			{ label: '订单活动优惠金额（即除了优惠标价外，使用的活动奖励）', name: 'amountActivity', index: 'amount_activity', width: 80 }, 			
+			{ label: '订单配送费', name: 'amountDeliveryFee', index: 'amount_delivery_fee', width: 80 }, 			
+			{ label: '订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50已关闭', name: 'status', index: 'status', width: 80 }, 			
+			{ label: '关联配送员 ID', name: 'deliveryDistributorId', index: 'delivery_distributor_id', width: 80 }, 			
+			{ label: '关联配送员名', name: 'deliveryDistributorName', index: 'delivery_distributor_name', width: 80 }, 			
+			{ label: '关联用户 ID', name: 'userInfoId', index: 'user_info_id', width: 80 }, 			
+			{ label: '用户名', name: 'username', index: 'username', width: 80 }, 			
+			{ label: '订单备注', name: 'remark', index: 'remark', width: 80 }, 			
+			{ label: '订单创建时间', name: 'creationTime', index: 'creation_time', width: 80 }, 			
+			{ label: '更新时间', name: 'updateTime', index: 'update_time', width: 80 }			
         ],
 		viewrecords: true,
         height: 385,
@@ -40,31 +48,18 @@ $(function () {
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
-        q:{
-            key: null
-        },
 		showList: true,
 		title: null,
-		userDeposit: {}
+		orderInfo: {}
 	},
 	methods: {
 		query: function () {
 			vm.reload();
 		},
-		detail: function(){
-            var id = getSelectedRow();
-            if(id == null){
-                return ;
-            }
-            vm.showList = false;
-            vm.title = "详情";
-
-            vm.getInfo(id)
-		},
-		/*add: function(){
+		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
-			vm.userDeposit = {};
+			vm.orderInfo = {};
 		},
 		update: function (event) {
 			var id = getSelectedRow();
@@ -77,12 +72,12 @@ var vm = new Vue({
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
-			var url = vm.userDeposit.id == null ? "../userdeposit/save" : "../userdeposit/update";
+			var url = vm.orderInfo.id == null ? "../orderinfo/save" : "../orderinfo/update";
 			$.ajax({
 				type: "POST",
 			    url: url,
 			    contentType: "application/json",
-			    data: JSON.stringify(vm.userDeposit),
+			    data: JSON.stringify(vm.orderInfo),
 			    success: function(r){
 			    	if(r.code === 0){
 						alert('操作成功', function(index){
@@ -103,7 +98,7 @@ var vm = new Vue({
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
-				    url: "../userdeposit/delete",
+				    url: "../orderinfo/delete",
 				    contentType: "application/json",
 				    data: JSON.stringify(ids),
 				    success: function(r){
@@ -117,17 +112,16 @@ var vm = new Vue({
 					}
 				});
 			});
-		},*/
+		},
 		getInfo: function(id){
-			$.get("../userdeposit/info/"+id, function(r){
-                vm.userDeposit = r.userDeposit;
+			$.get("../orderinfo/info/"+id, function(r){
+                vm.orderInfo = r.orderInfo;
             });
 		},
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{
-                postData:{'key': vm.q.key},
+			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page
             }).trigger("reloadGrid");
 		}

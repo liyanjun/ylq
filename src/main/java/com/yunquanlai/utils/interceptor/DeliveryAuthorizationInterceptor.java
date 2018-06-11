@@ -1,5 +1,7 @@
 package com.yunquanlai.utils.interceptor;
 
+import com.yunquanlai.admin.delivery.entity.DeliveryClientTokenEntity;
+import com.yunquanlai.admin.delivery.service.DeliveryClientTokenService;
 import com.yunquanlai.admin.user.entity.UserClientTokenEntity;
 import com.yunquanlai.admin.user.service.UserClientTokenService;
 import com.yunquanlai.utils.RRException;
@@ -21,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class DeliveryAuthorizationInterceptor extends HandlerInterceptorAdapter {
     @Autowired
-    private UserClientTokenService userClientTokenService;
+    private DeliveryClientTokenService deliveryClientTokenService;
 
     public static final String LOGIN_DELIVERY_KEY = "LOGIN_DELIVERY_KEY";
 
@@ -51,16 +53,14 @@ public class DeliveryAuthorizationInterceptor extends HandlerInterceptorAdapter 
             throw new RRException("token不能为空");
         }
 
-        //TODO 创建deliveryClientToken表处理这些个乱七八糟的东西
+        //查询token信息
+        DeliveryClientTokenEntity tokenEntity = deliveryClientTokenService.queryByToken(token);
+        if (tokenEntity == null || tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()) {
+            throw new RRException("token失效，请重新登录");
+        }
 
-//        //查询token信息
-//        UserClientTokenEntity tokenEntity = userClientTokenService.queryByToken(token);
-//        if (tokenEntity == null || tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()) {
-//            throw new RRException("token失效，请重新登录");
-//        }
-//
-//        //设置userId到request里，后续根据userId，获取用户信息
-//        request.setAttribute(LOGIN_USER_KEY, tokenEntity.getUserId());
+        //设置userId到request里，后续根据userId，获取用户信息
+        request.setAttribute(LOGIN_DELIVERY_KEY, tokenEntity.getDeliveryDistributorId());
 
         return true;
     }

@@ -24,6 +24,10 @@
 <div id="rrapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn">
+            <div class="form-group col-sm-2">
+                <input type="text" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="商品名、商品品牌">
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
             <a v-if="hasPermission('productinfo:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
             <a v-if="hasPermission('productinfo:update')" class="btn btn-primary" @click="update"><i
                     class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
@@ -38,13 +42,13 @@
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
             <div class="form-group">
-                <div class="col-sm-2 control-label">商品名称</div>
+                <div class="col-sm-2 control-label">商品名称</div><font color="red">*</font>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" v-model="productInfo.name" placeholder="商品名称"/>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">商品图片</div>
+                <div class="col-sm-2 control-label">商品图片</div><font color="red">*</font>
                 <div class="col-sm-10">
                     <div id="upload" style="background-image:url('http://oqvkyp7u2.bkt.clouddn.com/upload/20180531/28eacb7cb473408596a21f49d396239e');width: 100px;height: 100px"></div>
                     <input id="productInfo_img" type="hidden" v-model="productInfo.img">
@@ -53,19 +57,25 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">售价</div>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" v-model="productInfo.amountShow" placeholder="售价"/>
+                    <input type='text' onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="productInfo.amountShow" placeholder="售价"/>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">优惠价</div>
+                <div class="col-sm-2 control-label">优惠价</div><font color="red">*</font>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" v-model="productInfo.amount" placeholder="优惠价"/>
+                    <input type='text' onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="productInfo.amount" placeholder="优惠价"/>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">配送费</div>
+                <div class="col-sm-2 control-label">配送费</div><font color="red">*</font>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" v-model="productInfo.deliveryFee" placeholder="配送费"/>
+                    <input type='text' onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="productInfo.deliveryFee" placeholder="配送费"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">排序</div><font color="red">*</font>
+                <div class="col-sm-10">
+                    <input type='text' onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="productInfo.sort" placeholder="排序"/>
                 </div>
             </div>
             <div class="form-group">
@@ -93,28 +103,29 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">商品品牌</div>
+                <div class="col-sm-2 control-label">商品品牌</div><font color="red">*</font>
                 <div class="col-sm-10">
-                    <label v-for="brand in brandList" class="radio-inline">
-                        <!--<input type="checkbox" :value="role.roleId" v-model="user.roleIdList">{{role.roleName}}-->
-                        <input type="radio" name="brandId" :value="brand.id" v-model="productInfo.brandId"/>{{brand.name}}
-                    </label>
-
+                    <select v-model="brandId" class="form-control" id="selected">
+                        <option v-for="brand in brandList"  :value="brand.id" >{{brand.name}}</option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">桶类型</div>
+                <div class="col-sm-2 control-label">桶类型</div><font color="red">*</font>
                 <div class="col-sm-10">
                     <label class="radio-inline">
-                        <input type="radio" name="bucketType" value="10" v-model="productInfo.bucketType"/> 一次性桶
+                        <input type="radio" name="bucketType" value="10" v-model="productInfo.bucketType"/> 一次性桶装水
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="bucketType" value="20" v-model="productInfo.bucketType"/> 可回收桶
+                        <input type="radio" name="bucketType" value="20" v-model="productInfo.bucketType"/> 循环桶装水
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="bucketType" value="30" v-model="productInfo.bucketType"/> 瓶装水
                     </label>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">支持一键送水</div>
+                <div class="col-sm-2 control-label">支持一键送水</div><font color="red">*</font>
                 <div class="col-sm-10">
                     <label class="radio-inline">
                         <input type="radio" name="isQuick" value="10" v-model="productInfo.isQuick"/> 是

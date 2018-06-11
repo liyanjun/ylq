@@ -11,7 +11,7 @@ $(function () {
 				index: 'is_handle',
 				width: 80,
                 formatter: function (value, options, row) {
-                    return value === 0 ?
+                    return value === 10 ?
                         '未处理' :
                         '已处理';
                 }
