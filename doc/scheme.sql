@@ -15,6 +15,18 @@ Date: 2018-06-06 11:35:31
 
 SET FOREIGN_KEY_CHECKS=0;
 
+DROP TABLE IF EXISTS `delivery_distributor_financial_flow`;
+CREATE TABLE `delivery_distributor_financial_flow` (
+`id` int NOT NULL AUTO_INCREMENT,
+`before_amount` decimal(20,2) NOT NULL COMMENT '流水前金额',
+`after_amount` decimal(20,2) NOT NULL COMMENT '流水后金额',
+`type` tinyint(4) NOT NULL COMMENT '流水类型，10：收益，20：发工资',
+`amount` decimal NOT NULL COMMENT '流水金额',
+`delivery_distributor_id` int NOT NULL COMMENT '配送员 ID',
+PRIMARY KEY (`id`)
+)
+COMMENT='配送员收入信息流水';
+
 -- ----------------------------
 -- Table structure for delivery_client_token
 -- ----------------------------
@@ -54,6 +66,7 @@ CREATE TABLE `delivery_distributor` (
   `client_id` varchar(64) DEFAULT NULL COMMENT '用于点对点登录时的推送，由APP在登录的时候一起上传',
   `order_count` int(11) DEFAULT '0' COMMENT '当前在配送订单数',
   `status` tinyint(4) NOT NULL DEFAULT '20' COMMENT '当前状态，10：可配送，20：不可配送',
+  `amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '配送员分润',
   `identifycation` varchar(32) DEFAULT NULL COMMENT '身份证号（备用）',
   `identifycation_url` varchar(512) DEFAULT NULL COMMENT '身份证照片地址',
   `health_url` varchar(512) DEFAULT NULL COMMENT '健康证地址',

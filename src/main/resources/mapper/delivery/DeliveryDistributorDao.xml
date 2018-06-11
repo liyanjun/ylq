@@ -13,6 +13,7 @@
         <result property="clientId" column="client_id"/>
         <result property="orderCount" column="order_count"/>
         <result property="status" column="status"/>
+        <result property="amount" column="amount"/>
         <result property="identifycation" column="identifycation"/>
         <result property="identifycationUrl" column="identifycation_url"/>
         <result property="healthUrl" column="health_url"/>
@@ -30,6 +31,7 @@
 					`birthday`, 
 					`client_id`,
 					`status`,
+					`amount`,
                     `order_count`,
 					`identifycation`,
 					`identifycation_url`,
@@ -49,6 +51,7 @@
 					`birthday`,
 					`client_id`,
 					`status`,
+					`amount`,
                     `order_count`,
 					`identifycation`,
 					`identifycation_url`,
@@ -68,6 +71,7 @@
         `birthday`,
         `client_id`,
         `status`,
+        `amount`,
         `order_count`,
         `identifycation`,
         `identifycation_url`,
@@ -86,6 +90,7 @@
 		            `birthday`,
 		            `client_id`,
 		            `status`,
+		            `amount`,
                     `order_count`,
 		            `identifycation`,
 		            `identifycation_url`,
@@ -115,6 +120,7 @@
         `birthday`,
         `client_id`,
         `status`,
+        `amount`,
         `order_count`,
         `identifycation`,
         `identifycation_url`,
@@ -149,6 +155,7 @@
 			`birthday`, 
 			`client_id`,
 			`status`, 
+			`amount`,
 			`order_count`,
 			`identifycation`,
 			`identifycation_url`, 
@@ -165,6 +172,7 @@
 			#{birthday}, 
 			#{clientId},
 			#{status}, 
+			#{amount},
 			#{orderCount},
 			#{identifycation},
 			#{identifycationUrl}, 
@@ -184,6 +192,7 @@
 			<if test="birthday != null">`birthday` = #{birthday}, </if>
 			<if test="clientId != null">`client_id` = #{clientId}, </if>
 			<if test="status != null">`status` = #{status}, </if>
+			<if test="amount != null">`amount` = #{amount}, </if>
             <if test="orderCount != null">`order_count` = #{orderCount},</if>
 			<if test="identifycation != null">`identifycation` = #{identifycation}, </if>
 			<if test="identifycationUrl != null">`identifycation_url` = #{identifycationUrl}, </if>
