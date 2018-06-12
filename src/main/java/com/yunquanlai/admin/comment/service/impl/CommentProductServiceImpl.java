@@ -18,7 +18,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 	private CommentProductDao commentProductDao;
 	
 	@Override
-	public CommentProductEntity queryObject(Integer id){
+	public CommentProductEntity queryObject(Long id){
 		return commentProductDao.queryObject(id,false);
 	}
 	
@@ -26,7 +26,12 @@ public class CommentProductServiceImpl implements CommentProductService {
 	public List<CommentProductEntity> queryList(Map<String, Object> map){
 		return commentProductDao.queryList(map);
 	}
-	
+
+	@Override
+	public List<CommentProductEntity> queryCommentProductList(Long productId) {
+		return null;
+	}
+
 	@Override
 	public int queryTotal(Map<String, Object> map){
 		return commentProductDao.queryTotal(map);
@@ -43,12 +48,12 @@ public class CommentProductServiceImpl implements CommentProductService {
 	}
 	
 	@Override
-	public void delete(Integer id){
+	public void delete(Long id){
 		commentProductDao.delete(id);
 	}
 	
 	@Override
-	public void deleteBatch(Integer[] ids){
+	public void deleteBatch(Long[] ids){
 		commentProductDao.deleteBatch(ids);
 	}
 	

@@ -18,7 +18,7 @@ public class OrderOperateFlowEntity implements Serializable {
     /**
      * 设置：主键 ID
      */
-	private Integer id;
+	private Long id;
     /**
      * 设置：处理类型，10：手工选定配送员，20：取消订单
      */
@@ -42,7 +42,7 @@ public class OrderOperateFlowEntity implements Serializable {
     /**
      * 设置：操作人 ID
      */
-	private Integer operatorId;
+	private Long operatorId;
     /**
      * 设置：操作人名
      */
@@ -51,13 +51,13 @@ public class OrderOperateFlowEntity implements Serializable {
 	/**
 	 * 设置：主键 ID
 	 */
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	/**
 	 * 获取：主键 ID
 	 */
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	/**
@@ -123,13 +123,13 @@ public class OrderOperateFlowEntity implements Serializable {
 	/**
 	 * 设置：操作人 ID
 	 */
-	public void setOperatorId(Integer operatorId) {
+	public void setOperatorId(Long operatorId) {
 		this.operatorId = operatorId;
 	}
 	/**
 	 * 获取：操作人 ID
 	 */
-	public Integer getOperatorId() {
+	public Long getOperatorId() {
 		return operatorId;
 	}
 	/**

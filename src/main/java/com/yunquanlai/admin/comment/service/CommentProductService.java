@@ -14,9 +14,11 @@ import java.util.Map;
  */
 public interface CommentProductService {
 	
-	CommentProductEntity queryObject(Integer id);
+	CommentProductEntity queryObject(Long id);
 	
 	List<CommentProductEntity> queryList(Map<String, Object> map);
+
+	List<CommentProductEntity> queryCommentProductList(Long productId);
 	
 	int queryTotal(Map<String, Object> map);
 	
@@ -24,7 +26,7 @@ public interface CommentProductService {
 	
 	void update(CommentProductEntity commentProduct);
 	
-	void delete(Integer id);
+	void delete(Long id);
 	
-	void deleteBatch(Integer[] ids);
+	void deleteBatch(Long[] ids);
 }

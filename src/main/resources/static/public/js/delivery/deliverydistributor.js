@@ -147,6 +147,16 @@ var vm = new Vue({
                 vm.deliveryDistributor = r.deliveryDistributor;
             });
 		},
+        comment: function () {
+            var id = getSelectedRow();
+            var gr = jQuery("#jqGrid").jqGrid('getRowData', id);
+            if (id == null) {
+                return;
+            }
+            var url = "../comment/commentdelivery.html?deliveryDistributorId="+id +"&deliveryDistributorName="+gr.name;
+            // encodeURI 编码
+            window.location.assign(encodeURI(url));
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');

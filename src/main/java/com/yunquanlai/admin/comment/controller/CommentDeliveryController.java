@@ -50,7 +50,7 @@ public class CommentDeliveryController extends AbstractController {
 	 */
 	@RequestMapping("/info/{id}")
 	@RequiresPermissions("commentdelivery:info")
-	public R info(@PathVariable("id") Integer id){
+	public R info(@PathVariable("id") Long id){
 		CommentDeliveryEntity commentDelivery = commentDeliveryService.queryObject(id);
 		
 		return R.ok().put("commentDelivery", commentDelivery);
@@ -83,7 +83,7 @@ public class CommentDeliveryController extends AbstractController {
 	 */
 	@RequestMapping("/delete")
 	@RequiresPermissions("commentdelivery:delete")
-	public R delete(@RequestBody Integer[] ids){
+	public R delete(@RequestBody Long[] ids){
 		commentDeliveryService.deleteBatch(ids);
 		
 		return R.ok();

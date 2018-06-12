@@ -4,12 +4,20 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '处理类型，10：手工选定配送员，20：取消订单', name: 'type', index: 'type', width: 80 }, 			
-			{ label: '手工操作前状态', name: 'beforeStatus', index: 'before_status', width: 80 }, 			
-			{ label: '手工操作后状态', name: 'afterStatus', index: 'after_status', width: 80 }, 			
-			{ label: '操作备注信息', name: 'remark', index: 'remark', width: 80 }, 			
+			{
+				label: '处理类型',
+				name: 'type',
+				index: 'type',
+				width: 80,
+                formatter: function (value, options, row) {
+                    return value === 10 ?
+                        '手工选定配送员' :
+                        '取消订单';
+                }
+			},
+			{ label: '手工操作前状态', name: 'beforeStatus', index: 'before_status', width: 80 },
+			{ label: '手工操作后状态', name: 'afterStatus', index: 'after_status', width: 80 },
 			{ label: '操作时间', name: 'operatorTime', index: 'operator_time', width: 80 },
-			{ label: '操作人 ID', name: 'operatorId', index: 'operator_id', width: 80 },
 			{ label: '操作人名', name: 'operatorName', index: 'operator_name', width: 80 }
         ],
 		viewrecords: true,

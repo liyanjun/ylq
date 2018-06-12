@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * 配送员评价
  * 
@@ -50,7 +49,7 @@ public class CommentProductController extends AbstractController {
 	 */
 	@RequestMapping("/info/{id}")
 	@RequiresPermissions("commentproduct:info")
-	public R info(@PathVariable("id") Integer id){
+	public R info(@PathVariable("id") Long id){
 		CommentProductEntity commentProduct = commentProductService.queryObject(id);
 		
 		return R.ok().put("commentProduct", commentProduct);
@@ -83,10 +82,10 @@ public class CommentProductController extends AbstractController {
 	 */
 	@RequestMapping("/delete")
 	@RequiresPermissions("commentproduct:delete")
-	public R delete(@RequestBody Integer[] ids){
+	public R delete(@RequestBody Long[] ids){
 		commentProductService.deleteBatch(ids);
 		
 		return R.ok();
 	}
-	
+
 }

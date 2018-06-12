@@ -4,19 +4,33 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '收货人姓名', name: 'name', index: 'name', width: 80 }, 			
-			{ label: '订单地址信息（拼凑的用于在订单列表显示的）', name: 'address', index: 'address', width: 80 }, 			
-			{ label: '收货人性别', name: 'sex', index: 'sex', width: 80 }, 			
-			{ label: '用户手机号', name: 'phone', index: 'phone', width: 80 }, 			
-			{ label: '订单配送坐标x', name: 'locationX', index: 'location_x', width: 80 }, 			
-			{ label: '订单配送坐标y', name: 'locationY', index: 'location_y', width: 80 }, 			
-			{ label: '配送单状态，10：未支付，20：未分配，30：分配中，40：配送中，50：配送结束', name: 'status', index: 'status', width: 80 }, 			
-			{ label: '配送单备注', name: 'remark', index: 'remark', width: 80 }, 			
-			{ label: '配送单创建时间', name: 'creationTime', index: 'creation_time', width: 80 }, 			
+			{ label: '收货人姓名', name: 'name', index: 'name', width: 80 },
+			{ label: '用户手机号', name: 'phone', index: 'phone', width: 80 },
+			{
+				label: '配送单状态',
+				name: 'status',
+				index: 'status',
+				width: 80,
+                formatter: function (value, options, row) {
+                    if (value === 10) {
+                        return '未支付';
+                    } else if (value === 20) {
+                        return '未分配'
+                    } else if (value == 30) {
+                        return '分配中';
+                    } else if (value == 40) {
+                        return '配送中';
+                    } else if (value == 50) {
+                        return '配送结束';
+                    } else if (value == 60) {
+                        return '';
+                    } else if (value == 70) {
+                        return '';
+                    }
+                }
+			},
+			{ label: '配送单创建时间', name: 'creationTime', index: 'creation_time', width: 80 },
 			{ label: '期望配送时间', name: 'deliveryTime', index: 'delivery_time', width: 80 }, 			
-			{ label: '关联配送员 ID', name: 'deliveryDistributorId', index: 'delivery_distributor_id', width: 80 }, 			
-			{ label: '关联订单 ID', name: 'orderInfoId', index: 'order_info_id', width: 80 }, 			
-			{ label: '关联用户 ID', name: 'userInfoId', index: 'user_info_id', width: 80 }			
         ],
 		viewrecords: true,
         height: 385,

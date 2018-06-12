@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public interface CommentDeliveryService {
 	
-	CommentDeliveryEntity queryObject(Integer id);
+	CommentDeliveryEntity queryObject(Long id);
 	
 	List<CommentDeliveryEntity> queryList(Map<String, Object> map);
 	
@@ -24,7 +24,7 @@ public interface CommentDeliveryService {
 	
 	void update(CommentDeliveryEntity commentDelivery);
 	
-	void delete(Integer id);
+	void delete(Long id);
 	
-	void deleteBatch(Integer[] ids);
+	void deleteBatch(Long[] ids);
 }

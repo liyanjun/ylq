@@ -1,11 +1,27 @@
 $(function () {
+    vm.productId = T.p("productId");
+    vm.productName = T.p("productName");
+    var param = "";
+    if(vm.productId != undefined){
+        param = "?productId=" + vm.productId;
+    }
     $("#jqGrid").jqGrid({
-        url: '../commentproduct/list',
+        url: '../commentproduct/list'+param,
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '商品品牌名称', name: 'productId', index: 'product_id', width: 80 }, 			
-			{ label: '评论内容', name: 'comment', index: 'comment', width: 80 }, 			
+            { label: '商品id', name: 'productId', index: 'product_id', width: 80 },
+			{
+			    label: '商品名',
+                name: 'productName',
+                index: 'product_name',
+                width: 80 ,
+                hidden: vm.productId==undefined?true:false,
+                formatter: function (cellValue) {
+                    return vm.productName;
+                }
+            },
+			{ label: '评论内容', name: 'comment', index: 'comment', width: 80 },
 			{ label: '打分', name: 'level', index: 'level', width: 80 },
 			{ label: '评论时间', name: 'creationTime', index: 'creation_time', width: 80 }			
         ],
@@ -31,7 +47,7 @@ $(function () {
         },
         gridComplete:function(){
         	//隐藏grid底部滚动条
-        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
         }
     });
 });
@@ -117,8 +133,15 @@ var vm = new Vue({
 		getInfo: function(id){
 			$.get("../commentproduct/info/"+id, function(r){
                 vm.commentProduct = r.commentProduct;
+                vm.fnShow(vm.commentProduct.level)
             });
 		},
+        fnShow: function(num){
+            var lis = document.getElementsByTagName("li");
+            for (var i = 0; i < lis.length; i++) {
+                lis[i].className = i < num? "light" : "";//点亮星星就是加class为light的样式
+            }
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');

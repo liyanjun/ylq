@@ -35,7 +35,7 @@ public class OrderProductDetailEntity implements Serializable {
 	 */
 	private Integer bucketType;
     /**
-     * 设置：
+     * 设置：订单id
      */
 	private Long orderInfoId;
 
@@ -93,13 +93,13 @@ public class OrderProductDetailEntity implements Serializable {
 		return count;
 	}
 	/**
-	 * 设置：
+	 * 设置：订单id
 	 */
 	public void setOrderInfoId(Long orderInfoId) {
 		this.orderInfoId = orderInfoId;
 	}
 	/**
-	 * 获取：
+	 * 获取：订单id
 	 */
 	public Long getOrderInfoId() {
 		return orderInfoId;

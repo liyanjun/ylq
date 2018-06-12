@@ -18,11 +18,11 @@ public class CommentDeliveryEntity implements Serializable {
     /**
      * 设置：主键ID
      */
-	private Integer id;
+	private Long id;
     /**
-     * 设置：商品品牌名称
+     * 设置：配送员id
      */
-	private Integer deliveryDistributorId;
+	private Long deliveryDistributorId;
     /**
      * 设置：评论内容
      */
@@ -39,25 +39,25 @@ public class CommentDeliveryEntity implements Serializable {
 	/**
 	 * 设置：主键ID
 	 */
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	/**
 	 * 获取：主键ID
 	 */
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	/**
-	 * 设置：商品品牌名称
+	 * 设置：配送员id
 	 */
-	public void setDeliveryDistributorId(Integer deliveryDistributorId) {
+	public void setDeliveryDistributorId(Long deliveryDistributorId) {
 		this.deliveryDistributorId = deliveryDistributorId;
 	}
 	/**
-	 * 获取：商品品牌名称
+	 * 获取：配送员id
 	 */
-	public Integer getDeliveryDistributorId() {
+	public Long getDeliveryDistributorId() {
 		return deliveryDistributorId;
 	}
 	/**

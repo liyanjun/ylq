@@ -18,7 +18,7 @@ public class CommentDeliveryServiceImpl implements CommentDeliveryService {
 	private CommentDeliveryDao commentDeliveryDao;
 	
 	@Override
-	public CommentDeliveryEntity queryObject(Integer id){
+	public CommentDeliveryEntity queryObject(Long id){
 		return commentDeliveryDao.queryObject(id,false);
 	}
 	
@@ -43,12 +43,12 @@ public class CommentDeliveryServiceImpl implements CommentDeliveryService {
 	}
 	
 	@Override
-	public void delete(Integer id){
+	public void delete(Long id){
 		commentDeliveryDao.delete(id);
 	}
 	
 	@Override
-	public void deleteBatch(Integer[] ids){
+	public void deleteBatch(Long[] ids){
 		commentDeliveryDao.deleteBatch(ids);
 	}
 

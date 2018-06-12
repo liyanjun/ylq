@@ -33,6 +33,8 @@
                     class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
             <a v-if="hasPermission('productinfo:delete')" class="btn btn-primary" @click="del"><i
                     class="fa fa-trash-o"></i>&nbsp;删除</a>
+            <a v-if="hasPermission('commentdelivery:info')" class="btn btn-primary" @click="comment"><i
+                    class="fa fa-trash-o"></i>&nbsp;评论</a>
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>

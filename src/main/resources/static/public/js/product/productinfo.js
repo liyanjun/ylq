@@ -9,7 +9,7 @@ var vm = new Vue({
         title: null,
         brandId: "",
         productInfo: {},
-        brandList: []
+        brandList: [],
     },
     methods: {
         query: function () {
@@ -92,6 +92,16 @@ var vm = new Vue({
                 $("#upload").css("background-image", "url(" + vm.productInfo.img + ")");
             });
         },
+        comment: function () {
+            var id = getSelectedRow();
+            var gr = jQuery("#jqGrid").jqGrid('getRowData', id);
+            if (id == null) {
+                return;
+            }
+            var url = "../comment/commentproduct.html?productId="+id +"&productName="+gr.name;
+            // encodeURI 编码
+            window.location.assign(encodeURI(url));
+        },
         reload: function (event) {
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
@@ -109,7 +119,7 @@ $(function () {
         datatype: "json",
         colModel: [
             {label: '编号', name: 'id', index: 'id', width: 50, key: true},
-            {label: '商品名称', name: 'name', index: 'name', width: 80},
+            {label: '名称', name: 'name', index: 'name', width: 80},
             {
                 label: '售价',
                 name: 'amountShow',
@@ -124,7 +134,7 @@ $(function () {
                     return value + '元';
                 }
             },
-            {label: '商品品牌', name: 'brandName', index: 'brand_name', width: 80},
+            {label: '品牌', name: 'brandName', index: 'brand_name', width: 80},
             {
                 label: '桶类型',
                 name: 'bucketType',
@@ -161,7 +171,7 @@ $(function () {
                 }
             },
             {label: '创建时间', name: 'creationTime', index: 'creation_time', width: 130},
-            {label: '最后更新时间', name: 'updateTime', index: 'update_time', width: 130},
+            /*{label: '最后更新时间', name: 'updateTime', index: 'update_time', width: 130},*/
             {label: '排序', name: 'sort', index: 'sort', width: 60}
         ],
         viewrecords: true,
@@ -187,6 +197,9 @@ $(function () {
         gridComplete: function () {
             //隐藏grid底部滚动条
             $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
+        },
+        onComplete: function (r) {
+
         }
     });
 

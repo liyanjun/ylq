@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yunquanlai.dao.CommentProductDao">
+<mapper namespace="com.yunquanlai.admin.comment.dao.CommentProductDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.yunquanlai.admin.comment.entity.CommentProductEntity" id="commentProductMap">
@@ -31,6 +31,11 @@
 		            `level`, 
 		            `creation_time`
 				from comment_product
+		<where>
+			<if test="productId != null">
+				and `product_id`= #{productId}
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -39,6 +44,32 @@
                 order by id desc
 			</otherwise>
         </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryCommentProductList" resultType="com.yunquanlai.admin.comment.entity.CommentProductEntity">
+		select
+		`id`,
+		`product_id`,
+		`comment`,
+		`level`,
+		`creation_time`
+		from comment_product
+		<where>
+			<if test="productId != null">
+				and `product_id`= #{productId}
+			</if>
+		</where>
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
 		</if>

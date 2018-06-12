@@ -31,12 +31,12 @@ public class ProductDetailEntity implements Serializable {
 	@NotBlank(message="商品描述不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String content;
     /**
-     * 设置：
+     * 设置：商品信息id
      */
 	private Long productInfoId;
 
 	/**
-	 * 设置：
+	 * 设置：商品信息id
 	 */
 	public void setId(Long id) {
 		this.id = id;

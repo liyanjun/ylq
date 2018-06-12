@@ -4,19 +4,33 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '订单总额', name: 'amountTotal', index: 'amount_total', width: 80 }, 			
-			{ label: '订单金额', name: 'amount', index: 'amount', width: 80 }, 			
-			{ label: '订单折扣优惠金额', name: 'amountBenifit', index: 'amount_benifit', width: 80 }, 			
-			{ label: '订单活动优惠金额（即除了优惠标价外，使用的活动奖励）', name: 'amountActivity', index: 'amount_activity', width: 80 }, 			
-			{ label: '订单配送费', name: 'amountDeliveryFee', index: 'amount_delivery_fee', width: 80 }, 			
-			{ label: '订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50已关闭', name: 'status', index: 'status', width: 80 }, 			
-			{ label: '关联配送员 ID', name: 'deliveryDistributorId', index: 'delivery_distributor_id', width: 80 }, 			
-			{ label: '关联配送员名', name: 'deliveryDistributorName', index: 'delivery_distributor_name', width: 80 }, 			
-			{ label: '关联用户 ID', name: 'userInfoId', index: 'user_info_id', width: 80 }, 			
-			{ label: '用户名', name: 'username', index: 'username', width: 80 }, 			
-			{ label: '订单备注', name: 'remark', index: 'remark', width: 80 }, 			
-			{ label: '订单创建时间', name: 'creationTime', index: 'creation_time', width: 80 }, 			
-			{ label: '更新时间', name: 'updateTime', index: 'update_time', width: 80 }			
+			{ label: '订单金额', name: 'amount', index: 'amount', width: 80 },
+            {
+            	label: '订单状态',
+				name: 'status',
+				index: 'status',
+				width: 80,
+                formatter: function (value, options, row) {
+                    if (value === 10) {
+                        return '新创建';
+                    } else if (value === 20) {
+                        return '已支付，待配送'
+                    } else if (value == 30) {
+                        return '配送中';
+                    } else if (value == 40) {
+                        return '已到达';
+                    } else if (value == 50) {
+                        return '关闭';
+                    } else if (value == 60) {
+                        return '人工处理';
+                    } else if (value == 70) {
+                        return '人工派单';
+                    }
+                }
+			},
+            { label: '关联配送员名', name: 'deliveryDistributorName', index: 'delivery_distributor_name', width: 80 },
+			{ label: '用户名', name: 'username', index: 'username', width: 80 },
+			{ label: '订单创建时间', name: 'creationTime', index: 'creation_time', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
