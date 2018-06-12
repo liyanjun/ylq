@@ -185,7 +185,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailDao.save(orderProductDetailEntity);
         }
         // todo 测试用，下单后直接走支付完成流程
-        orderPay(orderInfoEntity.getId(),orderInfoEntity.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
+        orderPay(orderInfoEntity.getId(), orderInfoEntity.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
         return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities).put("minDeposit", deposit);
     }
 
@@ -321,8 +321,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public void payTimeOut(OrderInfoEntity orderInfoEntity) {
-
+    public void payTimeOut(OrderInfoEntity temp) {
+        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(temp.getId(), true);
+        if (orderInfoEntity.getStatus() == OrderInfoEntity.STATUS_NEW) {
+            orderInfoEntity.setStatus(OrderInfoEntity.STATUS_CLOSE);
+            OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(temp.getId(), true);
+            orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_CLOSE);
+            orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+            orderInfoDao.update(orderInfoEntity);
+        }
     }
 
     /**
@@ -330,6 +337,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
      *
      * @param orderProductDetailEntities 订单所购买的商品
      * @param deliveryEndpointEntity     配送点实体
+     *
      * @return
      */
     private List<ProductStockEntity> checkStock(List<OrderProductDetailEntity> orderProductDetailEntities, DeliveryEndpointEntity deliveryEndpointEntity) {

@@ -15,6 +15,7 @@ import com.yunquanlai.admin.user.entity.UserEmptyBucketFlowEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.utils.validator.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -162,7 +163,15 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
     }
 
     @Override
-    public void distributorTimeOut(OrderDeliveryInfoEntity orderDeliveryInfoEntity) {
+    public void distributorTimeOut(OrderDeliveryInfoEntity temp) {
+        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObject(temp.getId(), true);
+        if (orderDeliveryInfoEntity.getStatus() == OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE) {
+            orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_EXCEPTION);
+            OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderDeliveryInfoEntity.getOrderInfoId(), true);
+            orderInfoEntity.setType(OrderInfoEntity.TYPE_EXCEPTION);
+            orderInfoEntity.setException("订单分配超时异常。");
+            orderInfoDao.update(orderInfoEntity);
+        }
 
     }
 
