@@ -16,6 +16,32 @@ Date: 2018-06-06 11:35:31
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
+-- Table structure for comment_delivery
+-- ----------------------------
+DROP TABLE IF EXISTS `comment_delivery`;
+CREATE TABLE `comment_delivery` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `delivery_distributor_id` bigint(20) NOT NULL COMMENT '配送员id',
+  `comment` varchar(1024) NOT NULL COMMENT '评论内容',
+  `level` int(11) DEFAULT NULL COMMENT '打分，1-5分',
+  `creation_time` datetime DEFAULT NULL COMMENT '评论时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='配送员评价';
+
+-- ----------------------------
+-- Table structure for comment_product
+-- ----------------------------
+DROP TABLE IF EXISTS `comment_product`;
+CREATE TABLE `comment_product` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `product_id` bigint(20) NOT NULL COMMENT '商品名称',
+  `comment` varchar(1024) NOT NULL COMMENT '评论内容',
+  `level` int(11) DEFAULT NULL COMMENT '打分，1-5分',
+  `creation_time` datetime DEFAULT NULL COMMENT '评论时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='配送员评价';
+
+-- ----------------------------
 -- Table structure for delivery_client_token
 -- ----------------------------
 DROP TABLE IF EXISTS `delivery_client_token`;
@@ -34,8 +60,8 @@ CREATE TABLE `delivery_client_token` (
 -- ----------------------------
 DROP TABLE IF EXISTS `delivery_count_info`;
 CREATE TABLE `delivery_count_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
-  `delivery_distributor_id` int(11) NOT NULL COMMENT '配送人 ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `delivery_distributor_id` bigint(20) NOT NULL COMMENT '配送人 ID',
   `order_count` int(11) NOT NULL DEFAULT '0' COMMENT '配送订单总数量',
   `order_value` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '配送订单总价值',
   PRIMARY KEY (`id`)
@@ -46,7 +72,7 @@ CREATE TABLE `delivery_count_info` (
 -- ----------------------------
 DROP TABLE IF EXISTS `delivery_distributor`;
 CREATE TABLE `delivery_distributor` (
-  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL COMMENT '配送员姓名',
   `phone` varchar(32) NOT NULL COMMENT '配送员手机号',
   `password` varchar(64) NOT NULL COMMENT '配送员登录密码',
@@ -57,7 +83,7 @@ CREATE TABLE `delivery_distributor` (
   `identifycation` varchar(32) DEFAULT NULL COMMENT '身份证号（备用）',
   `identifycation_url` varchar(512) DEFAULT NULL COMMENT '身份证照片地址',
   `health_url` varchar(512) DEFAULT NULL COMMENT '健康证地址',
-  `delivery_endpoint_id` bigint(11) NOT NULL COMMENT '所属配送点',
+  `delivery_endpoint_id` bigint(20) NOT NULL COMMENT '所属配送点ID',
   `disable` tinyint(2) DEFAULT '2' COMMENT '0:停用    1：启用    2：新创建（默认）',
   `delivery_endpoint_name` varchar(32) NOT NULL COMMENT '配送点名',
   `device_identification` tinyint(4) DEFAULT NULL COMMENT '设备标识，10：安卓，20：苹果',
@@ -70,7 +96,7 @@ ADD INDEX `phone_unique` (`phone`) USING BTREE ;
 -- ----------------------------
 DROP TABLE IF EXISTS `delivery_distributor_financial_flow`;
 CREATE TABLE `delivery_distributor_financial_flow` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `before_amount` decimal(20,2) NOT NULL COMMENT '流水前金额',
   `before_disable_amount` decimal(20,2) NOT NULL COMMENT '流水前冻结金额',
   `before_enable_amount` decimal(20,2) NOT NULL COMMENT '流水前可用金额',
@@ -79,7 +105,7 @@ CREATE TABLE `delivery_distributor_financial_flow` (
   `after_amount` decimal(20,2) NOT NULL COMMENT '流水后金额',
   `type` tinyint(4) NOT NULL COMMENT '流水类型，10：收益，20：提现申请，30：提现成功',
   `amount` decimal(10,0) NOT NULL COMMENT '流水金额',
-  `delivery_distributor_id` int(11) NOT NULL COMMENT '配送员 ID',
+  `delivery_distributor_id` bigint(20) NOT NULL COMMENT '配送员 ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送员收入信息流水';
 
@@ -88,11 +114,11 @@ CREATE TABLE `delivery_distributor_financial_flow` (
 -- ----------------------------
 DROP TABLE IF EXISTS `delivery_distributor_financial_info`;
 CREATE TABLE `delivery_distributor_financial_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `amount` decimal(20,2) NOT NULL COMMENT '当前金额',
   `disable_amount` decimal(20,2) NOT NULL COMMENT '当前冻结金额',
   `enable_amount` decimal(20,2) NOT NULL COMMENT '当前可用金额',
-  `delivery_distributor_id` int(11) NOT NULL COMMENT '配送员 ID',
+  `delivery_distributor_id` bigint(20) NOT NULL COMMENT '配送员 ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送员收入信息';
 
@@ -101,7 +127,7 @@ CREATE TABLE `delivery_distributor_financial_info` (
 -- ----------------------------
 DROP TABLE IF EXISTS `delivery_endpoint`;
 CREATE TABLE `delivery_endpoint` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `name` varchar(32) NOT NULL COMMENT '配送点名',
   `location_x` decimal(20,10) NOT NULL COMMENT '配送点坐标x',
   `location_y` decimal(20,10) NOT NULL COMMENT '配送点坐标y',
@@ -114,16 +140,16 @@ CREATE TABLE `delivery_endpoint` (
 -- ----------------------------
 DROP TABLE IF EXISTS `delivery_withdraw_apply`;
 CREATE TABLE `delivery_withdraw_apply` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `phone` varchar(32) NOT NULL,
   `amount` decimal(20,2) NOT NULL COMMENT '提现时账户金额',
   `withdraw_amount` decimal(20,2) NOT NULL COMMENT '提现金额',
   `status` tinyint(4) NOT NULL COMMENT '状态，10：已处理，20：未处理',
   `creation_time` datetime NOT NULL COMMENT '创建时间',
-  `auditor_id` int(11) NOT NULL COMMENT '审核人 ID',
+  `auditor_id` bigint(20) NOT NULL COMMENT '审核人 ID',
   `audirot_name` varchar(32) NOT NULL COMMENT '审核人姓名',
-  `delivery_distributor` int(11) NOT NULL COMMENT '配送人主键关联',
+  `delivery_distributor` bigint(20) NOT NULL COMMENT '配送人主键关联',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送员提现申请信息';
 
@@ -143,7 +169,7 @@ CREATE TABLE `order_delivery_info` (
   `remark` varchar(1024) DEFAULT NULL COMMENT '配送单备注',
   `creation_time` datetime NOT NULL COMMENT '配送单创建时间',
   `delivery_time` datetime DEFAULT NULL COMMENT '期望配送时间',
-  `delivery_distributor_id` bigint(11) DEFAULT NULL COMMENT '关联配送员 ID',
+  `delivery_distributor_id` bigint(20) DEFAULT NULL COMMENT '关联配送员 ID',
   `order_info_id` bigint(20) NOT NULL COMMENT '关联订单 ID',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
   PRIMARY KEY (`id`),
@@ -159,14 +185,14 @@ DROP TABLE IF EXISTS `order_info`;
 CREATE TABLE `order_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `amount_total` decimal(20,2) NOT NULL COMMENT '订单总额',
-  `amount` decimal(20,2) NOT NULL COMMENT '订单金额',
+  `amount` decimal(20,2) NOT NULL COMMENT '订单金额（真正付款金额）',
   `amount_benifit` decimal(20,2) DEFAULT NULL COMMENT '订单折扣优惠金额',
   `amount_activity` decimal(20,2) DEFAULT NULL COMMENT '订单活动优惠金额（即除了优惠标价外，使用的活动奖励）',
   `amount_delivery_fee` decimal(10,0) NOT NULL COMMENT '订单配送费',
-  `status` tinyint(4) NOT NULL COMMENT '订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50已关闭',
+  `status` tinyint(4) NOT NULL COMMENT '订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50：已关闭，60：人工处理，70：人工派单',
   `type` tinyint(4) NOT NULL COMMENT '订单状态类型，10：正常，20：异常',
   `pay_type` tinyint(4) NOT NULL COMMENT '订单支付类型，10：现金，20：水票',
-  `delivery_distributor_id` bigint(11) DEFAULT NULL COMMENT '关联配送员 ID',
+  `delivery_distributor_id` bigint(20) DEFAULT NULL COMMENT '关联配送员 ID',
   `delivery_distributor_name` varchar(64) DEFAULT NULL COMMENT '关联配送员名',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
   `username` varchar(128) NOT NULL COMMENT '用户名',
@@ -191,9 +217,9 @@ CREATE TABLE `order_operate_flow` (
   `before_status` int(11) NOT NULL COMMENT '手工操作前状态',
   `after_status` int(11) NOT NULL COMMENT '手工操作后状态',
   `remark` varchar(512) DEFAULT NULL COMMENT '操作备注信息',
-  `opreator_time` datetime NOT NULL COMMENT '操作时间',
-  `opreator_id` bigint(20) NOT NULL COMMENT '操作人 ID',
-  `opreator_name` varchar(32) NOT NULL COMMENT '操作人名',
+  `operator_time` datetime NOT NULL COMMENT '操作时间',
+  `operator_id` bigint(20) NOT NULL COMMENT '操作人 ID',
+  `operator_name` varchar(32) NOT NULL COMMENT '操作人名',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单手工处理流水记录表';
 
@@ -203,7 +229,7 @@ CREATE TABLE `order_operate_flow` (
 DROP TABLE IF EXISTS `order_product_detail`;
 CREATE TABLE `order_product_detail` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
-  `product_info_id` int(11) NOT NULL COMMENT '对应商品 ID',
+  `product_info_id` bigint(20) NOT NULL COMMENT '对应商品 ID',
   `product_name` varchar(128) NOT NULL COMMENT '商品名称',
   `count` int(11) NOT NULL COMMENT '商品数量',
   `order_info_id` bigint(20) NOT NULL,
@@ -257,7 +283,7 @@ CREATE TABLE `product_info` (
   `amount_show` decimal(20,2) DEFAULT NULL COMMENT '售价',
   `amount` decimal(20,2) NOT NULL COMMENT '优惠价',
   `img` varchar(512) NOT NULL COMMENT '商品主图',
-  `brand_id` int(11) NOT NULL COMMENT '商品品牌 ID',
+  `brand_id` bigint(20) NOT NULL COMMENT '商品品牌 ID',
   `brand_name` varchar(64) NOT NULL COMMENT '商品品牌',
   `bucket_type` tinyint(4) NOT NULL COMMENT '规格，10：一次性桶装水，20：循环桶装水，30：瓶装水',
   `delivery_fee` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '配送费',
@@ -266,9 +292,9 @@ CREATE TABLE `product_info` (
   `is_quick` tinyint(4) NOT NULL COMMENT '是否一键送水,是：10，否：20',
   `creation_time` datetime NOT NULL COMMENT '商品创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '商品最后一次更新时间',
-  `creator_id` int(11) NOT NULL COMMENT '商品创建人 ID',
+  `creator_id` bigint(20) NOT NULL COMMENT '商品创建人 ID',
   `creator_name` varchar(32) NOT NULL COMMENT '商品创建人名',
-  `update_id` int(11) DEFAULT NULL COMMENT '商品更新人ID',
+  `update_id` bigint(20) DEFAULT NULL COMMENT '商品更新人ID',
   `update_name` varchar(32) DEFAULT NULL COMMENT '商品更新人名',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='商品信息表表';
@@ -291,10 +317,10 @@ CREATE TABLE `product_ticket` (
 -- ----------------------------
 DROP TABLE IF EXISTS `product_stock`;
 CREATE TABLE `product_stock` (
-  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `product_info_id` bigint(11) NOT NULL COMMENT '关联商品ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `product_info_id` bigint(20) NOT NULL COMMENT '关联商品ID',
   `product_name` varchar(128) DEFAULT NULL COMMENT '商品名',
-  `delivery_endpoint_id` bigint(11) NOT NULL COMMENT '关联配送点 ID',
+  `delivery_endpoint_id` bigint(20) NOT NULL COMMENT '关联配送点 ID',
   `delivery_name` varchar(64) DEFAULT NULL COMMENT '配送点名',
   `count` int(11) NOT NULL COMMENT '库存数',
   PRIMARY KEY (`id`)
@@ -312,8 +338,8 @@ CREATE TABLE `product_stock_flow` (
   `before_count` int(11) NOT NULL COMMENT '改变前值',
   `after_count` int(11) NOT NULL COMMENT '改变后值',
   `creation_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '库存变动时间',
-  `opreator` varchar(64) NOT NULL COMMENT '操作人名称',
-  `opreator_id` bigint(20) NOT NULL,
+  `operator` varchar(64) NOT NULL COMMENT '操作人名称',
+  `operator_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='商品库存流水信息表';
 
@@ -430,14 +456,14 @@ CREATE TABLE `sys_user_role` (
 -- ----------------------------
 DROP TABLE IF EXISTS `user_address`;
 CREATE TABLE `user_address` (
-  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `location_x` decimal(20,2) NOT NULL COMMENT '地址坐标x值',
   `location_y` decimal(20,2) NOT NULL COMMENT '地址坐标y值',
   `address` varchar(256) NOT NULL COMMENT '地址描述',
   `name` varchar(32) NOT NULL COMMENT '收货人姓名',
   `phone` varchar(32) NOT NULL COMMENT '收货人电话',
   `sex` tinyint(4) NOT NULL COMMENT '性别，10：男，20：女',
-  `user_info_id` bigint(11) NOT NULL COMMENT '对应用户ID',
+  `user_info_id` bigint(20) NOT NULL COMMENT '对应用户ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='客户地址信息表';
 
@@ -466,7 +492,7 @@ CREATE TABLE `user_empty_bucket_flow` (
   `after_empty_bucket` varchar(512) NOT NULL COMMENT '流水后空桶数',
   `empty_bucket_number` varchar(512) NOT NULL COMMENT '操作空桶数',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
-  `opreator_id` bigint(20) NOT NULL COMMENT '操作关联 ID（如果为归还关联配送员用户 ID，如果是获取关联订单 ID）',
+  `operator_id` bigint(20) NOT NULL COMMENT '操作关联 ID（如果为归还关联配送员用户 ID，如果是获取关联订单 ID）',
   `creation_time` datetime NOT NULL COMMENT '流水时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户空桶流水信息表';
