@@ -8,6 +8,7 @@ import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.utils.R;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public interface OrderInfoService {
 
     void deleteBatch(Long[] ids);
 
-    R newOrder(OrderVO orderVO, UserInfoEntity user);
+    R newOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException;
 
     /**
      * 标记订单已支付
@@ -85,4 +86,11 @@ public interface OrderInfoService {
      * @param orderInfoEntity
      */
     void payTimeOut(OrderInfoEntity orderInfoEntity);
+
+    /**
+     * 触发分配订单
+     *
+     * @param orderInfoEntity
+     */
+    void distributeOrder(OrderInfoEntity orderInfoEntity);
 }

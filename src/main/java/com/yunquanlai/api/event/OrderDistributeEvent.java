@@ -5,8 +5,8 @@ import org.springframework.context.ApplicationEvent;
 /**
  * 订单支付完成事件
  */
-public class OrderPaidEvent extends ApplicationEvent {
-    public OrderPaidEvent(Object source) {
+public class OrderDistributeEvent extends ApplicationEvent {
+    public OrderDistributeEvent(Object source) {
         super(source);
     }
 }

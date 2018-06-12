@@ -7,7 +7,7 @@ import com.yunquanlai.admin.order.entity.OrderProductDetailEntity;
 import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
 import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.admin.order.service.OrderProductDetailService;
-import com.yunquanlai.api.event.OrderPaidEvent;
+import com.yunquanlai.api.event.OrderDistributeEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ import java.util.List;
  * 监听支付完成事件
  */
 @Component
-public class OrderPaidEventListener implements ApplicationListener<OrderPaidEvent> {
-    Logger logger = LoggerFactory.getLogger(OrderPaidEventListener.class);
+public class OrderDistributeEventListener implements ApplicationListener<OrderDistributeEvent> {
+    Logger logger = LoggerFactory.getLogger(OrderDistributeEventListener.class);
     @Autowired
     OrderInfoService orderInfoService;
 
@@ -39,7 +39,7 @@ public class OrderPaidEventListener implements ApplicationListener<OrderPaidEven
 
     @Async
     @Override
-    public void onApplicationEvent(OrderPaidEvent applicationEvent) {
+    public void onApplicationEvent(OrderDistributeEvent applicationEvent) {
         Long orderId = Long.parseLong(applicationEvent.getSource().toString());
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = null;
         try {
@@ -69,8 +69,6 @@ public class OrderPaidEventListener implements ApplicationListener<OrderPaidEven
             // 按照距离排序
             Collections.sort(deliveryEndpointEntities);
             //TODO 距离超远的不送
-            orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_BEGIN_DELIVERY);
-            orderDeliveryInfoService.update(orderDeliveryInfoEntity);
             for (DeliveryEndpointEntity deliveryEndpointEntity : deliveryEndpointEntities) {
                 try {
                     orderInfoService.findDeliveryDistributor(orderProductDetailEntities, orderDeliveryInfoEntity, deliveryEndpointEntity);

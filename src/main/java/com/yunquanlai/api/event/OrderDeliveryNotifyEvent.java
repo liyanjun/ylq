@@ -4,6 +4,8 @@ import org.springframework.context.ApplicationEvent;
 
 /**
  * 订单派送分配通知事件
+ *
+ * @author liyanjun
  */
 public class OrderDeliveryNotifyEvent extends ApplicationEvent {
     public OrderDeliveryNotifyEvent(Object source) {
