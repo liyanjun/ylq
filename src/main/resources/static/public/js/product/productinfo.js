@@ -89,6 +89,7 @@ var vm = new Vue({
                 vm.productInfo = r.productInfo;
                 editor.txt.html(r.productInfo.content);
                 vm.brandId = vm.productInfo.brandId;
+                $("#upload").css("background-image", "url(" + vm.productInfo.img + ")");
             });
         },
         reload: function (event) {

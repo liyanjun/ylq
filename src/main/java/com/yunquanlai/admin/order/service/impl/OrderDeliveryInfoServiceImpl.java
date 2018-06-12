@@ -1,7 +1,9 @@
 package com.yunquanlai.admin.order.service.impl;
 
 import com.yunquanlai.admin.delivery.dao.DeliveryDistributorDao;
+import com.yunquanlai.admin.delivery.dao.DeliveryDistributorFinancialFlowDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
+import com.yunquanlai.admin.delivery.entity.DeliveryDistributorFinancialFlowEntity;
 import com.yunquanlai.admin.order.dao.OrderInfoDao;
 import com.yunquanlai.admin.order.dao.OrderProductDetailDao;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
@@ -13,8 +15,10 @@ import com.yunquanlai.admin.user.entity.UserEmptyBucketFlowEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.utils.validator.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +49,9 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
 
     @Autowired
     private UserEmptyBucketFlowDao userEmptyBucketFlowDao;
+
+    @Autowired
+    private DeliveryDistributorFinancialFlowDao deliveryDistributorFinancialFlowDao;
 
     @Override
     public OrderDeliveryInfoEntity queryObject(Long id) {
@@ -91,22 +98,37 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
 
         orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObject(orderDeliveryInfoEntity.getId(), true);
         Assert.isNull(orderDeliveryInfoEntity, "找不到配送单信息");
+        Assert.isEqual(orderDeliveryInfoEntity.getStatus(), OrderDeliveryInfoEntity.STATUS_DELIVERY_END, "该订单订单已标记送达");
         Assert.isNotEqual(orderDeliveryInfoEntity.getStatus(), OrderDeliveryInfoEntity.STATUS_ON_DELIVERY, "配送单不是配送中状态，无法标记送达");
-        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_DELIVERY_END);
-        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         deliveryDistributorEntity = deliveryDistributorDao.queryObject(deliveryDistributorEntity.getId(), true);
         Assert.isNull(orderDeliveryInfoEntity, "找不到配送员信息");
-        deliveryDistributorEntity.setOrderCount(deliveryDistributorEntity.getOrderCount() - 1);
-        deliveryDistributorDao.update(deliveryDistributorEntity);
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderDeliveryInfoEntity.getOrderInfoId(), true);
         Assert.isNull(orderDeliveryInfoEntity, "找不到订单信息");
-        orderInfoEntity.setStatus(OrderInfoEntity.STATUS_DELIVERY_END);
-        orderInfoEntity.setDeliveryEndTime(new Date());
-        orderInfoDao.update(orderInfoEntity);
-        int emptyBucketNumber = 0;
         List<OrderProductDetailEntity> orderProductDetailEntities = orderProductDetailDao.queryListByOrderId(orderInfoEntity.getId());
         UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderInfoEntity.getUserInfoId(), true);
         Assert.isNull(orderDeliveryInfoEntity, "找不到订单用户信息");
+
+        // 标记配送单送达
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_DELIVERY_END);
+        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+        // 减掉配送员 当前配送订单数，并分润，记录分润流水
+        deliveryDistributorEntity.setOrderCount(deliveryDistributorEntity.getOrderCount() - 1);
+        BigDecimal deliveryFee = orderInfoEntity.getAmountDeliveryFee();
+        DeliveryDistributorFinancialFlowEntity deliveryDistributorFinancialFlow = new DeliveryDistributorFinancialFlowEntity();
+        deliveryDistributorFinancialFlow.setDeliveryDistributorId(deliveryDistributorEntity.getId());
+        deliveryDistributorFinancialFlow.setType(10);
+        deliveryDistributorFinancialFlow.setBeforeAmount(deliveryDistributorEntity.getAmount());
+        deliveryDistributorFinancialFlow.setAmount(deliveryFee);
+        deliveryDistributorEntity.setAmount(deliveryDistributorEntity.getAmount().add(deliveryFee));
+        deliveryDistributorFinancialFlow.setAfterAmount(deliveryDistributorEntity.getAmount());
+        deliveryDistributorFinancialFlowDao.save(deliveryDistributorFinancialFlow);
+        deliveryDistributorDao.update(deliveryDistributorEntity);
+        // 更新订单状态及配送结束时间
+        orderInfoEntity.setStatus(OrderInfoEntity.STATUS_DELIVERY_END);
+        orderInfoEntity.setDeliveryEndTime(new Date());
+        orderInfoDao.update(orderInfoEntity);
+        // 更新添加用户空桶信息，及空桶流水
+        int emptyBucketNumber = 0;
         for (OrderProductDetailEntity orderProductDetailEntity : orderProductDetailEntities) {
             if (orderProductDetailEntity.getBucketType() == ProductInfoEntity.BUCKET_TYPE_RECYCLE) {
                 emptyBucketNumber += orderProductDetailEntity.getCount();
@@ -138,6 +160,19 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         orderInfoDao.update(orderInfoEntity);
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_EXCEPTION);
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+    }
+
+    @Override
+    public void distributorTimeOut(OrderDeliveryInfoEntity temp) {
+        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObject(temp.getId(), true);
+        if (orderDeliveryInfoEntity.getStatus() == OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE) {
+            orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_EXCEPTION);
+            OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderDeliveryInfoEntity.getOrderInfoId(), true);
+            orderInfoEntity.setType(OrderInfoEntity.TYPE_EXCEPTION);
+            orderInfoEntity.setException("订单分配超时异常。");
+            orderInfoDao.update(orderInfoEntity);
+        }
+
     }
 
 }

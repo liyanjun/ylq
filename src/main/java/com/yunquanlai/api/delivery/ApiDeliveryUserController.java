@@ -1,9 +1,13 @@
 package com.yunquanlai.api.delivery;
 
+import com.yunquanlai.admin.delivery.dao.DeliveryDistributorFinancialFlowDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryClientTokenEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
+import com.yunquanlai.admin.delivery.entity.DeliveryDistributorFinancialFlowEntity;
 import com.yunquanlai.admin.delivery.service.DeliveryClientTokenService;
+import com.yunquanlai.admin.delivery.service.DeliveryDistributorFinancialFlowService;
 import com.yunquanlai.admin.delivery.service.DeliveryDistributorService;
+import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.user.entity.UserClientTokenEntity;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
@@ -19,10 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 注册
@@ -40,6 +41,9 @@ public class ApiDeliveryUserController {
     @Autowired
     private DeliveryClientTokenService deliveryClientTokenService;
 
+    @Autowired
+    private DeliveryDistributorFinancialFlowService deliveryDistributorFinancialFlowService;
+
     /**
      * 12小时后过期
      */
@@ -50,7 +54,7 @@ public class ApiDeliveryUserController {
      */
     @IgnoreAuth
     @PostMapping("login")
-    @ApiOperation(value = "配送员登录,disable字段含义（0:停用    1：启用    2：新创建（默认））")
+    @ApiOperation(value = "配送员登录,disable字段含义（0:停用    1：启用    2：新创建（默认））,status字段含义(10：可配送，20：不可配送)")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", dataType = "string", name = "platform", value = "平台标识(10：安卓，20：苹果)", required = true),
             @ApiImplicitParam(paramType = "header", dataType = "string", name = "version", value = "版本", required = true),
@@ -58,7 +62,7 @@ public class ApiDeliveryUserController {
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "password", value = "密码", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "clientId", value = "推送客户端 ID", required = true)
     })
-    public R login(@RequestHeader String platform, @RequestHeader String version,
+    public R login(@RequestHeader Integer platform, @RequestHeader String version,
                    @RequestParam String mobile, @RequestParam String password, @RequestParam String clientId) {
         Assert.isBlank(mobile, "手机号不能为空");
         Assert.isBlank(password, "密码不能为空");
@@ -75,8 +79,12 @@ public class ApiDeliveryUserController {
             throw new RRException("账号已停用");
         }
         deliveryDistributorEntity.setClientId(clientId);
+        deliveryDistributorEntity.setPlatform(platform);
         deliveryDistributorService.update(deliveryDistributorEntity);
-        return createToken(deliveryDistributorEntity.getId()).put("disable", deliveryDistributorEntity.getDisable());
+        return createToken(deliveryDistributorEntity.getId())
+                .put("disable", deliveryDistributorEntity.getDisable())
+                .put("name", deliveryDistributorEntity.getName())
+                .put("status",deliveryDistributorEntity.getStatus());
     }
 
     /**
@@ -128,6 +136,31 @@ public class ApiDeliveryUserController {
         deliveryDistributorEntity.setStatus(status);
         deliveryDistributorService.update(deliveryDistributorEntity);
         return R.ok();
+    }
+
+    /**
+     * 查询该用户收益明细
+     *
+     * @return
+     */
+    @PostMapping("queryFinancialFlow")
+    @ApiOperation(value = "查询该用户收益明细")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "token", value = "token", required = true),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "platform", value = "平台标识", required = true),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "version", value = "版本", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "offset", value = "位移数", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "limit", value = "查询条数", required = true)
+    })
+    public R queryFinancialFlow(@LoginDelivery @ApiIgnore DeliveryDistributorEntity deliveryDistributorEntity,
+                                  @RequestParam Integer offset,
+                                  @RequestParam Integer limit) {
+        Map<String, Object> filter = new HashMap(16);
+        filter.put("deliveryDistributorId", deliveryDistributorEntity.getId());
+        filter.put("offset", offset);
+        filter.put("limit", limit);
+        List<DeliveryDistributorFinancialFlowEntity> orderDeliveryInfoEntityList = deliveryDistributorFinancialFlowService.queryList(filter);
+        return R.ok().put("orderDeliveryInfoEntityList", orderDeliveryInfoEntityList);
     }
 
     private R createToken(Long distributorId) {

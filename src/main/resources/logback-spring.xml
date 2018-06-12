@@ -4,6 +4,20 @@
     <logger name="org.springframework.web" level="INFO"/>
     <logger name="org.springboot.sample" level="TRACE" />
 
+    <!-- 按时间滚动的策略显示日志 -->
+    <appender name="FILE-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/yunquanlai.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/api-message-service-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d [%t] %-5p [%c:%L] - %m%n</pattern>
+        </encoder>
+    </appender>
+
     <!-- 开发、测试环境 -->
     <springProfile name="dev,test">
         <logger name="org.springframework.web" level="INFO"/>
@@ -17,5 +31,9 @@
         <logger name="org.springboot.sample" level="ERROR" />
         <logger name="com.yunquanlai" level="ERROR" />
     </springProfile>
+
+    <root level="INFO">
+        <appender-ref ref="FILE-APPENDER" />
+    </root>
 
 </configuration>

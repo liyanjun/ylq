@@ -15,18 +15,18 @@ import java.util.Date;
 public class OrderInfoEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public static final Integer STATUS_NEW = 10;
-    public static final Integer STATUS_PAID = 20;
-    public static final Integer STATUS_ON_DELIVERY = 30;
-    public static final Integer STATUS_DELIVERY_END = 40;
-    public static final Integer STATUS_CLOSE = 50;
+    public static final int STATUS_NEW = 10;
+    public static final int STATUS_PAID = 20;
+    public static final int STATUS_ON_DELIVERY = 30;
+    public static final int STATUS_DELIVERY_END = 40;
+    public static final int STATUS_CLOSE = 50;
 
 
-    public static final Integer TYPE_NORMAL = 10;
-    public static final Integer TYPE_EXCEPTION = 20;
+    public static final int TYPE_NORMAL = 10;
+    public static final int TYPE_EXCEPTION = 20;
 
-    public static final Integer PAY_TYPE_CASH = 10;
-    public static final Integer PAY_TYPE_TICKET = 20;
+    public static final int PAY_TYPE_CASH = 10;
+    public static final int PAY_TYPE_TICKET = 20;
 
     /**
      * 设置：主键 ID

@@ -30,21 +30,21 @@ INSERT INTO `product_brand` VALUES ('1', '哇哈哈', '爱的就是你');
 INSERT INTO `product_brand` VALUES ('2', '农夫山泉', '有点甜');
 INSERT INTO `product_brand` VALUES ('3', '云泉来', '云泉来自营');
 
-INSERT INTO `product_detail` VALUES ('1', 'null,null,null,null', '<p>爱的就是你，哇哈哈桶装水</p>', '1');
-INSERT INTO `product_detail` VALUES ('2', 'null,null,null,null', '<p>农夫山泉，有点甜</p>', '2');
+INSERT INTO `product_detail` VALUES ('1', 'null,null,null,null', '<p>爱的就是你，哇哈哈桶装水</p>', '10001');
+INSERT INTO `product_detail` VALUES ('2', 'null,null,null,null', '<p>农夫山泉，有点甜</p>', '10002');
 INSERT INTO `product_detail` VALUES ('3', 'null,null,null,null', '<p>云泉来自营瓶装水</p>', '10000');
 
-INSERT INTO `product_info` VALUES ('1', '哇哈哈桶装水', '28.00', '18.00', 'http://pa23n5htw.bkt.clouddn.com/upload/20180609/81a226a2703941f4a8e0aa8806b84547', '1', '哇哈哈', '10', '2.00', '8', null, '10', '2018-06-09 20:48:11', '2018-06-09 21:46:17', '1', 'admin', '1', 'admin');
-INSERT INTO `product_info` VALUES ('2', '农夫山泉桶装水', '20.00', '10.00', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/34eb2e56c3fb4abebddd51d5d13d22ee', '2', '农夫山泉', '20', '2.00', '0', null, '20', '2018-06-09 20:53:21', null, '1', 'admin', null, null);
+INSERT INTO `product_info` VALUES ('10001', '哇哈哈桶装水', '28.00', '18.00', 'http://pa23n5htw.bkt.clouddn.com/upload/20180609/81a226a2703941f4a8e0aa8806b84547', '1', '哇哈哈', '10', '2.00', '8', null, '10', '2018-06-09 20:48:11', '2018-06-09 21:46:17', '1', 'admin', '1', 'admin');
+INSERT INTO `product_info` VALUES ('10002', '农夫山泉桶装水', '20.00', '10.00', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/34eb2e56c3fb4abebddd51d5d13d22ee', '2', '农夫山泉', '20', '2.00', '0', null, '20', '2018-06-09 20:53:21', null, '1', 'admin', null, null);
 INSERT INTO `product_info` VALUES ('10000', '云泉来自营瓶装水', '6.00', '3.00', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/6c35aa47a0e44c6fb946b0cdef52927a', '3', '云泉来', '30', '1.00', '1', null, '10', '2018-06-09 21:10:49', '2018-06-09 21:43:14', '1', 'admin', '1', 'admin');
 
 
-INSERT INTO `product_stock` VALUES ('1', '2', '农夫山泉桶装水', '1', '广西大学配送站', '0');
-INSERT INTO `product_stock` VALUES ('2', '1', '哇哈哈桶装水', '1', '广西大学配送站', '0');
+INSERT INTO `product_stock` VALUES ('1', '10002', '农夫山泉桶装水', '1', '广西大学配送站', '0');
+INSERT INTO `product_stock` VALUES ('2', '10001', '哇哈哈桶装水', '1', '广西大学配送站', '0');
 INSERT INTO `product_stock` VALUES ('3', '10000', '云泉来自营瓶装水', '1', '广西大学配送站', '0');
 INSERT INTO `product_stock` VALUES ('4', '10000', '云泉来自营瓶装水', '2', '琅东客运站配送点', '3');
-INSERT INTO `product_stock` VALUES ('5', '2', '农夫山泉桶装水', '2', '琅东客运站配送点', '0');
-INSERT INTO `product_stock` VALUES ('6', '1', '哇哈哈桶装水', '2', '琅东客运站配送点', '0');
+INSERT INTO `product_stock` VALUES ('5', '10002', '农夫山泉桶装水', '2', '琅东客运站配送点', '0');
+INSERT INTO `product_stock` VALUES ('6', '10001', '哇哈哈桶装水', '2', '琅东客运站配送点', '0');
 
 INSERT INTO `product_stock_flow` VALUES ('1', '4', '3', '0', '0', '3', '2018-06-09 21:12:08', 'admin', '1');
 
@@ -64,4 +64,5 @@ INSERT INTO `sys_oss` VALUES ('5', 'http://pa23ubi36.bkt.clouddn.com/upload/2018
 INSERT INTO `sys_oss` VALUES ('6', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/6c35aa47a0e44c6fb946b0cdef52927a', '2018-06-09 21:10:21');
 INSERT INTO `sys_oss` VALUES ('7', 'http://pa23ubi36.bkt.clouddn.com/upload/20180609/120f31b821d74673ab29b44d7253fc6f', '2018-06-09 22:08:37');
 
-INSERT INTO `delivery_distributor` VALUES ('11', '章鱼', '15677187487', 'bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a', '2018-06-10', 'c758f22fe07a1d2fcb9c2bf100882647', null, '10', null, null, null, '1', '1', '广西大学配送站', null);
+
+INSERT INTO `delivery_distributor` VALUES ('11', '章鱼', '15677187487', 'bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a', '2018-06-10', 'c758f22fe07a1d2fcb9c2bf100882647', null, '10',10,0.00, null, null, null, '1', '1', '广西大学配送站', null);

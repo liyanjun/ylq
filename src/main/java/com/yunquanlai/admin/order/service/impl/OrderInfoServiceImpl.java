@@ -18,7 +18,7 @@ import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.api.comsumer.vo.ProductOrderVO;
 import com.yunquanlai.api.event.OrderDeliveryNotifyEvent;
-import com.yunquanlai.api.event.OrderPaidEvent;
+import com.yunquanlai.api.event.OrderDistributeEvent;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.validator.Assert;
@@ -29,6 +29,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.yunquanlai.admin.order.dao.OrderInfoDao;
@@ -113,7 +115,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public R newOrder(OrderVO orderVO, UserInfoEntity user) {
+    public R newOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = new OrderDeliveryInfoEntity();
         OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
         List<OrderProductDetailEntity> orderProductDetailEntities = new ArrayList<>(16);
@@ -163,7 +165,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         // 订单
         orderInfoDao.save(orderInfoEntity);
         orderDeliveryInfoEntity.setAddress(orderVO.getAddress());
-        // TODO orderDeliveryInfoEntity.setDeliveryTime(orderVO.getDeliveryTime()); 可能需要一个待配送订单表
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if (orderVO.getDeliveryTime() != null) {
+            orderDeliveryInfoEntity.setDeliveryTime(sdf.parse(orderVO.getDeliveryTime()));
+        }
         orderDeliveryInfoEntity.setLocationX(orderVO.getLocationX());
         orderDeliveryInfoEntity.setLocationY(orderVO.getLocationY());
         orderDeliveryInfoEntity.setOrderInfoId(orderInfoEntity.getId());
@@ -185,7 +190,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailDao.save(orderProductDetailEntity);
         }
         // todo 测试用，下单后直接走支付完成流程
-        orderPay(orderInfoEntity.getId(),orderInfoEntity.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
+        orderPay(orderInfoEntity.getId(), orderInfoEntity.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
         return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities).put("minDeposit", deposit);
     }
 
@@ -221,6 +226,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoEntity.setPaidTime(new Date());
         orderInfoDao.update(orderInfoEntity);
 
+        if (orderInfoEntity.getDistributeTime() != null && orderInfoEntity.getDistributeTime().after(new Date())) {
+            // 还未到期望配送时间，先不处理配送单，等定时任务处理分配
+            return;
+        }
+
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderInfoEntity.getId(), true);
         if (OrderDeliveryInfoEntity.STATUS_NEW != orderDeliveryInfoEntity.getStatus()) {
             logger.error("配送单" + orderDeliveryInfoEntity.getId() + "已支付并处理派送【" + orderDeliveryInfoEntity.getStatus() + "】");
@@ -228,7 +238,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
-        applicationContext.publishEvent(new OrderPaidEvent(orderInfoEntity.getId()));
+
+        applicationContext.publishEvent(new OrderDistributeEvent(orderInfoEntity.getId()));
     }
 
     @Override
@@ -314,11 +325,43 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return R.ok().put("orderProductDetails", orderProductDetailEntities).put("deposit", deposit).put("amount", amount);
     }
 
+    @Override
+    public void markException(OrderInfoEntity orderInfoEntity, OrderDeliveryInfoEntity orderDeliveryInfoEntity) {
+        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+        orderInfoDao.update(orderInfoEntity);
+    }
+
+    @Override
+    public void payTimeOut(OrderInfoEntity temp) {
+        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(temp.getId(), true);
+        if (orderInfoEntity.getStatus() == OrderInfoEntity.STATUS_NEW) {
+            orderInfoEntity.setStatus(OrderInfoEntity.STATUS_CLOSE);
+            OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(temp.getId(), true);
+            orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_CLOSE);
+            orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+            orderInfoDao.update(orderInfoEntity);
+        }
+    }
+
+    @Override
+    public void distributeOrder(OrderInfoEntity orderInfoEntity) {
+        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderInfoEntity.getId(), true);
+        if (OrderDeliveryInfoEntity.STATUS_NEW != orderDeliveryInfoEntity.getStatus()) {
+            logger.error("配送单" + orderDeliveryInfoEntity.getId() + "已处理，状态【" + orderDeliveryInfoEntity.getStatus() + "】");
+            return;
+        }
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
+        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+
+        applicationContext.publishEvent(new OrderDistributeEvent(orderInfoEntity.getId()));
+    }
+
     /**
      * 检查库存，并预生成要扣除的库存数
      *
      * @param orderProductDetailEntities 订单所购买的商品
      * @param deliveryEndpointEntity     配送点实体
+     *
      * @return
      */
     private List<ProductStockEntity> checkStock(List<OrderProductDetailEntity> orderProductDetailEntities, DeliveryEndpointEntity deliveryEndpointEntity) {

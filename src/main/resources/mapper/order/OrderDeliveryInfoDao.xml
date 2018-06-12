@@ -108,6 +108,7 @@
         `order_info_id`,
         `user_info_id`
         from order_delivery_info
+        where status = #{status} AND delivery_distributor_id = #{deliveryDistributorId}
         order by status  ,delivery_time ,creation_time
         <if test="offset != null and limit != null">
             limit #{offset}, #{limit}

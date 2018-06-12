@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 
 /**
@@ -53,6 +54,14 @@ public class DeliveryDistributorEntity implements Serializable {
      * 设置：当前状态，10：可配送，20：不可配送
      */
 	private Integer status;
+	/**
+	 * 设置：登录平台，10：安卓，20：IOS
+	 */
+	private Integer platform;
+	/**
+	 * 配送员获得分润
+	 */
+	private BigDecimal amount;
     /**
      * 当前配送订单数
      */
@@ -174,6 +183,15 @@ public class DeliveryDistributorEntity implements Serializable {
 	public Integer getStatus() {
 		return status;
 	}
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+
 	/**
 	 * 设置：身份证号（备用）
 	 */
@@ -245,4 +263,12 @@ public class DeliveryDistributorEntity implements Serializable {
      * 获取：配送点名
      */
     public String getDeliveryEndpointName() { return deliveryEndpointName; }
+
+	public Integer getPlatform() {
+		return platform;
+	}
+
+	public void setPlatform(Integer platform) {
+		this.platform = platform;
+	}
 }

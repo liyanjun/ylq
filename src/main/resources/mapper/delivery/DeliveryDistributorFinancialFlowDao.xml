@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunquanlai.admin.delivery.dao.DeliveryDistributorFinancialFlowDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.yunquanlai.admin.delivery.entity.DeliveryDistributorFinancialFlowEntity" id="deliveryDistributorFinancialFlowMap">
+        <result property="id" column="id"/>
+        <result property="beforeAmount" column="before_amount"/>
+        <result property="afterAmount" column="after_amount"/>
+        <result property="type" column="type"/>
+        <result property="amount" column="amount"/>
+        <result property="deliveryDistributorId" column="delivery_distributor_id"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorFinancialFlowEntity">
+		select
+					`id`, 
+					`before_amount`, 
+					`after_amount`,
+					`type`, 
+					`amount`, 
+					`delivery_distributor_id`
+				from delivery_distributor_financial_flow where id = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
+	</select>
+
+	<select id="queryList" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorFinancialFlowEntity">
+		select
+		            `id`, 
+		            `before_amount`, 
+		            `after_amount`,
+		            `type`, 
+		            `amount`, 
+		            `delivery_distributor_id`
+				from delivery_distributor_financial_flow
+		<where>
+			<if test="deliveryDistributorId != null">
+				and `delivery_distributor_id` = #{deliveryDistributorId}
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from delivery_distributor_financial_flow 
+	</select>
+	 
+	<insert id="save" parameterType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorFinancialFlowEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into delivery_distributor_financial_flow
+		(
+			`before_amount`, 
+			`after_amount`,
+			`type`, 
+			`amount`, 
+			`delivery_distributor_id`
+		)
+		values
+		(
+			#{beforeAmount}, 
+			#{afterAmount},
+			#{type}, 
+			#{amount}, 
+			#{deliveryDistributorId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorFinancialFlowEntity">
+		update delivery_distributor_financial_flow 
+		<set>
+			<if test="beforeAmount != null">`before_amount` = #{beforeAmount}, </if>
+			<if test="afterAmount != null">`after_amount` = #{afterAmount}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="amount != null">`amount` = #{amount}, </if>
+			<if test="deliveryDistributorId != null">`delivery_distributor_id` = #{deliveryDistributorId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from delivery_distributor_financial_flow where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from delivery_distributor_financial_flow where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

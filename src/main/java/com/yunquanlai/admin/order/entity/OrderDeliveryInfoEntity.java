@@ -17,9 +17,10 @@ public class OrderDeliveryInfoEntity implements Serializable {
 
     public static final int STATUS_NEW = 10;
     public static final int STATUS_UN_DISTRIBUTE = 20;
-    public static final int STATUS_ON_DELIVERY = 30;
-    public static final int STATUS_DELIVERY_END = 40;
-    public static final int STATUS_EXCEPTION = 50;
+    public static final int STATUS_CLOSE = 30;
+    public static final int STATUS_ON_DELIVERY = 40;
+    public static final int STATUS_DELIVERY_END = 50;
+    public static final int STATUS_EXCEPTION = 60;
 
     /**
      * 设置：主键 ID
@@ -50,7 +51,7 @@ public class OrderDeliveryInfoEntity implements Serializable {
      */
     private BigDecimal locationY;
     /**
-     * 设置：配送单状态，10：未支付，20：未分配，30：分配中，40：配送中，50：配送结束
+     * 设置：配送单状态，10：新创建，20：未分配，30：已关闭，40：配送中，50：配送结束,60:异常
      */
     private Integer status;
     /**
@@ -177,14 +178,14 @@ public class OrderDeliveryInfoEntity implements Serializable {
     }
 
     /**
-     * 设置：配送单状态，10：未分配，20：配送中，30：已配送
+     * 设置：配送单状态，10：新创建，20：未分配，30：已关闭，40：配送中，50：配送结束,60:异常
      */
     public void setStatus(Integer status) {
         this.status = status;
     }
 
     /**
-     * 获取：配送单状态，10：未分配，20：配送中，30：已配送
+     * 获取：配送单状态，10：新创建，20：未分配，30：已关闭，40：配送中，50：配送结束,60:异常
      */
     public Integer getStatus() {
         return status;
