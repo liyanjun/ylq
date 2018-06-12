@@ -125,7 +125,7 @@ CREATE TABLE `order_delivery_info` (
   `phone` varchar(32) NOT NULL COMMENT '用户手机号',
   `location_x` decimal(20,10) NOT NULL COMMENT '订单配送坐标x',
   `location_y` decimal(20,10) NOT NULL COMMENT '订单配送坐标y',
-  `status` tinyint(4) NOT NULL COMMENT '配送单状态，10：新创建，20：未分配，30：配送中，40：配送结束,50:异常',
+  `status` tinyint(4) NOT NULL COMMENT '配送单状态，10：新创建，20：未分配，30：分配中，40：配送中，50：配送结束,60:异常',
   `remark` varchar(1024) DEFAULT NULL COMMENT '配送单备注',
   `creation_time` datetime NOT NULL COMMENT '配送单创建时间',
   `delivery_time` datetime DEFAULT NULL COMMENT '期望配送时间',

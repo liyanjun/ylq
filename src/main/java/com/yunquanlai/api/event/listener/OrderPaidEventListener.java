@@ -69,8 +69,7 @@ public class OrderPaidEventListener implements ApplicationListener<OrderPaidEven
             // 按照距离排序
             Collections.sort(deliveryEndpointEntities);
             //TODO 距离超远的不送
-            //TODO 先更新为分配中，当一分钟分配不完时，用定时任务做补偿
-            orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
+            orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_BEGIN_DELIVERY);
             orderDeliveryInfoService.update(orderDeliveryInfoEntity);
             for (DeliveryEndpointEntity deliveryEndpointEntity : deliveryEndpointEntities) {
                 try {

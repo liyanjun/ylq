@@ -320,6 +320,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoDao.update(orderInfoEntity);
     }
 
+    @Override
+    public void payTimeOut(OrderInfoEntity orderInfoEntity) {
+
+    }
+
     /**
      * 检查库存，并预生成要扣除的库存数
      *

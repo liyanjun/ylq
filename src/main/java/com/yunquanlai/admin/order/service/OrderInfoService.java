@@ -66,9 +66,23 @@ public interface OrderInfoService {
      *
      * @param orderVO
      * @param user
+     *
      * @return
      */
     R confirm(OrderVO orderVO, UserInfoEntity user);
 
+    /**
+     * 标记异常
+     *
+     * @param orderInfoEntity
+     * @param orderDeliveryInfoEntity
+     */
     void markException(OrderInfoEntity orderInfoEntity, OrderDeliveryInfoEntity orderDeliveryInfoEntity);
+
+    /**
+     * 支付超时
+     *
+     * @param orderInfoEntity
+     */
+    void payTimeOut(OrderInfoEntity orderInfoEntity);
 }

@@ -60,7 +60,7 @@ public class ApiDeliveryController {
      * @return
      */
     @PostMapping("queryOrderDeliveries")
-    @ApiOperation(value = "查询该用户的配送单,（按照配送中，期望配送时间，下单时间排序）\n 配送单状态，10：未支付，20：未分配，30：分配中，40：配送中，50：配送结束")
+    @ApiOperation(value = "查询该用户的配送单,（按照配送中，期望配送时间，下单时间排序）\n 配送单状态，40：配送中，50：配送结束")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", dataType = "string", name = "token", value = "token", required = true),
             @ApiImplicitParam(paramType = "header", dataType = "string", name = "platform", value = "平台标识", required = true),

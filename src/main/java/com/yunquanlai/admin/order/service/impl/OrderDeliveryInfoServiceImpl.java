@@ -161,4 +161,9 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
     }
 
+    @Override
+    public void distributorTimeOut(OrderDeliveryInfoEntity orderDeliveryInfoEntity) {
+
+    }
+
 }

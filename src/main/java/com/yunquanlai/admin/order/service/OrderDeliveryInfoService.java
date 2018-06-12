@@ -42,4 +42,11 @@ public interface OrderDeliveryInfoService {
      * @param exception
      */
     void markerException(OrderDeliveryInfoEntity orderDeliveryInfoEntity, String exception);
+
+    /**
+     * 配送单分配超时
+     *
+     * @param orderDeliveryInfoEntity
+     */
+    void distributorTimeOut(OrderDeliveryInfoEntity orderDeliveryInfoEntity);
 }
