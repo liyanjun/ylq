@@ -80,6 +80,8 @@ CREATE TABLE `delivery_distributor` (
   `client_id` varchar(64) DEFAULT NULL COMMENT '用于点对点登录时的推送，由APP在登录的时候一起上传',
   `order_count` int(11) DEFAULT '0' COMMENT '当前在配送订单数',
   `status` tinyint(4) NOT NULL DEFAULT '20' COMMENT '当前状态，10：可配送，20：不可配送',
+  `platform` tinyint(4) DEFAULT '0' COMMENT '平台标识，10：安卓，20：苹果',
+  `amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '配送员分润',
   `identifycation` varchar(32) DEFAULT NULL COMMENT '身份证号（备用）',
   `identifycation_url` varchar(512) DEFAULT NULL COMMENT '身份证照片地址',
   `health_url` varchar(512) DEFAULT NULL COMMENT '健康证地址',
@@ -98,29 +100,12 @@ DROP TABLE IF EXISTS `delivery_distributor_financial_flow`;
 CREATE TABLE `delivery_distributor_financial_flow` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `before_amount` decimal(20,2) NOT NULL COMMENT '流水前金额',
-  `before_disable_amount` decimal(20,2) NOT NULL COMMENT '流水前冻结金额',
-  `before_enable_amount` decimal(20,2) NOT NULL COMMENT '流水前可用金额',
-  `after_enable_amount` decimal(20,2) NOT NULL COMMENT '流水后可用金额',
-  `after_disable_amount` decimal(20,2) NOT NULL COMMENT '流水后冻结金额',
   `after_amount` decimal(20,2) NOT NULL COMMENT '流水后金额',
   `type` tinyint(4) NOT NULL COMMENT '流水类型，10：收益，20：提现申请，30：提现成功',
   `amount` decimal(10,0) NOT NULL COMMENT '流水金额',
   `delivery_distributor_id` bigint(20) NOT NULL COMMENT '配送员 ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送员收入信息流水';
-
--- ----------------------------
--- Table structure for delivery_distributor_financial_info
--- ----------------------------
-DROP TABLE IF EXISTS `delivery_distributor_financial_info`;
-CREATE TABLE `delivery_distributor_financial_info` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `amount` decimal(20,2) NOT NULL COMMENT '当前金额',
-  `disable_amount` decimal(20,2) NOT NULL COMMENT '当前冻结金额',
-  `enable_amount` decimal(20,2) NOT NULL COMMENT '当前可用金额',
-  `delivery_distributor_id` bigint(20) NOT NULL COMMENT '配送员 ID',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送员收入信息';
 
 -- ----------------------------
 -- Table structure for delivery_endpoint
@@ -163,8 +148,8 @@ CREATE TABLE `order_delivery_info` (
   `address` varchar(256) NOT NULL COMMENT '订单地址信息（拼凑的用于在订单列表显示的）',
   `sex` int(11) NOT NULL COMMENT '收货人性别',
   `phone` varchar(32) NOT NULL COMMENT '用户手机号',
-  `location_x` decimal(20,2) NOT NULL COMMENT '订单配送坐标x',
-  `location_y` decimal(20,2) NOT NULL COMMENT '订单配送坐标y',
+  `location_x` decimal(20,10) NOT NULL COMMENT '订单配送坐标x',
+  `location_y` decimal(20,10) NOT NULL COMMENT '订单配送坐标y',
   `status` tinyint(4) NOT NULL COMMENT '配送单状态，10：未支付，20：未分配，30：分配中，40：配送中，50：配送结束',
   `remark` varchar(1024) DEFAULT NULL COMMENT '配送单备注',
   `creation_time` datetime NOT NULL COMMENT '配送单创建时间',
@@ -457,8 +442,8 @@ CREATE TABLE `sys_user_role` (
 DROP TABLE IF EXISTS `user_address`;
 CREATE TABLE `user_address` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
-  `location_x` decimal(20,2) NOT NULL COMMENT '地址坐标x值',
-  `location_y` decimal(20,2) NOT NULL COMMENT '地址坐标y值',
+  `location_x` decimal(20,10) NOT NULL COMMENT '地址坐标x值',
+  `location_y` decimal(20,10) NOT NULL COMMENT '地址坐标y值',
   `address` varchar(256) NOT NULL COMMENT '地址描述',
   `name` varchar(32) NOT NULL COMMENT '收货人姓名',
   `phone` varchar(32) NOT NULL COMMENT '收货人电话',
