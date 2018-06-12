@@ -237,9 +237,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             return;
         }
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
+        orderDeliveryInfoEntity.setDistributeTime(new Date());
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
 
-        applicationContext.publishEvent(new OrderDistributeEvent(orderInfoEntity.getId()));
+//        applicationContext.publishEvent(new OrderDistributeEvent(orderInfoEntity.getId()));
     }
 
     @Override
@@ -273,6 +274,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoEntity.setId(orderDeliveryInfoEntity.getOrderInfoId());
         orderInfoEntity.setDistributeTime(new Date());
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_ON_DELIVERY);
+        // 只要分配出去了，异常也是可以被宽恕的，毕竟要向前看
+        orderInfoEntity.setException("");
+        orderInfoEntity.setType(OrderInfoEntity.TYPE_NORMAL);
         orderInfoDao.update(orderInfoEntity);
 
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
@@ -351,6 +355,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             return;
         }
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
+        orderDeliveryInfoEntity.setDistributeTime(new Date());
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
 
         applicationContext.publishEvent(new OrderDistributeEvent(orderInfoEntity.getId()));

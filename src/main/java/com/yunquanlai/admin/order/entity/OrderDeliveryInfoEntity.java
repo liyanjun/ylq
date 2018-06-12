@@ -62,6 +62,11 @@ public class OrderDeliveryInfoEntity implements Serializable {
      * 设置：配送单创建时间
      */
     private Date creationTime;
+
+    /**
+     * 配送单开始分配时间
+     */
+    private Date distributeTime;
     /**
      * 设置：期望配送时间
      */
@@ -217,6 +222,14 @@ public class OrderDeliveryInfoEntity implements Serializable {
      */
     public Date getCreationTime() {
         return creationTime;
+    }
+
+    public Date getDistributeTime() {
+        return distributeTime;
+    }
+
+    public void setDistributeTime(Date distributeTime) {
+        this.distributeTime = distributeTime;
     }
 
     /**

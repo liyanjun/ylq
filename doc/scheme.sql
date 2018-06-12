@@ -153,6 +153,7 @@ CREATE TABLE `order_delivery_info` (
   `status` tinyint(4) NOT NULL COMMENT '配送单状态，10：未支付，20：未分配，30：分配中，40：配送中，50：配送结束',
   `remark` varchar(1024) DEFAULT NULL COMMENT '配送单备注',
   `creation_time` datetime NOT NULL COMMENT '配送单创建时间',
+  `distribute_time` datetime NOT NULL COMMENT '配送单开始分配时间',
   `delivery_time` datetime DEFAULT NULL COMMENT '期望配送时间',
   `delivery_distributor_id` bigint(20) DEFAULT NULL COMMENT '关联配送员 ID',
   `order_info_id` bigint(20) NOT NULL COMMENT '关联订单 ID',

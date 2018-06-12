@@ -171,6 +171,7 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
             orderInfoEntity.setType(OrderInfoEntity.TYPE_EXCEPTION);
             orderInfoEntity.setException("订单分配超时异常。");
             orderInfoDao.update(orderInfoEntity);
+            orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         }
 
     }

@@ -3,7 +3,7 @@
 
 <mapper namespace="com.yunquanlai.admin.system.dao.ScheduleJobDao">
 	<select id="queryObject" resultType="com.yunquanlai.admin.system.entity.ScheduleJobEntity" >
-		select * from schedule_job where id = #{id}
+		select * from schedule_job where job_id = #{id}
 		<if test="isLock != null and isLock == true">for update</if>
 	</select> 
 
