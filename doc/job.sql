@@ -190,3 +190,8 @@ CREATE INDEX IDX_QRTZ_FT_J_G ON QRTZ_FIRED_TRIGGERS(SCHED_NAME,JOB_NAME,JOB_GROU
 CREATE INDEX IDX_QRTZ_FT_JG ON QRTZ_FIRED_TRIGGERS(SCHED_NAME,JOB_GROUP);
 CREATE INDEX IDX_QRTZ_FT_T_G ON QRTZ_FIRED_TRIGGERS(SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP);
 CREATE INDEX IDX_QRTZ_FT_TG ON QRTZ_FIRED_TRIGGERS(SCHED_NAME,TRIGGER_GROUP);
+
+-- job
+INSERT INTO `schedule_job` VALUES ('3', 'orderCloseJob', 'closeOrder', null, '0 0/1 * * * ? *', '0', null, '2018-06-12 20:58:45');
+INSERT INTO `schedule_job` VALUES ('5', 'orderDeliveryExceptionJob', 'orderDeliveryException', null, '0 0/1 * * * ? *', '0', null, '2018-06-12 21:33:51');
+INSERT INTO `schedule_job` VALUES ('8', 'orderDeliveryWatchJob', 'distributeOrder', null, '0 0/1 * * * ? *', '0', null, '2018-06-13 22:44:51');

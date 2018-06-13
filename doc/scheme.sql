@@ -150,18 +150,20 @@ CREATE TABLE `order_delivery_info` (
   `phone` varchar(32) NOT NULL COMMENT '用户手机号',
   `location_x` decimal(20,10) NOT NULL COMMENT '订单配送坐标x',
   `location_y` decimal(20,10) NOT NULL COMMENT '订单配送坐标y',
+  `amount_delivery_fee` decimal(20,10) NOT NULL COMMENT '该派送单派送费',
   `status` tinyint(4) NOT NULL COMMENT '配送单状态，10：未支付，20：未分配，30：分配中，40：配送中，50：配送结束',
   `remark` varchar(1024) DEFAULT NULL COMMENT '配送单备注',
+  `detail` text DEFAULT NULL COMMENT '配送单需要配送的商品，json格式',
   `creation_time` datetime NOT NULL COMMENT '配送单创建时间',
-  `distribute_time` datetime NOT NULL COMMENT '配送单开始分配时间',
-  `delivery_time` datetime DEFAULT NULL COMMENT '期望配送时间',
+  `distribute_time` datetime COMMENT '配送单开始分配时间',
+  `delivery_time` datetime COMMENT '期望配送时间',
   `delivery_distributor_id` bigint(20) DEFAULT NULL COMMENT '关联配送员 ID',
   `order_info_id` bigint(20) NOT NULL COMMENT '关联订单 ID',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
   PRIMARY KEY (`id`),
   KEY `status_index` (`status`) USING BTREE,
-  KEY `order_id_index` (`order_info_id`),
-  KEY `distributor_id_index` (`delivery_distributor_id`)
+  KEY `order_id_index` (`order_info_id`) USING BTREE ,
+  KEY `distributor_id_index` (`delivery_distributor_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='订单配送信息表';
 
 -- ----------------------------
@@ -189,7 +191,10 @@ CREATE TABLE `order_info` (
   `distribute_time` datetime COMMENT '订单分配时间',
   `delivery_end_time` datetime COMMENT '订单配送结束时间',
   `close_time` datetime COMMENT '订单关闭时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `status_index` (`status`) USING BTREE,
+  KEY `user_id_index` (`user_info_id`) USING BTREE ,
+  KEY `type_index` (`type`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='订单信息表';
 ALTER TABLE `order_info`
 AUTO_INCREMENT=10000;
@@ -218,8 +223,9 @@ CREATE TABLE `order_product_detail` (
   `product_info_id` bigint(20) NOT NULL COMMENT '对应商品 ID',
   `product_name` varchar(128) NOT NULL COMMENT '商品名称',
   `count` int(11) NOT NULL COMMENT '商品数量',
-  `order_info_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`)
+  `order_info_id` bigint(20) NOT NULL COMMENT '对应订单主键 ID',
+  PRIMARY KEY (`id`),
+  KEY `product_info_id_index` (`product_info_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='订单商品信息表';
 
 -- ----------------------------

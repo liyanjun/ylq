@@ -4,11 +4,13 @@ import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
 import com.yunquanlai.admin.order.service.OrderInfoService;
+import com.yunquanlai.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,7 @@ public class OrderDeliveryWatchJob {
 
     public void distributeOrder() {
         Map<String, Object> filter = new HashMap<>(16);
-        filter.put("deliveryTime", OrderInfoEntity.STATUS_PAID);
+        filter.put("deliveryTime", DateUtils.localDateTimeToDate(LocalDateTime.now()));
         List<OrderDeliveryInfoEntity> orderDeliveryInfoEntities = orderDeliveryInfoService.queryList(filter);
         for (OrderDeliveryInfoEntity orderDeliveryInfoEntity : orderDeliveryInfoEntities) {
             try {

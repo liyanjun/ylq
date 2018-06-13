@@ -73,8 +73,10 @@
         `phone`,
         `location_x`,
         `location_y`,
+        `amount_delivery_fee`,
         `status`,
         `remark`,
+        `detail`,
         `creation_time`,
         `distribute_time`,
         `delivery_time`,
@@ -86,9 +88,14 @@
             <if test="status != null">
                 and status = #{status}
             </if>
-            <if test="distributeTime != null and beginTime !=''">
+            <if test="distributeTime != null and distributeTime !=''">
                 <![CDATA[
                 and distribute_time <= #{distributeTime}
+                ]]>
+            </if>
+            <if test="deliveryTime != null and deliveryTime !=''">
+                <![CDATA[
+                AND delivery_time != null AND delivery_time <= #{deliveryTime}
                 ]]>
             </if>
         </where>
@@ -114,8 +121,10 @@
         `phone`,
         `location_x`,
         `location_y`,
+        `amount_delivery_fee`,
         `status`,
         `remark`,
+        `detail`,
         `creation_time`,
         `distribute_time`,
         `delivery_time`,
@@ -144,9 +153,11 @@
 			`phone`, 
 			`location_x`, 
 			`location_y`, 
-			`status`, 
+			`amount_delivery_fee`,
+			`status`,
 			`remark`, 
-			`creation_time`, 
+			`detail`,
+			`creation_time`,
 			`distribute_time`,
 			`delivery_time`,
 			`delivery_distributor_id`, 
@@ -161,9 +172,11 @@
 			#{phone}, 
 			#{locationX}, 
 			#{locationY}, 
-			#{status}, 
+			#{amountDeliveryFee},
+			#{status},
 			#{remark}, 
-			#{creationTime}, 
+			#{detail},
+			#{creationTime},
 			#{distributeTime},
 			#{deliveryTime},
 			#{deliveryDistributorId}, 
@@ -181,8 +194,10 @@
             <if test="phone != null">`phone` = #{phone},</if>
             <if test="locationX != null">`location_x` = #{locationX},</if>
             <if test="locationY != null">`location_y` = #{locationY},</if>
+            <if test="amountDeliveryFee != null">`amount_delivery_fee` = #{amountDeliveryFee},</if>
             <if test="status != null">`status` = #{status},</if>
             <if test="remark != null">`remark` = #{remark},</if>
+            <if test="detail != null">`detail` = #{detail},</if>
             <if test="creationTime != null">`creation_time` = #{creationTime},</if>
             <if test="deliveryTime != null">`delivery_time` = #{deliveryTime},</if>
             <if test="distributeTime != null">`distribute_time` = #{distributeTime},</if>

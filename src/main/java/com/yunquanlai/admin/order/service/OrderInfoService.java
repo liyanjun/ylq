@@ -1,5 +1,6 @@
 package com.yunquanlai.admin.order.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
@@ -35,7 +36,7 @@ public interface OrderInfoService {
 
     void deleteBatch(Long[] ids);
 
-    R newOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException;
+    R newOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException, JsonProcessingException;
 
     /**
      * 标记订单已支付
