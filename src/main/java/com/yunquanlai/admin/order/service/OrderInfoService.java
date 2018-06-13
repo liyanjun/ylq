@@ -87,10 +87,4 @@ public interface OrderInfoService {
      */
     void payTimeOut(OrderInfoEntity orderInfoEntity);
 
-    /**
-     * 触发分配订单
-     *
-     * @param orderInfoEntity
-     */
-    void distributeOrder(OrderInfoEntity orderInfoEntity);
 }

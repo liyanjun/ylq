@@ -44,7 +44,9 @@ import javax.annotation.Resource;
 @Service("orderInfoService")
 @Transactional(rollbackFor = Exception.class)
 public class OrderInfoServiceImpl implements OrderInfoService {
+
     Logger logger = LoggerFactory.getLogger(OrderInfoServiceImpl.class);
+
     @Autowired
     private OrderInfoDao orderInfoDao;
 
@@ -343,18 +345,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
     }
 
-    @Override
-    public void distributeOrder(OrderInfoEntity orderInfoEntity) {
-        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderInfoEntity.getId(), true);
-        if (OrderDeliveryInfoEntity.STATUS_NEW != orderDeliveryInfoEntity.getStatus()) {
-            logger.error("配送单" + orderDeliveryInfoEntity.getId() + "已处理，状态【" + orderDeliveryInfoEntity.getStatus() + "】");
-            return;
-        }
-        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
-        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
-
-        applicationContext.publishEvent(new OrderDistributeEvent(orderInfoEntity.getId()));
-    }
 
     /**
      * 检查库存，并预生成要扣除的库存数

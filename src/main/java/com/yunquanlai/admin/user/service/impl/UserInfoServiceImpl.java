@@ -74,7 +74,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		UserInfoEntity userInfoEntity = userInfoDao.queryObject(userInfoId,true);
 		Assert.isNull(userInfoEntity,"找不到配送单的用户信息。");
 		if(userInfoEntity.getEmptyBucketNumber().intValue() < number.intValue()){
-			throw new RRException("用户持有空桶数大于回送空桶数。");
+			throw new RRException("用户持有空桶数小于回送空桶数。");
 		}
 		userInfoEntity.setEmptyBucketNumber(userInfoEntity.getEmptyBucketNumber() - number);
 		userInfoDao.update(userInfoEntity);
