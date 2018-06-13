@@ -339,7 +339,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
             orderProductDetailEntities.add(orderProductDetailEntity);
         }
-        return R.ok().put("orderProductDetails", orderProductDetailEntities).put("deposit", deposit).put("amount", amount);
+        // TODO 防重复提交，及EHCache的引入
+        return R.ok().put("orderProductDetails", orderProductDetailEntities).
+                put("deposit", deposit).put("amount", amount).put("orderToken",UUID.randomUUID().toString());
     }
 
     @Override
