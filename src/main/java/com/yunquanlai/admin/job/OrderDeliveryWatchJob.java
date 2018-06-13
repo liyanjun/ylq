@@ -1,6 +1,8 @@
 package com.yunquanlai.admin.job;
 
+import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
+import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
 import com.yunquanlai.admin.order.service.OrderInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,18 +24,20 @@ public class OrderDeliveryWatchJob {
     private static final Logger logger = LoggerFactory.getLogger(OrderDeliveryWatchJob.class);
 
     @Autowired
+    OrderDeliveryInfoService orderDeliveryInfoService;
+
+    @Autowired
     OrderInfoService orderInfoService;
 
     public void distributeOrder() {
         Map<String, Object> filter = new HashMap<>(16);
-        // TODO 条件设置
-        filter.put("status", OrderInfoEntity.STATUS_PAID);
-        List<OrderInfoEntity> orderInfoEntityList = orderInfoService.queryList(filter);
-        for (OrderInfoEntity orderInfoEntity : orderInfoEntityList) {
+        filter.put("deliveryTime", OrderInfoEntity.STATUS_PAID);
+        List<OrderDeliveryInfoEntity> orderDeliveryInfoEntities = orderDeliveryInfoService.queryList(filter);
+        for (OrderDeliveryInfoEntity orderDeliveryInfoEntity : orderDeliveryInfoEntities) {
             try {
-                orderInfoService.distributeOrder(orderInfoEntity);
+                orderDeliveryInfoService.distributeOrder(orderDeliveryInfoEntity.getId());
             } catch (Exception e) {
-                logger.error("定时任务关闭订单失败，订单ID【" + orderInfoEntity.getId() + "】", e);
+                logger.error("定时任务配送订单失败，配送订单ID【" + orderDeliveryInfoEntity.getId() + "】", e);
             }
         }
     }
