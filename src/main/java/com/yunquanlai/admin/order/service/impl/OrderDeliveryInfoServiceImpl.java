@@ -196,6 +196,7 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
             return;
         }
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
+        orderDeliveryInfoEntity.setDistributeTime(new Date());
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
 
         applicationContext.publishEvent(new OrderDistributeEvent(orderDeliveryId));
