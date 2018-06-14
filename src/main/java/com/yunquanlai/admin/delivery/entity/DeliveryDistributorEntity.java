@@ -87,7 +87,7 @@ public class DeliveryDistributorEntity implements Serializable {
 	/**
 	 * 设置：停用状态
 	 */
-	private byte disable;
+	private Integer disable;
     /**
      * 设置：所属配送点名
      */
@@ -243,12 +243,12 @@ public class DeliveryDistributorEntity implements Serializable {
 	/**
 	 * 设置：停用状态
 	 */
-	public void setDisable(byte disable) { this.disable = disable; }
+	public void setDisable(Integer disable) { this.disable = disable; }
 
 	/**
 	 * 获取：停用状态
 	 */
-	public byte getDisable() {
+	public Integer getDisable() {
 		return disable;
 	}
 

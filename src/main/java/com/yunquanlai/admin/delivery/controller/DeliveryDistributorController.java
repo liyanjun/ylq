@@ -77,7 +77,7 @@ public class DeliveryDistributorController extends AbstractController {
 			//status状态默认为20
 			deliveryDistributor.setStatus(20);
 			//新创建停用状态，默认值为2
-			deliveryDistributor.setDisable((byte) 2);
+			deliveryDistributor.setDisable( 2);
 			String pwd = deliveryDistributor.getPassword();
 			//初始密码：123456
 			if(StringUtils.isEmpty(pwd)){
