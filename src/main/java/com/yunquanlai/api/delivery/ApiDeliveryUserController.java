@@ -111,7 +111,7 @@ public class ApiDeliveryUserController {
             throw new RRException("两次输入密码不一致");
         }
         deliveryDistributorEntity.setPassword(DigestUtils.sha256Hex(password));
-        deliveryDistributorEntity.setDisable((byte) 1);
+        deliveryDistributorEntity.setDisable(1);
         deliveryDistributorService.update(deliveryDistributorEntity);
         return R.ok();
     }
