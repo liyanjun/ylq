@@ -88,7 +88,6 @@ CREATE TABLE `delivery_distributor` (
   `delivery_endpoint_id` bigint(20) NOT NULL COMMENT '所属配送点ID',
   `disable` tinyint(2) DEFAULT '2' COMMENT '0:停用    1：启用    2：新创建（默认）',
   `delivery_endpoint_name` varchar(32) NOT NULL COMMENT '配送点名',
-  `device_identification` tinyint(4) DEFAULT NULL COMMENT '设备标识，10：安卓，20：苹果',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='配送员信息';
 ALTER TABLE `delivery_distributor`
@@ -106,6 +105,19 @@ CREATE TABLE `delivery_distributor_financial_flow` (
   `delivery_distributor_id` bigint(20) NOT NULL COMMENT '配送员 ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送员收入信息流水';
+
+-- ----------------------------
+-- Table structure for delivery_distributor_financial_info
+-- ----------------------------
+DROP TABLE IF EXISTS `delivery_distributor_financial_info`;
+CREATE TABLE `delivery_distributor_financial_info` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `amount` decimal(20,2) NOT NULL COMMENT '当前金额',
+  `disable_amount` decimal(20,2) NOT NULL COMMENT '当前冻结金额',
+  `enable_amount` decimal(20,2) NOT NULL COMMENT '当前可用金额',
+  `delivery_distributor_id` bigint(20) NOT NULL COMMENT '配送员 ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送员收入信息';
 
 -- ----------------------------
 -- Table structure for delivery_endpoint
