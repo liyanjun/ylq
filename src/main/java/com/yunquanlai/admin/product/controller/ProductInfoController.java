@@ -1,7 +1,6 @@
 package com.yunquanlai.admin.product.controller;
 
 import com.yunquanlai.admin.comment.dao.CommentProductDao;
-import com.yunquanlai.admin.comment.entity.CommentProductEntity;
 import com.yunquanlai.admin.common.AbstractController;
 import com.yunquanlai.admin.product.entity.ProductDetailEntity;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
@@ -121,21 +120,4 @@ public class ProductInfoController extends AbstractController {
 		
 		return R.ok();
 	}
-
-	// TODO: 2018/6/11 通过商品查看评论
-	/*@RequestMapping("/comment")
-	@RequiresPermissions("productinfo:comment")
-	public R commentProductList(@RequestParam Map<String, Object> params){
-	    String name = params.get("name").toString();
-		//查询列表数据
-        Query query = new Query(params);
-
-		List<CommentProductEntity> commentProductEntityList = commentProductDao.queryCommentProductList((Long) query.get("id"));
-
-        int total = productInfoService.queryTotal(query);
-
-        PageUtils pageUtil = new PageUtils(commentProductEntityList, total, query.getLimit(), query.getPage());
-
-        return R.ok().put("page", pageUtil);
-	}*/
 }

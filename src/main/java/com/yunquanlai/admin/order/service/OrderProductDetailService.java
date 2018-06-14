@@ -13,9 +13,9 @@ import java.util.Map;
  * @date 2018-06-04 22:42:21
  */
 public interface OrderProductDetailService {
-	
+
 	OrderProductDetailEntity queryObject(Long id);
-	
+
 	List<OrderProductDetailEntity> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);

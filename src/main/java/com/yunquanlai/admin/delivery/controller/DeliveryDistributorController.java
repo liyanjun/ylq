@@ -118,5 +118,15 @@ public class DeliveryDistributorController extends AbstractController {
 		return R.ok();
 	}
 
-	// TODO: 2018/6/11 通过配送员查看评论
+	/**
+	 * 根据配送点id获取配送员
+	 * @return
+	 */
+	@RequestMapping("/select")
+	@RequiresPermissions("deliverydistributor:list")
+	public R listByDeliveryEndpointId(Long deliveryEndpointId){
+
+		List<DeliveryDistributorEntity> deliveryDistributorEntities = deliveryDistributorService.queryListByDeliveryEndpointId(deliveryEndpointId);
+		return R.ok().put("deliveryDistributorEntities", deliveryDistributorEntities);
+	}
 }

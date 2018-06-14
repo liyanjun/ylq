@@ -55,7 +55,29 @@ public class OrderProductDetailController extends AbstractController {
 		
 		return R.ok().put("orderProductDetail", orderProductDetail);
 	}
-	
+
+	/*@RequestMapping("/listByOrderId/{orderId}")
+	@RequiresPermissions("orderproductdetail:info")
+	public R listByOrderId(@PathVariable("orderId") Long orderId){
+		List<OrderProductDetailEntity> orderProductDetailEntityList = orderProductDetailService.queryListByOrderId(orderId);
+
+		return R.ok().put("orderProductList", orderProductDetailEntityList);
+	}*/
+
+    @RequestMapping("/listByOrderId")
+    @RequiresPermissions("orderproductdetail:list")
+    public R listByOrderId(@RequestParam Map<String, Object> params){
+        //查询列表数据
+        Query query = new Query(params);
+        Long id = Long.valueOf(params.get("id").toString());
+        List<OrderProductDetailEntity> orderProductDetailList = orderProductDetailService.queryListByOrderId(id);
+        int total = orderProductDetailService.queryTotal(query);
+
+        PageUtils pageUtil = new PageUtils(orderProductDetailList, total, query.getLimit(), query.getPage());
+
+        return R.ok().put("page", pageUtil);
+    }
+
 	/**
 	 * 保存
 	 */

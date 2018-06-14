@@ -22,7 +22,7 @@ public class OrderProductDetailServiceImpl implements OrderProductDetailService 
 	public OrderProductDetailEntity queryObject(Long id){
 		return orderProductDetailDao.queryObject(id,false);
 	}
-	
+
 	@Override
 	public List<OrderProductDetailEntity> queryList(Map<String, Object> map){
 		return orderProductDetailDao.queryList(map);

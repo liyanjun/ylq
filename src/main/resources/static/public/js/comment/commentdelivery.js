@@ -16,7 +16,7 @@ $(function () {
                 name: 'deliveryDistributorName',
                 index: 'delivery_distributor_name',
                 width: 80,
-                hidden: vm.productId==undefined?true:false,
+                hidden: vm.deliveryDistributorId==undefined?true:false,
                 formatter: function (cellValue) {
                     return vm.deliveryDistributorName;
                 }

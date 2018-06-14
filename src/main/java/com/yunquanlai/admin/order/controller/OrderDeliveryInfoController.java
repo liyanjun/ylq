@@ -26,7 +26,7 @@ import java.util.Map;
 public class OrderDeliveryInfoController extends AbstractController {
 	@Autowired
 	private OrderDeliveryInfoService orderDeliveryInfoService;
-	
+
 	/**
 	 * 列表
 	 */
@@ -55,7 +55,14 @@ public class OrderDeliveryInfoController extends AbstractController {
 		
 		return R.ok().put("orderDeliveryInfo", orderDeliveryInfo);
 	}
-	
+
+	@RequestMapping("/infoByOrderId/{orderId}")
+	@RequiresPermissions("orderdeliveryinfo:info")
+	public R infoByOrderId(@PathVariable("orderId") Long orderId){
+		OrderDeliveryInfoEntity orderDeliveryInfo = orderDeliveryInfoService.queryObjectByOrderId(orderId);
+
+		return R.ok().put("orderDeliveryInfo", orderDeliveryInfo);
+	}
 	/**
 	 * 保存
 	 */

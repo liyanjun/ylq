@@ -168,7 +168,6 @@ var vm = new Vue({
 		getDeliveryEndpointList:function () {
             $.get("../deliveryendpoint/select", function(r){
                 vm.deliveryEndpointList = r.deliveryEndpointEntities;
-                //alert(r.deliveryEndpointEntities[0].id)
             });
         }
 	}
