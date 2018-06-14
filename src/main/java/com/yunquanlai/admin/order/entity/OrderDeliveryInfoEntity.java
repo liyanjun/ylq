@@ -51,6 +51,10 @@ public class OrderDeliveryInfoEntity implements Serializable {
      */
     private BigDecimal locationY;
     /**
+     * 本配送单配送费
+     */
+    private BigDecimal amountDeliveryFee;
+    /**
      * 设置：配送单状态，10：新创建，20：未分配，30：已关闭，40：配送中，50：配送结束,60:异常
      */
     private Integer status;
@@ -59,9 +63,18 @@ public class OrderDeliveryInfoEntity implements Serializable {
      */
     private String remark;
     /**
+     * 配送商品明细
+     */
+    private String detail;
+    /**
      * 设置：配送单创建时间
      */
     private Date creationTime;
+
+    /**
+     * 配送单开始分配时间
+     */
+    private Date distributeTime;
     /**
      * 设置：期望配送时间
      */
@@ -219,6 +232,14 @@ public class OrderDeliveryInfoEntity implements Serializable {
         return creationTime;
     }
 
+    public Date getDistributeTime() {
+        return distributeTime;
+    }
+
+    public void setDistributeTime(Date distributeTime) {
+        this.distributeTime = distributeTime;
+    }
+
     /**
      * 设置：期望配送时间
      */
@@ -273,5 +294,21 @@ public class OrderDeliveryInfoEntity implements Serializable {
      */
     public Long getUserInfoId() {
         return userInfoId;
+    }
+
+    public BigDecimal getAmountDeliveryFee() {
+        return amountDeliveryFee;
+    }
+
+    public void setAmountDeliveryFee(BigDecimal amountDeliveryFee) {
+        this.amountDeliveryFee = amountDeliveryFee;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

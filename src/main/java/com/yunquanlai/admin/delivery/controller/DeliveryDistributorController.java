@@ -15,6 +15,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +85,7 @@ public class DeliveryDistributorController extends AbstractController {
 			}
             //对密码进行加密
             deliveryDistributor.setPassword(DigestUtils.sha256Hex(pwd));
+			deliveryDistributor.setAmount(BigDecimal.ZERO);
 			deliveryDistributorService.save(deliveryDistributor);
 			return R.ok();
 		} else {

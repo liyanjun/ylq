@@ -83,6 +83,11 @@
             <if test="status != null">
                 and status = #{status}
             </if>
+            <if test="creationTime != null">
+                <![CDATA[
+                and creation_time <= #{creationTime}
+                ]]>
+            </if>
         </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">

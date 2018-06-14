@@ -1,5 +1,6 @@
 package com.yunquanlai.admin.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yunquanlai.utils.validator.group.AddGroup;
 import com.yunquanlai.utils.validator.group.UpdateGroup;
 import org.hibernate.validator.constraints.NotBlank;

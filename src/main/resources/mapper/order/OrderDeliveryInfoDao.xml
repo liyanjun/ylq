@@ -15,6 +15,7 @@
         <result property="status" column="status"/>
         <result property="remark" column="remark"/>
         <result property="creationTime" column="creation_time"/>
+        <result property="distributeTime" column="distribute_time"/>
         <result property="deliveryTime" column="delivery_time"/>
         <result property="deliveryDistributorId" column="delivery_distributor_id"/>
         <result property="orderInfoId" column="order_info_id"/>
@@ -33,6 +34,7 @@
         `status`,
         `remark`,
         `creation_time`,
+        `distribute_time`,
         `delivery_time`,
         `delivery_distributor_id`,
         `order_info_id`,
@@ -53,6 +55,7 @@
         `status`,
         `remark`,
         `creation_time`,
+        `distribute_time`,
         `delivery_time`,
         `delivery_distributor_id`,
         `order_info_id`,
@@ -70,14 +73,32 @@
         `phone`,
         `location_x`,
         `location_y`,
+        `amount_delivery_fee`,
         `status`,
         `remark`,
+        `detail`,
         `creation_time`,
+        `distribute_time`,
         `delivery_time`,
         `delivery_distributor_id`,
         `order_info_id`,
         `user_info_id`
         from order_delivery_info
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="distributeTime != null and distributeTime !=''">
+                <![CDATA[
+                and distribute_time <= #{distributeTime}
+                ]]>
+            </if>
+            <if test="deliveryTime != null and deliveryTime !=''">
+                <![CDATA[
+                AND delivery_time != null AND delivery_time <= #{deliveryTime}
+                ]]>
+            </if>
+        </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -100,9 +121,12 @@
         `phone`,
         `location_x`,
         `location_y`,
+        `amount_delivery_fee`,
         `status`,
         `remark`,
+        `detail`,
         `creation_time`,
+        `distribute_time`,
         `delivery_time`,
         `delivery_distributor_id`,
         `order_info_id`,
@@ -129,10 +153,13 @@
 			`phone`, 
 			`location_x`, 
 			`location_y`, 
-			`status`, 
+			`amount_delivery_fee`,
+			`status`,
 			`remark`, 
-			`creation_time`, 
-			`delivery_time`, 
+			`detail`,
+			`creation_time`,
+			`distribute_time`,
+			`delivery_time`,
 			`delivery_distributor_id`, 
 			`order_info_id`, 
 			`user_info_id`
@@ -145,10 +172,13 @@
 			#{phone}, 
 			#{locationX}, 
 			#{locationY}, 
-			#{status}, 
+			#{amountDeliveryFee},
+			#{status},
 			#{remark}, 
-			#{creationTime}, 
-			#{deliveryTime}, 
+			#{detail},
+			#{creationTime},
+			#{distributeTime},
+			#{deliveryTime},
 			#{deliveryDistributorId}, 
 			#{orderInfoId}, 
 			#{userInfoId}
@@ -164,10 +194,13 @@
             <if test="phone != null">`phone` = #{phone},</if>
             <if test="locationX != null">`location_x` = #{locationX},</if>
             <if test="locationY != null">`location_y` = #{locationY},</if>
+            <if test="amountDeliveryFee != null">`amount_delivery_fee` = #{amountDeliveryFee},</if>
             <if test="status != null">`status` = #{status},</if>
             <if test="remark != null">`remark` = #{remark},</if>
+            <if test="detail != null">`detail` = #{detail},</if>
             <if test="creationTime != null">`creation_time` = #{creationTime},</if>
             <if test="deliveryTime != null">`delivery_time` = #{deliveryTime},</if>
+            <if test="distributeTime != null">`distribute_time` = #{distributeTime},</if>
             <if test="deliveryDistributorId != null">`delivery_distributor_id` = #{deliveryDistributorId},</if>
             <if test="orderInfoId != null">`order_info_id` = #{orderInfoId},</if>
             <if test="userInfoId != null">`user_info_id` = #{userInfoId}</if>

@@ -4,34 +4,40 @@ import com.yunquanlai.admin.delivery.dao.DeliveryDistributorDao;
 import com.yunquanlai.admin.delivery.dao.DeliveryDistributorFinancialFlowDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorFinancialFlowEntity;
+import com.yunquanlai.admin.order.dao.OrderDeliveryInfoDao;
 import com.yunquanlai.admin.order.dao.OrderInfoDao;
 import com.yunquanlai.admin.order.dao.OrderProductDetailDao;
+import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderProductDetailEntity;
+import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.user.dao.UserEmptyBucketFlowDao;
 import com.yunquanlai.admin.user.dao.UserInfoDao;
 import com.yunquanlai.admin.user.entity.UserEmptyBucketFlowEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
+import com.yunquanlai.api.event.OrderDistributeEvent;
 import com.yunquanlai.utils.validator.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.yunquanlai.admin.order.dao.OrderDeliveryInfoDao;
-import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
-import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
-import org.springframework.transaction.annotation.Transactional;
-
 
 @Service("orderDeliveryInfoService")
 @Transactional(rollbackFor = Exception.class)
 public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
+
+    Logger logger = LoggerFactory.getLogger(OrderDeliveryInfoServiceImpl.class);
+
     @Autowired
     private OrderDeliveryInfoDao orderDeliveryInfoDao;
 
@@ -52,6 +58,12 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
 
     @Autowired
     private DeliveryDistributorFinancialFlowDao deliveryDistributorFinancialFlowDao;
+
+    /**
+     * 上下文对象
+     */
+    @Resource
+    private ApplicationContext applicationContext;
 
     @Override
     public OrderDeliveryInfoEntity queryObject(Long id) {
@@ -171,8 +183,22 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
             orderInfoEntity.setType(OrderInfoEntity.TYPE_EXCEPTION);
             orderInfoEntity.setException("订单分配超时异常。");
             orderInfoDao.update(orderInfoEntity);
+            orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         }
 
     }
 
+    @Override
+    public void distributeOrder(Long orderDeliveryId) {
+        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderDeliveryId, true);
+        if (OrderDeliveryInfoEntity.STATUS_NEW != orderDeliveryInfoEntity.getStatus()) {
+            logger.error("配送单" + orderDeliveryInfoEntity.getId() + "已处理，状态【" + orderDeliveryInfoEntity.getStatus() + "】");
+            return;
+        }
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
+        orderDeliveryInfoEntity.setDistributeTime(new Date());
+        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+
+        applicationContext.publishEvent(new OrderDistributeEvent(orderDeliveryId));
+    }
 }

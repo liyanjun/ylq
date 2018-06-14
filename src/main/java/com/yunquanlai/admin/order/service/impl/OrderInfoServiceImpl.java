@@ -1,5 +1,8 @@
 package com.yunquanlai.admin.order.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.yunquanlai.admin.delivery.dao.DeliveryDistributorDao;
 import com.yunquanlai.admin.delivery.dao.DeliveryEndpointDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
@@ -44,7 +47,9 @@ import javax.annotation.Resource;
 @Service("orderInfoService")
 @Transactional(rollbackFor = Exception.class)
 public class OrderInfoServiceImpl implements OrderInfoService {
+
     Logger logger = LoggerFactory.getLogger(OrderInfoServiceImpl.class);
+
     @Autowired
     private OrderInfoDao orderInfoDao;
 
@@ -77,6 +82,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
      */
     @Resource
     private ApplicationContext applicationContext;
+
+    ObjectMapper mapper = new ObjectMapper();
 
 
     @Override
@@ -115,7 +122,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public R newOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException {
+    public R newOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException, JsonProcessingException {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = new OrderDeliveryInfoEntity();
         OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
         List<OrderProductDetailEntity> orderProductDetailEntities = new ArrayList<>(16);
@@ -169,6 +176,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (orderVO.getDeliveryTime() != null) {
             orderDeliveryInfoEntity.setDeliveryTime(sdf.parse(orderVO.getDeliveryTime()));
         }
+        orderDeliveryInfoEntity.setAmountDeliveryFee(amountDeliveryFee);
+        orderDeliveryInfoEntity.setDetail(mapper.writeValueAsString(orderProductDetailEntities));
         orderDeliveryInfoEntity.setLocationX(orderVO.getLocationX());
         orderDeliveryInfoEntity.setLocationY(orderVO.getLocationY());
         orderDeliveryInfoEntity.setOrderInfoId(orderInfoEntity.getId());
@@ -189,7 +198,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             // 订单商品明细
             orderProductDetailDao.save(orderProductDetailEntity);
         }
-        // todo 测试用，下单后直接走支付完成流程
+        // todo 测试用，下单后直接走支付完成流程，休眠一秒中，免得配送单都没插入就支付了
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         orderPay(orderInfoEntity.getId(), orderInfoEntity.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
         return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities).put("minDeposit", deposit);
     }
@@ -226,17 +240,17 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoEntity.setPaidTime(new Date());
         orderInfoDao.update(orderInfoEntity);
 
-        if (orderInfoEntity.getDistributeTime() != null && orderInfoEntity.getDistributeTime().after(new Date())) {
+        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderInfoEntity.getId(), true);
+        if (orderDeliveryInfoEntity.getDeliveryTime() != null && orderDeliveryInfoEntity.getDeliveryTime().after(new Date())) {
             // 还未到期望配送时间，先不处理配送单，等定时任务处理分配
             return;
         }
-
-        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderInfoEntity.getId(), true);
         if (OrderDeliveryInfoEntity.STATUS_NEW != orderDeliveryInfoEntity.getStatus()) {
             logger.error("配送单" + orderDeliveryInfoEntity.getId() + "已支付并处理派送【" + orderDeliveryInfoEntity.getStatus() + "】");
             return;
         }
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
+        orderDeliveryInfoEntity.setDistributeTime(new Date());
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
 
         applicationContext.publishEvent(new OrderDistributeEvent(orderInfoEntity.getId()));
@@ -273,12 +287,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoEntity.setId(orderDeliveryInfoEntity.getOrderInfoId());
         orderInfoEntity.setDistributeTime(new Date());
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_ON_DELIVERY);
+        // 只要分配出去了，异常也是可以被宽恕的，毕竟要向前看
+        orderInfoEntity.setException("");
+        orderInfoEntity.setType(OrderInfoEntity.TYPE_NORMAL);
         orderInfoDao.update(orderInfoEntity);
 
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
         orderDeliveryInfoEntity.setDeliveryDistributorId(deliveryDistributorEntity.getId());
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
-        applicationContext.publishEvent(new OrderDeliveryNotifyEvent(deliveryDistributorEntity.getClientId()));
+        applicationContext.publishEvent(new OrderDeliveryNotifyEvent(orderDeliveryInfoEntity.getId()));
         return true;
     }
 
@@ -322,7 +339,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
             orderProductDetailEntities.add(orderProductDetailEntity);
         }
-        return R.ok().put("orderProductDetails", orderProductDetailEntities).put("deposit", deposit).put("amount", amount);
+        // TODO 防重复提交，及EHCache的引入
+        return R.ok().put("orderProductDetails", orderProductDetailEntities).
+                put("deposit", deposit).put("amount", amount).put("orderToken",UUID.randomUUID().toString());
     }
 
     @Override
@@ -343,18 +362,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
     }
 
-    @Override
-    public void distributeOrder(OrderInfoEntity orderInfoEntity) {
-        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderInfoEntity.getId(), true);
-        if (OrderDeliveryInfoEntity.STATUS_NEW != orderDeliveryInfoEntity.getStatus()) {
-            logger.error("配送单" + orderDeliveryInfoEntity.getId() + "已处理，状态【" + orderDeliveryInfoEntity.getStatus() + "】");
-            return;
-        }
-        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
-        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
-
-        applicationContext.publishEvent(new OrderDistributeEvent(orderInfoEntity.getId()));
-    }
 
     /**
      * 检查库存，并预生成要扣除的库存数

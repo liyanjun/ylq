@@ -1,6 +1,7 @@
 package com.yunquanlai.utils;
 
 import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.Date;
 
 /**
@@ -17,7 +18,7 @@ public class DateUtils {
 	public final static String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 	
 	public static String format(Date date) {
-        return format(date, DATE_PATTERN);
+        return format(date, DATE_TIME_PATTERN);
     }
 
     public static String format(Date date, String pattern) {
@@ -26,5 +27,12 @@ public class DateUtils {
             return df.format(date);
         }
         return null;
+    }
+
+    public static String localDateTimeToDate(LocalDateTime localDateTime) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        Instant instant = localDateTime.atZone(zoneId).toInstant();
+
+        return format(Date.from(instant));
     }
 }

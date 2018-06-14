@@ -49,4 +49,11 @@ public interface OrderDeliveryInfoService {
      * @param orderDeliveryInfoEntity
      */
     void distributorTimeOut(OrderDeliveryInfoEntity orderDeliveryInfoEntity);
+
+    /**
+     * 配送单配送
+     *
+     * @param id
+     */
+    void distributeOrder(Long id);
 }

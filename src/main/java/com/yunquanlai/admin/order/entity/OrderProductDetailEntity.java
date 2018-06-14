@@ -1,5 +1,7 @@
 package com.yunquanlai.admin.order.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -11,6 +13,7 @@ import java.math.BigDecimal;
  * @email 
  * @date 2018-06-04 22:42:21
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderProductDetailEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

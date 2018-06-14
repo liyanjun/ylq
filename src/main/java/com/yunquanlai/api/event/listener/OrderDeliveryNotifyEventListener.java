@@ -65,7 +65,7 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         message.setPushNetWorkType(0);
         Target target = new Target();
         target.setAppId(appId);
-        target.setClientId(applicationEvent.getSource().toString());
+        target.setClientId(deliveryDistributorEntity.getClientId());
         //target.setAlias(Alias);
         IPushResult ret;
         try {
