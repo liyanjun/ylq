@@ -2,7 +2,7 @@ spring:
     datasource:
         url: jdbc:mysql://localhost:3306/yunquanlai?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=false
         username: root
-        password: 123
+        password:
         #连接池的配置信息
         initialSize: 10
         minIdle: 10

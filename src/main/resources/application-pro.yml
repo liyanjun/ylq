@@ -20,3 +20,9 @@ spring:
       ehcache:
         config: ehcache
       type: ehcache
+server:
+  port: 443
+  ssl:
+    key-store: /app/cert/your-name.jks
+    key-store-password: 214769235080420
+    key-password: 214769235080420

@@ -9,8 +9,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class RenrenApplicationTests {
 
 //	/**
@@ -18,7 +18,7 @@ public class RenrenApplicationTests {
 //	 */
 //	@Resource
 //	private ApplicationContext applicationContext;
-	@Test
+//	@Test
 	public void contextLoads() {
 //		applicationContext.publishEvent(new OrderDeliveryNotifyEvent("9ef699f5451d755c8fe3690c0b8050ed"));
 //		applicationContext.publishEvent(new OrderDeliveryNotifyEvent("c758f22fe07a1d2fcb9c2bf100882647"));
