@@ -17,9 +17,9 @@ import java.util.Map;
 public interface ProductInfoService {
 	
 	ProductInfoVO queryProductInfoVO(Long id);
-	
+
 	List<ProductInfoEntity> queryList(Map<String, Object> map);
-	
+
 	int queryTotal(Map<String, Object> map);
 	
 	void save(ProductInfoVO productInfoVO);
