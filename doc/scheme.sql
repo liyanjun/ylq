@@ -176,7 +176,7 @@ CREATE TABLE `order_delivery_info` (
   KEY `status_index` (`status`) USING BTREE,
   KEY `order_id_index` (`order_info_id`) USING BTREE ,
   KEY `distributor_id_index` (`delivery_distributor_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='订单配送信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='订单配送信息表';
 
 -- ----------------------------
 -- Table structure for order_info
@@ -235,6 +235,7 @@ CREATE TABLE `order_product_detail` (
   `product_info_id` bigint(20) NOT NULL COMMENT '对应商品 ID',
   `product_name` varchar(128) NOT NULL COMMENT '商品名称',
   `count` int(11) NOT NULL COMMENT '商品数量',
+  `bucket_type` tinyint(4) NOT NULL COMMENT '商品规格',
   `order_info_id` bigint(20) NOT NULL COMMENT '对应订单主键 ID',
   PRIMARY KEY (`id`),
   KEY `product_info_id_index` (`product_info_id`) USING BTREE
@@ -511,10 +512,10 @@ CREATE TABLE `user_info` (
   `phone` varchar(32) DEFAULT NULL COMMENT '用户绑定手机号',
   `uid` varchar(64) NOT NULL COMMENT '用户微信 ID',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户状态：0：启用，1：禁用',
-  `deposit_amount` decimal(20,2) DEFAULT '0.00' COMMENT '总押金金额',
-  `enable_deposit_amount` decimal(20,2) DEFAULT '0.00' COMMENT '可用押金金额',
-  `disable_deposit_amount` decimal(20,2) DEFAULT '0.00' COMMENT '不可用押金金额',
-  `empty_bucket_number` int(11) DEFAULT '0' COMMENT '持有空桶数',
+  `deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '总押金金额',
+  `enable_deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '可用押金金额',
+  `disable_deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '不可用押金金额',
+  `empty_bucket_number` int(11) NOT NULL DEFAULT '0' COMMENT '持有空桶数',
   `creation_time` datetime NOT NULL COMMENT '用户注册时间',
   `recommenderID` bigint(20) DEFAULT NULL COMMENT '推荐人ID',
   `recommenderName` varchar(64) DEFAULT NULL COMMENT '推荐人姓名',

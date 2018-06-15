@@ -53,7 +53,7 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         if (deliveryDistributorEntity.getPlatform() == 10) {
             template = getNotificationTemplate();
         } else {
-            template = getTransmissionTemplate();
+            template = getTransmissionTemplate(orderDeliveryInfoEntity.getId()+"");
         }
 
         SingleMessage message = new SingleMessage();
@@ -129,12 +129,12 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
      *
      * @return
      */
-    public static TransmissionTemplate getTransmissionTemplate() {
+    public static TransmissionTemplate getTransmissionTemplate(String orderDeliveryId) {
         TransmissionTemplate template = new TransmissionTemplate();
         template.setAppId(appId);
         template.setAppkey(appKey);
         template.setTransmissionType(2);
-        template.setTransmissionContent("您有新的配送任务");
+        template.setTransmissionContent(orderDeliveryId);
         APNPayload apnPayload = new APNPayload();
         apnPayload.setAutoBadge("+1");
         apnPayload.setContentAvailable(1);

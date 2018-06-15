@@ -103,7 +103,7 @@
 		)
 	</insert>
 
-<!--	<update id="update" parameterType="com.yunquanlai.admin.user.entity.UserInfoEntity">
+	<update id="update" parameterType="com.yunquanlai.admin.user.entity.UserInfoEntity">
 		update user_info
 		<set>
 			<if test="username != null">`username` = #{username}, </if>
@@ -119,15 +119,15 @@
 		where id = #{id}
 	</update>
 
-	<delete id="delete">
-		delete from user_info where id = #{value}
-	</delete>
+	<!--	<delete id="delete">
+            delete from user_info where id = #{value}
+        </delete>
 
-	<delete id="deleteBatch">
-		delete from user_info where id in
-		<foreach item="id" collection="array" open="(" separator="," close=")">
-			#{id}
-		</foreach>
-	</delete>-->
+        <delete id="deleteBatch">
+            delete from user_info where id in
+            <foreach item="id" collection="array" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </delete>-->
 
 </mapper>

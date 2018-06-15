@@ -16,3 +16,7 @@ spring:
         testOnReturn: false
         poolPreparedStatements: true
         maxPoolPreparedStatementPerConnectionSize: 20
+    cache:
+      ehcache:
+        config: ehcache
+      type: ehcache

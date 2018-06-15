@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,6 +68,10 @@ public class ApiUserController {
             userInfoEntity.setStatus(0);
             userInfoEntity.setCreationTime(new Date());
             userInfoEntity.setUid(uid);
+            userInfoEntity.setEmptyBucketNumber(0);
+            userInfoEntity.setEnableDepositAmount(BigDecimal.ZERO);
+            userInfoEntity.setDisableDepositAmount(BigDecimal.ZERO);
+            userInfoEntity.setDepositAmount(BigDecimal.ZERO);
             userInfoEntity.setUsername(username);
             userInfoService.save(userInfoEntity);
         }
