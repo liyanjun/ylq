@@ -6,6 +6,7 @@ import com.yunquanlai.admin.delivery.service.DeliveryEndpointService;
 import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.validator.Assert;
 import com.yunquanlai.utils.validator.ValidatorUtils;
 import com.yunquanlai.utils.validator.group.AddGroup;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -87,7 +88,8 @@ public class DeliveryEndpointController {
 	public R save(@RequestBody DeliveryEndpointEntity deliveryEndpoint){
 		//校验配送点信息
 		ValidatorUtils.validateEntity(deliveryEndpoint, AddGroup.class);
-
+		Assert.isNull(deliveryEndpoint.getLocationX(),"请在地图中点选，配送点地址。");
+        Assert.isNull(deliveryEndpoint.getLocationY(),"请在地图中点选，配送点地址。");
 		deliveryEndpointService.save(deliveryEndpoint);
 
 		return R.ok();

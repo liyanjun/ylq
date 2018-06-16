@@ -3,9 +3,12 @@ $(function () {
         url: '../sys/oss/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', width: 20, key: true },
-            { label: 'URL地址', name: 'url', width: 160 },
-			{ label: '创建时间', name: 'createDate', width: 40 }
+			{ label: 'id', name: 'id', width: 15, key: true },
+            { label: 'URL地址', name: 'url', width: 230 },
+            { label: '预览', name: 'url', width: 90, formatter: function(value, options, row){
+                    return '<div id="upload" style="background-image:url('+value+');background-size:100% 100%;width: 200px;height: 200px"></div>' ;
+                } },
+			{ label: '创建时间', name: 'createDate', width: 60 }
         ],
 		viewrecords: true,
         height: 385,

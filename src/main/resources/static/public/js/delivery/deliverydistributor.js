@@ -1,4 +1,24 @@
 $(function () {
+    Date.prototype.format = function (format) {
+        var args = {
+            "M+": this.getMonth() + 1,
+            "d+": this.getDate(),
+            "h+": this.getHours(),
+            "m+": this.getMinutes(),
+            "s+": this.getSeconds(),
+            "q+": Math.floor((this.getMonth() + 3) / 3),  //quarter
+            "S": this.getMilliseconds()
+        };
+        if (/(y+)/.test(format))
+            format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var i in args) {
+            var n = args[i];
+            if (new RegExp("(" + i + ")").test(format))
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+        }
+        return format;
+    };
+
     $("#jqGrid").jqGrid({
         url: '../deliverydistributor/list',
         datatype: "json",
@@ -85,7 +105,6 @@ var vm = new Vue({
 			}
 			vm.showList = false;
             vm.title = "修改";
-            
             vm.getInfo(id);
             //获取配送点信息
             this.getDeliveryEndpointList();
@@ -110,6 +129,7 @@ var vm = new Vue({
 			    success: function(r){
 			    	if(r.code === 0){
 						alert('操作成功', function(index){
+                            vm.deliveryEndpointId = '';
 							vm.reload();
 						});
 					}else{
@@ -133,7 +153,7 @@ var vm = new Vue({
 				    success: function(r){
 						if(r.code == 0){
 							alert('操作成功', function(index){
-								$("#jqGrid").trigger("reloadGrid");
+								window.location.reload();
 							});
 						}else{
 							alert(r.msg);
