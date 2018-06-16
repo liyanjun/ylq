@@ -169,11 +169,17 @@ public class DeliveryEndpointController {
     @RequestMapping("/test")
     @RequiresPermissions("deliveryendpoint:info")
 	public R test() throws JSONException {
-	    //String dis = getDistance(39.983171,116.308479,39.949226,116.394309);
-        BigDecimal x = new BigDecimal(22.7812900000);
-        BigDecimal y = new BigDecimal(108.2733100000);
-        boolean b = availableDelivery(x,y);
-	    return R.ok().put("b",b);
+	    double dis1 = getDistance(39.983171,116.308479,39.949226,116.394309);
+	    double Dis1 = GetDistance(39.983171,116.308479,39.949226,116.394309);
+
+        double dis2 = getDistance(39.983171,116.308479,39.996059,116.353454);
+        double Dis2 = GetDistance(39.983171,116.308479,39.996059,116.353454);
+
+        /*BigDecimal x = new BigDecimal(22.7812900000);
+        BigDecimal y = new BigDecimal(108.2733100000);*/
+
+        //boolean b = availableDelivery(x,y);
+	    return R.ok();
     }
 
     /**
@@ -237,10 +243,20 @@ public class DeliveryEndpointController {
     //Google Maps计算两点间经纬度距离，暂时不用该方法
     // 取WGS84标准参考椭球中的地球长半径(单位:km),计算结果单位为km，即公里
     public static final double EARTH_RADIUS = 6378.137;
+	//转化为弧度
     private static double rad(double d)
     {
         return d * Math.PI / 180.0;
     }
+
+    /**
+     * 计算两点间距离
+     * @param lat1 第一点的纬度
+     * @param lng1 第一点的经度
+     * @param lat2 第二点的纬度
+     * @param lng2 第二点的经度
+     * @return
+     */
     public static double GetDistance(double lat1, double lng1, double lat2, double lng2)
     {
         double radLat1 = rad(lat1);

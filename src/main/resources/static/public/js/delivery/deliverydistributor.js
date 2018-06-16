@@ -172,3 +172,15 @@ var vm = new Vue({
         }
 	}
 });
+
+function checkDate() {
+    var curDate = new Date();
+    var date = $("#date").val();
+    date = new Date(date);
+    if(date > curDate){
+        alert("生日不能大于当前时间");
+        $("#date").val("");
+        return false;
+    }
+    return true;
+}
