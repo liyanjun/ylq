@@ -3,7 +3,6 @@ package com.yunquanlai.admin.delivery.controller;
 import com.yunquanlai.admin.delivery.dao.DeliveryDistributorDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunquanlai.admin.delivery.service.DeliveryEndpointService;
-import com.yunquanlai.utils.DeliveryDistanceUtils;
 import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
@@ -11,21 +10,9 @@ import com.yunquanlai.utils.validator.Assert;
 import com.yunquanlai.utils.validator.ValidatorUtils;
 import com.yunquanlai.utils.validator.group.AddGroup;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 
 
