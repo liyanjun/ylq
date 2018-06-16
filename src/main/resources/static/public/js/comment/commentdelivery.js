@@ -89,7 +89,7 @@ vm = new Vue({
                     success: function (r) {
                         if (r.code == 0) {
                             alert('操作成功', function (index) {
-                                $("#jqGrid").trigger("reloadGrid");
+                                window.location.reload();
                             });
                         } else {
                             alert(r.msg);
