@@ -51,6 +51,10 @@ var vm = new Vue({
 		query: function () {
 			vm.reload();
 		},
+        reset: function () {
+            $("#productName").val("");
+            $("#endpointName").val("");
+        },
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";

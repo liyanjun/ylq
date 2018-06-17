@@ -55,6 +55,9 @@ var vm = new Vue({
 		query: function () {
 			vm.reload();
 		},
+        reset: function () {
+            $("#searchKey").val("");
+        },
 		detail: function(){
             var id = getSelectedRow();
             if(id == null){

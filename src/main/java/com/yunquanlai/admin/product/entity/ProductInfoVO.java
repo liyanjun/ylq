@@ -1,6 +1,8 @@
 package com.yunquanlai.admin.product.entity;
 
-import org.apache.commons.lang3.StringUtils;
+import com.yunquanlai.utils.validator.group.AddGroup;
+import com.yunquanlai.utils.validator.group.UpdateGroup;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,6 +22,7 @@ public class ProductInfoVO implements Serializable {
 
     private ProductDetailEntity productDetailEntity;
 
+    @NotBlank(message="广告轮播图不能为空", groups = {AddGroup.class, UpdateGroup.class})
     private String banner1;
 
     private String banner2;

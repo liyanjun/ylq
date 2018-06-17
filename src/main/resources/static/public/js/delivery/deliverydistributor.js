@@ -91,6 +91,9 @@ var vm = new Vue({
 		query: function () {
 			vm.reload();
 		},
+        reset: function () {
+            $("#searchKey").val("");
+        },
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
