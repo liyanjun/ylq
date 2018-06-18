@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -83,7 +84,7 @@ public class ApiUserController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true)
     })
-    public R depositoryWithdraw(@LoginUser UserInfoEntity userInfoEntity){
+    public R depositoryWithdraw(@LoginUser @ApiIgnore UserInfoEntity userInfoEntity){
         UserWithdrawDepositEntity temp = userWithdrawDepositService.queryObjectByUserId(userInfoEntity.getId());
         Assert.isNull(temp,"已存在未处理的押金提现申请，请耐心等待。");
         UserWithdrawDepositEntity userWithdrawDepositEntity = new UserWithdrawDepositEntity();

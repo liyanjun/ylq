@@ -29,5 +29,6 @@
     <cache name="product" maxElementsInMemory="1000"/>
     <cache name="productBrand" maxElementsInMemory="50"/>
     <cache name="common" maxElementsInMemory="100"/>
-    <cache name="tokens" maxElementsInMemory="10000"/>
+    <cache name="tokens" maxElementsInMemory="20000"/>
+    <cache name="orderTokens" maxElementsInMemory="20000"/>
 </ehcache>

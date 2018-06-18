@@ -43,6 +43,11 @@ public class OrderVO {
      * 是否需要发票
      */
     private Integer needBill;
+
+    /**
+     * 防重复提交token
+     */
+    private String orderToken;
     /**
      * 购买产品及数量
      */
@@ -128,4 +133,11 @@ public class OrderVO {
         this.locationY = locationY;
     }
 
+    public String getOrderToken() {
+        return orderToken;
+    }
+
+    public void setOrderToken(String orderToken) {
+        this.orderToken = orderToken;
+    }
 }

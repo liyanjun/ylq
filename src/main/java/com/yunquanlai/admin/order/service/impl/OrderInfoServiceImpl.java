@@ -3,6 +3,12 @@ package com.yunquanlai.admin.order.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
+import com.yunquanlai.admin.comment.dao.CommentDeliveryDao;
+import com.yunquanlai.admin.comment.dao.CommentProductDao;
+import com.yunquanlai.admin.comment.entity.CommentDeliveryEntity;
+import com.yunquanlai.admin.comment.entity.CommentProductEntity;
+import com.yunquanlai.admin.comment.service.CommentDeliveryService;
+import com.yunquanlai.admin.comment.service.CommentProductService;
 import com.yunquanlai.admin.delivery.dao.DeliveryDistributorDao;
 import com.yunquanlai.admin.delivery.dao.DeliveryEndpointDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
@@ -18,12 +24,14 @@ import com.yunquanlai.admin.product.entity.ProductStockEntity;
 import com.yunquanlai.admin.system.dao.SysConfigDao;
 import com.yunquanlai.admin.user.dao.UserInfoDao;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
+import com.yunquanlai.api.comsumer.vo.OrderCommentVO;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.api.comsumer.vo.ProductOrderVO;
 import com.yunquanlai.api.event.OrderDeliveryNotifyEvent;
 import com.yunquanlai.api.event.OrderDistributeEvent;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
+import com.yunquanlai.utils.TokenUtils;
 import com.yunquanlai.utils.validator.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,6 +84,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Autowired
     private UserInfoDao userInfoDao;
+
+    @Autowired
+    private TokenUtils tokenUtils;
+
+    @Autowired
+    private CommentDeliveryDao commentDeliveryDao;
+
+    @Autowired
+    private CommentProductDao commentProductDao;
 
     /**
      * 上下文对象
@@ -340,9 +357,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
             orderProductDetailEntities.add(orderProductDetailEntity);
         }
-        // TODO 防重复提交，及EHCache的引入
         return R.ok().put("orderProductDetails", orderProductDetailEntities).
-                put("deposit", deposit).put("amount", amount).put("orderToken",UUID.randomUUID().toString());
+                put("deposit", deposit).put("amount", amount).put("orderToken",tokenUtils.getToken());
     }
 
     @Override
@@ -360,6 +376,14 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_CLOSE);
             orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
             orderInfoDao.update(orderInfoEntity);
+        }
+    }
+
+    @Override
+    public void saveComment(OrderCommentVO orderCommentVO) {
+        commentDeliveryDao.save(orderCommentVO.getCommentDeliveryEntity());
+        for (CommentProductEntity commentProductEntity: orderCommentVO.getCommentProductEntities()) {
+            commentProductDao.save(commentProductEntity);
         }
     }
 
