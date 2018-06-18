@@ -11,6 +11,7 @@ import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.utils.DeliveryDistanceUtils;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.TokenUtils;
 import com.yunquanlai.utils.annotation.LoginUser;
 import com.yunquanlai.utils.validator.Assert;
 import io.swagger.annotations.*;
@@ -47,13 +48,16 @@ import java.util.Map;
 public class ApiOrderController {
 
     @Autowired
-    OrderInfoService orderInfoService;
+    private OrderInfoService orderInfoService;
 
     @Autowired
-    OrderDeliveryInfoService orderDeliveryInfoService;
+    private OrderDeliveryInfoService orderDeliveryInfoService;
 
     @Autowired
-    DeliveryEndpointService deliveryEndpointService;
+    private DeliveryEndpointService deliveryEndpointService;
+
+    @Autowired
+    private TokenUtils tokenUtils;
 
     /**
      * 用户订单查询
@@ -129,7 +133,9 @@ public class ApiOrderController {
             @ApiImplicitParam(name = "orderVO", value = "订单信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderVO", paramType = "body")
     })
     public R order(@RequestBody OrderVO orderVO, @LoginUser @ApiIgnore UserInfoEntity user) throws ParseException, JsonProcessingException {
-        //TODO 校验订单信息的完整性与合法性。
+        if (!tokenUtils.isExitToken(orderVO.getOrderToken())) {
+            return R.error("订单确认已失效，请重新下单。");
+        }
         if (!availableDelivery(orderVO.getLocationX(), orderVO.getLocationY())) {
             return R.error("订单不在派送范围内，请联系客服确认。");
         }
