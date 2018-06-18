@@ -53,7 +53,7 @@ public class ProductInfoController extends AbstractController {
 		
 		return R.ok().put("page", pageUtil);
 	}
-	
+	// TODO: 2018/6/17 bug:489903 商品信息管理，查询功能无效 （没发现问题）
 	
 	/**
 	 * 信息
@@ -76,6 +76,7 @@ public class ProductInfoController extends AbstractController {
 		ProductInfoEntity productInfoEntity = productInfoVO.getProductInfoEntity();
         ProductDetailEntity productDetailEntity = productInfoVO.getProductDetailEntity();
 		//校验商品信息
+		// TODO: 2018/6/17 字段按前端顺序进行验证
 		ValidatorUtils.validateEntity(productInfoEntity, AddGroup.class);
 		ValidatorUtils.validateEntity(productDetailEntity, AddGroup.class);
 		Assert.isBlank(productInfoVO.getProductDetailEntity().getBanner().replace(",",""),"至少需要一张广告轮播图");
@@ -120,4 +121,5 @@ public class ProductInfoController extends AbstractController {
 		
 		return R.ok();
 	}
+	// TODO: 2018/6/16 商品上/下架功能有待添加 
 }

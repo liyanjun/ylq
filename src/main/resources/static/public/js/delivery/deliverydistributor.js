@@ -98,6 +98,7 @@ var vm = new Vue({
 			vm.showList = false;
 			vm.title = "新增";
 			vm.deliveryDistributor = {};
+			vm.deliveryEndpointId = "";
 			//获取配送点信息
             this.getDeliveryEndpointList();
 		},
@@ -108,17 +109,9 @@ var vm = new Vue({
 			}
 			vm.showList = false;
             vm.title = "修改";
-            vm.getInfo(id);
             //获取配送点信息
             this.getDeliveryEndpointList();
-            for (var i=0;i<vm.deliveryEndpointList.length;i++)
-            {
-                if(vm.deliveryEndpointList[i].id===vm.deliveryDistributor.deliveryEndpointId){//循环找出配送员所属配送点
-                    vm.deliveryEndpointId = vm.deliveryDistributor.deliveryEndpointId ;
-                    $("#selected option:selected").text = vm.deliveryDistributor.deliveryEndpointName ;
-                    break;
-                }
-            }
+            vm.getInfo(id);
 		},
 		saveOrUpdate: function (event) {
             vm.deliveryDistributor.deliveryEndpointId = vm.deliveryEndpointId;
@@ -168,6 +161,7 @@ var vm = new Vue({
 		getInfo: function(id){
 			$.get("../deliverydistributor/info/"+id, function(r){
                 vm.deliveryDistributor = r.deliveryDistributor;
+                vm.deliveryEndpointId = vm.deliveryDistributor.deliveryEndpointId ;
             });
 		},
         comment: function () {
