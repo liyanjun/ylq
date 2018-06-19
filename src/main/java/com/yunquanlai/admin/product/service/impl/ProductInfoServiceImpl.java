@@ -48,6 +48,11 @@ public class ProductInfoServiceImpl implements ProductInfoService {
     }
 
     @Override
+    public ProductInfoEntity queryObject(Long id) {
+        return null;
+    }
+
+    @Override
     public List<ProductInfoEntity> queryList(Map<String, Object> map) {
         return productInfoDao.queryList(map);
     }
@@ -90,6 +95,12 @@ public class ProductInfoServiceImpl implements ProductInfoService {
             productStockDao.updateProductName(p);
         }
     }
+
+    @Override
+    public void updateShelves(Map<String, Object> map) {
+        productInfoDao.updateShelves(map);
+    }
+
 
     @Override
     public void delete(Long id) {

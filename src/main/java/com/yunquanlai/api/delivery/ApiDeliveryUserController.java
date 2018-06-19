@@ -1,6 +1,5 @@
 package com.yunquanlai.api.delivery;
 
-import com.yunquanlai.admin.delivery.dao.DeliveryDistributorFinancialFlowDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryClientTokenEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorFinancialFlowEntity;
@@ -9,7 +8,6 @@ import com.yunquanlai.admin.delivery.service.DeliveryDistributorFinancialFlowSer
 import com.yunquanlai.admin.delivery.service.DeliveryDistributorService;
 import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
-import com.yunquanlai.admin.user.entity.UserClientTokenEntity;
 import com.yunquanlai.api.delivery.vo.DeliveryDateVO;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
@@ -105,15 +103,11 @@ public class ApiDeliveryUserController {
             @ApiImplicitParam(paramType = "header", dataType = "string", name = "token", value = "token", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "passwordOld", value = "旧密码", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "password", value = "新密码", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "string", name = "passwordRepeat", value = "新密码重复", required = true)
     })
     public R editPassword(@LoginDelivery @ApiIgnore DeliveryDistributorEntity deliveryDistributorEntity,
-                          @RequestParam String passwordOld, @RequestParam String password, @RequestParam String passwordRepeat) {
+                          @RequestParam String passwordOld, @RequestParam String password) {
         if (!deliveryDistributorEntity.getPassword().equals(DigestUtils.sha256Hex(passwordOld))) {
             throw new RRException("旧密码错误");
-        }
-        if (!password.equals(passwordRepeat)) {
-            throw new RRException("两次输入密码不一致");
         }
         deliveryDistributorEntity.setPassword(DigestUtils.sha256Hex(password));
         deliveryDistributorEntity.setDisable(1);

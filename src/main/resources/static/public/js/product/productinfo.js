@@ -10,6 +10,12 @@ var vm = new Vue({
         brandId: "",
         productInfo: {},
         brandList: [],
+        //商品上下架
+        productShelves : {
+            "ids" : null,
+            "status" : null
+        },
+        defaultImgUrl : "http://pa23ubi36.bkt.clouddn.com/upload/20180611/98eca8e408c14c10b7049403d1385269"
     },
     methods: {
         query: function () {
@@ -23,7 +29,7 @@ var vm = new Vue({
             vm.title = "新增";
             vm.productInfo = {};
             vm.brandId = "";
-            //TODO 商品主图片未清空
+            document.getElementById("upload").style.backgroundImage="url('"+vm.defaultImgUrl+"')";
 
             editor.txt.html("");
             //获取品牌信息
@@ -107,6 +113,20 @@ var vm = new Vue({
             // encodeURI 编码
             window.location.assign(encodeURI(url));
         },
+        onShelves: function(){
+            var ids = getSelectedRows();
+            if (ids == null) {
+                return;
+            }
+            sheleves(ids, 20);
+        },
+        offShelves: function(){
+            var ids = getSelectedRows();
+            if (ids == null) {
+                return;
+            }
+            sheleves(ids, 30);
+        },
         reload: function (event) {
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
@@ -117,6 +137,28 @@ var vm = new Vue({
         }
     }
 });
+//TODO 信息列表显示商品状态
+//商品上下架
+function sheleves(ids, status){
+    $.ajax({
+        type: "POST",
+        url: "../productinfo/shelves",
+        contentType:"application/json",
+        data: JSON.stringify({
+            "ids" : ids,
+            "status" : status
+        }),
+        success: function (r) {
+            if (r.code === 0) {
+                alert('操作成功', function (index) {
+                    vm.reload();
+                });
+            } else {
+                alert(r.msg);
+            }
+        }
+    });
+}
 
 $(function () {
     $("#jqGrid").jqGrid({

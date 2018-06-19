@@ -22,6 +22,7 @@
         <result property="creatorName" column="creator_name"/>
         <result property="updateId" column="update_id"/>
         <result property="updateName" column="update_name"/>
+        <result property="status" column="status"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductInfoEntity">
@@ -42,7 +43,8 @@
 					`creator_id`, 
 					`creator_name`, 
 					`update_id`, 
-					`update_name`
+					`update_name`,
+                    `status`
 				from
 				product_info
 				where id = #{id}
@@ -68,7 +70,8 @@
         `creator_id`,
         `creator_name`,
         `update_id`,
-        `update_name`
+        `update_name`,
+        `status`
         from product_info
         <where>
             <if test="key != null and key.trim() != ''">
@@ -100,7 +103,8 @@
         `creator_id`,
         `creator_name`,
         `update_id`,
-        `update_name`
+        `update_name`,
+        `status`
         from product_info
         <where>
             <if test="name != null and name.trim() != ''">
@@ -153,7 +157,8 @@
 			`creator_id`, 
 			`creator_name`, 
 			`update_id`, 
-			`update_name`
+			`update_name`,
+			`status`
 		)
 		values
 		(
@@ -173,7 +178,8 @@
 			#{creatorId}, 
 			#{creatorName}, 
 			#{updateId}, 
-			#{updateName}
+			#{updateName},
+			#{status}
 		)
 	</insert>
 
@@ -199,6 +205,17 @@
             <if test="updateName != null">`update_name` = #{updateName}</if>
         </set>
         where id = #{id}
+    </update>
+
+    <update id="updateShelves" parameterType="java.util.HashMap">
+        update product_info
+        <set>
+            <if test="status != null">`status` = #{status}</if>
+        </set>
+        where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </update>
 
     <update id="updateBrandName" parameterType="com.yunquanlai.admin.product.entity.ProductInfoEntity">

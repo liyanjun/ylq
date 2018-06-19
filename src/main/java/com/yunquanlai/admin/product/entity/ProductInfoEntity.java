@@ -96,6 +96,10 @@ public class ProductInfoEntity implements Serializable {
      * 设置：商品更新人名
      */
 	private String updateName;
+	/**
+	 * 设置：商品状态
+	 */
+	private Integer status;
 
 	/**
 	 * 是否是一键送水产品，10：是，20：不是
@@ -312,5 +316,13 @@ public class ProductInfoEntity implements Serializable {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 }

@@ -4,7 +4,6 @@ import com.yunquanlai.utils.validator.group.AddGroup;
 import com.yunquanlai.utils.validator.group.UpdateGroup;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -82,7 +81,6 @@ public class DeliveryDistributorEntity implements Serializable {
     /**
      * 设置：所属配送点id
      */
-	@NotNull(message="配送点id不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Long deliveryEndpointId;
 	/**
 	 * 设置：停用状态

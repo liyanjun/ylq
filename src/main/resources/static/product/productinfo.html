@@ -36,6 +36,10 @@
                     class="fa fa-trash-o"></i>&nbsp;删除</a>
             <a v-if="hasPermission('commentdelivery:info')" class="btn btn-primary" @click="comment"><i
                     class="fa fa-comments-o"></i>&nbsp;评论</a>
+            <a v-if="hasPermission('commentdelivery:info')" class="btn btn-primary" @click="onShelves"><i
+                    class="fa fa-arrow-circle-o-up"></i>&nbsp;上架</a>
+            <a v-if="hasPermission('commentdelivery:info')" class="btn btn-primary" @click="offShelves"><i
+                    class="fa fa-arrow-circle-o-down"></i>&nbsp;下架</a>
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>

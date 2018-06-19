@@ -111,24 +111,36 @@ public class ProductInfoController extends AbstractController {
         ValidatorUtils.validateEntity(productDetailEntity, UpdateGroup.class);
         Assert.isBlank(productInfoVO.getProductDetailEntity().getBanner().replace(",", ""), "至少需要一张广告轮播图");
 
-        productInfoEntity.setUpdateTime(new Date());
-        productInfoEntity.setUpdateName(getUser().getUsername());
-        productInfoEntity.setUpdateId(getUserId());
-        productInfoVO.setProductInfoEntity(productInfoEntity);
-        productInfoService.update(productInfoVO);
-
-        return R.ok();
-    }
+		productInfoEntity.setUpdateTime(new Date());
+		productInfoEntity.setUpdateName(getUser().getUsername());
+		productInfoEntity.setUpdateId(getUserId());
+		productInfoVO.setProductInfoEntity(productInfoEntity);
+		productInfoService.update(productInfoVO);
+		
+		return R.ok();
+	}
+	
+	/**
+	 * 删除
+	 */
+	@RequestMapping("/delete")
+	@RequiresPermissions("productinfo:delete")
+	public R delete(@RequestBody Long[] ids){
+		productInfoService.deleteBatch(ids);
+		
+		return R.ok();
+	}
 
     /**
-     * 删除
+     * 商品上下架功能
+     * @param
+     * @return
      */
-    @RequestMapping("/delete")
-    @RequiresPermissions("productinfo:delete")
-    public R delete(@RequestBody Long[] ids) {
-        productInfoService.deleteBatch(ids);
-
+    @RequestMapping("/shelves")
+    @RequiresPermissions("productinfo:info")
+	public R onAndOffShelves(@RequestBody Map<String,Object> map){
+	    productInfoService.updateShelves(map);
         return R.ok();
-    }
-    // TODO: 2018/6/16 商品上/下架功能有待添加
+
+	}
 }

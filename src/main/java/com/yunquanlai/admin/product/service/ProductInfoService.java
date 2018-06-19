@@ -18,6 +18,8 @@ public interface ProductInfoService {
 	
 	ProductInfoVO queryProductInfoVO(Long id);
 
+	ProductInfoEntity queryObject(Long id);
+
 	List<ProductInfoEntity> queryList(Map<String, Object> map);
 
 	int queryTotal(Map<String, Object> map);
@@ -25,6 +27,8 @@ public interface ProductInfoService {
 	void save(ProductInfoVO productInfoVO);
 	
 	void update(ProductInfoVO productInfoVO);
+
+	void updateShelves(Map<String, Object> map);
 	
 	void delete(Long id);
 	
