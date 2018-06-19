@@ -10,11 +10,6 @@ var vm = new Vue({
         brandId: "",
         productInfo: {},
         brandList: [],
-        //商品上下架
-        productShelves : {
-            "ids" : null,
-            "status" : null
-        },
         defaultImgUrl : "http://pa23ubi36.bkt.clouddn.com/upload/20180611/98eca8e408c14c10b7049403d1385269"
     },
     methods: {
