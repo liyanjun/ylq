@@ -139,6 +139,27 @@
         </if>
     </select>
 
+    <select id="queryDeliveryDate" resultType="com.yunquanlai.api.delivery.vo.DeliveryDateVO">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        SUM(amount_delivery_fee) AS allDeliveryAmount,
+        COUNT(*) AS allDelivery
+        FROM
+        order_delivery_info
+        WHERE delivery_distributor_id = #{deliveryDistributorId} AND status = #{status}
+        ) t1,
+        (
+        SELECT
+        SUM(amount_delivery_fee) AS dayDeliveryAmount,
+        COUNT(*) AS dayDelivery
+        FROM
+        order_delivery_info WHERE delivery_distributor_id = #{deliveryDistributorId} AND status = #{status} AND <![CDATA[distribute_time >= #{distributeTime}]]>
+        ) t2
+    </select>
+
     <select id="queryTotal" resultType="int">
 		select count(*) from order_delivery_info 
 	</select>

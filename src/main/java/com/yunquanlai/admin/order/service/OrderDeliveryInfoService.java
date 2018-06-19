@@ -2,6 +2,7 @@ package com.yunquanlai.admin.order.service;
 
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
+import com.yunquanlai.api.delivery.vo.DeliveryDateVO;
 
 import java.util.List;
 import java.util.Map;
@@ -56,4 +57,6 @@ public interface OrderDeliveryInfoService {
      * @param id
      */
     void distributeOrder(Long id);
+
+    DeliveryDateVO queryDeliveryDate(Map<String, Object> filter);
 }

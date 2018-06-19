@@ -16,6 +16,7 @@ import com.yunquanlai.admin.user.dao.UserEmptyBucketFlowDao;
 import com.yunquanlai.admin.user.dao.UserInfoDao;
 import com.yunquanlai.admin.user.entity.UserEmptyBucketFlowEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
+import com.yunquanlai.api.delivery.vo.DeliveryDateVO;
 import com.yunquanlai.api.event.OrderDistributeEvent;
 import com.yunquanlai.utils.validator.Assert;
 import org.slf4j.Logger;
@@ -58,6 +59,7 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
 
     @Autowired
     private DeliveryDistributorFinancialFlowDao deliveryDistributorFinancialFlowDao;
+
 
     /**
      * 上下文对象
@@ -200,5 +202,10 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
 
         applicationContext.publishEvent(new OrderDistributeEvent(orderDeliveryInfoEntity.getOrderInfoId()));
+    }
+
+    @Override
+    public DeliveryDateVO queryDeliveryDate(Map<String, Object> filter) {
+        return orderDeliveryInfoDao.queryDeliveryDate(filter);
     }
 }
