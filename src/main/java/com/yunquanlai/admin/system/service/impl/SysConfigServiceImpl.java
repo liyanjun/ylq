@@ -7,6 +7,8 @@ import com.yunquanlai.admin.system.entity.SysConfigEntity;
 import com.yunquanlai.admin.system.service.SysConfigService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,11 +25,13 @@ public class SysConfigServiceImpl implements SysConfigService {
 	}
 
 	@Override
+	@CacheEvict(value = "common",key = "#config.key")
 	public void update(SysConfigEntity config) {
 		sysConfigDao.update(config);
 	}
 
 	@Override
+	@CacheEvict(value = "common",key = "#key")
 	public void updateValueByKey(String key, String value) {
 		sysConfigDao.updateValueByKey(key, value);
 	}
@@ -53,6 +57,7 @@ public class SysConfigServiceImpl implements SysConfigService {
 	}
 
 	@Override
+	@Cacheable(value = "common",key = "#key")
 	public String getValue(String key, String defaultValue) {
 		String value = sysConfigDao.queryByKey(key);
 		if(StringUtils.isBlank(value)){

@@ -17,6 +17,8 @@ public interface DeliveryDistributorService {
 	DeliveryDistributorEntity queryObject(Long id);
 	
 	List<DeliveryDistributorEntity> queryList(Map<String, Object> map);
+
+	List<DeliveryDistributorEntity> queryListByDeliveryEndpointId(Long deliveryEndpointId);
 	
 	int queryTotal(Map<String, Object> map);
 	

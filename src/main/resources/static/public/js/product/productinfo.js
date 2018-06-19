@@ -15,10 +15,15 @@ var vm = new Vue({
         query: function () {
             vm.reload();
         },
+        reset: function () {
+            $("#searchKey").val("");
+        },
         add: function () {
             vm.showList = false;
             vm.title = "新增";
             vm.productInfo = {};
+            vm.brandId = "";
+            //TODO 商品主图片未清空
 
             editor.txt.html("");
             //获取品牌信息
@@ -75,7 +80,7 @@ var vm = new Vue({
                     success: function (r) {
                         if (r.code == 0) {
                             alert('操作成功', function (index) {
-                                $("#jqGrid").trigger("reloadGrid");
+                                window.location.reload();
                             });
                         } else {
                             alert(r.msg);
@@ -197,9 +202,6 @@ $(function () {
         gridComplete: function () {
             //隐藏grid底部滚动条
             $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
-        },
-        onComplete: function (r) {
-
         }
     });
 
@@ -240,3 +242,10 @@ $(function () {
     editor.create()
 
 });
+
+//只能输入两位小数
+function checkDecimal(data) {
+    var re = /([0-9]+\.[0-9]{2})[0-9]*/;
+    var num = data.replace(re,"$1");
+    return num;
+}

@@ -92,6 +92,7 @@ CREATE TABLE `delivery_distributor` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='配送员信息';
 ALTER TABLE `delivery_distributor`
 ADD INDEX `phone_unique` (`phone`) USING BTREE ;
+
 -- ----------------------------
 -- Table structure for delivery_distributor_financial_flow
 -- ----------------------------
@@ -176,7 +177,7 @@ CREATE TABLE `order_delivery_info` (
   KEY `status_index` (`status`) USING BTREE,
   KEY `order_id_index` (`order_info_id`) USING BTREE ,
   KEY `distributor_id_index` (`delivery_distributor_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='订单配送信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='订单配送信息表';
 
 -- ----------------------------
 -- Table structure for order_info
@@ -189,7 +190,7 @@ CREATE TABLE `order_info` (
   `amount_benifit` decimal(20,2) DEFAULT NULL COMMENT '订单折扣优惠金额',
   `amount_activity` decimal(20,2) DEFAULT NULL COMMENT '订单活动优惠金额（即除了优惠标价外，使用的活动奖励）',
   `amount_delivery_fee` decimal(10,0) NOT NULL COMMENT '订单配送费',
-  `status` tinyint(4) NOT NULL COMMENT '订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50：已关闭，60：人工处理，70：人工派单',
+  `status` tinyint(4) NOT NULL COMMENT '订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50：已关闭',
   `type` tinyint(4) NOT NULL COMMENT '订单状态类型，10：正常，20：异常',
   `pay_type` tinyint(4) NOT NULL COMMENT '订单支付类型，10：现金，20：水票',
   `delivery_distributor_id` bigint(20) DEFAULT NULL COMMENT '关联配送员 ID',
@@ -208,8 +209,8 @@ CREATE TABLE `order_info` (
   KEY `user_id_index` (`user_info_id`) USING BTREE ,
   KEY `type_index` (`type`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='订单信息表';
-ALTER TABLE `order_info`
-AUTO_INCREMENT=10000;
+ALTER TABLE `order_info` AUTO_INCREMENT=10000;
+
 -- ----------------------------
 -- Table structure for order_operate_flow
 -- ----------------------------
@@ -235,6 +236,7 @@ CREATE TABLE `order_product_detail` (
   `product_info_id` bigint(20) NOT NULL COMMENT '对应商品 ID',
   `product_name` varchar(128) NOT NULL COMMENT '商品名称',
   `count` int(11) NOT NULL COMMENT '商品数量',
+  `bucket_type` tinyint(4) NOT NULL COMMENT '商品规格',
   `order_info_id` bigint(20) NOT NULL COMMENT '对应订单主键 ID',
   PRIMARY KEY (`id`),
   KEY `product_info_id_index` (`product_info_id`) USING BTREE
@@ -305,6 +307,9 @@ CREATE TABLE `product_info` (
 ALTER TABLE `product_info`
 AUTO_INCREMENT=10000;
 
+-- ----------------------------
+-- Table structure for product_ticket
+-- ----------------------------
 DROP TABLE IF EXISTS `product_ticket`;
 CREATE TABLE `product_ticket` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -484,7 +489,6 @@ CREATE TABLE `user_client_token` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
-
 -- ----------------------------
 -- Table structure for user_deposit_flow
 -- ----------------------------
@@ -511,10 +515,10 @@ CREATE TABLE `user_info` (
   `phone` varchar(32) DEFAULT NULL COMMENT '用户绑定手机号',
   `uid` varchar(64) NOT NULL COMMENT '用户微信 ID',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户状态：0：启用，1：禁用',
-  `deposit_amount` decimal(20,2) DEFAULT '0.00' COMMENT '总押金金额',
-  `enable_deposit_amount` decimal(20,2) DEFAULT '0.00' COMMENT '可用押金金额',
-  `disable_deposit_amount` decimal(20,2) DEFAULT '0.00' COMMENT '不可用押金金额',
-  `empty_bucket_number` int(11) DEFAULT '0' COMMENT '持有空桶数',
+  `deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '总押金金额',
+  `enable_deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '可用押金金额',
+  `disable_deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '不可用押金金额',
+  `empty_bucket_number` int(11) NOT NULL DEFAULT '0' COMMENT '持有空桶数',
   `creation_time` datetime NOT NULL COMMENT '用户注册时间',
   `recommenderID` bigint(20) DEFAULT NULL COMMENT '推荐人ID',
   `recommenderName` varchar(64) DEFAULT NULL COMMENT '推荐人姓名',
@@ -537,6 +541,9 @@ CREATE TABLE `user_withdraw_deposit` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户押金提现申请表';
 
+-- ----------------------------
+-- Table structure for user_product_ticket_flow
+-- ----------------------------
 DROP TABLE IF EXISTS `user_product_ticket_flow`;
 CREATE TABLE `user_product_ticket_flow` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
@@ -546,6 +553,9 @@ CREATE TABLE `user_product_ticket_flow` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户水票消费流水';
 
+-- ----------------------------
+-- Table structure for user_product_ticket
+-- ----------------------------
 DROP TABLE IF EXISTS `user_product_ticket`;
 CREATE TABLE `user_product_ticket` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,

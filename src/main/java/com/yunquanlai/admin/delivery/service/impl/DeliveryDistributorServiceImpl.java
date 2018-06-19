@@ -26,7 +26,12 @@ public class DeliveryDistributorServiceImpl implements DeliveryDistributorServic
 	public List<DeliveryDistributorEntity> queryList(Map<String, Object> map){
 		return deliveryDistributorDao.queryList(map);
 	}
-	
+
+	@Override
+	public List<DeliveryDistributorEntity> queryListByDeliveryEndpointId(Long deliveryEndpointId) {
+		return deliveryDistributorDao.queryListByDeliveryEndpointId(deliveryEndpointId);
+	}
+
 	@Override
 	public int queryTotal(Map<String, Object> map){
 		return deliveryDistributorDao.queryTotal(map);

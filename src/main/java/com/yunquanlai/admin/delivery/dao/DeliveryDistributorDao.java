@@ -3,6 +3,7 @@ package com.yunquanlai.admin.delivery.dao;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.system.dao.BaseDao;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,4 +27,11 @@ public interface DeliveryDistributorDao extends BaseDao<DeliveryDistributorEntit
      * @return
      */
     DeliveryDistributorEntity queryObjectByPhone(String mobile);
+
+    /**
+     * 根据配送点id获取配送员列表
+     * @param deliveryEndpointId
+     * @return
+     */
+    List<DeliveryDistributorEntity> queryListByDeliveryEndpointId(Long deliveryEndpointId);
 }

@@ -1,4 +1,24 @@
 $(function () {
+    Date.prototype.format = function (format) {
+        var args = {
+            "M+": this.getMonth() + 1,
+            "d+": this.getDate(),
+            "h+": this.getHours(),
+            "m+": this.getMinutes(),
+            "s+": this.getSeconds(),
+            "q+": Math.floor((this.getMonth() + 3) / 3),  //quarter
+            "S": this.getMilliseconds()
+        };
+        if (/(y+)/.test(format))
+            format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var i in args) {
+            var n = args[i];
+            if (new RegExp("(" + i + ")").test(format))
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
+        }
+        return format;
+    };
+
     $("#jqGrid").jqGrid({
         url: '../deliverydistributor/list',
         datatype: "json",
@@ -71,10 +91,14 @@ var vm = new Vue({
 		query: function () {
 			vm.reload();
 		},
+        reset: function () {
+            $("#searchKey").val("");
+        },
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
 			vm.deliveryDistributor = {};
+			vm.deliveryEndpointId = "";
 			//获取配送点信息
             this.getDeliveryEndpointList();
 		},
@@ -85,18 +109,9 @@ var vm = new Vue({
 			}
 			vm.showList = false;
             vm.title = "修改";
-            
-            vm.getInfo(id);
             //获取配送点信息
             this.getDeliveryEndpointList();
-            for (var i=0;i<vm.deliveryEndpointList.length;i++)
-            {
-                if(vm.deliveryEndpointList[i].id===vm.deliveryDistributor.deliveryEndpointId){//循环找出配送员所属配送点
-                    vm.deliveryEndpointId = vm.deliveryDistributor.deliveryEndpointId ;
-                    $("#selected option:selected").text = vm.deliveryDistributor.deliveryEndpointName ;
-                    break;
-                }
-            }
+            vm.getInfo(id);
 		},
 		saveOrUpdate: function (event) {
             vm.deliveryDistributor.deliveryEndpointId = vm.deliveryEndpointId;
@@ -110,6 +125,7 @@ var vm = new Vue({
 			    success: function(r){
 			    	if(r.code === 0){
 						alert('操作成功', function(index){
+                            vm.deliveryEndpointId = '';
 							vm.reload();
 						});
 					}else{
@@ -133,7 +149,7 @@ var vm = new Vue({
 				    success: function(r){
 						if(r.code == 0){
 							alert('操作成功', function(index){
-								$("#jqGrid").trigger("reloadGrid");
+								window.location.reload();
 							});
 						}else{
 							alert(r.msg);
@@ -145,6 +161,7 @@ var vm = new Vue({
 		getInfo: function(id){
 			$.get("../deliverydistributor/info/"+id, function(r){
                 vm.deliveryDistributor = r.deliveryDistributor;
+                vm.deliveryEndpointId = vm.deliveryDistributor.deliveryEndpointId ;
             });
 		},
         comment: function () {
@@ -168,8 +185,19 @@ var vm = new Vue({
 		getDeliveryEndpointList:function () {
             $.get("../deliveryendpoint/select", function(r){
                 vm.deliveryEndpointList = r.deliveryEndpointEntities;
-                //alert(r.deliveryEndpointEntities[0].id)
             });
         }
 	}
 });
+
+function checkDate() {
+    var curDate = new Date();
+    var date = $("#date").val();
+    date = new Date(date);
+    if(date > curDate){
+        alert("生日不能大于当前时间");
+        $("#date").val("");
+        return false;
+    }
+    return true;
+}

@@ -85,7 +85,7 @@ public class ApiProductController {
     @ApiOperation(value = "商品查询")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "name", value = "商品名称"),
-            @ApiImplicitParam(paramType = "query", dataType = "int", name = "brandId", value = "商品品牌(传ID)"),
+            @ApiImplicitParam(paramType = "query", dataType = "long", name = "brandId", value = "商品品牌(传ID)"),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "orderType", value = "排序类型，10：按价格升序，20：按价格降序"),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "bucketType", value = "规格，10：一次性桶装水，20：循环桶装水，30：瓶装谁，40：全部"),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "isQuick", value = "是否一键送水,是：10，否：20", required = true),

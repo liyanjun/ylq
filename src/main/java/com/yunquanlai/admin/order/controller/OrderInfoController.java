@@ -85,8 +85,8 @@ public class OrderInfoController extends AbstractController {
 	@RequiresPermissions("orderinfo:delete")
 	public R delete(@RequestBody Long[] ids){
 		orderInfoService.deleteBatch(ids);
-		
+
 		return R.ok();
 	}
-	
+
 }

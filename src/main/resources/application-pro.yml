@@ -16,3 +16,15 @@ spring:
         testOnReturn: false
         poolPreparedStatements: true
         maxPoolPreparedStatementPerConnectionSize: 20
+    cache:
+      ehcache:
+        config: ehcache
+      type: ehcache
+server:
+  http:
+    port: 80
+  port: 443
+  ssl:
+    key-store: /app/cert/your-name.jks
+    key-store-password: 214769235080420
+    key-password: 214769235080420

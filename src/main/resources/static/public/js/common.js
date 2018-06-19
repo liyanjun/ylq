@@ -12,7 +12,8 @@ window.T = {};
 // T.p('id') --> 123;
 var url = function(name) {
 	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-	var r = window.location.search.substr(1).match(reg);
+    //decodeURI 解码
+	var r = decodeURI(window.location.search).substr(1).match(reg);
 	if(r!=null)return  unescape(r[2]); return null;
 };
 T.p = url;

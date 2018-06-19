@@ -6,9 +6,9 @@
 
     <!-- 按时间滚动的策略显示日志 -->
     <appender name="FILE-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/yunquanlai.log</file>
+        <file>../logs/yunquanlai.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>logs/api-message-service-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>logs/yunquanlai-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
             <maxHistory>30</maxHistory>
             <totalSizeCap>10GB</totalSizeCap>

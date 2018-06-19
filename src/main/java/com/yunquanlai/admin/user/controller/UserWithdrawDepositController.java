@@ -96,6 +96,10 @@ public class UserWithdrawDepositController extends AbstractController {
 	public R handleDepositoryWithdraw(@RequestBody UserWithdrawDepositEntity userWithdrawDepositEntity){
 		userWithdrawDepositEntity.setIsHandle(20);
         // TODO: 2018/6/10 需要获取当前操作人id 和 name
+		userWithdrawDepositEntity.setHandlerId(getUserId());
+		userWithdrawDepositEntity.setHandlerName(getUser().getUsername());
+		userWithdrawDepositEntity.setIsHandle(20);
+		userWithdrawDepositService.save(userWithdrawDepositEntity);
 		return R.ok();
 	}
 	

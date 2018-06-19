@@ -8,6 +8,7 @@ import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
 import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.admin.order.service.OrderProductDetailService;
 import com.yunquanlai.api.event.OrderDistributeEvent;
+import com.yunquanlai.utils.DeliveryDistanceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,17 +57,7 @@ public class OrderDistributeEventListener implements ApplicationListener<OrderDi
             List<OrderProductDetailEntity> orderProductDetailEntities = orderProductDetailService.queryListByOrderId(orderDeliveryInfoEntity.getOrderInfoId());
             // 找出所有配送点
             List<DeliveryEndpointEntity> deliveryEndpointEntities = deliveryEndpointService.queryList(null);
-            for (DeliveryEndpointEntity deliveryEndpointEntity : deliveryEndpointEntities) {
-                // 求出x,y的差值的绝对值，即为距离
-                BigDecimal x = orderDeliveryInfoEntity.getLocationX().subtract(deliveryEndpointEntity.getLocationX()).abs();
-                BigDecimal y = orderDeliveryInfoEntity.getLocationY().subtract(deliveryEndpointEntity.getLocationY()).abs();
-                BigDecimal distance = x.pow(2).add(y.pow(2));
-                // 不用开方，因为开方了对比大小还是一样的。
-                deliveryEndpointEntity.setDistance(distance);
-            }
-            // 按照距离排序
-            Collections.sort(deliveryEndpointEntities);
-            //TODO 距离超远的不送
+            DeliveryDistanceUtils.sortDeliveryEndpoint(orderDeliveryInfoEntity.getLocationX(),orderDeliveryInfoEntity.getLocationY(),deliveryEndpointEntities);
             for (DeliveryEndpointEntity deliveryEndpointEntity : deliveryEndpointEntities) {
                 try {
                     orderInfoService.findDeliveryDistributor(orderProductDetailEntities, orderDeliveryInfoEntity, deliveryEndpointEntity);
@@ -89,4 +78,5 @@ public class OrderDistributeEventListener implements ApplicationListener<OrderDi
             }
         }
     }
+
 }

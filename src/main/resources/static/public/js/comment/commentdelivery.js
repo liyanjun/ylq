@@ -16,7 +16,7 @@ $(function () {
                 name: 'deliveryDistributorName',
                 index: 'delivery_distributor_name',
                 width: 80,
-                hidden: vm.productId==undefined?true:false,
+                hidden: vm.deliveryDistributorId==undefined?true:false,
                 formatter: function (cellValue) {
                     return vm.deliveryDistributorName;
                 }
@@ -89,7 +89,7 @@ vm = new Vue({
                     success: function (r) {
                         if (r.code == 0) {
                             alert('操作成功', function (index) {
-                                $("#jqGrid").trigger("reloadGrid");
+                                window.location.reload();
                             });
                         } else {
                             alert(r.msg);

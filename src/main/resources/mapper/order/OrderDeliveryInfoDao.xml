@@ -86,16 +86,16 @@
         from order_delivery_info
         <where>
             <if test="status != null">
-                and status = #{status}
+                AND status = #{status}
             </if>
             <if test="distributeTime != null and distributeTime !=''">
                 <![CDATA[
-                and distribute_time <= #{distributeTime}
+                AND distribute_time <= #{distributeTime}
                 ]]>
             </if>
             <if test="deliveryTime != null and deliveryTime !=''">
                 <![CDATA[
-                AND delivery_time != null AND delivery_time <= #{deliveryTime}
+                AND status = 10 AND delivery_time <= #{deliveryTime}
                 ]]>
             </if>
         </where>

@@ -24,6 +24,12 @@ public abstract class Assert {
         }
     }
 
+    public static void isNotNull(Object object, String message) {
+        if (object != null) {
+            throw new RRException(message);
+        }
+    }
+
     /**
      * 判断两个对象是否不相等，不相等抛出异常
      *

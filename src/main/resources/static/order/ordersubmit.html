@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>配送点信息</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" href="../public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
+    <link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" href="../public/css/main.css">
+    <script src="../public/libs/jquery.min.js"></script>
+    <script src="../public/plugins/layer/layer.js"></script>
+    <script src="../public/libs/bootstrap.min.js"></script>
+    <script src="../public/libs/vue.min.js"></script>
+    <script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
+    <script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+    <script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script src="../public/js/common.js"></script>
+    <script type="text/javascript"
+            src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2">
+                    <select v-model="deliveryEndpointId" class="form-control" id="deliveryEndpoints" onchange="changeDeliveryEndpointSelect(this.options[this.options.selectedIndex].value)">
+                        <option v-for="deliveryEndpoint in deliveryEndpointList" :value="deliveryEndpoint.id" >{{deliveryEndpoint.name}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select v-model="deliveryDistributorId" class="form-control" id="deliveryDistributors">
+                        <option v-for="deliveryDistributor in deliveryDistributorList" :value="deliveryDistributor.id" >{{deliveryDistributor.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="summit" value="提交"/>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script src="../public/js/order/ordersubmit.js"></script>
+</body>
+</html>

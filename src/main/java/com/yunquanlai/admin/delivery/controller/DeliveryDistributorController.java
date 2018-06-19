@@ -6,6 +6,7 @@ import com.yunquanlai.admin.delivery.service.DeliveryDistributorService;
 import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.validator.Assert;
 import com.yunquanlai.utils.validator.ValidatorUtils;
 import com.yunquanlai.utils.validator.group.AddGroup;
 import com.yunquanlai.utils.validator.group.UpdateGroup;
@@ -72,6 +73,7 @@ public class DeliveryDistributorController extends AbstractController {
 	public R save(@RequestBody DeliveryDistributorEntity deliveryDistributor){
 	    //校验配送员信息
         ValidatorUtils.validateEntity(deliveryDistributor, AddGroup.class);
+        Assert.isNotNull(deliveryDistributorService.queryObjectByPhone(deliveryDistributor.getPhone()),"新增配送员手机号重复。");
 
 		if (deliveryDistributor != null){
 			//status状态默认为20
@@ -118,5 +120,15 @@ public class DeliveryDistributorController extends AbstractController {
 		return R.ok();
 	}
 
-	// TODO: 2018/6/11 通过配送员查看评论
+	/**
+	 * 根据配送点id获取配送员
+	 * @return
+	 */
+	@RequestMapping("/select")
+	@RequiresPermissions("deliverydistributor:list")
+	public R listByDeliveryEndpointId(Long deliveryEndpointId){
+
+		List<DeliveryDistributorEntity> deliveryDistributorEntities = deliveryDistributorService.queryListByDeliveryEndpointId(deliveryEndpointId);
+		return R.ok().put("deliveryDistributorEntities", deliveryDistributorEntities);
+	}
 }

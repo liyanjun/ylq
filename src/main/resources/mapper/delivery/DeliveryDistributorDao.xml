@@ -85,6 +85,25 @@
         for update
     </select>
 
+	<select id="queryListByDeliveryEndpointId" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
+		select
+		`id`,
+		`name`,
+		`phone`,
+		`password`,
+		`birthday`,
+		`client_id`,
+		`status`,
+		`order_count`,
+		`identifycation`,
+		`identifycation_url`,
+		`health_url`,
+		`delivery_endpoint_id`,
+		`disable`,
+		`delivery_endpoint_name`
+		from delivery_distributor where delivery_endpoint_id = #{deliveryEndpointId}
+	</select>
+
 	<select id="queryList" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
 		select
 		            `id`,
@@ -160,7 +179,7 @@
 			`password`, 
 			`birthday`, 
 			`client_id`,
-			`status`, 
+			`status`,
 			`platform`,
 			`amount`,
 			`order_count`,
@@ -178,7 +197,7 @@
 			#{password}, 
 			#{birthday}, 
 			#{clientId},
-			#{status}, 
+			#{status},
 			#{platform},
 			#{amount},
 			#{orderCount},

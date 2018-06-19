@@ -6,6 +6,7 @@ import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderProductDetailEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
+import com.yunquanlai.api.comsumer.vo.OrderCommentVO;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.utils.R;
 
@@ -88,4 +89,5 @@ public interface OrderInfoService {
      */
     void payTimeOut(OrderInfoEntity orderInfoEntity);
 
+    void saveComment(OrderCommentVO orderCommentVO);
 }

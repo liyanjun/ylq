@@ -190,7 +190,7 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
 
     @Override
     public void distributeOrder(Long orderDeliveryId) {
-        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderDeliveryId, true);
+        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObject(orderDeliveryId, true);
         if (OrderDeliveryInfoEntity.STATUS_NEW != orderDeliveryInfoEntity.getStatus()) {
             logger.error("配送单" + orderDeliveryInfoEntity.getId() + "已处理，状态【" + orderDeliveryInfoEntity.getStatus() + "】");
             return;
@@ -199,6 +199,6 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         orderDeliveryInfoEntity.setDistributeTime(new Date());
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
 
-        applicationContext.publishEvent(new OrderDistributeEvent(orderDeliveryId));
+        applicationContext.publishEvent(new OrderDistributeEvent(orderDeliveryInfoEntity.getOrderInfoId()));
     }
 }
