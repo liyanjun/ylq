@@ -62,7 +62,7 @@
 					`delivery_endpoint_id`,
 					`disable`,
 					`delivery_endpoint_name`
-				from delivery_distributor where phone = #{value}
+				from delivery_distributor where phone = #{value} limit 0,1
     </select>
 
     <select id="pickOne" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity">
