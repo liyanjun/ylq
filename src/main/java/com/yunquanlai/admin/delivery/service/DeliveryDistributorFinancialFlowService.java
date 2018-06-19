@@ -27,4 +27,5 @@ public interface DeliveryDistributorFinancialFlowService {
 	void delete(Integer id);
 	
 	void deleteBatch(Integer[] ids);
+
 }

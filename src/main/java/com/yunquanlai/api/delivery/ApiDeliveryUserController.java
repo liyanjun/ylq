@@ -8,7 +8,9 @@ import com.yunquanlai.admin.delivery.service.DeliveryClientTokenService;
 import com.yunquanlai.admin.delivery.service.DeliveryDistributorFinancialFlowService;
 import com.yunquanlai.admin.delivery.service.DeliveryDistributorService;
 import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
+import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
 import com.yunquanlai.admin.user.entity.UserClientTokenEntity;
+import com.yunquanlai.api.delivery.vo.DeliveryDateVO;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
@@ -43,6 +45,9 @@ public class ApiDeliveryUserController {
 
     @Autowired
     private DeliveryDistributorFinancialFlowService deliveryDistributorFinancialFlowService;
+
+    @Autowired
+    private OrderDeliveryInfoService orderDeliveryInfoService;
 
     /**
      * 12小时后过期
@@ -84,7 +89,7 @@ public class ApiDeliveryUserController {
         return createToken(deliveryDistributorEntity.getId())
                 .put("disable", deliveryDistributorEntity.getDisable())
                 .put("name", deliveryDistributorEntity.getName())
-                .put("status",deliveryDistributorEntity.getStatus());
+                .put("status", deliveryDistributorEntity.getStatus());
     }
 
     /**
@@ -153,14 +158,39 @@ public class ApiDeliveryUserController {
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "limit", value = "查询条数", required = true)
     })
     public R queryFinancialFlow(@LoginDelivery @ApiIgnore DeliveryDistributorEntity deliveryDistributorEntity,
-                                  @RequestParam Integer offset,
-                                  @RequestParam Integer limit) {
+                                @RequestParam Integer offset,
+                                @RequestParam Integer limit) {
         Map<String, Object> filter = new HashMap(16);
         filter.put("deliveryDistributorId", deliveryDistributorEntity.getId());
         filter.put("offset", offset);
         filter.put("limit", limit);
         List<DeliveryDistributorFinancialFlowEntity> orderDeliveryInfoEntityList = deliveryDistributorFinancialFlowService.queryList(filter);
         return R.ok().put("orderDeliveryInfoEntityList", orderDeliveryInfoEntityList);
+    }
+
+    /**
+     * 查询该用户配送统计
+     *
+     * @return
+     */
+    @PostMapping("queryDeliveryDate")
+    @ApiOperation(value = "查询该用户配送统计")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "token", value = "token", required = true),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "platform", value = "平台标识", required = true),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "version", value = "版本", required = true)
+    })
+    public R queryDeliveryDate(@LoginDelivery @ApiIgnore DeliveryDistributorEntity deliveryDistributorEntity) {
+        Map<String, Object> filter = new HashMap(16);
+        filter.put("deliveryDistributorId", deliveryDistributorEntity.getId());
+        filter.put("status", OrderDeliveryInfoEntity.STATUS_DELIVERY_END);
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        filter.put("distributeTime", c.getTime());
+        DeliveryDateVO deliveryDateVO = orderDeliveryInfoService.queryDeliveryDate(filter);
+        return R.ok().put("deliveryDateVO", deliveryDateVO);
     }
 
     private R createToken(Long distributorId) {

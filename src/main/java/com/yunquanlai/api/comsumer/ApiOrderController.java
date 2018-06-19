@@ -127,7 +127,7 @@ public class ApiOrderController {
      * @return
      */
     @PostMapping("order")
-    @ApiOperation(value = "下单orderVO样例{ \"address\": \"南宁市幸福里\", \"name\": \"李有钱\", \"sex\": 10, \"locationX\": 22.156487, \"locationY\": 23.458798, \"phone\": \"15677188594\", \"remark\": \"水里多放辣椒\", \"deliveryTime\": null, \"productOrderVOList\":[ {\"productInfoId\": 10001, \"count\": 2}, {\"productInfoId\": 10002, \"count\": 1} ] }")
+    @ApiOperation(value = "下单orderVO样例{ \"orderToken\": \"xxxxx\",\"address\": \"南宁市幸福里\", \"name\": \"李有钱\", \"sex\": 10, \"locationX\": 22.156487, \"locationY\": 23.458798, \"phone\": \"15677188594\", \"remark\": \"水里多放辣椒\", \"deliveryTime\": null, \"productOrderVOList\":[ {\"productInfoId\": 10001, \"count\": 2}, {\"productInfoId\": 10002, \"count\": 1} ] }")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
             @ApiImplicitParam(name = "orderVO", value = "订单信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderVO", paramType = "body")
@@ -136,9 +136,10 @@ public class ApiOrderController {
         if (!tokenUtils.isExitToken(orderVO.getOrderToken())) {
             return R.error("订单确认已失效，请重新下单。");
         }
-        if (!availableDelivery(orderVO.getLocationX(), orderVO.getLocationY())) {
-            return R.error("订单不在派送范围内，请联系客服确认。");
-        }
+        // TODO 先注释
+//        if (!availableDelivery(orderVO.getLocationX(), orderVO.getLocationY())) {
+//            return R.error("订单不在派送范围内，请联系客服确认。");
+//        }
         return orderInfoService.newOrder(orderVO, user);
     }
 

@@ -22,7 +22,6 @@ public class ProductInfoVO implements Serializable {
 
     private ProductDetailEntity productDetailEntity;
 
-    @NotBlank(message="广告轮播图不能为空", groups = {AddGroup.class, UpdateGroup.class})
     private String banner1;
 
     private String banner2;
@@ -42,11 +41,15 @@ public class ProductInfoVO implements Serializable {
         String[] banners = productDetailEntity.getBanner().split(",");
         if (banners.length > 0) {
             banner1 = "null".equals(banners[0]) ? "" : banners[0];
+        }
+        if (banners.length > 1) {
             banner2 = "null".equals(banners[1]) ? "" : banners[1];
+        }
+        if (banners.length > 2) {
             banner3 = "null".equals(banners[2]) ? "" : banners[2];
-            if (banners.length > 3) {
-                banner4 = "null".equals(banners[3]) ? "" : banners[3];
-            }
+        }
+        if (banners.length > 3) {
+            banner4 = "null".equals(banners[3]) ? "" : banners[3];
         }
     }
 
