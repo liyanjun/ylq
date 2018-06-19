@@ -49,7 +49,7 @@ public class ApiDeliveryController {
     })
     public R recyclingEmptyBarrels(@LoginDelivery DeliveryDistributorEntity deliveryDistributorEntity, Integer number, Long orderDeliveryId) {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoService.queryObject(orderDeliveryId);
-        return userInfoService.recyclingEmptyBarrels(orderDeliveryInfoEntity.getUserInfoId(), number,deliveryDistributorEntity.getId());
+        return userInfoService.recyclingEmptyBarrels(orderDeliveryInfoEntity.getUserInfoId(), number, deliveryDistributorEntity.getId());
 
     }
 
@@ -98,6 +98,7 @@ public class ApiDeliveryController {
     public R markerOrderDelivery(@LoginDelivery @ApiIgnore DeliveryDistributorEntity deliveryDistributorEntity,
                                  @RequestParam Long orderDeliveryId) {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoService.queryObject(orderDeliveryId);
+        Assert.isNull(orderDeliveryInfoEntity, "找不到配送单【" + orderDeliveryId + "】");
         Assert.isNotEqual(deliveryDistributorEntity.getId().longValue(), orderDeliveryInfoEntity.getDeliveryDistributorId().longValue(), "请不要标记别人的订单。");
         orderDeliveryInfoService.orderDelivery(deliveryDistributorEntity, orderDeliveryInfoEntity);
         return R.ok();
