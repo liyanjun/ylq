@@ -104,6 +104,7 @@ CREATE TABLE `delivery_distributor_financial_flow` (
   `type` tinyint(4) NOT NULL COMMENT '流水类型，10：收益，20：提现申请，30：提现成功',
   `amount` decimal(10,0) NOT NULL COMMENT '流水金额',
   `delivery_distributor_id` bigint(20) NOT NULL COMMENT '配送员 ID',
+  `creation_time` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送员收入信息流水';
 
@@ -302,6 +303,7 @@ CREATE TABLE `product_info` (
   `creator_name` varchar(32) NOT NULL COMMENT '商品创建人名',
   `update_id` bigint(20) DEFAULT NULL COMMENT '商品更新人ID',
   `update_name` varchar(32) DEFAULT NULL COMMENT '商品更新人名',
+  `status` tinyint(4) NOT NULL COMMENT '商品状态，10：新创建，20：商品上架，30：商品下架',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='商品信息表表';
 ALTER TABLE `product_info`
