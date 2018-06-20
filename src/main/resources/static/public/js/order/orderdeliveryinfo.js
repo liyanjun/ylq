@@ -23,7 +23,7 @@ $(function () {
                     } else if (value == 50) {
                         return '配送结束';
                     } else if (value == 60) {
-                        return '';
+                        return '异常';
                     } else if (value == 70) {
                         return '';
                     }

@@ -41,6 +41,8 @@ public class DeliveryDistributorFinancialFlowEntity implements Serializable {
      */
 	private Long deliveryDistributorId;
 
+	private Date creationTime;
+
 	/**
 	 * 设置：
 	 */
@@ -112,5 +114,21 @@ public class DeliveryDistributorFinancialFlowEntity implements Serializable {
 	 */
 	public Long getDeliveryDistributorId() {
 		return deliveryDistributorId;
+	}
+
+    /**
+     * 获取：创建时间
+     * @return
+     */
+	public Date getCreationTime() {
+		return creationTime;
+	}
+
+    /**
+     * 设置：创建时间
+     * @param creationTime
+     */
+	public void setCreationTime(Date creationTime) {
+		this.creationTime = creationTime;
 	}
 }

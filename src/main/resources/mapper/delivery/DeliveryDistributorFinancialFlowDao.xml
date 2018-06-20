@@ -11,6 +11,7 @@
         <result property="type" column="type"/>
         <result property="amount" column="amount"/>
         <result property="deliveryDistributorId" column="delivery_distributor_id"/>
+		<result property="creationTime" column="creation_time"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorFinancialFlowEntity">
@@ -20,7 +21,8 @@
 					`after_amount`,
 					`type`, 
 					`amount`, 
-					`delivery_distributor_id`
+					`delivery_distributor_id`,
+					`creation_time`
 				from delivery_distributor_financial_flow where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
 	</select>
@@ -32,7 +34,8 @@
 		            `after_amount`,
 		            `type`, 
 		            `amount`, 
-		            `delivery_distributor_id`
+		            `delivery_distributor_id`,
+					`creation_time`
 				from delivery_distributor_financial_flow
 		<where>
 			<if test="deliveryDistributorId != null">
@@ -63,7 +66,8 @@
 			`after_amount`,
 			`type`, 
 			`amount`, 
-			`delivery_distributor_id`
+			`delivery_distributor_id`,
+			`creation_time`
 		)
 		values
 		(
@@ -71,7 +75,8 @@
 			#{afterAmount},
 			#{type}, 
 			#{amount}, 
-			#{deliveryDistributorId}
+			#{deliveryDistributorId},
+			#{creationTime}
 		)
 	</insert>
 	 
@@ -82,7 +87,8 @@
 			<if test="afterAmount != null">`after_amount` = #{afterAmount}, </if>
 			<if test="type != null">`type` = #{type}, </if>
 			<if test="amount != null">`amount` = #{amount}, </if>
-			<if test="deliveryDistributorId != null">`delivery_distributor_id` = #{deliveryDistributorId}</if>
+			<if test="deliveryDistributorId != null">`delivery_distributor_id` = #{deliveryDistributorId},</if>
+			<if test="creationTime != null">`creation_time` = #{creationTime} </if>
 		</set>
 		where id = #{id}
 	</update>
