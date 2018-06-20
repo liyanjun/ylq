@@ -7,7 +7,7 @@ $(function () {
 			{ label: '配送点名', name: 'name', index: 'name', width: 80 }, 			
 			{ label: '配送点坐标x', name: 'locationX', index: 'location_x', width: 80 }, 			
 			{ label: '配送点坐标y', name: 'locationY', index: 'location_y', width: 80 }, 			
-			{ label: '', name: '备注', index: 'remark', width: 80 }
+			{ label: '备注', name: 'remark', index: 'remark', width: 80 }
         ],
 		viewrecords: true,
         height: 385,

@@ -60,7 +60,7 @@ public class DeliveryEndpointServiceImpl implements DeliveryEndpointService {
 
     @Override
     public void update(DeliveryEndpointEntity deliveryEndpoint) {
-        DeliveryEndpointEntity deliveryEndpointEntity = deliveryEndpointDao.queryObject(deliveryEndpoint, true);
+        DeliveryEndpointEntity deliveryEndpointEntity = deliveryEndpointDao.queryObject(deliveryEndpoint.getId(), true);
         if (deliveryEndpoint == null) {
             return;
         }
