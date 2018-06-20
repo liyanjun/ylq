@@ -113,6 +113,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return orderInfoDao.queryList(map);
     }
 
+
     @Override
     public int queryTotal(Map<String, Object> map) {
         return orderInfoDao.queryTotal(map);
@@ -385,6 +386,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         for (CommentProductEntity commentProductEntity: orderCommentVO.getCommentProductEntities()) {
             commentProductDao.save(commentProductEntity);
         }
+    }
+
+    @Override
+    public List<OrderInfoEntity> queryListClient(Map filter) {
+        return orderInfoDao.queryListClient(filter);
     }
 
 

@@ -1,171 +1,165 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>订单信息表</title>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<link rel="stylesheet" href="../public/css/bootstrap.min.css">
-<link rel="stylesheet" href="../public/css/font-awesome.min.css">
-<link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
-<link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
-<link rel="stylesheet" href="../public/css/main.css">
-<script src="../public/libs/jquery.min.js"></script>
-<script src="../public/plugins/layer/layer.js"></script>
-<script src="../public/libs/bootstrap.min.js"></script>
-<script src="../public/libs/vue.min.js"></script>
-<script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
-<script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
-<script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
-<script src="../public/js/common.js"></script>
+    <title>订单信息表</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
+    <link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" href="../public/css/main.css">
+    <script src="../public/libs/jquery.min.js"></script>
+    <script src="../public/plugins/layer/layer.js"></script>
+    <script src="../public/libs/bootstrap.min.js"></script>
+    <script src="../public/libs/vue.min.js"></script>
+    <script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
+    <script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+    <script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script src="../public/js/common.js"></script>
 </head>
 <body>
 <div id="rrapp" v-cloak>
-	<div v-show="showList">
-		<div class="grid-btn">
-			<a v-if="hasPermission('orderinfo:info')" class="btn btn-primary" @click="detail"><i class="fa fa-plus"></i>&nbsp;详情</a>
-			<a v-if="hasPermission('orderinfo:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-			<a v-if="hasPermission('orderinfo:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-		</div>
-	    <table id="jqGrid"></table>
-	    <div id="jqGridPager"></div>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <a v-if="hasPermission('orderinfo:info')" class="btn btn-primary" @click="detail"><i class="fa fa-plus"></i>&nbsp;详情</a>
+            <a v-if="hasPermission('orderinfo:update')" class="btn btn-primary" @click="update"><i
+                    class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            <a v-if="hasPermission('orderinfo:delete')" class="btn btn-primary" @click="del"><i
+                    class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
     </div>
-    
+
     <div v-show="!showList" class="panel panel-default">
-		<div class="panel-heading">{{title}}</div>
-		<form class="form-horizontal">
-											<div class="form-group">
-			   	<div class="col-sm-2 control-label">订单总额</div>
-			   	<div class="col-sm-10">
-			      <input type="text" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="orderInfo.amountTotal" placeholder="订单总额"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">订单金额</div>
-			   	<div class="col-sm-10">
-			      <input type="text" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="orderInfo.amount" placeholder="订单金额"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">折扣优惠金额</div>
-			   	<div class="col-sm-10">
-			      <input type="text" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="orderInfo.amountBenifit" placeholder="订单折扣优惠金额"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">活动优惠金额</div>
-			   	<div class="col-sm-10">
-			      <input type="text" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="orderInfo.amountActivity" placeholder="订单活动优惠金额（即除了优惠标价外，使用的活动奖励）"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">订单配送费</div>
-			   	<div class="col-sm-10">
-			      <input type="text" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="orderInfo.amountDeliveryFee" placeholder="订单配送费"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">订单状态</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderInfo.status" placeholder="订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50已关闭"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">关联配送员 ID</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderInfo.deliveryDistributorId" placeholder="关联配送员 ID"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">关联配送员名</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderInfo.deliveryDistributorName" placeholder="关联配送员名"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">关联用户 ID</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderInfo.userInfoId" placeholder="关联用户 ID"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">用户名</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderInfo.username" placeholder="用户名"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">订单备注</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderInfo.remark" placeholder="订单备注"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">订单创建时间</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderInfo.creationTime" placeholder="订单创建时间"/>
-			    </div>
-			</div>
-							<div class="form-group">
-				<div class="col-sm-2 control-label"></div> 
-				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
-				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
-			</div>
-		</form>
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">订单原价总额</div>
+                <div class="col-sm-10">
+                    <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.amountTotal" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">订单金额</div>
+                <div class="col-sm-10">
+                    <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.amount" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">折扣优惠金额</div>
+                <div class="col-sm-10">
+                    <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.amountBenifit"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">活动优惠金额</div>
+                <div class="col-sm-10">
+                    <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.amountActivity"
+                           />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">订单配送费</div>
+                <div class="col-sm-10">
+                    <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.amountDeliveryFee"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">订单状态</div>
+                <div class="col-sm-10">
+                    <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==10" value="新创建"/>
+                    <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==20" value="已支付，待配送"/>
+                    <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==30" value="配送中"/>
+                    <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==40" value="已送达"/>
+                    <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==50" value="关闭"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">用户</div>
+                <div class="col-sm-10">
+                    <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.username" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">订单配送状态</div>
+                <div class="col-sm-10">
+                    <font color="green" v-if="orderInfo.type == 10">正常</font>
+                    <font color="red" v-if="orderInfo.type == 20">异常</font>
+                </div>
+            </div>
+            <div class="form-group" v-if="orderInfo.type == 20">
+                <div class="col-sm-2 control-label">订单异常信息</div>
+                <div class="col-sm-10">
+                    <font color="red" >{{orderInfo.exception}}</font>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">订单备注</div>
+                <div class="col-sm-10">
+                    <input type="text" disabled="disabled"  class="form-control" v-model="orderInfo.remark" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">订单创建时间</div>
+                <div class="col-sm-10">
+                    <input type="text" disabled="disabled"  class="form-control" v-model="orderInfo.creationTime" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="handDistribute" value="手工派单"/>
+                <input type="button" class="btn btn-primary" @click="handle" value="标记为已人工处理"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
         <div class="panel-heading">配送单信息</div>
         <div v-show="showDetail">
             <form class="form-horizontal">
                 <div class="form-group">
                     <div class="col-sm-2 control-label">收货人姓名：</div>
                     <div class="col-sm-10">
-                        <input type="text" disabled="disabled" class="form-control" v-model="orderDeliveryInfo.name" placeholder="收货人姓名"/>
+                        <input type="text" disabled="disabled" class="form-control" v-model="orderDeliveryInfo.name"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-2 control-label">电话：</div>
                     <div class="col-sm-10">
-                        <input type="text" disabled="disabled" class="form-control" v-model="orderDeliveryInfo.phone" placeholder="电话"/>
+                        <input type="text" disabled="disabled" class="form-control" v-model="orderDeliveryInfo.phone"/>
                     </div>
                 </div>
-				<div class="form-group">
+                <div class="form-group">
                     <div class="col-sm-2 control-label">收货地址：</div>
                     <div class="col-sm-10">
-                        <input type="text" disabled="disabled" class="form-control" v-model="orderDeliveryInfo.address" placeholder="收货地址"/>
+                        <input type="text" disabled="disabled" class="form-control" v-model="orderDeliveryInfo.address"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-2 control-label">配送单状态：</div>
-                    <label class="radio-inline">
-                        <input type="radio" disabled="disabled" name="status" value="10" v-model="orderDeliveryInfo.status"/> 未支付
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" disabled="disabled" name="status" value="20" v-model="orderDeliveryInfo.status"/> 未分配
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" disabled="disabled" name="status" value="30" v-model="orderDeliveryInfo.status"/> 分配中
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" disabled="disabled" name="status" value="40" v-model="orderDeliveryInfo.status"/> 配送中
-                    </label><label class="radio-inline">
-                        <input type="radio" disabled="disabled" name="status" value="50" v-model="orderDeliveryInfo.status"/> 配送结束
-                    </label>
+                    <div class="col-sm-10">
+                        <input type="text" disabled="disabled" class="form-control" v-if="orderDeliveryInfo.status==10" value="新创建"/>
+                        <input type="text" disabled="disabled" class="form-control" v-if="orderDeliveryInfo.status==20" value="未分配"/>
+                        <input type="text" disabled="disabled" class="form-control" v-if="orderDeliveryInfo.status==30" value="已关闭"/>
+                        <input type="text" disabled="disabled" class="form-control" v-if="orderDeliveryInfo.status==40" value="配送中"/>
+                        <input type="text" disabled="disabled" class="form-control" v-if="orderDeliveryInfo.status==50" value="配送结束"/>
+                        <input type="text" disabled="disabled" class="form-control" v-if="orderDeliveryInfo.status==50" value="异常"/>
+                    </div>
+                </label>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-2 control-label">配送员：</div>
                     <div class="col-sm-10">
-                        <input type="text" disabled="disabled" class="form-control" v-model="orderDeliveryInfo.deliveryDistributorId" placeholder="配送员"/>
+                        <input type="text" disabled="disabled" class="form-control"
+                               v-model="orderDeliveryInfo.deliveryDistributorId" />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-2 control-label">期望配送时间：</div>
                     <div class="col-sm-10">
-                        <input type="text" disabled="disabled" class="form-control" v-model="orderDeliveryInfo.delivery_time" placeholder="期望配送时间"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-2 control-label">备注：</div>
-                    <div class="col-sm-10">
-                        <input type="text" disabled="disabled" class="form-control" v-model="orderDeliveryInfo.remark" placeholder="备注"/>
+                        <input type="text" disabled="disabled" class="form-control"
+                               v-model="orderDeliveryInfo.delivery_time" />
                     </div>
                 </div>
             </form>
@@ -177,7 +171,7 @@
                 <div id="jqGridProductPager"></div>
             </form>
         </div>
-	</div>
+    </div>
 </div>
 
 <script src="../public/js/order/orderinfo.js"></script>

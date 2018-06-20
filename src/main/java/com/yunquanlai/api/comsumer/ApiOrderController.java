@@ -79,7 +79,7 @@ public class ApiOrderController {
         filter.put("status", status);
         filter.put("offset", offset);
         filter.put("limit", limit);
-        List<OrderInfoEntity> orderInfoEntities = orderInfoService.queryList(filter);
+        List<OrderInfoEntity> orderInfoEntities = orderInfoService.queryListClient(filter);
         return R.ok().put("orderInfoList", orderInfoEntities);
     }
 

@@ -94,6 +94,55 @@
                 order by ${sidx} ${order}
             </when>
             <otherwise>
+                order by type desc, status ,creation_time desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryListClient" resultType="com.yunquanlai.admin.order.entity.OrderInfoEntity">
+        select
+        `id`,
+        `amount_total`,
+        `amount`,
+        `amount_benifit`,
+        `amount_activity`,
+        `amount_delivery_fee`,
+        `status`,
+        `type`,
+        `pay_type`,
+        `delivery_distributor_id`,
+        `delivery_distributor_name`,
+        `user_info_id`,
+        `username`,
+        `remark`,
+        `exception`,
+        `creation_time`,
+        `paid_time`,
+        `distribute_time`,
+        `delivery_end_time`,
+        `close_time`
+        from order_info
+        <where>
+            <if test="userInfoId != null">
+                and user_info_id = #{userInfoId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="creationTime != null">
+                <![CDATA[
+                and creation_time <= #{creationTime}
+                ]]>
+            </if>
+        </where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
                 order by status ,creation_time desc
             </otherwise>
         </choose>

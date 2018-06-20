@@ -4,12 +4,11 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '订单金额', name: 'amount', index: 'amount', width: 80 },
-            {
-            	label: '订单状态',
-				name: 'status',
-				index: 'status',
-				width: 80,
+			{ label: '订单金额', name: 'amount', index: 'amount', width: 80 ,
+                formatter: function (value, options, row) {
+                    return value + "元";
+                }},
+            { label: '订单状态', name: 'status', index: 'status', width: 80,
                 formatter: function (value, options, row) {
                     if (value === 10) {
                         return '新创建';
@@ -18,19 +17,26 @@ $(function () {
                     } else if (value == 30) {
                         return '配送中';
                     } else if (value == 40) {
-                        return '已到达';
+                        return '已送达';
                     } else if (value == 50) {
                         return '关闭';
-                    } else if (value == 60) {
-                        return '人工处理';
-                    } else if (value == 70) {
-                        return '人工派单';
                     }
                 }
 			},
-            { label: '关联配送员名', name: 'deliveryDistributorName', index: 'delivery_distributor_name', width: 80 },
+            { label: '订单配送状态', name: 'type', index: 'type', width: 80,
+                formatter: function (value, options, row) {
+                    if (value === 10) {
+                        return '<font color="green">正常</font>';
+                    } else if (value === 20) {
+                        return '<font color="red">异常</font>'
+                    } else {
+                        return '未知';
+                    }
+                }
+            },
+            { label: '配送员', name: 'deliveryDistributorName', index: 'delivery_distributor_name', width: 80 },
 			{ label: '用户名', name: 'username', index: 'username', width: 80 },
-			{ label: '订单创建时间', name: 'creationTime', index: 'creation_time', width: 80 }
+			{ label: '下单时间', name: 'creationTime', index: 'creation_time', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -95,6 +101,20 @@ var vm = new Vue({
             
             vm.getInfo(id)
 		},
+        handle: function(event) {
+            $.ajax({
+                type: "POST",
+                url: "../hand?orderId=" + vm.orderInfo.Id,
+                contentType: "application/json",
+                success: function(r){
+                    if(r.code === 0){
+                        alert('标记手工处理成功');
+                    }else{
+                        alert(r.msg);
+                    }
+                }
+            });
+        },
 		saveOrUpdate: function (event) {
 			var url = vm.orderInfo.id == null ? "../orderinfo/save" : "../orderinfo/update";
 			$.ajax({
@@ -111,30 +131,6 @@ var vm = new Vue({
 						alert(r.msg);
 					}
 				}
-			});
-		},
-		del: function (event) {
-			var ids = getSelectedRows();
-			if(ids == null){
-				return ;
-			}
-			
-			confirm('确定要删除选中的记录？', function(){
-				$.ajax({
-					type: "POST",
-				    url: "../orderinfo/delete",
-				    contentType: "application/json",
-				    data: JSON.stringify(ids),
-				    success: function(r){
-						if(r.code == 0){
-							alert('操作成功', function(index){
-								window.location.reload();
-							});
-						}else{
-							alert(r.msg);
-						}
-					}
-				});
 			});
 		},
 		getInfo: function(id){
@@ -158,13 +154,13 @@ var vm = new Vue({
                 },
                 datatype: "json",
                 colModel: [
-                    { label: 'id', name: 'id', index: 'id', width: 50, key: true },
+                    { label: 'id', name: 'productInfoId', index: 'productInfoId', width: 50, key: true },
                     { label: '商品名称', name: 'productName', index: 'product_name', width: 80 },
                     { label: '商品数量', name: 'count', index: 'count', width: 80 },
                 ],
                 viewrecords: true,
                 height: 385,
-                width:500,
+                width:600,
                 rowNum: 10,
                 rowList : [10,30,50],
                 rownumbers: true,
