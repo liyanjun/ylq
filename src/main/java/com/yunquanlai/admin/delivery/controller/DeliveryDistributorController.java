@@ -88,6 +88,7 @@ public class DeliveryDistributorController extends AbstractController {
             //对密码进行加密
             deliveryDistributor.setPassword(DigestUtils.sha256Hex(pwd));
 			deliveryDistributor.setAmount(BigDecimal.ZERO);
+			deliveryDistributor.setOrderCount(0);
 			deliveryDistributorService.save(deliveryDistributor);
 			return R.ok();
 		} else {

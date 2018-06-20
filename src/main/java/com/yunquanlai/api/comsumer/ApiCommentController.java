@@ -53,7 +53,7 @@ public class ApiCommentController {
      * @return
      */
     @PostMapping("comment")
-    @ApiOperation(value = "提交用户评论信息")
+    @ApiOperation(value = "提交用户评论信息{\"orderId\":null,\"commentDeliveryEntity\":{\"id\":null,\"deliveryDistributorId\":null,\"comment\":null,\"level\":null,\"creationTime\":null},\"commentProductEntities\":[{\"id\":null,\"productId\":null,\"comment\":null,\"level\":null,\"creationTime\":null}]}")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
             @ApiImplicitParam(name = "OrderCommentVO", value = "订单评论信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderCommentVO", paramType = "body"),

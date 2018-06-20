@@ -42,6 +42,7 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
 
     @Autowired
     private OrderInfoService orderInfoService;
+
     @Async
     @Override
     public void onApplicationEvent(OrderDeliveryNotifyEvent applicationEvent) {
@@ -51,9 +52,9 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         IGtPush push = new IGtPush(host, appKey, masterSecret);
         AbstractTemplate template;
         if (deliveryDistributorEntity.getPlatform() == 10) {
-            template = getNotificationTemplate();
+            template = getNotificationTemplate(orderDeliveryId);
         } else {
-            template = getTransmissionTemplate(orderDeliveryInfoEntity.getId()+"");
+            template = getTransmissionTemplate(orderDeliveryInfoEntity.getId() + "");
         }
 
         SingleMessage message = new SingleMessage();
@@ -79,19 +80,19 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
             if (!"ok".equals(ret.getResponse().get("result"))) {
                 OrderInfoEntity orderInfoEntity = orderInfoService.queryObject(orderDeliveryInfoEntity.getOrderInfoId());
                 orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_EXCEPTION);
-                orderDeliveryInfoEntity.setRemark("推送订单异常："+ret.getResponse().toString());
+                orderDeliveryInfoEntity.setRemark("推送订单异常：" + ret.getResponse().toString());
                 orderInfoEntity.setType(OrderInfoEntity.TYPE_EXCEPTION);
-                orderInfoEntity.setException("推送订单异常："+ret.getResponse().toString());
-                orderInfoService.markException(orderInfoEntity,orderDeliveryInfoEntity);
+                orderInfoEntity.setException("推送订单异常：" + ret.getResponse().toString());
+                orderInfoService.markException(orderInfoEntity, orderDeliveryInfoEntity);
             }
             logger.debug(ret.getResponse().toString());
         } else {
             OrderInfoEntity orderInfoEntity = orderInfoService.queryObject(orderDeliveryInfoEntity.getOrderInfoId());
             orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_EXCEPTION);
-            orderDeliveryInfoEntity.setRemark("推送订单异常："+"推送请求发送异常");
+            orderDeliveryInfoEntity.setRemark("推送订单异常：" + "推送请求发送异常");
             orderInfoEntity.setType(OrderInfoEntity.TYPE_EXCEPTION);
-            orderInfoEntity.setException("推送订单异常："+"推送请求发送异常");
-            orderInfoService.markException(orderInfoEntity,orderDeliveryInfoEntity);
+            orderInfoEntity.setException("推送订单异常：" + "推送请求发送异常");
+            orderInfoService.markException(orderInfoEntity, orderDeliveryInfoEntity);
             logger.error("推送请求发送异常");
         }
 
@@ -103,7 +104,7 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
      *
      * @return
      */
-    public static NotificationTemplate getNotificationTemplate() {
+    public static NotificationTemplate getNotificationTemplate(Long orderDeliveryId) {
         NotificationTemplate template = new NotificationTemplate();
         // 设置APPID与APPKEY
         template.setAppId(appId);
@@ -111,7 +112,7 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         Style0 style = new Style0();
         // 设置通知栏标题与内容
         style.setTitle("您有新的配送任务");
-        style.setText("您有新的配送任务,请注意查看");
+        style.setText("{\"orderDeliveryId\":\"" + orderDeliveryId + "\",\"content\":\"您有新的配送任务,请注意查看\"}");
         // 配置通知栏图标
         style.setLogo("icon.png");
         // 配置通知栏网络图标

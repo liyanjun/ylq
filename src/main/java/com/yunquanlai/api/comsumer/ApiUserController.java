@@ -86,7 +86,7 @@ public class ApiUserController {
     })
     public R depositoryWithdraw(@LoginUser @ApiIgnore UserInfoEntity userInfoEntity){
         UserWithdrawDepositEntity temp = userWithdrawDepositService.queryObjectByUserId(userInfoEntity.getId());
-        Assert.isNull(temp,"已存在未处理的押金提现申请，请耐心等待。");
+        Assert.isNotNull(temp,"已存在未处理的押金提现申请，请耐心等待。");
         UserWithdrawDepositEntity userWithdrawDepositEntity = new UserWithdrawDepositEntity();
         userWithdrawDepositEntity.setUserInfoId(userInfoEntity.getId());
         userWithdrawDepositEntity.setCreationTime(new Date());

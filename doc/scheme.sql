@@ -78,7 +78,7 @@ CREATE TABLE `delivery_distributor` (
   `password` varchar(64) NOT NULL COMMENT '配送员登录密码',
   `birthday` varchar(10) NOT NULL COMMENT '配送员生日',
   `client_id` varchar(64) DEFAULT NULL COMMENT '用于点对点登录时的推送，由APP在登录的时候一起上传',
-  `order_count` int(11) DEFAULT '0' COMMENT '当前在配送订单数',
+  `order_count` int(11) NOT NULL DEFAULT '0' COMMENT '当前在配送订单数',
   `status` tinyint(4) NOT NULL DEFAULT '20' COMMENT '当前状态，10：可配送，20：不可配送',
   `platform` tinyint(4) DEFAULT '0' COMMENT '平台标识，10：安卓，20：苹果',
   `amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '配送员分润',
@@ -104,7 +104,7 @@ CREATE TABLE `delivery_distributor_financial_flow` (
   `type` tinyint(4) NOT NULL COMMENT '流水类型，10：收益，20：提现申请，30：提现成功',
   `amount` decimal(10,0) NOT NULL COMMENT '流水金额',
   `delivery_distributor_id` bigint(20) NOT NULL COMMENT '配送员 ID',
-  `creation_time` datetime NOT NULL COMMENT '创建时间',
+  `creation_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '流水时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送员收入信息流水';
 
