@@ -3,7 +3,7 @@
 
 <mapper namespace="com.yunquanlai.admin.system.dao.SysUserDao">
 	<select id="queryObject" resultType="com.yunquanlai.admin.system.entity.SysUserEntity">
-		select * from sys_user where userId = #{id}
+		select * from sys_user where user_id = #{id}
 		<if test="isLock != null and isLock == true">for update</if>
 	</select>
 	

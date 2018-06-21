@@ -84,19 +84,6 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">订单配送状态</div>
-                <div class="col-sm-10">
-                    <font color="green" v-if="orderInfo.type == 10">正常</font>
-                    <font color="red" v-if="orderInfo.type == 20">异常</font>
-                </div>
-            </div>
-            <div class="form-group" v-if="orderInfo.type == 20">
-                <div class="col-sm-2 control-label">订单异常信息</div>
-                <div class="col-sm-10">
-                    <font color="red" >{{orderInfo.exception}}</font>
-                </div>
-            </div>
-            <div class="form-group">
                 <div class="col-sm-2 control-label">订单备注</div>
                 <div class="col-sm-10">
                     <input type="text" disabled="disabled"  class="form-control" v-model="orderInfo.remark" />
@@ -109,14 +96,21 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label"></div>
-                <input type="button" class="btn btn-primary" @click="handDistribute" value="手工派单"/>
-                <input type="button" class="btn btn-primary" @click="handle" value="标记为已人工处理"/>
-                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+                <div class="col-sm-2 control-label">订单配送状态</div>
+                <div class="col-sm-10">
+                    <font color="green" v-if="orderInfo.type == 10">正常</font>
+                    <font color="red" v-if="orderInfo.type == 20">异常</font>
+                </div>
+            </div>
+            <div class="form-group" v-if="orderInfo.type == 20">
+                <div class="col-sm-2 control-label">订单异常信息</div>
+                <div class="col-sm-10">
+                    <font color="red" >{{orderInfo.exception}}</font>
+                </div>
             </div>
         </form>
-        <div class="panel-heading">配送单信息</div>
-        <div v-show="showDetail">
+        <div class="panel-heading" v-if="orderDeliveryInfo != null">配送单信息</div>
+        <div v-show="showDetail" v-if="orderDeliveryInfo != null">
             <form class="form-horizontal">
                 <div class="form-group">
                     <div class="col-sm-2 control-label">收货人姓名：</div>
@@ -163,6 +157,12 @@
                     </div>
                 </div>
             </form>
+            <div class="form-group">
+                <div class="col-sm-1 control-label"></div>
+                <input type="button" class="btn btn-primary" v-if="orderInfo.type == 20" @click="handDistribute" v-if="hasPermission('order:update')" value="手工派单"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-primary" v-if="orderInfo.type == 20" @click="handle" v-if="hasPermission('order:update')" value="标记为已人工处理"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
         </div>
         <div class="panel-heading">订单商品信息</div>
         <div v-show="showDetail">

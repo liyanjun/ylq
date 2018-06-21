@@ -16,6 +16,7 @@ import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunquanlai.admin.order.dao.OrderDeliveryInfoDao;
 import com.yunquanlai.admin.order.dao.OrderProductDetailDao;
 import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
+import com.yunquanlai.admin.order.entity.OrderOperateFlowEntity;
 import com.yunquanlai.admin.order.entity.OrderProductDetailEntity;
 import com.yunquanlai.admin.product.dao.ProductInfoDao;
 import com.yunquanlai.admin.product.dao.ProductStockDao;
@@ -360,7 +361,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntities.add(orderProductDetailEntity);
         }
         return R.ok().put("orderProductDetails", orderProductDetailEntities).
-                put("deposit", deposit).put("amount", amount).put("orderToken",tokenUtils.getToken());
+                put("deposit", deposit).put("amount", amount).put("orderToken", tokenUtils.getToken());
     }
 
     @Override
@@ -384,7 +385,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public void saveComment(OrderCommentVO orderCommentVO) {
         commentDeliveryDao.save(orderCommentVO.getCommentDeliveryEntity());
-        for (CommentProductEntity commentProductEntity: orderCommentVO.getCommentProductEntities()) {
+        for (CommentProductEntity commentProductEntity : orderCommentVO.getCommentProductEntities()) {
             commentProductDao.save(commentProductEntity);
         }
     }
@@ -394,13 +395,71 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return orderInfoDao.queryListClient(filter);
     }
 
+    @Override
+    public void handle(Long orderId) {
+        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderId, true);
+        orderInfoEntity.setStatus(OrderInfoEntity.STATUS_CLOSE);
+        orderInfoEntity.setType(OrderInfoEntity.TYPE_NORMAL);
+        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderId, true);
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_CLOSE);
+        orderInfoDao.update(orderInfoEntity);
+        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+    }
+
+    @Override
+    public void handDistribute(Long orderId, Long deliveryDistributorId, Long deliveryEndpointId) {
+        //先锁配送点，再开始锁配送点库存，否则有可能造成死锁
+        DeliveryEndpointEntity deliveryEndpointEntity = deliveryEndpointDao.queryObject(deliveryEndpointId, true);
+        if (deliveryEndpointEntity == null) {
+            throw new RRException("找不到ID为【" + deliveryEndpointId + "】的配送点");
+            // 该配送点找不到能送的人，找下一个配送点
+        }
+        DeliveryDistributorEntity deliveryDistributorEntity = deliveryDistributorDao.queryObject(deliveryDistributorId, true);
+        if (deliveryDistributorEntity == null) {
+            throw new RRException("找不到ID为【" + deliveryDistributorId + "】的配送员");
+            // 该配送点找不到能送的人，找下一个配送点
+        }
+        OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderId, true);
+        if (deliveryDistributorEntity == null) {
+            throw new RRException("找不到订单ID为【" + orderId + "】的配送单员");
+            // 该配送点找不到能送的人，找下一个配送点
+        }
+
+        List<OrderProductDetailEntity> orderProductDetailEntities = orderProductDetailDao.queryListByOrderId(orderId);
+        for (OrderProductDetailEntity orderProductDetailEntity : orderProductDetailEntities) {
+            ProductStockEntity productStockEntity = productStockDao.queryByDeliveryEndpointIdAndProductId(orderProductDetailEntity.getProductInfoId(), deliveryEndpointEntity.getId(), true);
+            // 强行扣库存，有可能扣到负数
+            productStockEntity.setCount(productStockEntity.getCount() - orderProductDetailEntity.getCount());
+            productStockDao.update(productStockEntity);
+        }
+        // 分配订单，配送中订单数加一
+        deliveryDistributorEntity.setOrderCount(deliveryDistributorEntity.getOrderCount() + 1);
+        deliveryDistributorDao.update(deliveryDistributorEntity);
+
+        // 更新订单分配时间
+        OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
+        orderInfoEntity.setId(orderId);
+        orderInfoEntity.setDistributeTime(new Date());
+        orderInfoEntity.setStatus(OrderInfoEntity.STATUS_ON_DELIVERY);
+        // 只要分配出去了，异常也是可以被宽恕的，毕竟要向前看
+        orderInfoEntity.setException("");
+        orderInfoEntity.setType(OrderInfoEntity.TYPE_NORMAL);
+        orderInfoDao.update(orderInfoEntity);
+
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
+        orderDeliveryInfoEntity.setDeliveryDistributorId(deliveryDistributorEntity.getId());
+        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+        //todo 记录订单手工操作
+        OrderOperateFlowEntity orderOperateFlowEntity = new OrderOperateFlowEntity();
+        applicationContext.publishEvent(new OrderDeliveryNotifyEvent(orderDeliveryInfoEntity.getId()));
+    }
+
 
     /**
      * 检查库存，并预生成要扣除的库存数
      *
      * @param orderProductDetailEntities 订单所购买的商品
      * @param deliveryEndpointEntity     配送点实体
-     *
      * @return
      */
     private List<ProductStockEntity> checkStock(List<OrderProductDetailEntity> orderProductDetailEntities, DeliveryEndpointEntity deliveryEndpointEntity) {

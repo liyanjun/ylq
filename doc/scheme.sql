@@ -312,6 +312,8 @@ CREATE TABLE `product_info` (
 ALTER TABLE `product_info`
 AUTO_INCREMENT=10000;
 
+ALTER TABLE `product_info`
+ADD UNIQUE INDEX `product_num_unique` (`product_num`) USING BTREE ;
 -- ----------------------------
 -- Table structure for product_ticket
 -- ----------------------------

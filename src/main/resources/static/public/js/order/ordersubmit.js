@@ -1,4 +1,5 @@
 $(function () {
+    vm.orderId = T.p("orderId");
     vm.getDeliveryEndpointList();
 });
 
@@ -21,7 +22,8 @@ var vm = new Vue({
                 contentType: "application/json",
                 data: {
                     "deliveryEndpointId":vm.deliveryEndpointId,
-                    "deliveryDistributorId":vm.deliveryDistributorId
+                    "deliveryDistributorId":vm.deliveryDistributorId,
+                    "orderId":vm.orderId
                 },
                 success: function(r){
                     if(r.code === 0){

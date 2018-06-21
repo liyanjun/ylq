@@ -92,4 +92,8 @@ public interface OrderInfoService {
     void saveComment(OrderCommentVO orderCommentVO);
 
     List<OrderInfoEntity> queryListClient(Map filter);
+
+    void handle(Long orderId);
+
+    void handDistribute(Long orderId, Long deliveryDistributorId, Long deliveryEndpointId);
 }
