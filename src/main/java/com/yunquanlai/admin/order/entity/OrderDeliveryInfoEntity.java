@@ -84,6 +84,10 @@ public class OrderDeliveryInfoEntity implements Serializable {
      */
     private Date deliveryEndTime;
     /**
+     * 设置：该配送单回送空桶数
+     */
+    private Integer emptyBarrels;
+    /**
      * 设置：关联配送员 ID
      */
     private Long deliveryDistributorId;
@@ -322,5 +326,13 @@ public class OrderDeliveryInfoEntity implements Serializable {
 
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public Integer getEmptyBarrels() {
+        return emptyBarrels;
+    }
+
+    public void setEmptyBarrels(Integer emptyBarrels) {
+        this.emptyBarrels = emptyBarrels;
     }
 }
