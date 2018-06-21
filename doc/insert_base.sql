@@ -76,7 +76,7 @@ INSERT INTO `sys_menu` VALUES ('57', '54', '修改', null, 'productstock:update'
 INSERT INTO `sys_menu` VALUES ('58', '54', '删除', null, 'productstock:delete', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('59', '0', '商品管理', null, null, '0', 'fa fa-cube', '0');
 INSERT INTO `sys_menu` VALUES ('60', '0', '配送管理', null, null, '0', 'fa fa-bicycle', '0');
-INSERT INTO `sys_menu` VALUES ('61', '0', '客户管理', null, null, '0', 'fa-users', '0');
+INSERT INTO `sys_menu` VALUES ('61', '0', '客户管理', null, null, '0', 'fa fa-users', '0');
 INSERT INTO `sys_menu` VALUES ('62', '61', '客户信息', 'user/userinfo.html', 'userinfo:list', '1', 'fa fa-user', '6');
 INSERT INTO `sys_menu` VALUES ('63', '62', '查看', null, 'userinfo:list,userinfo:info', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('64', '61', '押金提现申请', 'user/userwithdrawdeposit.html', 'userwithdrawdeposit:list', '1', 'fa fa-cny', '6');
