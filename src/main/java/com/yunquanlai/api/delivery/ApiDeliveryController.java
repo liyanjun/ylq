@@ -5,6 +5,7 @@ import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
 import com.yunquanlai.admin.user.service.UserInfoService;
 import com.yunquanlai.utils.R;
+import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.annotation.LoginDelivery;
 import com.yunquanlai.utils.validator.Assert;
 import io.swagger.annotations.*;
@@ -48,8 +49,11 @@ public class ApiDeliveryController {
             @ApiImplicitParam(paramType = "query", dataType = "long", name = "orderDeliveryId", value = "配送单 ID", required = true)
     })
     public R recyclingEmptyBarrels(@LoginDelivery DeliveryDistributorEntity deliveryDistributorEntity, Integer number, Long orderDeliveryId) {
+        if(number <= 0){
+            throw new RRException("回收空桶数不能小于等于0");
+        }
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoService.queryObject(orderDeliveryId);
-        return userInfoService.recyclingEmptyBarrels(orderDeliveryInfoEntity.getUserInfoId(), number, deliveryDistributorEntity.getId());
+        return userInfoService.recyclingEmptyBarrels(orderDeliveryInfoEntity, number, deliveryDistributorEntity.getId());
 
     }
 

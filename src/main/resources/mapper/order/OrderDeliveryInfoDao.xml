@@ -18,7 +18,8 @@
         <result property="distributeTime" column="distribute_time"/>
         <result property="deliveryTime" column="delivery_time"/>
         <result property="deliveryEndTime" column="delivery_end_time"/>
-        <result property="deliveryDistributorId" column="delivery_distributor_id"/>
+        <result property="deliveryEndTime" column="delivery_end_time"/>
+        <result property="emptyBarrels" column="empty_barrels"/>
         <result property="orderInfoId" column="order_info_id"/>
         <result property="userInfoId" column="user_info_id"/>
     </resultMap>
@@ -38,6 +39,7 @@
         `distribute_time`,
         `delivery_time`,
         `delivery_end_time`,
+        `empty_barrels`,
         `delivery_distributor_id`,
         `order_info_id`,
         `user_info_id`
@@ -60,6 +62,7 @@
         `distribute_time`,
         `delivery_time`,
         `delivery_end_time`,
+        `empty_barrels`,
         `delivery_distributor_id`,
         `order_info_id`,
         `user_info_id`
@@ -84,6 +87,7 @@
         `distribute_time`,
         `delivery_time`,
         `delivery_end_time`,
+        `empty_barrels`,
         `delivery_distributor_id`,
         `order_info_id`,
         `user_info_id`
@@ -133,6 +137,7 @@
         `distribute_time`,
         `delivery_time`,
         `delivery_end_time`,
+        `empty_barrels`,
         `delivery_distributor_id`,
         `order_info_id`,
         `user_info_id`
@@ -187,6 +192,7 @@
 			`distribute_time`,
 			`delivery_time`,
 			`delivery_end_time`,
+			`empty_barrels`,
 			`delivery_distributor_id`,
 			`order_info_id`, 
 			`user_info_id`
@@ -207,6 +213,7 @@
 			#{distributeTime},
 			#{deliveryTime},
 			#{deliveryEndTime},
+			#{emptyBarrels},
 			#{deliveryDistributorId},
 			#{orderInfoId}, 
 			#{userInfoId}
@@ -229,6 +236,7 @@
             <if test="creationTime != null">`creation_time` = #{creationTime},</if>
             <if test="deliveryTime != null">`delivery_time` = #{deliveryTime},</if>
             <if test="deliveryEndTime != null">`delivery_end_time` = #{deliveryEndTime},</if>
+            <if test="emptyBarrels != null">`empty_barrels` = #{emptyBarrels},</if>
             <if test="distributeTime != null">`distribute_time` = #{distributeTime},</if>
             <if test="deliveryDistributorId != null">`delivery_distributor_id` = #{deliveryDistributorId},</if>
             <if test="orderInfoId != null">`order_info_id` = #{orderInfoId},</if>

@@ -1,6 +1,7 @@
 package com.yunquanlai.admin.user.service;
 
 
+import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.utils.R;
 
@@ -35,10 +36,10 @@ public interface UserInfoService {
     /**
      * 用户回收空桶
      *
-     * @param userInfoId
+     * @param orderDeliveryInfoEntity
      * @param number
      * @param deliveryDistributorId
      * @return
      */
-    R recyclingEmptyBarrels(Long userInfoId, Integer number, Long deliveryDistributorId);
+    R recyclingEmptyBarrels(OrderDeliveryInfoEntity orderDeliveryInfoEntity, Integer number, Long deliveryDistributorId);
 }
