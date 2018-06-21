@@ -17,7 +17,7 @@ $(function () {
                     } else if (value == 30) {
                         return '配送中';
                     } else if (value == 40) {
-                        return '已送达';
+                        return '已到达';
                     } else if (value == 50) {
                         return '关闭';
                     }
@@ -101,6 +101,9 @@ var vm = new Vue({
             
             vm.getInfo(id)
 		},
+        handDistribute: function(){
+		    //TODO 手工派单功能实现
+        },
         handle: function(event) {
             $.ajax({
                 type: "POST",

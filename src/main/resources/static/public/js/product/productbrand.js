@@ -50,6 +50,8 @@ var vm = new Vue({
 		},
         reset: function () {
             $("#searchKey").val("");
+            vm.q.brandName = "";
+            vm.reload();
         },
 		add: function(){
 			vm.showList = false;

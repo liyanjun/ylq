@@ -57,6 +57,8 @@ var vm = new Vue({
 		},
         reset: function () {
             $("#searchKey").val("");
+            vm.q.key = "";
+            vm.reload();
         },
 		detail: function(){
             var id = getSelectedRow();

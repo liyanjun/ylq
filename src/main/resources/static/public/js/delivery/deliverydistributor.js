@@ -93,6 +93,8 @@ var vm = new Vue({
 		},
         reset: function () {
             $("#searchKey").val("");
+            vm.q.key = "";
+            vm.reload();
         },
 		add: function(){
 			vm.showList = false;

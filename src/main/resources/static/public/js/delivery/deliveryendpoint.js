@@ -53,6 +53,8 @@ var vm = new Vue({
 		},
         reset: function () {
             $("#searchKey").val("");
+            vm.q.deliveryEndpointName = "";
+            vm.reload();
         },
 		add: function(){
 			vm.showList = false;

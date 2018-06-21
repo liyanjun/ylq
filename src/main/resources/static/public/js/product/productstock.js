@@ -54,6 +54,9 @@ var vm = new Vue({
         reset: function () {
             $("#productName").val("");
             $("#endpointName").val("");
+            vm.q.productName = "";
+            vm.q.deliveryEndpointName = "";
+            vm.reload();
         },
 		add: function(){
 			vm.showList = false;

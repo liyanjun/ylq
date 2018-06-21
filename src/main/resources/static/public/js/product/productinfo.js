@@ -18,6 +18,8 @@ var vm = new Vue({
         },
         reset: function () {
             $("#searchKey").val("");
+            vm.q.key = "";
+            vm.reload();
         },
         add: function () {
             vm.showList = false;
@@ -160,7 +162,7 @@ $(function () {
         url: '../productinfo/list',
         datatype: "json",
         colModel: [
-            {label: '编号', name: 'id', index: 'id', width: 50, key: true},
+            {label: '编号', name: 'productNum', index: 'product_num', width: 50, key: true},
             {label: '名称', name: 'name', index: 'name', width: 80},
             {
                 label: '售价',
@@ -208,11 +210,11 @@ $(function () {
                 width: 80,
                 formatter: function (value, options, row) {
                     return value === 10 ?
-                        '是' :
-                        '否';
+                        '<font color="green">是</font>' :
+                        '<font color="red">否</font>';
                 }
             },
-            {label: '创建时间', name: 'creationTime', index: 'creation_time', width: 130},
+            /*{label: '创建时间', name: 'creationTime', index: 'creation_time', width: 130},*/
             /*{label: '最后更新时间', name: 'updateTime', index: 'update_time', width: 130},*/
             {label: '排序', name: 'sort', index: 'sort', width: 60}
         ],
