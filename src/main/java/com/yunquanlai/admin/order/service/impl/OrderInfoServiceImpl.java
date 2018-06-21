@@ -208,6 +208,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderDeliveryInfoEntity.setOrderInfoId(orderInfoEntity.getId());
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_NEW);
         orderDeliveryInfoEntity.setCreationTime(new Date());
+        orderDeliveryInfoEntity.setEmptyBarrels(0);
         // 配送单
         orderDeliveryInfoDao.save(orderDeliveryInfoEntity);
         // TODO 发票，发票抬头(先不做)

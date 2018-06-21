@@ -61,11 +61,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public R recyclingEmptyBarrels(OrderDeliveryInfoEntity orderDeliveryInfoEntity, Integer number, Long deliveryDistributorId) {
         orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObject(orderDeliveryInfoEntity.getId(), true);
-        if(orderDeliveryInfoEntity.getEmptyBarrels() == null){
-            orderDeliveryInfoEntity.setEmptyBarrels(number);
-        }else{
-            orderDeliveryInfoEntity.setEmptyBarrels(orderDeliveryInfoEntity.getEmptyBarrels() + number);
-        }
+        orderDeliveryInfoEntity.setEmptyBarrels(orderDeliveryInfoEntity.getEmptyBarrels() + number);
+        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderDeliveryInfoEntity.getUserInfoId(), true);
         Assert.isNull(userInfoEntity, "找不到配送单的用户信息。");
         if (userInfoEntity.getEmptyBucketNumber().intValue() < number.intValue()) {

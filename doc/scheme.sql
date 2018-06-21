@@ -172,7 +172,7 @@ CREATE TABLE `order_delivery_info` (
   `distribute_time` datetime COMMENT '配送单开始分配时间',
   `delivery_time` datetime COMMENT '期望配送时间',
   `delivery_end_time` datetime COMMENT '配送结束时间',
-  `empty_barrels` int(11) COMMENT '该配送单回收空桶数',
+  `empty_barrels` int(11) NOT NULL COMMENT '该配送单回收空桶数',
   `delivery_distributor_id` bigint(20) DEFAULT NULL COMMENT '关联配送员 ID',
   `order_info_id` bigint(20) NOT NULL COMMENT '关联订单 ID',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
