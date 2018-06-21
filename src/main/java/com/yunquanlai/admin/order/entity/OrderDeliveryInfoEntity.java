@@ -80,6 +80,10 @@ public class OrderDeliveryInfoEntity implements Serializable {
      */
     private Date deliveryTime;
     /**
+     * 设置：配送结束时间
+     */
+    private Date deliveryEndTime;
+    /**
      * 设置：关联配送员 ID
      */
     private Long deliveryDistributorId;
@@ -252,6 +256,14 @@ public class OrderDeliveryInfoEntity implements Serializable {
      */
     public Date getDeliveryTime() {
         return deliveryTime;
+    }
+
+    public Date getDeliveryEndTime() {
+        return deliveryEndTime;
+    }
+
+    public void setDeliveryEndTime(Date deliveryEndTime) {
+        this.deliveryEndTime = deliveryEndTime;
     }
 
     /**

@@ -121,9 +121,10 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         List<OrderProductDetailEntity> orderProductDetailEntities = orderProductDetailDao.queryListByOrderId(orderInfoEntity.getId());
         UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderInfoEntity.getUserInfoId(), true);
         Assert.isNull(orderDeliveryInfoEntity, "找不到订单用户信息");
-
+        Date now = new Date();
         // 标记配送单送达
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_DELIVERY_END);
+        orderDeliveryInfoEntity.setDeliveryEndTime(now);
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         // 减掉配送员 当前配送订单数，并分润，记录分润流水
         deliveryDistributorEntity.setOrderCount(deliveryDistributorEntity.getOrderCount() - 1);
@@ -139,7 +140,7 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         deliveryDistributorDao.update(deliveryDistributorEntity);
         // 更新订单状态及配送结束时间
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_DELIVERY_END);
-        orderInfoEntity.setDeliveryEndTime(new Date());
+        orderInfoEntity.setDeliveryEndTime(now);
         orderInfoDao.update(orderInfoEntity);
         // 更新添加用户空桶信息，及空桶流水
         int emptyBucketNumber = 0;

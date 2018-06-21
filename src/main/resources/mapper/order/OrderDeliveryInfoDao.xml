@@ -17,6 +17,7 @@
         <result property="creationTime" column="creation_time"/>
         <result property="distributeTime" column="distribute_time"/>
         <result property="deliveryTime" column="delivery_time"/>
+        <result property="deliveryEndTime" column="delivery_end_time"/>
         <result property="deliveryDistributorId" column="delivery_distributor_id"/>
         <result property="orderInfoId" column="order_info_id"/>
         <result property="userInfoId" column="user_info_id"/>
@@ -36,6 +37,7 @@
         `creation_time`,
         `distribute_time`,
         `delivery_time`,
+        `delivery_end_time`,
         `delivery_distributor_id`,
         `order_info_id`,
         `user_info_id`
@@ -57,6 +59,7 @@
         `creation_time`,
         `distribute_time`,
         `delivery_time`,
+        `delivery_end_time`,
         `delivery_distributor_id`,
         `order_info_id`,
         `user_info_id`
@@ -80,6 +83,7 @@
         `creation_time`,
         `distribute_time`,
         `delivery_time`,
+        `delivery_end_time`,
         `delivery_distributor_id`,
         `order_info_id`,
         `user_info_id`
@@ -128,6 +132,7 @@
         `creation_time`,
         `distribute_time`,
         `delivery_time`,
+        `delivery_end_time`,
         `delivery_distributor_id`,
         `order_info_id`,
         `user_info_id`
@@ -181,7 +186,8 @@
 			`creation_time`,
 			`distribute_time`,
 			`delivery_time`,
-			`delivery_distributor_id`, 
+			`delivery_end_time`,
+			`delivery_distributor_id`,
 			`order_info_id`, 
 			`user_info_id`
 		)
@@ -200,7 +206,8 @@
 			#{creationTime},
 			#{distributeTime},
 			#{deliveryTime},
-			#{deliveryDistributorId}, 
+			#{deliveryEndTime},
+			#{deliveryDistributorId},
 			#{orderInfoId}, 
 			#{userInfoId}
 		)
@@ -221,6 +228,7 @@
             <if test="detail != null">`detail` = #{detail},</if>
             <if test="creationTime != null">`creation_time` = #{creationTime},</if>
             <if test="deliveryTime != null">`delivery_time` = #{deliveryTime},</if>
+            <if test="deliveryEndTime != null">`delivery_end_time` = #{deliveryEndTime},</if>
             <if test="distributeTime != null">`distribute_time` = #{distributeTime},</if>
             <if test="deliveryDistributorId != null">`delivery_distributor_id` = #{deliveryDistributorId},</if>
             <if test="orderInfoId != null">`order_info_id` = #{orderInfoId},</if>
