@@ -108,6 +108,11 @@ public class ProductInfoEntity implements Serializable {
 	private Integer isQuick;
 
 	/**
+	 * 商品编号
+	 */
+	private String productNum;
+
+	/**
 	 * 设置：主键ID
 	 */
 	public void setId(Long id) {
@@ -324,5 +329,13 @@ public class ProductInfoEntity implements Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public String getProductNum() {
+		return productNum;
+	}
+
+	public void setProductNum(String productNum) {
+		this.productNum = productNum;
 	}
 }
