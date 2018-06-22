@@ -2,6 +2,7 @@ package com.yunquanlai.admin.order.controller;
 
 import com.yunquanlai.admin.common.AbstractController;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
+import com.yunquanlai.admin.order.entity.OrderOperateFlowEntity;
 import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
@@ -12,6 +13,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -60,8 +62,8 @@ public class OrderInfoController extends AbstractController {
     public R handDistribute(@RequestParam Long orderId, Long deliveryDistributorId, Long deliveryEndpointId) {
         Assert.isNull(deliveryEndpointId, "请选择配送点。");
         Assert.isNull(deliveryDistributorId, "请选择配送员。");
-
-        orderInfoService.handDistribute(orderId,deliveryDistributorId,deliveryEndpointId);
+        OrderOperateFlowEntity orderOperateFlowEntity = new OrderOperateFlowEntity(getUserId(),getUser().getUsername(),new Date());
+        orderInfoService.handDistribute(orderId,deliveryDistributorId,deliveryEndpointId,orderOperateFlowEntity);
         return R.ok();
     }
 
@@ -76,7 +78,9 @@ public class OrderInfoController extends AbstractController {
     @RequiresPermissions("orderinfo:update")
     public R handle(@RequestParam Long orderId, String remark) {
         Assert.isBlank(remark, "请填写手工处理备注。");
-        orderInfoService.handle(orderId);
+        OrderOperateFlowEntity orderOperateFlowEntity = new OrderOperateFlowEntity(getUserId(),getUser().getUsername(),new Date());
+        orderOperateFlowEntity.setRemark(remark);
+        orderInfoService.handle(orderId,orderOperateFlowEntity);
         return R.ok();
     }
 

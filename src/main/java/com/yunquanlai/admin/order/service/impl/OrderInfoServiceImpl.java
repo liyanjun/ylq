@@ -10,6 +10,7 @@ import com.yunquanlai.admin.delivery.dao.DeliveryEndpointDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunquanlai.admin.order.dao.OrderDeliveryInfoDao;
+import com.yunquanlai.admin.order.dao.OrderOperateFlowDao;
 import com.yunquanlai.admin.order.dao.OrderProductDetailDao;
 import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderOperateFlowEntity;
@@ -63,6 +64,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Autowired
     private OrderDeliveryInfoDao orderDeliveryInfoDao;
+
+    @Autowired
+    private OrderOperateFlowDao orderOperateFlowDao;
 
     @Autowired
     private ProductInfoDao productInfoDao;
@@ -391,18 +395,22 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public void handle(Long orderId) {
+    public void handle(Long orderId, OrderOperateFlowEntity orderOperateFlowEntity) {
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderId, true);
+        orderOperateFlowEntity.setType(OrderOperateFlowEntity.TYPE_HANDLE);
+        orderOperateFlowEntity.setBeforeStatus(orderInfoEntity.getStatus());
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_CLOSE);
         orderInfoEntity.setType(OrderInfoEntity.TYPE_NORMAL);
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderId, true);
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_CLOSE);
+        orderOperateFlowEntity.setAfterStatus(OrderInfoEntity.STATUS_CLOSE);
         orderInfoDao.update(orderInfoEntity);
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+        orderOperateFlowDao.update(orderOperateFlowEntity);
     }
 
     @Override
-    public void handDistribute(Long orderId, Long deliveryDistributorId, Long deliveryEndpointId) {
+    public void handDistribute(Long orderId, Long deliveryDistributorId, Long deliveryEndpointId, OrderOperateFlowEntity orderOperateFlowEntity) {
         //先锁配送点，再开始锁配送点库存，否则有可能造成死锁
         DeliveryEndpointEntity deliveryEndpointEntity = deliveryEndpointDao.queryObject(deliveryEndpointId, true);
         if (deliveryEndpointEntity == null) {
@@ -430,12 +438,13 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         // 分配订单，配送中订单数加一
         deliveryDistributorEntity.setOrderCount(deliveryDistributorEntity.getOrderCount() + 1);
         deliveryDistributorDao.update(deliveryDistributorEntity);
-
         // 更新订单分配时间
-        OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
+        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderId, true);
+        orderOperateFlowEntity.setBeforeStatus(orderInfoEntity.getStatus());
         orderInfoEntity.setId(orderId);
         orderInfoEntity.setDistributeTime(new Date());
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_ON_DELIVERY);
+        orderOperateFlowEntity.setAfterStatus(OrderInfoEntity.STATUS_ON_DELIVERY);
         // 只要分配出去了，异常也是可以被宽恕的，毕竟要向前看
         orderInfoEntity.setException("");
         orderInfoEntity.setType(OrderInfoEntity.TYPE_NORMAL);
@@ -444,8 +453,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
         orderDeliveryInfoEntity.setDeliveryDistributorId(deliveryDistributorEntity.getId());
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
-        //todo 记录订单手工操作
-        OrderOperateFlowEntity orderOperateFlowEntity = new OrderOperateFlowEntity();
+        orderOperateFlowEntity.setType(OrderOperateFlowEntity.TYPE_HAND_DISTRIBUTOR);
+        orderOperateFlowEntity.setRemark("手工分配订单【" + orderId + "】到【" + deliveryEndpointEntity.getName() + "：编号" + deliveryEndpointEntity.getId() + "】，【" + deliveryDistributorEntity.getName() + "：编号" + deliveryDistributorEntity.getId() + "】");
+        orderOperateFlowDao.update(orderOperateFlowEntity);
         applicationContext.publishEvent(new OrderDeliveryNotifyEvent(orderDeliveryInfoEntity.getId()));
     }
 
@@ -455,6 +465,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
      *
      * @param orderProductDetailEntities 订单所购买的商品
      * @param deliveryEndpointEntity     配送点实体
+     *
      * @return
      */
     private List<ProductStockEntity> checkStock(List<OrderProductDetailEntity> orderProductDetailEntities, DeliveryEndpointEntity deliveryEndpointEntity) {
