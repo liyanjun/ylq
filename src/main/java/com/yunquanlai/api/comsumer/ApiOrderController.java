@@ -1,7 +1,11 @@
 package com.yunquanlai.api.comsumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.yunquanlai.admin.comment.dao.CommentDeliveryDao;
+import com.yunquanlai.admin.comment.service.CommentDeliveryService;
+import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
+import com.yunquanlai.admin.delivery.service.DeliveryDistributorService;
 import com.yunquanlai.admin.delivery.service.DeliveryEndpointService;
 import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
@@ -57,6 +61,12 @@ public class ApiOrderController {
     private DeliveryEndpointService deliveryEndpointService;
 
     @Autowired
+    private DeliveryDistributorService deliveryDistributorService;
+
+    @Autowired
+    private CommentDeliveryService commentDeliveryService;
+
+    @Autowired
     private TokenUtils tokenUtils;
 
     /**
@@ -100,7 +110,9 @@ public class ApiOrderController {
         Assert.isNull(orderInfoEntity, "找不到订单");
         Assert.isNotEqual(orderInfoEntity.getUserInfoId(), user.getId(), "不能查询别人的订单详情");
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoService.queryObjectByOrderId(orderId);
-        return R.ok().put("orderInfo", orderInfoEntity).put("orderDeliveryInfo", orderDeliveryInfoEntity);
+        DeliveryDistributorEntity deliveryDistributorEntity = deliveryDistributorService.queryObject(orderDeliveryInfoEntity.getDeliveryDistributorId());
+//        commentDeliveryService.
+        return R.ok().put("orderInfo", orderInfoEntity).put("orderDeliveryInfo", orderDeliveryInfoEntity).put("deliveryDistributor",deliveryDistributorEntity);
     }
 
 
@@ -127,7 +139,7 @@ public class ApiOrderController {
      * @return
      */
     @PostMapping("order")
-    @ApiOperation(value = "下单orderVO样例{ \"orderToken\": \"xxxxx\",\"address\": \"南宁市幸福里\", \"name\": \"李有钱\", \"sex\": 10, \"locationX\": 22.156487, \"locationY\": 23.458798, \"phone\": \"15677188594\", \"remark\": \"水里多放辣椒\", \"deliveryTime\": null, \"productOrderVOList\":[ {\"productInfoId\": 10001, \"count\": 2}, {\"productInfoId\": 10002, \"count\": 1} ] }")
+    @ApiOperation(value = "下单orderVO样例{ \"deposit\": 15.0,\"bucketNum\": 1,\"orderToken\": \"xxxxx\",\"address\": \"南宁市幸福里\", \"name\": \"李有钱\", \"sex\": 10, \"locationX\": 22.156487, \"locationY\": 23.458798, \"phone\": \"15677188594\", \"remark\": \"水里多放辣椒\", \"deliveryTime\": null, \"productOrderVOList\":[ {\"productInfoId\": 10001, \"count\": 2}, {\"productInfoId\": 10002, \"count\": 1} ] }")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
             @ApiImplicitParam(name = "orderVO", value = "订单信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderVO", paramType = "body")

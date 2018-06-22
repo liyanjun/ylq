@@ -57,6 +57,14 @@ public class OrderInfoEntity implements Serializable {
      */
     private BigDecimal deposit;
     /**
+     * 押金桶数
+     */
+    private BigDecimal bucketNum;
+    /**
+     * 订单购买商品详情
+     */
+    private String detail;
+    /**
      * 设置：订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50已关闭
      */
     private Integer status;
@@ -381,5 +389,21 @@ public class OrderInfoEntity implements Serializable {
 
     public void setDeposit(BigDecimal deposit) {
         this.deposit = deposit;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public void setBucketNum(BigDecimal bucketNum) {
+        this.bucketNum = bucketNum;
+    }
+
+    public BigDecimal getBucketNum() {
+        return bucketNum;
     }
 }

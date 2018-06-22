@@ -11,6 +11,9 @@
         <result property="amountBenifit" column="amount_benifit"/>
         <result property="amountActivity" column="amount_activity"/>
         <result property="amountDeliveryFee" column="amount_delivery_fee"/>
+        <result property="detail" column="detail"/>
+        <result property="deposit" column="deposit"/>
+        <result property="bucketNum" column="bucket_num"/>
         <result property="status" column="status"/>
         <result property="type" column="type"/>
         <result property="payType" column="pay_type"/>
@@ -35,6 +38,9 @@
         `amount_benifit`,
         `amount_activity`,
         `amount_delivery_fee`,
+        `detail`,
+        `deposit`,
+        `bucket_num`,
         `status`,
         `type`,
         `pay_type`,
@@ -61,6 +67,9 @@
         `amount_benifit`,
         `amount_activity`,
         `amount_delivery_fee`,
+        `detail`,
+        `deposit`,
+        `bucket_num`,
         `status`,
         `type`,
         `pay_type`,
@@ -110,6 +119,9 @@
         `amount_benifit`,
         `amount_activity`,
         `amount_delivery_fee`,
+        `detail`,
+        `deposit`,
+        `bucket_num`,
         `status`,
         `type`,
         `pay_type`,
@@ -164,7 +176,10 @@
 			`amount_benifit`, 
 			`amount_activity`, 
 			`amount_delivery_fee`, 
-			`status`, 
+			`detail`,
+			`deposit`,
+			`bucket_num`,
+			`status`,
 			`type`, 
 			`pay_type`,
 			`delivery_distributor_id`,
@@ -186,7 +201,10 @@
 			#{amountBenifit}, 
 			#{amountActivity}, 
 			#{amountDeliveryFee}, 
-			#{status}, 
+			#{detail},
+			#{deposit},
+			#{bucketNum},
+			#{status},
 			#{type}, 
 			#{payType},
 			#{deliveryDistributorId},
@@ -211,6 +229,9 @@
             <if test="amountBenifit != null">`amount_benifit` = #{amountBenifit},</if>
             <if test="amountActivity != null">`amount_activity` = #{amountActivity},</if>
             <if test="amountDeliveryFee != null">`amount_delivery_fee` = #{amountDeliveryFee},</if>
+            <if test="detail != null">`detail` = #{detail},</if>
+            <if test="deposit != null">`deposit` = #{deposit},</if>
+            <if test="bucketNum != null">`bucket_num` = #{bucketNum},</if>
             <if test="status != null">`status` = #{status},</if>
             <if test="type != null">`type` = #{type},</if>
             <if test="payType != null">`pay_type` = #{payType},</if>

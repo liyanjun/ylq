@@ -2,13 +2,9 @@ package com.yunquanlai.admin.order.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.yunquanlai.admin.comment.dao.CommentDeliveryDao;
 import com.yunquanlai.admin.comment.dao.CommentProductDao;
-import com.yunquanlai.admin.comment.entity.CommentDeliveryEntity;
 import com.yunquanlai.admin.comment.entity.CommentProductEntity;
-import com.yunquanlai.admin.comment.service.CommentDeliveryService;
-import com.yunquanlai.admin.comment.service.CommentProductService;
 import com.yunquanlai.admin.delivery.dao.DeliveryDistributorDao;
 import com.yunquanlai.admin.delivery.dao.DeliveryEndpointDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
@@ -154,7 +150,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         BigDecimal amount = BigDecimal.ZERO;
         BigDecimal amountTotal = BigDecimal.ZERO;
         BigDecimal amountDeliveryFee = BigDecimal.ZERO;
-        BigDecimal deposit = BigDecimal.ZERO;
 
         for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
             // 计算订单总额
@@ -166,9 +161,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             if (productInfoEntity.getAmountShow() != null) {
                 amountTotal = amountTotal.add(productInfoEntity.getAmountShow().multiply(new BigDecimal(productOrderVO.getCount())));
             }
-            if (productInfoEntity.getBucketType() == ProductInfoEntity.BUCKET_TYPE_RECYCLE) {
-                deposit = deposit.add(bEmptyValue.multiply(new BigDecimal(productOrderVO.getCount())));
-            }
 
             amountDeliveryFee = amountDeliveryFee.add(productInfoEntity.getDeliveryFee());
             OrderProductDetailEntity orderProductDetailEntity = new OrderProductDetailEntity();
@@ -178,7 +170,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntity.setBucketType(productInfoEntity.getBucketType());
             orderProductDetailEntities.add(orderProductDetailEntity);
         }
-        orderInfoEntity.setDeposit(deposit);
+        orderInfoEntity.setDeposit(orderVO.getDeposit());
+        orderInfoEntity.setBucketNum(orderVO.getBucketNum());
         orderInfoEntity.setAmount(amount);
         orderInfoEntity.setAmountTotal(amountTotal);
         orderInfoEntity.setAmountDeliveryFee(amountDeliveryFee);
@@ -189,6 +182,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoEntity.setType(OrderInfoEntity.TYPE_NORMAL);
         orderInfoEntity.setPayType(OrderInfoEntity.PAY_TYPE_CASH);
         orderInfoEntity.setRemark(orderVO.getRemark());
+        orderInfoEntity.setDetail(mapper.writeValueAsString(orderProductDetailEntities));
         // 订单
         orderInfoDao.save(orderInfoEntity);
         orderDeliveryInfoEntity.setAddress(orderVO.getAddress());
@@ -196,6 +190,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (orderVO.getDeliveryTime() != null) {
             orderDeliveryInfoEntity.setDeliveryTime(sdf.parse(orderVO.getDeliveryTime()));
         }
+
         orderDeliveryInfoEntity.setAmountDeliveryFee(amountDeliveryFee);
         orderDeliveryInfoEntity.setDetail(mapper.writeValueAsString(orderProductDetailEntities));
         orderDeliveryInfoEntity.setLocationX(orderVO.getLocationX());
@@ -225,8 +220,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        orderPay(orderInfoEntity.getId(), orderInfoEntity.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
-        return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities).put("minDeposit", deposit);
+        orderPay(orderInfoEntity.getId(), orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit()).multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
+        return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities);
     }
 
     @Override
