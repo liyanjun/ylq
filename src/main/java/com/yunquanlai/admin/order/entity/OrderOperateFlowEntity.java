@@ -54,6 +54,9 @@ public class OrderOperateFlowEntity implements Serializable {
      */
 	private String operatorName;
 
+	public OrderOperateFlowEntity() {
+	}
+
 	public OrderOperateFlowEntity(Long userId, String username, Date date) {
 		this.operatorId = userId;
 		this.operatorName = username;

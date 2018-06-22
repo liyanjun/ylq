@@ -405,9 +405,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderId, true);
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_CLOSE);
         orderOperateFlowEntity.setAfterStatus(OrderInfoEntity.STATUS_CLOSE);
+        orderInfoEntity.setRemark("订单已人工关闭，处理办法：" + orderOperateFlowEntity.getRemark());
         orderInfoDao.update(orderInfoEntity);
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
-        orderOperateFlowDao.update(orderOperateFlowEntity);
+        orderOperateFlowDao.save(orderOperateFlowEntity);
     }
 
     @Override
@@ -456,7 +457,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         orderOperateFlowEntity.setType(OrderOperateFlowEntity.TYPE_HAND_DISTRIBUTOR);
         orderOperateFlowEntity.setRemark("手工分配订单【" + orderId + "】到【" + deliveryEndpointEntity.getName() + "：编号" + deliveryEndpointEntity.getId() + "】，【" + deliveryDistributorEntity.getName() + "：编号" + deliveryDistributorEntity.getId() + "】");
-        orderOperateFlowDao.update(orderOperateFlowEntity);
+        orderOperateFlowDao.save(orderOperateFlowEntity);
         applicationContext.publishEvent(new OrderDeliveryNotifyEvent(orderDeliveryInfoEntity.getId()));
     }
 
