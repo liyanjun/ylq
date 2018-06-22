@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
+import com.yunquanlai.admin.order.entity.OrderOperateFlowEntity;
 import com.yunquanlai.admin.order.entity.OrderProductDetailEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderCommentVO;
@@ -93,7 +94,7 @@ public interface OrderInfoService {
 
     List<OrderInfoEntity> queryListClient(Map filter);
 
-    void handle(Long orderId);
+    void handle(Long orderId, OrderOperateFlowEntity orderOperateFlowEntity);
 
-    void handDistribute(Long orderId, Long deliveryDistributorId, Long deliveryEndpointId);
+    void handDistribute(Long orderId, Long deliveryDistributorId, Long deliveryEndpointId, OrderOperateFlowEntity orderOperateFlowEntity);
 }

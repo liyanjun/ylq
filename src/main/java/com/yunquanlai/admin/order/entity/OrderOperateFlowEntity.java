@@ -14,6 +14,12 @@ import java.util.Date;
  */
 public class OrderOperateFlowEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	public static final int TYPE_HAND_DISTRIBUTOR = 10;
+
+	public static final int TYPE_HANDLE = 20;
+
+
 	
     /**
      * 设置：主键 ID
@@ -47,6 +53,12 @@ public class OrderOperateFlowEntity implements Serializable {
      * 设置：操作人名
      */
 	private String operatorName;
+
+	public OrderOperateFlowEntity(Long userId, String username, Date date) {
+		this.operatorId = userId;
+		this.operatorName = username;
+		this.operatorTime = date;
+	}
 
 	/**
 	 * 设置：主键 ID
