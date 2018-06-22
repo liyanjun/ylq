@@ -13,6 +13,7 @@ import java.util.Date;
  * @date 2018-06-04 22:42:21
  */
 public class OrderInfoEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     public static final int STATUS_NEW = 10;
@@ -20,6 +21,7 @@ public class OrderInfoEntity implements Serializable {
     public static final int STATUS_ON_DELIVERY = 30;
     public static final int STATUS_DELIVERY_END = 40;
     public static final int STATUS_CLOSE = 50;
+    public static final int STATUS_COMMENT = 60;
 
 
     public static final int TYPE_NORMAL = 10;
@@ -65,7 +67,7 @@ public class OrderInfoEntity implements Serializable {
      */
     private String detail;
     /**
-     * 设置：订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50已关闭
+     * 设置：订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50：已关闭，60：已评论
      */
     private Integer status;
     /**

@@ -31,6 +31,7 @@ import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.TokenUtils;
 import com.yunquanlai.utils.validator.Assert;
+import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -382,11 +383,21 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public void saveComment(OrderCommentVO orderCommentVO) {
+    public R saveComment(OrderCommentVO orderCommentVO, Long id) {
+        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderCommentVO.getOrderId(),true);
+        if (id.longValue() != orderInfoEntity.getUserInfoId().longValue()) {
+            return R.error("不能评价别人的订单。");
+        }
+        if (orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_DELIVERY_END) {
+            return R.error("订单未送达，不能评论。");
+        }
+        orderInfoEntity.setStatus(OrderInfoEntity.STATUS_COMMENT);
         commentDeliveryDao.save(orderCommentVO.getCommentDeliveryEntity());
         for (CommentProductEntity commentProductEntity : orderCommentVO.getCommentProductEntities()) {
             commentProductDao.save(commentProductEntity);
         }
+        orderInfoDao.update(orderInfoEntity);
+        return R.ok();
     }
 
     @Override

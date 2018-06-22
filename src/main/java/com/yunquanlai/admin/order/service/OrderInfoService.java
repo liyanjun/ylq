@@ -90,7 +90,7 @@ public interface OrderInfoService {
      */
     void payTimeOut(OrderInfoEntity orderInfoEntity);
 
-    void saveComment(OrderCommentVO orderCommentVO);
+    R saveComment(OrderCommentVO orderCommentVO, Long id);
 
     List<OrderInfoEntity> queryListClient(Map filter);
 

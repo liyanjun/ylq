@@ -12,6 +12,7 @@ import com.yunquanlai.api.comsumer.wechat.utils.weixin.config.WxPayConfig;
 import com.yunquanlai.api.comsumer.wechat.utils.weixin.vo.OAuthJsToken;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
+import com.yunquanlai.utils.validator.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -72,11 +73,9 @@ public class WechatController extends WeixinSupport {
             @ApiImplicitParam(paramType = "query", name = "code", value = "临时登录凭证code ", required = true),
     })
     public Map<String, Object> login(@RequestParam String code) throws WeixinException, IOException {
-        if (code == null || code.equals("")) {
-            throw new WeixinException("invalid null, code is null.");
-        }
+        Assert.isBlank(code, "code is null");
 
-        Map<String, Object> ret = new HashMap<String, Object>();
+        Map<String, Object> ret = new HashMap<>();
         //拼接参数
         String param = "?grant_type=" + WxPayConfig.grant_type + "&appid=" + WxPayConfig.appid + "&secret=" + WxPayConfig.secret + "&js_code=" + code;
 
@@ -90,7 +89,7 @@ public class WechatController extends WeixinSupport {
             Object errcode = jsonObj.get("errcode");
             if (errcode != null) {
                 //返回异常信息
-                throw new WeixinException(getCause(Integer.parseInt(errcode.toString())));
+                throw new RRException(getCause(Integer.parseInt(errcode.toString())));
             }
 
             ObjectMapper mapper = new ObjectMapper();
@@ -115,34 +114,20 @@ public class WechatController extends WeixinSupport {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", dataType = "string", value = "token", required = true),
             @ApiImplicitParam(paramType = "query", name = "openid", dataType = "string", value = "用户唯一标识 openid", required = true),
-            @ApiImplicitParam(paramType = "query", name = "orderId", dataType = "long", value = "需要支付的订单 ID", required = true),
-            @ApiImplicitParam(paramType = "query", name = "depositCount", dataType = "int", value = "押金桶数"),
-            @ApiImplicitParam(paramType = "query", name = "depositAmount", dataType = "double", value = "押金金额")
+            @ApiImplicitParam(paramType = "query", name = "orderId", dataType = "long", value = "需要支付的订单 ID", required = true)
     })
-    public R wxPay(@RequestParam String openid, @RequestParam Long orderId, Integer depositCount,BigDecimal depositAmount, HttpServletRequest request) {
-        BigDecimal bEmptyValue;
-        String emptyValue = sysConfigService.getValue("emptyValue","");
-        if (org.apache.commons.lang3.StringUtils.isBlank(emptyValue)) {
-            throw new RRException("单个空桶价值未配置");
-        }
-        bEmptyValue = new BigDecimal(emptyValue);
-        if(!bEmptyValue.multiply(new BigDecimal(depositCount)).equals(depositAmount)){
-            throw new RRException("押金金额计算错误");
-        }
+    public R wxPay(@RequestParam String openid, @RequestParam Long orderId, HttpServletRequest request) {
 
         OrderInfoEntity orderInfoEntity = orderInfoService.queryObject(orderId);
-        if(orderInfoEntity.getStatus() == OrderInfoEntity.STATUS_CLOSE){
+        if (orderInfoEntity.getStatus() == OrderInfoEntity.STATUS_CLOSE) {
             // 已关闭的订单不能发起请求，但是发起支付请求以后，关闭的订单，然后支付回调了，是要把订单从新拉起来到待分配状态的。
             throw new RRException("订单已关闭，不能发起支付请求");
         }
-        orderInfoEntity.setDeposit(depositAmount);
-        // 更新订单押金金额
-        orderInfoService.update(orderInfoEntity);
         try {
             //生成的随机字符串
             String nonce_str = StringUtils.getRandomStringByLength(32);
             //商品名称
-            String body = "云泉来-" + orderInfoEntity.getId();
+            String body = "运泉来-" + orderInfoEntity.getId();
             //获取本机的ip地址
             String spbill_create_ip = IpUtils.getIpAddr(request);
 
@@ -228,7 +213,7 @@ public class WechatController extends WeixinSupport {
             return R.ok("发起微信支付成功").put("response", response);
         } catch (Exception e) {
             logger.error("发起微信支付失败", e);
-            return R.ok("发起微信支付失败");
+            return R.ok("发起微信支付失败：" + e.getMessage());
         }
     }
 
