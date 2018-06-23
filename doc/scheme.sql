@@ -203,6 +203,7 @@ CREATE TABLE `order_info` (
   `delivery_distributor_name` varchar(64) DEFAULT NULL COMMENT '关联配送员名',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
   `username` varchar(128) NOT NULL COMMENT '用户名',
+  `user_phone` varchar(32) NOT NULL COMMENT '用户手机号',
   `remark` varchar(1024) DEFAULT NULL COMMENT '订单备注',
   `exception` text DEFAULT NULL COMMENT '订单异常信息',
   `creation_time` datetime NOT NULL COMMENT '订单创建时间',
@@ -500,7 +501,7 @@ CREATE TABLE `user_client_token` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for user_deposit_flow
+-- Table structure for user_empty_bucket_flow
 -- ----------------------------
 DROP TABLE IF EXISTS `user_empty_bucket_flow`;
 CREATE TABLE `user_empty_bucket_flow` (
