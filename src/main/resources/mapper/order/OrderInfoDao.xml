@@ -21,6 +21,7 @@
         <result property="deliveryDistributorName" column="delivery_distributor_name"/>
         <result property="userInfoId" column="user_info_id"/>
         <result property="username" column="username"/>
+        <result property="userPhone" column="user_phone"/>
         <result property="remark" column="remark"/>
         <result property="exception" column="exception"/>
         <result property="creationTime" column="creation_time"/>
@@ -48,6 +49,7 @@
         `delivery_distributor_name`,
         `user_info_id`,
         `username`,
+        `user_phone`,
         `remark`,
         `exception`,
         `creation_time`,
@@ -77,6 +79,7 @@
         `delivery_distributor_name`,
         `user_info_id`,
         `username`,
+        `user_phone`,
         `remark`,
         `exception`,
         `creation_time`,
@@ -89,8 +92,17 @@
             <if test="userInfoId != null">
                 and user_info_id = #{userInfoId}
             </if>
-            <if test="status != null">
+            <if test="userName != null and userName.trim() != ''">
+                and `username` like concat('%',#{userName},'%')
+            </if>
+            <if test="userPhone != null and userPhone.trim() != ''">
+                and `user_phone` like concat('%',#{userPhone},'%')
+            </if>
+            <if test="status != null and status.trim() != ''">
                 and status = #{status}
+            </if>
+            <if test="type != null and type.trim() != ''">
+                and `type` = #{type}
             </if>
             <if test="creationTime != null">
                 <![CDATA[
@@ -129,6 +141,7 @@
         `delivery_distributor_name`,
         `user_info_id`,
         `username`,
+        `user_phone`,
         `remark`,
         `exception`,
         `creation_time`,
@@ -185,7 +198,8 @@
 			`delivery_distributor_id`,
 			`delivery_distributor_name`, 
 			`user_info_id`, 
-			`username`, 
+			`username`,
+			`user_phone`,
 			`remark`, 
 			`exception`, 
 			`creation_time`, 
@@ -210,7 +224,8 @@
 			#{deliveryDistributorId},
 			#{deliveryDistributorName}, 
 			#{userInfoId}, 
-			#{username}, 
+			#{username},
+			#{userPhone},
 			#{remark}, 
 			#{exception}, 
 			#{creationTime}, 
@@ -239,6 +254,7 @@
             <if test="deliveryDistributorName != null">`delivery_distributor_name` = #{deliveryDistributorName},</if>
             <if test="userInfoId != null">`user_info_id` = #{userInfoId},</if>
             <if test="username != null">`username` = #{username},</if>
+            <if test="userPhone != null">`user_phone` = #{userPhone},</if>
             <if test="remark != null">`remark` = #{remark},</if>
             <if test="exception != null">`exception` = #{exception},</if>
             <if test="creationTime != null">`creation_time` = #{creationTime},</if>

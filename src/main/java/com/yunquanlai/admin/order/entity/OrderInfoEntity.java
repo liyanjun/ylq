@@ -95,6 +95,10 @@ public class OrderInfoEntity implements Serializable {
      */
     private String username;
     /**
+     * 设置：用户手机号
+     */
+    private String userPhone;
+    /**
      * 设置：订单备注
      */
     private String remark;
@@ -407,5 +411,13 @@ public class OrderInfoEntity implements Serializable {
 
     public BigDecimal getBucketNum() {
         return bucketNum;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
     }
 }

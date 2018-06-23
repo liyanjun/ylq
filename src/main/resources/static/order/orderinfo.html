@@ -18,16 +18,36 @@
     <script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
     <script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
     <script src="../public/js/common.js"></script>
+    <style>
+        select:invalid { color: gray; }
+    </style>
 </head>
 <body>
 <div id="rrapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn">
+            <div class="form-group col-sm-2" style="width: 150px">
+                <input type="text" id="userName" class="form-control" v-model="q.userName" @keyup.enter="query" placeholder="用户名">
+            </div>
+            <div class="form-group col-sm-2" style="width: 150px">
+                <input type="text" id="userPhone" class="form-control" v-model="q.userPhone" @keyup.enter="query" placeholder="用户手机号">
+            </div>
+            <div class="form-group col-sm-2" style="width: 200px">
+                <select v-model="q.status" class="form-control" id="statusSelect">
+                    <option value="" disabled selected hidden>订单状态</option>
+                    <option v-for="statusSel in statusSelect" :value="statusSel.id">{{statusSel.name}}</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-2" style="width: 150px">
+                <select v-model="q.type" class="form-control" id="typeSelect">
+                    <option value="" disabled selected hidden>配送状态</option>
+                    <option value="10">正常</option>
+                    <option value="20">异常</option>
+                </select>
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+            <a class="btn btn-success" @click="reset"><i class="fa fa-rotate-left"></i> 重置</a>
             <a v-if="hasPermission('orderinfo:info')" class="btn btn-primary" @click="detail"><i class="fa fa-plus"></i>&nbsp;详情</a>
-            <a v-if="hasPermission('orderinfo:update')" class="btn btn-primary" @click="update"><i
-                    class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-            <a v-if="hasPermission('orderinfo:delete')" class="btn btn-primary" @click="del"><i
-                    class="fa fa-trash-o"></i>&nbsp;删除</a>
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
@@ -46,6 +66,18 @@
                 <div class="col-sm-2 control-label">订单金额</div>
                 <div class="col-sm-10">
                     <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.amount" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">订单押金</div>
+                <div class="col-sm-10">
+                    <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.deposit" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">订单桶数</div>
+                <div class="col-sm-10">
+                    <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.bucketNum" />
                 </div>
             </div>
             <div class="form-group">

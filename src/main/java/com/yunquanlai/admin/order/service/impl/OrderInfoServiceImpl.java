@@ -10,11 +10,14 @@ import com.yunquanlai.admin.delivery.dao.DeliveryEndpointDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunquanlai.admin.order.dao.OrderDeliveryInfoDao;
+import com.yunquanlai.admin.order.dao.OrderInfoDao;
 import com.yunquanlai.admin.order.dao.OrderOperateFlowDao;
 import com.yunquanlai.admin.order.dao.OrderProductDetailDao;
 import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
+import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderOperateFlowEntity;
 import com.yunquanlai.admin.order.entity.OrderProductDetailEntity;
+import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.admin.product.dao.ProductInfoDao;
 import com.yunquanlai.admin.product.dao.ProductStockDao;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
@@ -37,18 +40,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import com.yunquanlai.admin.order.dao.OrderInfoDao;
-import com.yunquanlai.admin.order.entity.OrderInfoEntity;
-import com.yunquanlai.admin.order.service.OrderInfoService;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 
 
 @Service("orderInfoService")
@@ -181,6 +179,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoEntity.setAmountTotal(amountTotal);
         orderInfoEntity.setAmountDeliveryFee(amountDeliveryFee);
         orderInfoEntity.setUsername(user.getUsername());
+        orderInfoEntity.setUserPhone(user.getPhone());
         orderInfoEntity.setUserInfoId(user.getId());
         orderInfoEntity.setCreationTime(new Date());
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_NEW);
