@@ -54,8 +54,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public UserInfoEntity queryObjectByUid(String uid) {
-        return userInfoDao.queryObjectByUid(uid);
+    public void update(UserInfoEntity userInfo) {
+        userInfoDao.update(userInfo);
+    }
+
+    @Override
+    public UserInfoEntity queryObjectByOpenId(String openId) {
+        return userInfoDao.queryObjectByOpenId(openId);
     }
 
     @Override

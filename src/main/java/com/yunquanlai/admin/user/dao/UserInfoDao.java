@@ -13,5 +13,5 @@ import com.yunquanlai.admin.user.entity.UserInfoEntity;
  */
 public interface UserInfoDao extends BaseDao<UserInfoEntity> {
 
-    UserInfoEntity queryObjectByUid(String uid);
+    UserInfoEntity queryObjectByOpenId(String uid);
 }

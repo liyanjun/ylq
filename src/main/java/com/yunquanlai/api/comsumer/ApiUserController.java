@@ -58,24 +58,16 @@ public class ApiUserController {
     @PostMapping("wechat/login")
     @ApiOperation(value = "用户从小程序登录接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "string", name = "uid", value = "微信 ID", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "微信名" ),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "openId", value = "微信 openId", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "微信名", required = true ),
     })
-    public R wechatLogin(@RequestParam String uid, String username) {
-        UserInfoEntity userInfoEntity = userInfoService.queryObjectByUid(uid);
+    public R wechatLogin(@RequestParam String openId, String username) {
+        UserInfoEntity userInfoEntity = userInfoService.queryObjectByOpenId(openId);
         if (userInfoEntity == null) {
-            //不存在用户就创建用户
-            userInfoEntity = new UserInfoEntity();
-            userInfoEntity.setStatus(0);
-            userInfoEntity.setCreationTime(new Date());
-            userInfoEntity.setUid(uid);
-            userInfoEntity.setEmptyBucketNumber(0);
-            userInfoEntity.setEnableDepositAmount(BigDecimal.ZERO);
-            userInfoEntity.setDisableDepositAmount(BigDecimal.ZERO);
-            userInfoEntity.setDepositAmount(BigDecimal.ZERO);
-            userInfoEntity.setUsername(username);
-            userInfoService.save(userInfoEntity);
+            return R.error("用户不存在");
         }
+        userInfoEntity.setUsername(username);
+        userInfoService.update(userInfoEntity);
         return createToken(userInfoEntity.getId());
     }
 
