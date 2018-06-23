@@ -55,6 +55,12 @@
                 </div>
             </div>
             <div class="form-group">
+                <div class="col-sm-2 control-label">商品编号</div><font color="red">*</font>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="productInfoEntity.productNum" placeholder="商品编号"/>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-sm-2 control-label">商品图片</div><font color="red">*</font>
                 <div class="col-sm-10">
 
@@ -83,7 +89,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">排序</div>
                 <div class="col-sm-10">
-                    <input type='text' onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="productInfo.sort" placeholder="排序"/>
+                    <input type='text' onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="productInfoEntity.sort" placeholder="排序"/>
                 </div>
             </div>
             <div class="form-group">

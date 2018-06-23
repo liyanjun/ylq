@@ -53,6 +53,11 @@ public class ProductInfoServiceImpl implements ProductInfoService {
     }
 
     @Override
+    public ProductInfoEntity queryObjectByProductNum(String productNum) {
+        return productInfoDao.queryObjectByProductNum(productNum);
+    }
+
+    @Override
     public List<ProductInfoEntity> queryList(Map<String, Object> map) {
         return productInfoDao.queryList(map);
     }

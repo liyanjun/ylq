@@ -53,6 +53,33 @@
                 <if test="isLock != null and isLock == true">for update</if>
 	</select>
 
+    <select id="queryObjectByProductNum" resultType="com.yunquanlai.admin.product.entity.ProductInfoEntity">
+        select
+        `id`,
+        `name`,
+        `img`,
+        `amount_show`,
+        `amount`,
+        `brand_id`,
+        `brand_name`,
+        `bucket_type`,
+        `delivery_fee`,
+        `is_quick`,
+        `count`,
+        `creation_time`,
+        `update_time`,
+        `creator_id`,
+        `creator_name`,
+        `update_id`,
+        `update_name`,
+        `status`,
+        `product_num`
+        from
+        product_info
+        where product_num = #{productNum}
+        limit 0,1
+    </select>
+
     <select id="queryList" resultType="com.yunquanlai.admin.product.entity.ProductInfoEntity">
         select
         `id`,
