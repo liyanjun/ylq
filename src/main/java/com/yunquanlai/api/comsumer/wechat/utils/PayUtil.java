@@ -1,4 +1,4 @@
-package com.yunquanlai.api.comsumer.wechat.utils.weixin;
+package com.yunquanlai.api.comsumer.wechat.utils;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jdom.Document;

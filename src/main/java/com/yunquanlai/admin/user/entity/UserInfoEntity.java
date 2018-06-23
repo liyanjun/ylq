@@ -32,6 +32,10 @@ public class UserInfoEntity implements Serializable {
      * 设置：用户微信 ID
      */
 	private String uid;
+	/**
+	 * openId
+	 */
+	private String openId;
     /**
      * 设置：用户状态：0：启用，1：禁用
      */
@@ -105,6 +109,15 @@ public class UserInfoEntity implements Serializable {
 	public String getUid() {
 		return uid;
 	}
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
 	/**
 	 * 设置：用户状态：0：启用，1：禁用
 	 */

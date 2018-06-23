@@ -102,7 +102,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Resource
     private ApplicationContext applicationContext;
 
-    ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper();
 
 
     @Override

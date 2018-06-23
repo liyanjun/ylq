@@ -200,11 +200,11 @@
 			<version>${getui.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.apache.commons</groupId>-->
+			<!--<artifactId>commons-lang3</artifactId>-->
+			<!--<version>${commons-lang3.version}</version>-->
+		<!--</dependency>-->
 
 		<dependency>
 			<groupId>jdom</groupId>
@@ -212,13 +212,16 @@
 			<version>1.0</version>
 		</dependency>
 
-		<!-- 微信公众号jar包 -->
 		<dependency>
-			<groupId>weixin</groupId>
-			<artifactId>weixin4j</artifactId>
-			<version>0.0.9.1</version>
-			<!--<scope>system</scope>-->
-			<!--<systemPath>${project.basedir}/lib/weixin4j-0.0.9.1.jar</systemPath>-->
+			<groupId>com.github.binarywang</groupId>
+			<artifactId>weixin-java-pay</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.binarywang</groupId>
+			<artifactId>weixin-java-miniapp</artifactId>
+			<version>3.1.0</version>
 		</dependency>
 
 	</dependencies>
