@@ -41,7 +41,11 @@ public class OrderOperateFlowEntity implements Serializable {
      * 设置：操作备注信息
      */
 	private String remark;
-    /**
+	/**
+	 * 订单 ID
+	 */
+    private Long orderId;
+	/**
      * 设置：操作时间
      */
 	private Date operatorTime;
@@ -53,6 +57,9 @@ public class OrderOperateFlowEntity implements Serializable {
      * 设置：操作人名
      */
 	private String operatorName;
+
+	public OrderOperateFlowEntity() {
+	}
 
 	public OrderOperateFlowEntity(Long userId, String username, Date date) {
 		this.operatorId = userId;
@@ -155,5 +162,13 @@ public class OrderOperateFlowEntity implements Serializable {
 	 */
 	public String getOperatorName() {
 		return operatorName;
+	}
+
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
 	}
 }

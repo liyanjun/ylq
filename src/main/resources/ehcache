@@ -31,4 +31,5 @@
     <cache name="common" maxElementsInMemory="100"/>
     <cache name="tokens" maxElementsInMemory="20000"/>
     <cache name="orderTokens" maxElementsInMemory="20000"/>
+    <cache name="menu" maxElementsInMemory="1000"/>
 </ehcache>

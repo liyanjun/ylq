@@ -4,47 +4,43 @@ $(function () {
 });
 
 var vm = new Vue({
-    el:'#rrapp',
-    data:{
+    el: '#rrapp',
+    data: {
         title: null,
-        deliveryEndpointId : null,
-        deliveryDistributorId : null,
+        deliveryEndpointId: null,
+        deliveryDistributorId: null,
         deliveryEndpoint: {},
-        deliveryEndpointList : [],
-        deliveryDistributorList : []
+        deliveryEndpointList: [],
+        deliveryDistributorList: []
     },
     methods: {
         summit: function (event) {
-            var url = "../order/orderSubmmit";
+            var url = "../orderinfo/handDistribute?deliveryEndpointId=" + vm.deliveryEndpointId + "&deliveryDistributorId=" + vm.deliveryDistributorId + "&orderId=" + vm.orderId;
             $.ajax({
                 type: "POST",
                 url: url,
                 contentType: "application/json",
-                data: {
-                    "deliveryEndpointId":vm.deliveryEndpointId,
-                    "deliveryDistributorId":vm.deliveryDistributorId,
-                    "orderId":vm.orderId
-                },
-                success: function(r){
-                    if(r.code === 0){
-                        alert('操作成功', function(index){
+                success: function (r) {
+                    if (r.code === 0) {
+                        alert('操作成功', function (index) {
                             //vm.reload();
                         });
-                    }else{
+                    } else {
                         alert(r.msg);
                     }
                 }
             });
         },
-        getDeliveryEndpointList:function () {
-            $.get("../deliveryendpoint/select", function(r){
+        getDeliveryEndpointList: function () {
+            $.get("../deliveryendpoint/select", function (r) {
                 vm.deliveryEndpointList = r.deliveryEndpointEntities;
             });
         },
     }
 });
+
 function changeDeliveryEndpointSelect(deliveryEndpointId) {
-    $.get("../deliverydistributor/select?deliveryEndpointId="+deliveryEndpointId, function(r){
+    $.get("../deliverydistributor/select?deliveryEndpointId=" + deliveryEndpointId, function (r) {
         vm.deliveryDistributorList = r.deliveryDistributorEntities;
     });
 }

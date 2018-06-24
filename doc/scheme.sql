@@ -174,6 +174,7 @@ CREATE TABLE `order_delivery_info` (
   `delivery_end_time` datetime COMMENT '配送结束时间',
   `empty_barrels` int(11) NOT NULL COMMENT '该配送单回收空桶数',
   `delivery_distributor_id` bigint(20) DEFAULT NULL COMMENT '关联配送员 ID',
+  `delivery_distributor_name` varchar(32) DEFAULT NULL COMMENT '配送员名',
   `order_info_id` bigint(20) NOT NULL COMMENT '关联订单 ID',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
   PRIMARY KEY (`id`),
@@ -228,11 +229,12 @@ CREATE TABLE `order_operate_flow` (
   `before_status` int(11) NOT NULL COMMENT '手工操作前状态',
   `after_status` int(11) NOT NULL COMMENT '手工操作后状态',
   `remark` varchar(512) DEFAULT NULL COMMENT '操作备注信息',
+  `order_id` bigint(20) NOT NULL COMMENT '订单 ID',
   `operator_time` datetime NOT NULL COMMENT '操作时间',
   `operator_id` bigint(20) NOT NULL COMMENT '操作人 ID',
   `operator_name` varchar(32) NOT NULL COMMENT '操作人名',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单手工处理流水记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单手工处理记录表';
 
 -- ----------------------------
 -- Table structure for order_product_detail
@@ -293,8 +295,8 @@ DROP TABLE IF EXISTS `product_info`;
 CREATE TABLE `product_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `name` varchar(128) NOT NULL COMMENT '商品名称',
-  `amount_show` decimal(20,2) DEFAULT NULL COMMENT '售价',
-  `amount` decimal(20,2) NOT NULL COMMENT '优惠价',
+  `amount_show` decimal(20,2) DEFAULT NULL COMMENT '展示价',
+  `amount` decimal(20,2) NOT NULL COMMENT '售价',
   `img` varchar(512) NOT NULL COMMENT '商品主图',
   `brand_id` bigint(20) NOT NULL COMMENT '商品品牌 ID',
   `brand_name` varchar(64) NOT NULL COMMENT '商品品牌',

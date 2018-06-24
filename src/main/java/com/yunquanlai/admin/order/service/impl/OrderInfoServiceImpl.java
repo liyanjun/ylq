@@ -144,12 +144,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = new OrderDeliveryInfoEntity();
         OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
         List<OrderProductDetailEntity> orderProductDetailEntities = new ArrayList<>(16);
-        BigDecimal bEmptyValue;
-        String emptyValue = sysConfigDao.queryByKey("emptyValue");
-        if (emptyValue == null) {
-            throw new RRException("单个空桶价值未配置");
-        }
-        bEmptyValue = new BigDecimal(emptyValue);
         BigDecimal amount = BigDecimal.ZERO;
         BigDecimal amountTotal = BigDecimal.ZERO;
         BigDecimal amountDeliveryFee = BigDecimal.ZERO;
@@ -171,6 +165,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntity.setProductInfoId(productInfoEntity.getId());
             orderProductDetailEntity.setProductName(productInfoEntity.getName());
             orderProductDetailEntity.setBucketType(productInfoEntity.getBucketType());
+            orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
             orderProductDetailEntities.add(orderProductDetailEntity);
         }
         orderInfoEntity.setDeposit(orderVO.getDeposit());
@@ -190,7 +185,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         // 订单
         orderInfoDao.save(orderInfoEntity);
         orderDeliveryInfoEntity.setAddress(orderVO.getAddress());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         if (orderVO.getDeliveryTime() != null) {
             orderDeliveryInfoEntity.setDeliveryTime(sdf.parse(orderVO.getDeliveryTime()));
         }
@@ -314,6 +309,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
         orderDeliveryInfoEntity.setDeliveryDistributorId(deliveryDistributorEntity.getId());
+        orderDeliveryInfoEntity.setDeliveryDistributorName(deliveryDistributorEntity.getName());
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         applicationContext.publishEvent(new OrderDeliveryNotifyEvent(orderDeliveryInfoEntity.getId()));
         return true;
@@ -413,7 +409,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoEntity.setType(OrderInfoEntity.TYPE_NORMAL);
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderId, true);
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_CLOSE);
-        orderOperateFlowEntity.setAfterStatus(OrderInfoEntity.STATUS_CLOSE);
+        orderOperateFlowEntity.setOrderId(orderInfoEntity.getId());
         orderInfoDao.update(orderInfoEntity);
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         orderOperateFlowDao.update(orderOperateFlowEntity);
@@ -421,21 +417,22 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public void handDistribute(Long orderId, Long deliveryDistributorId, Long deliveryEndpointId, OrderOperateFlowEntity orderOperateFlowEntity) {
+        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderId, true);
         //先锁配送点，再开始锁配送点库存，否则有可能造成死锁
         DeliveryEndpointEntity deliveryEndpointEntity = deliveryEndpointDao.queryObject(deliveryEndpointId, true);
         if (deliveryEndpointEntity == null) {
-            throw new RRException("找不到ID为【" + deliveryEndpointId + "】的配送点");
-            // 该配送点找不到能送的人，找下一个配送点
+            throw new RRException("找不到ID为【" + deliveryEndpointId + "】的配送点。");
         }
         DeliveryDistributorEntity deliveryDistributorEntity = deliveryDistributorDao.queryObject(deliveryDistributorId, true);
         if (deliveryDistributorEntity == null) {
-            throw new RRException("找不到ID为【" + deliveryDistributorId + "】的配送员");
-            // 该配送点找不到能送的人，找下一个配送点
+            throw new RRException("找不到ID为【" + deliveryDistributorId + "】的配送员。");
         }
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderId, true);
         if (deliveryDistributorEntity == null) {
-            throw new RRException("找不到订单ID为【" + orderId + "】的配送单员");
-            // 该配送点找不到能送的人，找下一个配送点
+            throw new RRException("找不到订单ID为【" + orderId + "】的配送单员。");
+        }
+        if(orderInfoEntity.getStatus() != OrderInfoEntity.TYPE_EXCEPTION){
+            throw new RRException("订单不是异常状态，不能手工派单。");
         }
 
         List<OrderProductDetailEntity> orderProductDetailEntities = orderProductDetailDao.queryListByOrderId(orderId);
@@ -449,7 +446,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         deliveryDistributorEntity.setOrderCount(deliveryDistributorEntity.getOrderCount() + 1);
         deliveryDistributorDao.update(deliveryDistributorEntity);
         // 更新订单分配时间
-        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderId, true);
         orderOperateFlowEntity.setBeforeStatus(orderInfoEntity.getStatus());
         orderInfoEntity.setId(orderId);
         orderInfoEntity.setDistributeTime(new Date());
@@ -462,10 +458,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
         orderDeliveryInfoEntity.setDeliveryDistributorId(deliveryDistributorEntity.getId());
+        orderDeliveryInfoEntity.setDeliveryDistributorName(deliveryDistributorEntity.getName());
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+        orderOperateFlowEntity.setOrderId(orderInfoEntity.getId());
         orderOperateFlowEntity.setType(OrderOperateFlowEntity.TYPE_HAND_DISTRIBUTOR);
         orderOperateFlowEntity.setRemark("手工分配订单【" + orderId + "】到【" + deliveryEndpointEntity.getName() + "：编号" + deliveryEndpointEntity.getId() + "】，【" + deliveryDistributorEntity.getName() + "：编号" + deliveryDistributorEntity.getId() + "】");
-        orderOperateFlowDao.update(orderOperateFlowEntity);
+        orderOperateFlowDao.save(orderOperateFlowEntity);
         applicationContext.publishEvent(new OrderDeliveryNotifyEvent(orderDeliveryInfoEntity.getId()));
     }
 

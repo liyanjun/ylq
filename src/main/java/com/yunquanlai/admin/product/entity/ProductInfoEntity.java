@@ -39,13 +39,13 @@ public class ProductInfoEntity implements Serializable {
     @NotBlank(message="商品主图不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String img;
     /**
-     * 设置：售价
+     * 设置：展示价
      */
-    @NotNull(message="商品售价不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private BigDecimal amountShow;
     /**
-     * 设置：优惠价
+     * 设置：售价
      */
+	@NotNull(message="商品售价不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private BigDecimal amount;
     /**
      * 设置：商品品牌 ID

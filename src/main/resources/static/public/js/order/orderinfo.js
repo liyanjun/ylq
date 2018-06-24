@@ -32,6 +32,8 @@ $(function () {
                         return '已到达';
                     } else if (value == 50) {
                         return '关闭';
+                    } else if(value == 60){
+                        return "已评论";
                     }
                 }
             },

@@ -88,6 +88,10 @@ public class OrderDeliveryInfoEntity implements Serializable {
      */
     private Integer emptyBarrels;
     /**
+     * 配送员名
+     */
+    private String deliveryDistributorName;
+    /**
      * 设置：关联配送员 ID
      */
     private Long deliveryDistributorId;
@@ -334,5 +338,13 @@ public class OrderDeliveryInfoEntity implements Serializable {
 
     public void setEmptyBarrels(Integer emptyBarrels) {
         this.emptyBarrels = emptyBarrels;
+    }
+
+    public String getDeliveryDistributorName() {
+        return deliveryDistributorName;
+    }
+
+    public void setDeliveryDistributorName(String deliveryDistributorName) {
+        this.deliveryDistributorName = deliveryDistributorName;
     }
 }
