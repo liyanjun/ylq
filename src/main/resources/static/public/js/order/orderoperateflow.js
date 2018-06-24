@@ -81,6 +81,9 @@ $(function () {
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
+        q:{
+            orderId: null
+        },
 		showList: true,
 		title: null,
 		orderOperateFlow: {}
@@ -89,6 +92,11 @@ var vm = new Vue({
 		query: function () {
 			vm.reload();
 		},
+        reset: function () {
+            $("#searchKey").val("");
+            vm.q.orderId = "";
+            vm.reload();
+        },
 		del: function (event) {
 			var ids = getSelectedRows();
 			if(ids == null){
@@ -121,7 +129,8 @@ var vm = new Vue({
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{ 
+			$("#jqGrid").jqGrid('setGridParam',{
+                postData:{'orderId': vm.q.orderId},
                 page:page
             }).trigger("reloadGrid");
 		}

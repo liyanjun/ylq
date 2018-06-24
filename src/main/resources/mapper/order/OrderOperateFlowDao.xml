@@ -43,6 +43,11 @@
 		            `operator_id`,
 		            `operator_name`
 				from order_operate_flow
+		<where>
+			<if test="orderId != null and orderId.trim() != ''">
+				and `order_id` like concat('%',#{orderId},'%')
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}

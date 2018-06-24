@@ -98,10 +98,10 @@
             <if test="userPhone != null and userPhone.trim() != ''">
                 and `user_phone` like concat('%',#{userPhone},'%')
             </if>
-            <if test="status != null">
+            <if test="status != null and status.trim() != ''">
                 and status = #{status}
             </if>
-            <if test="type != null">
+            <if test="type != null and type.trim() != ''">
                 and `type` = #{type}
             </if>
             <if test="creationTime != null">
