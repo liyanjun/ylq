@@ -57,7 +57,8 @@ public class ApiAddressController {
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "userAddressId", value = "用户地址ID（添加不用填）"),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "name", value = "姓名", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "phone", value = "手机号", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "string", name = "address", value = "地址", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "address", value = "坐标地址", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "addressDetail", value = "详细地址", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "double", name = "locationX", value = "腾讯地图坐标（loc.latlng.lat）", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "double", name = "locationY", value = "腾讯地图坐标（loc.latlng.lng）", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "sex", value = "性别，10：男，20：女", required = true)
@@ -67,18 +68,19 @@ public class ApiAddressController {
                          @RequestParam String name,
                          @RequestParam String phone,
                          @RequestParam String address,
+                         @RequestParam String addressDetail,
                          @RequestParam BigDecimal locationX,
                          @RequestParam BigDecimal locationY,
                          @RequestParam Integer sex) {
         // 在这里没有锁表，因为保持/修改地址也不是高并发操作
         if (userAddressId == null) {
-            userAddressService.save(new UserAddressEntity(name, phone, address, locationX, locationY, sex, user.getId()));
+            userAddressService.save(new UserAddressEntity(name, phone, address,addressDetail, locationX, locationY, sex, user.getId()));
         } else {
             UserAddressEntity userAddressEntity = userAddressService.queryObject(userAddressId);
             if (user.getId().longValue() != userAddressEntity.getUserInfoId().longValue()) {
                 return R.error("不能修改别人的地址");
             }
-            userAddressEntity = new UserAddressEntity(name, phone, address, locationX, locationY, sex, user.getId());
+            userAddressEntity = new UserAddressEntity(name, phone, address,addressDetail, locationX, locationY, sex, user.getId());
             userAddressEntity.setId(userAddressId);
             userAddressService.update(userAddressEntity);
         }

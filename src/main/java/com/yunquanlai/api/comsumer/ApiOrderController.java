@@ -111,7 +111,10 @@ public class ApiOrderController {
         Assert.isNotEqual(orderInfoEntity.getUserInfoId(), user.getId(), "不能查询别人的订单详情");
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoService.queryObjectByOrderId(orderId);
         DeliveryDistributorEntity deliveryDistributorEntity = deliveryDistributorService.queryObject(orderDeliveryInfoEntity.getDeliveryDistributorId());
-//        commentDeliveryService.
+        if(deliveryDistributorEntity != null){
+            deliveryDistributorEntity.setPassword(null);
+        }
+        //        commentDeliveryService.
         return R.ok().put("orderInfo", orderInfoEntity).put("orderDeliveryInfo", orderDeliveryInfoEntity).put("deliveryDistributor",deliveryDistributorEntity);
     }
 

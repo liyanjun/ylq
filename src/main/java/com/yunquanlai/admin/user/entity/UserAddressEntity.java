@@ -33,6 +33,10 @@ public class UserAddressEntity implements Serializable {
      */
     private String address;
     /**
+     * 详细地址
+     */
+    private String addressDetail;
+    /**
      * 设置：收货人姓名
      */
     private String name;
@@ -53,10 +57,11 @@ public class UserAddressEntity implements Serializable {
 
     }
 
-    public UserAddressEntity(String name, String phone, String address, BigDecimal locationX, BigDecimal locationY, Integer sex, Long userInfoId) {
+    public UserAddressEntity(String name, String phone, String address,String addressDetail, BigDecimal locationX, BigDecimal locationY, Integer sex, Long userInfoId) {
         this.name = name;
         this.phone = phone;
         this.address = address;
+        this.addressDetail = addressDetail;
         this.locationX = locationX;
         this.locationY = locationY;
         this.sex = sex;
@@ -117,6 +122,14 @@ public class UserAddressEntity implements Serializable {
      */
     public String getAddress() {
         return address;
+    }
+
+    public String getAddressDetail() {
+        return addressDetail;
+    }
+
+    public void setAddressDetail(String addressDetail) {
+        this.addressDetail = addressDetail;
     }
 
     /**

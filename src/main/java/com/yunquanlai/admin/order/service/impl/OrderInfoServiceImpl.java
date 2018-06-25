@@ -174,7 +174,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoEntity.setAmountTotal(amountTotal);
         orderInfoEntity.setAmountDeliveryFee(amountDeliveryFee);
         orderInfoEntity.setUsername(user.getUsername());
-        orderInfoEntity.setUserPhone(user.getPhone());
+        orderInfoEntity.setUserPhone(orderVO.getPhone());
         orderInfoEntity.setUserInfoId(user.getId());
         orderInfoEntity.setCreationTime(new Date());
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_NEW);

@@ -9,6 +9,7 @@
         <result property="locationX" column="location_x"/>
         <result property="locationY" column="location_y"/>
         <result property="address" column="address"/>
+        <result property="addressDetail" column="address_detail"/>
         <result property="name" column="name"/>
         <result property="phone" column="phone"/>
         <result property="sex" column="sex"/>
@@ -21,6 +22,7 @@
         `location_x`,
         `location_y`,
         `address`,
+        `address_detail`,
         `name`,
         `phone`,
         `sex`,
@@ -35,6 +37,7 @@
 					`location_x`,
 					`location_y`,
 					`address`,
+					`address_detail`,
 					`name`,
 					`phone`,
 					`sex`,
@@ -48,6 +51,7 @@
         `location_x`,
         `location_y`,
         `address`,
+        `address_detail`,
         `name`,
         `phone`,
         `sex`,
@@ -77,7 +81,8 @@
 			`location_x`, 
 			`location_y`, 
 			`address`, 
-			`name`, 
+			`address_detail`,
+			`name`,
 			`phone`, 
 			`sex`,
 			`user_info_id`
@@ -87,7 +92,8 @@
 			#{locationX}, 
 			#{locationY}, 
 			#{address}, 
-			#{name}, 
+			#{addressDetail},
+			#{name},
 			#{phone}, 
 			#{sex},
 			#{userInfoId}
@@ -100,6 +106,7 @@
             <if test="locationX != null">`location_x` = #{locationX},</if>
             <if test="locationY != null">`location_y` = #{locationY},</if>
             <if test="address != null">`address` = #{address},</if>
+            <if test="addressDetail != null">`address_detail` = #{addressDetail},</if>
             <if test="name != null">`name` = #{name},</if>
             <if test="phone != null">`phone` = #{phone},</if>
             <if test="sex != null">`sex` = #{sex},</if>
