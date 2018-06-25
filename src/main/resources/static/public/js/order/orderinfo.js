@@ -1,9 +1,18 @@
 $(function () {
+    $("option[value='']").prop("selected",true);
     $("#jqGrid").jqGrid({
         url: '../orderinfo/list',
         datatype: "json",
         colModel: [
             {label: 'id', name: 'id', index: 'id', width: 50, key: true},
+            {label: '用户名', name: 'username', index: 'username', width: 80,
+                formatter: function(value){
+                    if(value != null){
+                        return value.substr(0, 10);
+                    }
+                }
+            },
+            {label: '用户手机号', name: 'userPhone', index: 'user_phone', width: 80},
             {
                 label: '订单金额', name: 'amount', index: 'amount', width: 80,
                 formatter: function (value, options, row) {
@@ -23,11 +32,13 @@ $(function () {
                         return '已到达';
                     } else if (value == 50) {
                         return '关闭';
+                    } else if(value == 60){
+                        return "已评论";
                     }
                 }
             },
             {
-                label: '订单配送状态', name: 'type', index: 'type', width: 80,
+                label: '配送状态', name: 'type', index: 'type', width: 80,
                 formatter: function (value, options, row) {
                     if (value === 10) {
                         return '<font color="green">正常</font>';
@@ -39,7 +50,13 @@ $(function () {
                 }
             },
             {label: '配送员', name: 'deliveryDistributorName', index: 'delivery_distributor_name', width: 80},
-            {label: '用户名', name: 'username', index: 'username', width: 80},
+            {label: '备注', name: 'remark', index: 'remark', width: 80,
+                formatter: function(value){
+                    if(value != null){
+                        return value.substr(0, 10);
+                    }
+                }
+             },
             {label: '下单时间', name: 'creationTime', index: 'creation_time', width: 80}
         ],
         viewrecords: true,
@@ -75,12 +92,36 @@ var vm = new Vue({
         showList: true,
         showDetail: false,//显示配送单和订单商品信息
         title: null,
+        q:{
+            userName: null,
+            userPhone: null,
+            status: null,
+            type: null
+        },
         orderInfo: {},
         orderDeliveryInfo: {},
-        orderProductList: []
+        orderProductList: [],
+        statusSelect:[
+            {id:"10",name:"新创建"},
+            {id:"20",name:"已支付，待配送"},
+            {id:"30",name:"配送中"},
+            {id:"40",name:"已到达"},
+            {id:"50",name:"关闭"}
+        ]
     },
     methods: {
         query: function () {
+            vm.reload();
+        },
+        reset: function () {
+            $("#userName").val("");
+            $("#userPhone").val("");
+            $("#statusSelect").val("");
+            $("#typeSelect").val("");
+            vm.q.userName = "";
+            vm.q.userPhone = "";
+            vm.q.status = "";
+            vm.q.type = "";
             vm.reload();
         },
         detail: function () {
@@ -94,16 +135,6 @@ var vm = new Vue({
             vm.getInfo(id);
             vm.getOrderDeliveryInfo(id);
             vm.getOrderProductInfo(id);
-        },
-        update: function (event) {
-            var id = getSelectedRow();
-            if (id == null) {
-                return;
-            }
-            vm.showList = false;
-            vm.title = "修改";
-
-            vm.getInfo(id)
         },
         handDistribute: function () {
             var id = getSelectedRow();
@@ -136,24 +167,6 @@ var vm = new Vue({
                 }
             });
         },
-        saveOrUpdate: function (event) {
-            var url = vm.orderInfo.id == null ? "../orderinfo/save" : "../orderinfo/update";
-            $.ajax({
-                type: "POST",
-                url: url,
-                contentType: "application/json",
-                data: JSON.stringify(vm.orderInfo),
-                success: function (r) {
-                    if (r.code === 0) {
-                        alert('操作成功', function (index) {
-                            vm.reload();
-                        });
-                    } else {
-                        alert(r.msg);
-                    }
-                }
-            });
-        },
         getInfo: function (id) {
             $.get("../orderinfo/info/" + id, function (r) {
                 vm.orderInfo = r.orderInfo;
@@ -165,9 +178,6 @@ var vm = new Vue({
             });
         },
         getOrderProductInfo: function (id) {
-            /*$.get("../orderproductdetail/listByOrderId/"+id, function(r){
-                vm.orderProductList = r.orderProductList;
-            });*/
             $("#jqGridProduct").jqGrid({
                 url: '../orderproductdetail/listByOrderId',
                 postData: {
@@ -210,6 +220,12 @@ var vm = new Vue({
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
+                postData:{
+                    userName: vm.q.userName,
+                    userPhone: vm.q.userPhone,
+                    status: vm.q.status,
+                    type: vm.q.type
+                },
                 page: page
             }).trigger("reloadGrid");
         }

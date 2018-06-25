@@ -9,6 +9,7 @@ var vm = new Vue({
         title: null,
         brandId: "",
         productInfo: {},
+        productInfoEntity:{},
         brandList: [],
         defaultImgUrl : "http://pa23ubi36.bkt.clouddn.com/upload/20180611/98eca8e408c14c10b7049403d1385269"
     },
@@ -41,7 +42,7 @@ var vm = new Vue({
             vm.title = "修改";
 
             this.getBrandList();
-            vm.getInfo(id)
+            vm.getInfo(id);
         },
         getBrandList: function () {
             $.get("../productbrand/queryAll", function (r) {
@@ -95,8 +96,10 @@ var vm = new Vue({
         getInfo: function (id) {
             $.get("../productinfo/info/" + id, function (r) {
                 vm.productInfo = r.productInfo;
+                vm.productInfoEntity = r.productInfo.productInfoEntity;
                 editor.txt.html(r.productInfo.content);
                 vm.brandId = vm.productInfo.brandId;
+                $("#selected option:selected").text = vm.productInfo.brandName ;
                 $("#upload").css("background-image", "url(" + vm.productInfo.img + ")");
             });
         },
@@ -134,7 +137,6 @@ var vm = new Vue({
         }
     }
 });
-//TODO 信息列表显示商品状态
 //商品上下架
 function sheleves(ids, status){
     $.ajax({
@@ -162,7 +164,8 @@ $(function () {
         url: '../productinfo/list',
         datatype: "json",
         colModel: [
-            {label: '编号', name: 'productNum', index: 'product_num', width: 50, key: true},
+            {label: 'd', name: 'id', index: 'id', width: 50, key: true, hidden:true},
+            {label: '编号', name: 'productNum', index: 'product_num', width: 50},
             {label: '名称', name: 'name', index: 'name', width: 80},
             {
                 label: '售价',

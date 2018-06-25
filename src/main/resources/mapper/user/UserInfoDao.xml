@@ -9,6 +9,7 @@
         <result property="username" column="username"/>
         <result property="phone" column="phone"/>
         <result property="uid" column="uid"/>
+        <result property="openId" column="open_id"/>
         <result property="status" column="status"/>
         <result property="depositAmount" column="deposit_amount"/>
         <result property="enableDepositAmount" column="enable_deposit_amount"/>
@@ -23,7 +24,8 @@
 					`username`, 
 					`phone`, 
 					`uid`, 
-					`status`, 
+					`open_id`,
+					`status`,
 					`deposit_amount`, 
 					`enable_deposit_amount`, 
 					`disable_deposit_amount`, 
@@ -33,19 +35,20 @@
         <if test="isLock != null and isLock == true">for update</if>
 	</select>
 
-	<select id="queryObjectByUid" resultType="com.yunquanlai.admin.user.entity.UserInfoEntity">
+	<select id="queryObjectByOpenId" resultType="com.yunquanlai.admin.user.entity.UserInfoEntity">
 		select
 		`id`,
 		`username`,
 		`phone`,
 		`uid`,
+		`open_id`,
 		`status`,
 		`deposit_amount`,
 		`enable_deposit_amount`,
 		`disable_deposit_amount`,
 		`empty_bucket_number`,
 		`creation_time`
-		from user_info where uid = #{value}
+		from user_info where open_id = #{value}
 	</select>
 
 	<select id="queryList" resultType="com.yunquanlai.admin.user.entity.UserInfoEntity">
@@ -54,7 +57,8 @@
 		            `username`, 
 		            `phone`, 
 		            `uid`, 
-		            `status`, 
+		            `open_id`,
+		            `status`,
 		            `deposit_amount`, 
 		            `enable_deposit_amount`, 
 		            `disable_deposit_amount`, 
@@ -82,7 +86,8 @@
 			`username`, 
 			`phone`, 
 			`uid`, 
-			`status`, 
+			`open_id`,
+			`status`,
 			`deposit_amount`, 
 			`enable_deposit_amount`, 
 			`disable_deposit_amount`, 
@@ -94,7 +99,8 @@
 			#{username}, 
 			#{phone}, 
 			#{uid}, 
-			#{status}, 
+			#{openId},
+			#{status},
 			#{depositAmount}, 
 			#{enableDepositAmount}, 
 			#{disableDepositAmount}, 
@@ -109,6 +115,7 @@
 			<if test="username != null">`username` = #{username}, </if>
 			<if test="phone != null">`phone` = #{phone}, </if>
 			<if test="uid != null">`uid` = #{uid}, </if>
+			<if test="openId != null">`open_id` = #{openId}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="depositAmount != null">`deposit_amount` = #{depositAmount}, </if>
 			<if test="enableDepositAmount != null">`enable_deposit_amount` = #{enableDepositAmount}, </if>

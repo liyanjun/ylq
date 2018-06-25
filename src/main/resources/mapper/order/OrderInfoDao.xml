@@ -11,6 +11,9 @@
         <result property="amountBenifit" column="amount_benifit"/>
         <result property="amountActivity" column="amount_activity"/>
         <result property="amountDeliveryFee" column="amount_delivery_fee"/>
+        <result property="detail" column="detail"/>
+        <result property="deposit" column="deposit"/>
+        <result property="bucketNum" column="bucket_num"/>
         <result property="status" column="status"/>
         <result property="type" column="type"/>
         <result property="payType" column="pay_type"/>
@@ -18,6 +21,7 @@
         <result property="deliveryDistributorName" column="delivery_distributor_name"/>
         <result property="userInfoId" column="user_info_id"/>
         <result property="username" column="username"/>
+        <result property="userPhone" column="user_phone"/>
         <result property="remark" column="remark"/>
         <result property="exception" column="exception"/>
         <result property="creationTime" column="creation_time"/>
@@ -35,6 +39,9 @@
         `amount_benifit`,
         `amount_activity`,
         `amount_delivery_fee`,
+        `detail`,
+        `deposit`,
+        `bucket_num`,
         `status`,
         `type`,
         `pay_type`,
@@ -42,6 +49,7 @@
         `delivery_distributor_name`,
         `user_info_id`,
         `username`,
+        `user_phone`,
         `remark`,
         `exception`,
         `creation_time`,
@@ -61,6 +69,9 @@
         `amount_benifit`,
         `amount_activity`,
         `amount_delivery_fee`,
+        `detail`,
+        `deposit`,
+        `bucket_num`,
         `status`,
         `type`,
         `pay_type`,
@@ -68,6 +79,7 @@
         `delivery_distributor_name`,
         `user_info_id`,
         `username`,
+        `user_phone`,
         `remark`,
         `exception`,
         `creation_time`,
@@ -80,8 +92,17 @@
             <if test="userInfoId != null">
                 and user_info_id = #{userInfoId}
             </if>
-            <if test="status != null">
+            <if test="userName != null and userName.trim() != ''">
+                and `username` like concat('%',#{userName},'%')
+            </if>
+            <if test="userPhone != null and userPhone.trim() != ''">
+                and `user_phone` like concat('%',#{userPhone},'%')
+            </if>
+            <if test="status != null and status.trim() != ''">
                 and status = #{status}
+            </if>
+            <if test="type != null and type.trim() != ''">
+                and `type` = #{type}
             </if>
             <if test="creationTime != null">
                 <![CDATA[
@@ -110,6 +131,9 @@
         `amount_benifit`,
         `amount_activity`,
         `amount_delivery_fee`,
+        `detail`,
+        `deposit`,
+        `bucket_num`,
         `status`,
         `type`,
         `pay_type`,
@@ -117,6 +141,7 @@
         `delivery_distributor_name`,
         `user_info_id`,
         `username`,
+        `user_phone`,
         `remark`,
         `exception`,
         `creation_time`,
@@ -164,13 +189,17 @@
 			`amount_benifit`, 
 			`amount_activity`, 
 			`amount_delivery_fee`, 
-			`status`, 
+			`detail`,
+			`deposit`,
+			`bucket_num`,
+			`status`,
 			`type`, 
 			`pay_type`,
 			`delivery_distributor_id`,
 			`delivery_distributor_name`, 
 			`user_info_id`, 
-			`username`, 
+			`username`,
+			`user_phone`,
 			`remark`, 
 			`exception`, 
 			`creation_time`, 
@@ -186,13 +215,17 @@
 			#{amountBenifit}, 
 			#{amountActivity}, 
 			#{amountDeliveryFee}, 
-			#{status}, 
+			#{detail},
+			#{deposit},
+			#{bucketNum},
+			#{status},
 			#{type}, 
 			#{payType},
 			#{deliveryDistributorId},
 			#{deliveryDistributorName}, 
 			#{userInfoId}, 
-			#{username}, 
+			#{username},
+			#{userPhone},
 			#{remark}, 
 			#{exception}, 
 			#{creationTime}, 
@@ -211,6 +244,9 @@
             <if test="amountBenifit != null">`amount_benifit` = #{amountBenifit},</if>
             <if test="amountActivity != null">`amount_activity` = #{amountActivity},</if>
             <if test="amountDeliveryFee != null">`amount_delivery_fee` = #{amountDeliveryFee},</if>
+            <if test="detail != null">`detail` = #{detail},</if>
+            <if test="deposit != null">`deposit` = #{deposit},</if>
+            <if test="bucketNum != null">`bucket_num` = #{bucketNum},</if>
             <if test="status != null">`status` = #{status},</if>
             <if test="type != null">`type` = #{type},</if>
             <if test="payType != null">`pay_type` = #{payType},</if>
@@ -218,6 +254,7 @@
             <if test="deliveryDistributorName != null">`delivery_distributor_name` = #{deliveryDistributorName},</if>
             <if test="userInfoId != null">`user_info_id` = #{userInfoId},</if>
             <if test="username != null">`username` = #{username},</if>
+            <if test="userPhone != null">`user_phone` = #{userPhone},</if>
             <if test="remark != null">`remark` = #{remark},</if>
             <if test="exception != null">`exception` = #{exception},</if>
             <if test="creationTime != null">`creation_time` = #{creationTime},</if>

@@ -1,6 +1,7 @@
 package com.yunquanlai.admin.system.dao;
 
 import com.yunquanlai.admin.system.entity.SysMenuEntity;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 

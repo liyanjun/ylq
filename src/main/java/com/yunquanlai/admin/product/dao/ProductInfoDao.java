@@ -20,4 +20,6 @@ public interface ProductInfoDao extends BaseDao<ProductInfoEntity> {
     void updateBrandName(ProductInfoEntity productInfoEntity);
 
     void updateShelves(Map<String, Object> map);
+
+    ProductInfoEntity queryObjectByProductNum(String productNum);
 }

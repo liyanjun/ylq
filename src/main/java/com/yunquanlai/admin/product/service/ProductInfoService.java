@@ -20,6 +20,8 @@ public interface ProductInfoService {
 
 	ProductInfoEntity queryObject(Long id);
 
+	ProductInfoEntity queryObjectByProductNum(String productNum);
+
 	List<ProductInfoEntity> queryList(Map<String, Object> map);
 
 	int queryTotal(Map<String, Object> map);

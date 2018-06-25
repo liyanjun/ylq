@@ -28,3 +28,14 @@ server:
     key-store: /app/cert/your-name.jks
     key-store-password: 214769235080420
     key-password: 214769235080420
+wechat:
+  miniapp:
+    appid: wx39b1debf7c7b57f7
+    secret: b82a5f7d5d654106447a28a2efeb9f73
+#    token: 111
+#    aesKey: 111
+    msgDataFormat: JSON
+  pay:
+    appId: wx39b1debf7c7b57f7
+    mchId: 1494681812
+    mchKey: a9b80505a74e4c748daf576357b8f20a

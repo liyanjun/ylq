@@ -88,6 +88,11 @@ public class ProductInfoController extends AbstractController {
         // TODO: 2018/6/17 字段按前端顺序进行验证
         ValidatorUtils.validateEntity(productInfoEntity, AddGroup.class);
         ValidatorUtils.validateEntity(productDetailEntity, AddGroup.class);
+        //检验商品编号唯一性
+        ProductInfoEntity productInfo = productInfoService.queryObjectByProductNum(productInfoEntity.getProductNum());
+        if(productInfo != null){
+            throw new RRException("商品编号已存在 ！");
+        }
         Assert.isBlank(productInfoVO.getProductDetailEntity().getBanner().replace(",", ""), "至少需要一张广告轮播图");
         productInfoEntity.setCreationTime(new Date());
         productInfoEntity.setCreatorName(getUser().getUsername());

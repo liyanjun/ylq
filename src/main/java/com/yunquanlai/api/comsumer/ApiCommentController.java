@@ -59,14 +59,7 @@ public class ApiCommentController {
             @ApiImplicitParam(name = "OrderCommentVO", value = "订单评论信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderCommentVO", paramType = "body"),
     })
     public R comment(@LoginUser @ApiIgnore UserInfoEntity user, @ApiIgnore OrderCommentVO orderCommentVO) {
-        //todo 写样例JSON
-        OrderInfoEntity orderInfoEntity = orderInfoService.queryObject(orderCommentVO.getOrderId());
-        if (user.getId().longValue() != orderInfoEntity.getUserInfoId().longValue()) {
-            return R.error("不能评价别人的订单");
-        }
-        orderInfoService.saveComment(orderCommentVO);
-
-        return R.ok();
+        return orderInfoService.saveComment(orderCommentVO,user.getId());
     }
 
     /**

@@ -25,13 +25,13 @@ public interface UserInfoService {
 
     void save(UserInfoEntity userInfo);
 
-/*	void update(UserInfoEntity userInfo);
+    void update(UserInfoEntity userInfo);
 
-	void delete(Long id);
+/*		void delete(Long id);
 
 	void deleteBatch(Long[] ids);*/
 
-    UserInfoEntity queryObjectByUid(String uid);
+    UserInfoEntity queryObjectByOpenId(String openId);
 
     /**
      * 用户回收空桶

@@ -49,6 +49,14 @@ public class OrderVO {
      */
     private String orderToken;
     /**
+     * 用户选择押金
+     */
+    private BigDecimal deposit;
+    /**
+     * 押金桶数
+     */
+    private BigDecimal bucketNum;
+    /**
      * 购买产品及数量
      */
     private List<ProductOrderVO> productOrderVOList;
@@ -139,5 +147,21 @@ public class OrderVO {
 
     public void setOrderToken(String orderToken) {
         this.orderToken = orderToken;
+    }
+
+    public BigDecimal getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(BigDecimal deposit) {
+        this.deposit = deposit;
+    }
+
+    public BigDecimal getBucketNum() {
+        return bucketNum;
+    }
+
+    public void setBucketNum(BigDecimal bucketNum) {
+        this.bucketNum = bucketNum;
     }
 }

@@ -10,6 +10,7 @@
         <result property="beforeStatus" column="before_status"/>
         <result property="afterStatus" column="after_status"/>
         <result property="remark" column="remark"/>
+		<result property="orderId" column="order_id"/>
         <result property="operatorTime" column="operator_time"/>
         <result property="operatorId" column="operator_id"/>
         <result property="operatorName" column="operator_name"/>
@@ -22,6 +23,7 @@
 					`before_status`, 
 					`after_status`, 
 					`remark`, 
+					`order_id`,
 					`operator_time`,
 					`operator_id`,
 					`operator_name`
@@ -36,10 +38,16 @@
 		            `before_status`, 
 		            `after_status`, 
 		            `remark`, 
+		            `order_id`,
 		            `operator_time`,
 		            `operator_id`,
 		            `operator_name`
 				from order_operate_flow
+		<where>
+			<if test="orderId != null and orderId.trim() != ''">
+				and `order_id` like concat('%',#{orderId},'%')
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -64,6 +72,7 @@
 			`before_status`, 
 			`after_status`, 
 			`remark`, 
+			`order_id`,
 			`operator_time`,
 			`operator_id`,
 			`operator_name`
@@ -74,6 +83,7 @@
 			#{beforeStatus}, 
 			#{afterStatus}, 
 			#{remark}, 
+			#{orderId},
 			#{operatorTime},
 			#{operatorId},
 			#{operatorName}
@@ -87,6 +97,7 @@
 			<if test="beforeStatus != null">`before_status` = #{beforeStatus}, </if>
 			<if test="afterStatus != null">`after_status` = #{afterStatus}, </if>
 			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="orderId != null">`order_id` = #{orderId}, </if>
 			<if test="operatorTime != null">`operator_time` = #{operatorTime}, </if>
 			<if test="operatorId != null">`operator_id` = #{operatorId}, </if>
 			<if test="operatorName != null">`operator_name` = #{operatorName}</if>

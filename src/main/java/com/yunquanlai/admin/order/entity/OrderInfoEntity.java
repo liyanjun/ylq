@@ -13,6 +13,7 @@ import java.util.Date;
  * @date 2018-06-04 22:42:21
  */
 public class OrderInfoEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     public static final int STATUS_NEW = 10;
@@ -20,6 +21,7 @@ public class OrderInfoEntity implements Serializable {
     public static final int STATUS_ON_DELIVERY = 30;
     public static final int STATUS_DELIVERY_END = 40;
     public static final int STATUS_CLOSE = 50;
+    public static final int STATUS_COMMENT = 60;
 
 
     public static final int TYPE_NORMAL = 10;
@@ -57,7 +59,15 @@ public class OrderInfoEntity implements Serializable {
      */
     private BigDecimal deposit;
     /**
-     * 设置：订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50已关闭
+     * 押金桶数
+     */
+    private BigDecimal bucketNum;
+    /**
+     * 订单购买商品详情
+     */
+    private String detail;
+    /**
+     * 设置：订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50：已关闭，60：已评论
      */
     private Integer status;
     /**
@@ -84,6 +94,10 @@ public class OrderInfoEntity implements Serializable {
      * 设置：用户名
      */
     private String username;
+    /**
+     * 设置：用户手机号
+     */
+    private String userPhone;
     /**
      * 设置：订单备注
      */
@@ -381,5 +395,29 @@ public class OrderInfoEntity implements Serializable {
 
     public void setDeposit(BigDecimal deposit) {
         this.deposit = deposit;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public void setBucketNum(BigDecimal bucketNum) {
+        this.bucketNum = bucketNum;
+    }
+
+    public BigDecimal getBucketNum() {
+        return bucketNum;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
     }
 }

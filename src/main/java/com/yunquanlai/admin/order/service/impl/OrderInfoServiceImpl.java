@@ -10,11 +10,14 @@ import com.yunquanlai.admin.delivery.dao.DeliveryEndpointDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunquanlai.admin.order.dao.OrderDeliveryInfoDao;
+import com.yunquanlai.admin.order.dao.OrderInfoDao;
 import com.yunquanlai.admin.order.dao.OrderOperateFlowDao;
 import com.yunquanlai.admin.order.dao.OrderProductDetailDao;
 import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
+import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderOperateFlowEntity;
 import com.yunquanlai.admin.order.entity.OrderProductDetailEntity;
+import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.admin.product.dao.ProductInfoDao;
 import com.yunquanlai.admin.product.dao.ProductStockDao;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
@@ -31,23 +34,19 @@ import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.TokenUtils;
 import com.yunquanlai.utils.validator.Assert;
+import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import com.yunquanlai.admin.order.dao.OrderInfoDao;
-import com.yunquanlai.admin.order.entity.OrderInfoEntity;
-import com.yunquanlai.admin.order.service.OrderInfoService;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 
 
 @Service("orderInfoService")
@@ -101,7 +100,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Resource
     private ApplicationContext applicationContext;
 
-    ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper();
 
 
     @Override
@@ -145,16 +144,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = new OrderDeliveryInfoEntity();
         OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
         List<OrderProductDetailEntity> orderProductDetailEntities = new ArrayList<>(16);
-        BigDecimal bEmptyValue;
-        String emptyValue = sysConfigDao.queryByKey("emptyValue");
-        if (emptyValue == null) {
-            throw new RRException("单个空桶价值未配置");
-        }
-        bEmptyValue = new BigDecimal(emptyValue);
         BigDecimal amount = BigDecimal.ZERO;
         BigDecimal amountTotal = BigDecimal.ZERO;
         BigDecimal amountDeliveryFee = BigDecimal.ZERO;
-        BigDecimal deposit = BigDecimal.ZERO;
 
         for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
             // 计算订单总额
@@ -166,9 +158,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             if (productInfoEntity.getAmountShow() != null) {
                 amountTotal = amountTotal.add(productInfoEntity.getAmountShow().multiply(new BigDecimal(productOrderVO.getCount())));
             }
-            if (productInfoEntity.getBucketType() == ProductInfoEntity.BUCKET_TYPE_RECYCLE) {
-                deposit = deposit.add(bEmptyValue.multiply(new BigDecimal(productOrderVO.getCount())));
-            }
 
             amountDeliveryFee = amountDeliveryFee.add(productInfoEntity.getDeliveryFee());
             OrderProductDetailEntity orderProductDetailEntity = new OrderProductDetailEntity();
@@ -176,26 +165,31 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntity.setProductInfoId(productInfoEntity.getId());
             orderProductDetailEntity.setProductName(productInfoEntity.getName());
             orderProductDetailEntity.setBucketType(productInfoEntity.getBucketType());
+            orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
             orderProductDetailEntities.add(orderProductDetailEntity);
         }
-        orderInfoEntity.setDeposit(deposit);
+        orderInfoEntity.setDeposit(orderVO.getDeposit());
+        orderInfoEntity.setBucketNum(orderVO.getBucketNum());
         orderInfoEntity.setAmount(amount);
         orderInfoEntity.setAmountTotal(amountTotal);
         orderInfoEntity.setAmountDeliveryFee(amountDeliveryFee);
         orderInfoEntity.setUsername(user.getUsername());
+        orderInfoEntity.setUserPhone(user.getPhone());
         orderInfoEntity.setUserInfoId(user.getId());
         orderInfoEntity.setCreationTime(new Date());
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_NEW);
         orderInfoEntity.setType(OrderInfoEntity.TYPE_NORMAL);
         orderInfoEntity.setPayType(OrderInfoEntity.PAY_TYPE_CASH);
         orderInfoEntity.setRemark(orderVO.getRemark());
+        orderInfoEntity.setDetail(mapper.writeValueAsString(orderProductDetailEntities));
         // 订单
         orderInfoDao.save(orderInfoEntity);
         orderDeliveryInfoEntity.setAddress(orderVO.getAddress());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         if (orderVO.getDeliveryTime() != null) {
             orderDeliveryInfoEntity.setDeliveryTime(sdf.parse(orderVO.getDeliveryTime()));
         }
+
         orderDeliveryInfoEntity.setAmountDeliveryFee(amountDeliveryFee);
         orderDeliveryInfoEntity.setDetail(mapper.writeValueAsString(orderProductDetailEntities));
         orderDeliveryInfoEntity.setLocationX(orderVO.getLocationX());
@@ -225,8 +219,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        orderPay(orderInfoEntity.getId(), orderInfoEntity.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
-        return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities).put("minDeposit", deposit);
+        orderPay(orderInfoEntity.getId(), orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit()).multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
+        return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities);
     }
 
     @Override
@@ -315,6 +309,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
         orderDeliveryInfoEntity.setDeliveryDistributorId(deliveryDistributorEntity.getId());
+        orderDeliveryInfoEntity.setDeliveryDistributorName(deliveryDistributorEntity.getName());
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         applicationContext.publishEvent(new OrderDeliveryNotifyEvent(orderDeliveryInfoEntity.getId()));
         return true;
@@ -383,11 +378,21 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public void saveComment(OrderCommentVO orderCommentVO) {
+    public R saveComment(OrderCommentVO orderCommentVO, Long id) {
+        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderCommentVO.getOrderId(),true);
+        if (id.longValue() != orderInfoEntity.getUserInfoId().longValue()) {
+            return R.error("不能评价别人的订单。");
+        }
+        if (orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_DELIVERY_END) {
+            return R.error("订单未送达，不能评论。");
+        }
+        orderInfoEntity.setStatus(OrderInfoEntity.STATUS_COMMENT);
         commentDeliveryDao.save(orderCommentVO.getCommentDeliveryEntity());
         for (CommentProductEntity commentProductEntity : orderCommentVO.getCommentProductEntities()) {
             commentProductDao.save(commentProductEntity);
         }
+        orderInfoDao.update(orderInfoEntity);
+        return R.ok();
     }
 
     @Override
@@ -406,6 +411,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_CLOSE);
         orderOperateFlowEntity.setAfterStatus(OrderInfoEntity.STATUS_CLOSE);
         orderInfoEntity.setRemark("订单已人工关闭，处理办法：" + orderOperateFlowEntity.getRemark());
+        orderOperateFlowEntity.setOrderId(orderInfoEntity.getId());
         orderInfoDao.update(orderInfoEntity);
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         orderOperateFlowDao.save(orderOperateFlowEntity);
@@ -413,21 +419,22 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public void handDistribute(Long orderId, Long deliveryDistributorId, Long deliveryEndpointId, OrderOperateFlowEntity orderOperateFlowEntity) {
+        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderId, true);
         //先锁配送点，再开始锁配送点库存，否则有可能造成死锁
         DeliveryEndpointEntity deliveryEndpointEntity = deliveryEndpointDao.queryObject(deliveryEndpointId, true);
         if (deliveryEndpointEntity == null) {
-            throw new RRException("找不到ID为【" + deliveryEndpointId + "】的配送点");
-            // 该配送点找不到能送的人，找下一个配送点
+            throw new RRException("找不到ID为【" + deliveryEndpointId + "】的配送点。");
         }
         DeliveryDistributorEntity deliveryDistributorEntity = deliveryDistributorDao.queryObject(deliveryDistributorId, true);
         if (deliveryDistributorEntity == null) {
-            throw new RRException("找不到ID为【" + deliveryDistributorId + "】的配送员");
-            // 该配送点找不到能送的人，找下一个配送点
+            throw new RRException("找不到ID为【" + deliveryDistributorId + "】的配送员。");
         }
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderId, true);
         if (deliveryDistributorEntity == null) {
-            throw new RRException("找不到订单ID为【" + orderId + "】的配送单员");
-            // 该配送点找不到能送的人，找下一个配送点
+            throw new RRException("找不到订单ID为【" + orderId + "】的配送单员。");
+        }
+        if(orderInfoEntity.getStatus() != OrderInfoEntity.TYPE_EXCEPTION){
+            throw new RRException("订单不是异常状态，不能手工派单。");
         }
 
         List<OrderProductDetailEntity> orderProductDetailEntities = orderProductDetailDao.queryListByOrderId(orderId);
@@ -441,7 +448,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         deliveryDistributorEntity.setOrderCount(deliveryDistributorEntity.getOrderCount() + 1);
         deliveryDistributorDao.update(deliveryDistributorEntity);
         // 更新订单分配时间
-        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderId, true);
         orderOperateFlowEntity.setBeforeStatus(orderInfoEntity.getStatus());
         orderInfoEntity.setId(orderId);
         orderInfoEntity.setDistributeTime(new Date());
@@ -454,7 +460,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_ON_DELIVERY);
         orderDeliveryInfoEntity.setDeliveryDistributorId(deliveryDistributorEntity.getId());
+        orderDeliveryInfoEntity.setDeliveryDistributorName(deliveryDistributorEntity.getName());
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
+        orderOperateFlowEntity.setOrderId(orderInfoEntity.getId());
         orderOperateFlowEntity.setType(OrderOperateFlowEntity.TYPE_HAND_DISTRIBUTOR);
         orderOperateFlowEntity.setRemark("手工分配订单【" + orderId + "】到【" + deliveryEndpointEntity.getName() + "：编号" + deliveryEndpointEntity.getId() + "】，【" + deliveryDistributorEntity.getName() + "：编号" + deliveryDistributorEntity.getId() + "】");
         orderOperateFlowDao.save(orderOperateFlowEntity);

@@ -174,6 +174,7 @@ CREATE TABLE `order_delivery_info` (
   `delivery_end_time` datetime COMMENT '配送结束时间',
   `empty_barrels` int(11) NOT NULL COMMENT '该配送单回收空桶数',
   `delivery_distributor_id` bigint(20) DEFAULT NULL COMMENT '关联配送员 ID',
+  `delivery_distributor_name` varchar(32) DEFAULT NULL COMMENT '配送员名',
   `order_info_id` bigint(20) NOT NULL COMMENT '关联订单 ID',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
   PRIMARY KEY (`id`),
@@ -193,13 +194,17 @@ CREATE TABLE `order_info` (
   `amount_benifit` decimal(20,2) DEFAULT NULL COMMENT '订单折扣优惠金额',
   `amount_activity` decimal(20,2) DEFAULT NULL COMMENT '订单活动优惠金额（即除了优惠标价外，使用的活动奖励）',
   `amount_delivery_fee` decimal(10,0) NOT NULL COMMENT '订单配送费',
-  `status` tinyint(4) NOT NULL COMMENT '订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50：已关闭',
+  `deposit` decimal(10,0) COMMENT '订单押金',
+  `bucket_num` int(11) NOT NULL COMMENT '订单桶数',
+  `detail` text NOT NULL COMMENT '订单购买商品详情',
+  `status` tinyint(4) NOT NULL COMMENT '订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50：已关闭，60：已评论',
   `type` tinyint(4) NOT NULL COMMENT '订单状态类型，10：正常，20：异常',
   `pay_type` tinyint(4) NOT NULL COMMENT '订单支付类型，10：现金，20：水票',
   `delivery_distributor_id` bigint(20) DEFAULT NULL COMMENT '关联配送员 ID',
   `delivery_distributor_name` varchar(64) DEFAULT NULL COMMENT '关联配送员名',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
   `username` varchar(128) NOT NULL COMMENT '用户名',
+  `user_phone` varchar(32) NOT NULL COMMENT '用户手机号',
   `remark` varchar(1024) DEFAULT NULL COMMENT '订单备注',
   `exception` text DEFAULT NULL COMMENT '订单异常信息',
   `creation_time` datetime NOT NULL COMMENT '订单创建时间',
@@ -224,11 +229,12 @@ CREATE TABLE `order_operate_flow` (
   `before_status` int(11) NOT NULL COMMENT '手工操作前状态',
   `after_status` int(11) NOT NULL COMMENT '手工操作后状态',
   `remark` varchar(512) DEFAULT NULL COMMENT '操作备注信息',
+  `order_id` bigint(20) NOT NULL COMMENT '订单 ID',
   `operator_time` datetime NOT NULL COMMENT '操作时间',
   `operator_id` bigint(20) NOT NULL COMMENT '操作人 ID',
   `operator_name` varchar(32) NOT NULL COMMENT '操作人名',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单手工处理流水记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单手工处理记录表';
 
 -- ----------------------------
 -- Table structure for order_product_detail
@@ -289,8 +295,8 @@ DROP TABLE IF EXISTS `product_info`;
 CREATE TABLE `product_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `name` varchar(128) NOT NULL COMMENT '商品名称',
-  `amount_show` decimal(20,2) DEFAULT NULL COMMENT '售价',
-  `amount` decimal(20,2) NOT NULL COMMENT '优惠价',
+  `amount_show` decimal(20,2) DEFAULT NULL COMMENT '展示价',
+  `amount` decimal(20,2) NOT NULL COMMENT '售价',
   `img` varchar(512) NOT NULL COMMENT '商品主图',
   `brand_id` bigint(20) NOT NULL COMMENT '商品品牌 ID',
   `brand_name` varchar(64) NOT NULL COMMENT '商品品牌',
@@ -497,7 +503,7 @@ CREATE TABLE `user_client_token` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for user_deposit_flow
+-- Table structure for user_empty_bucket_flow
 -- ----------------------------
 DROP TABLE IF EXISTS `user_empty_bucket_flow`;
 CREATE TABLE `user_empty_bucket_flow` (
@@ -520,7 +526,8 @@ CREATE TABLE `user_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `username` varchar(64) NOT NULL COMMENT '用户名(从小程序过来是就是微信昵称)',
   `phone` varchar(32) DEFAULT NULL COMMENT '用户绑定手机号',
-  `uid` varchar(64) NOT NULL COMMENT '用户微信 ID',
+  `uid` varchar(64) COMMENT '用户微信 ID',
+  `open_id` varchar(64) NOT NULL COMMENT '用户微信 open_id',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户状态：0：启用，1：禁用',
   `deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '总押金金额',
   `enable_deposit_amount` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '可用押金金额',

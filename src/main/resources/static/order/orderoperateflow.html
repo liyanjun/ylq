@@ -1,88 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>订单手工处理流水记录表</title>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<link rel="stylesheet" href="../public/css/bootstrap.min.css">
-<link rel="stylesheet" href="../public/css/font-awesome.min.css">
-<link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
-<link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
-<link rel="stylesheet" href="../public/css/main.css">
-<script src="../public/libs/jquery.min.js"></script>
-<script src="../public/plugins/layer/layer.js"></script>
-<script src="../public/libs/bootstrap.min.js"></script>
-<script src="../public/libs/vue.min.js"></script>
-<script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
-<script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
-<script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
-<script src="../public/js/common.js"></script>
+    <title>订单手工处理流水记录表</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
+    <link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" href="../public/css/main.css">
+    <script src="../public/libs/jquery.min.js"></script>
+    <script src="../public/plugins/layer/layer.js"></script>
+    <script src="../public/libs/bootstrap.min.js"></script>
+    <script src="../public/libs/vue.min.js"></script>
+    <script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
+    <script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+    <script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script src="../public/js/common.js"></script>
 </head>
 <body>
 <div id="rrapp" v-cloak>
-	<div v-show="showList">
-		<div class="grid-btn">
-			<a v-if="hasPermission('orderoperateflow:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
-			<a v-if="hasPermission('orderoperateflow:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-			<a v-if="hasPermission('orderoperateflow:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-		</div>
-	    <table id="jqGrid"></table>
-	    <div id="jqGridPager"></div>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <div class="form-group col-sm-2">
+                <input type="text" id="searchKey" class="form-control" v-model="q.orderId" @keyup.enter="query" placeholder="订单ID">
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+            <a class="btn btn-success" @click="reset"><i class="fa fa-rotate-left"></i> 重置</a>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
     </div>
-    
-    <div v-show="!showList" class="panel panel-default">
-		<div class="panel-heading">{{title}}</div>
-		<form class="form-horizontal">
-											<div class="form-group">
-			   	<div class="col-sm-2 control-label">处理类型，10：手工选定配送员，20：取消订单</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderOperateFlow.type" placeholder="处理类型，10：手工选定配送员，20：取消订单"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">手工操作前状态</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderOperateFlow.beforeStatus" placeholder="手工操作前状态"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">手工操作后状态</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderOperateFlow.afterStatus" placeholder="手工操作后状态"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">操作备注信息</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderOperateFlow.remark" placeholder="操作备注信息"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">操作时间</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderOperateFlow.operatorTime" placeholder="操作时间"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">操作人 ID</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderOperateFlow.operatorId" placeholder="操作人 ID"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">操作人名</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="orderOperateFlow.operatorName" placeholder="操作人名"/>
-			    </div>
-			</div>
-							<div class="form-group">
-				<div class="col-sm-2 control-label"></div> 
-				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
-				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
-			</div>
-		</form>
-	</div>
+
 </div>
 
 <script src="../public/js/order/orderoperateflow.js"></script>

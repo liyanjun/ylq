@@ -15,10 +15,41 @@ $(function () {
                         '取消订单';
                 }
 			},
-			{ label: '手工操作前状态', name: 'beforeStatus', index: 'before_status', width: 80 },
-			{ label: '手工操作后状态', name: 'afterStatus', index: 'after_status', width: 80 },
+			{ label: '手工处理前状态', name: 'beforeStatus', index: 'before_status', width: 80 ,
+                formatter: function (value, options, row) {
+                    if (value === 10) {
+                        return '新创建';
+                    } else if (value === 20) {
+                        return '已支付，待配送'
+                    } else if (value == 30) {
+                        return '配送中';
+                    } else if (value == 40) {
+                        return '已到达';
+                    } else if (value == 50) {
+                        return '关闭';
+                    } else if(value == 60){
+                        return "已评论";
+                    }
+                }},
+			{ label: '手工处理后状态', name: 'afterStatus', index: 'after_status', width: 80 ,
+                formatter: function (value, options, row) {
+                    if (value === 10) {
+                        return '新创建';
+                    } else if (value === 20) {
+                        return '已支付，待配送'
+                    } else if (value == 30) {
+                        return '配送中';
+                    } else if (value == 40) {
+                        return '已到达';
+                    } else if (value == 50) {
+                        return '关闭';
+                    } else if(value == 60){
+                        return "已评论";
+                    }
+                }},
+            { label: '订单ID', name: 'orderId', index: 'order_id', width: 80 },
 			{ label: '操作时间', name: 'operatorTime', index: 'operator_time', width: 80 },
-			{ label: '操作人名', name: 'operatorName', index: 'operator_name', width: 80 }
+			{ label: '操作人', name: 'operatorName', index: 'operator_name', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -50,6 +81,9 @@ $(function () {
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
+        q:{
+            orderId: null
+        },
 		showList: true,
 		title: null,
 		orderOperateFlow: {}
@@ -58,39 +92,11 @@ var vm = new Vue({
 		query: function () {
 			vm.reload();
 		},
-		add: function(){
-			vm.showList = false;
-			vm.title = "新增";
-			vm.orderOperateFlow = {};
-		},
-		update: function (event) {
-			var id = getSelectedRow();
-			if(id == null){
-				return ;
-			}
-			vm.showList = false;
-            vm.title = "修改";
-            
-            vm.getInfo(id)
-		},
-		saveOrUpdate: function (event) {
-			var url = vm.orderOperateFlow.id == null ? "../orderoperateflow/save" : "../orderoperateflow/update";
-			$.ajax({
-				type: "POST",
-			    url: url,
-			    contentType: "application/json",
-			    data: JSON.stringify(vm.orderOperateFlow),
-			    success: function(r){
-			    	if(r.code === 0){
-						alert('操作成功', function(index){
-							vm.reload();
-						});
-					}else{
-						alert(r.msg);
-					}
-				}
-			});
-		},
+        reset: function () {
+            $("#searchKey").val("");
+            vm.q.orderId = "";
+            vm.reload();
+        },
 		del: function (event) {
 			var ids = getSelectedRows();
 			if(ids == null){
@@ -123,7 +129,8 @@ var vm = new Vue({
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{ 
+			$("#jqGrid").jqGrid('setGridParam',{
+                postData:{'orderId': vm.q.orderId},
                 page:page
             }).trigger("reloadGrid");
 		}
