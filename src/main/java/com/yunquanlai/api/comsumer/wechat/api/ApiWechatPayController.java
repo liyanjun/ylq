@@ -1,8 +1,10 @@
 package com.yunquanlai.api.comsumer.wechat.api;
 
+import com.gexin.rp.sdk.base.uitls.MD5Util;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.service.WxPayService;
+import com.github.binarywang.wxpay.util.SignUtils;
 import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.admin.system.service.SysConfigService;
@@ -11,6 +13,7 @@ import com.yunquanlai.api.comsumer.wechat.utils.StringUtils;
 import com.yunquanlai.api.comsumer.wechat.utils.PayUtil;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
+import com.yunquanlai.utils.annotation.IgnoreAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -30,6 +33,8 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -85,9 +90,9 @@ public class ApiWechatPayController {
             //商品名称
             String body = "运泉来-" + orderInfoEntity.getId();
             //获取本机的ip地址 TODO 线上记得打开
-            String spbill_create_ip = IpUtils.getIpAddr(httpServletRequest);
+//            String spbill_create_ip = IpUtils.getIpAddr(httpServletRequest);
 
-//            String spbill_create_ip = "119.23.247.12";
+            String spbill_create_ip = "119.23.247.12";
 
             String orderNo = orderInfoEntity.getId() + "";
             Integer money = orderInfoEntity.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN).intValue();
@@ -107,8 +112,16 @@ public class ApiWechatPayController {
             request.setOpenid(openid);
 
             WxPayUnifiedOrderResult wxPayUnifiedOrderResult = wxPayService.unifiedOrder(request);
+            Map map = new LinkedHashMap();
+            map.put("appId", wxPayUnifiedOrderResult.getAppid());
+            map.put("nonceStr", wxPayUnifiedOrderResult.getNonceStr());
+            map.put("package", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
+            map.put("signType", "MD5");
+            map.put("timeStamp", System.currentTimeMillis() + "");
+            String sign = MD5Util.getMD5Format(PayUtil.createLinkString(map) + "&key=" + key);
+            map.put("sign", sign.toUpperCase());
 
-            return R.ok("发起微信支付成功").put("wxPayUnifiedOrderResult", wxPayUnifiedOrderResult);
+            return R.ok("发起微信支付成功").put("result", map);
         } catch (Exception e) {
             logger.error("发起微信支付失败", e);
             return R.ok("发起微信支付失败：" + e.getMessage());
@@ -122,6 +135,7 @@ public class ApiWechatPayController {
      * @param response
      * @throws Exception
      */
+    @IgnoreAuth
     @PostMapping(value = "/wxNotify")
     public void wxNotify(HttpServletRequest request, HttpServletResponse response) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
@@ -140,9 +154,11 @@ public class ApiWechatPayController {
 
         String returnCode = (String) map.get("return_code");
         if ("SUCCESS".equals(returnCode)) {
+            logger.debug("支付成功");
             try {
                 //验证签名是否正确
-                if (PayUtil.verify(PayUtil.createLinkString(map), (String) map.get("sign"), key, "utf-8")) {
+                if (PayUtil.verify(PayUtil.createLinkString(map), (String) map.get("sign"), key)) {
+                    logger.debug("签名验证通过，开始业务逻辑");
                     /**业务逻辑 start**/
                     orderInfoService.orderPay(map.get("out_trade_no"), map.get("total_fee"));
                     /**逻辑 end**/

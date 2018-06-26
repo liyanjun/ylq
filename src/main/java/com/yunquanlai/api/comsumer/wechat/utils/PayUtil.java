@@ -1,5 +1,6 @@
 package com.yunquanlai.api.comsumer.wechat.utils;
 
+import com.gexin.rp.sdk.base.uitls.MD5Util;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -29,12 +30,11 @@ public class PayUtil {
      *  @param text 需要签名的字符串
      * @param sign 签名结果  
      * @param key 密钥
-     * @param input_charset 编码格式  
-     * @return 签名结果  
+     * @return 签名结果
      */   
-    public static boolean verify(String text, String sign, String key, String input_charset) {   
+    public static boolean verify(String text, String sign, String key ){
         text = text + key;   
-        String mysign = DigestUtils.md5Hex(getContentBytes(text, input_charset));
+        String mysign = MD5Util.getMD5Format(text);
         if (mysign.equals(sign)) {   
             return true;   
         } else {   
