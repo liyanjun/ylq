@@ -51,7 +51,7 @@ public abstract class Assert {
      * @param message
      */
     public static void isEqual(Object object, Object object1, String message) {
-        if (object.equals(object1)|| object == object1) {
+        if (object.equals(object1) || object == object1) {
             throw new RRException(message);
         }
     }

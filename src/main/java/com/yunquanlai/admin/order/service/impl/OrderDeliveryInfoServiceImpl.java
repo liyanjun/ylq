@@ -117,10 +117,10 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         deliveryDistributorEntity = deliveryDistributorDao.queryObject(deliveryDistributorEntity.getId(), true);
         Assert.isNull(orderDeliveryInfoEntity, "找不到配送员信息");
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderDeliveryInfoEntity.getOrderInfoId(), true);
-        Assert.isNull(orderDeliveryInfoEntity, "找不到订单信息");
+        Assert.isNull(orderInfoEntity, "找不到订单信息");
         List<OrderProductDetailEntity> orderProductDetailEntities = orderProductDetailDao.queryListByOrderId(orderInfoEntity.getId());
         UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderInfoEntity.getUserInfoId(), true);
-        Assert.isNull(orderDeliveryInfoEntity, "找不到订单用户信息");
+        Assert.isNull(userInfoEntity, "找不到订单用户信息");
         Date now = new Date();
         // 标记配送单送达
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_DELIVERY_END);
@@ -136,6 +136,7 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         deliveryDistributorFinancialFlow.setAmount(deliveryFee);
         deliveryDistributorEntity.setAmount(deliveryDistributorEntity.getAmount().add(deliveryFee));
         deliveryDistributorFinancialFlow.setAfterAmount(deliveryDistributorEntity.getAmount());
+        deliveryDistributorFinancialFlow.setCreationTime(new Date());
         deliveryDistributorFinancialFlowDao.save(deliveryDistributorFinancialFlow);
         deliveryDistributorDao.update(deliveryDistributorEntity);
         // 更新订单状态及配送结束时间
