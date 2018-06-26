@@ -98,8 +98,9 @@ public class ApiWechatPayController {
 
             //商户订单号
             request.setOutTradeNo(orderNo);
-            //支付金额，这边需要转成字符串类型，否则后面的签名会失败
-            request.setTotalFee(money);
+            //TODO 支付金额，1分，上线记得打开
+//            request.setTotalFee(money);
+            request.setTotalFee(1);
             request.setSpbillCreateIp(spbill_create_ip);
             request.setNotifyUrl("https://www.yunquanlai.com/client/api/wechat/pay/wxNotify");
             request.setTradeType("JSAPI");
