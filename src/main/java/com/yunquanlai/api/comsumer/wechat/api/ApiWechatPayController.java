@@ -84,8 +84,10 @@ public class ApiWechatPayController {
             String nonce_str = StringUtils.getRandomStringByLength(32);
             //商品名称
             String body = "运泉来-" + orderInfoEntity.getId();
-            //获取本机的ip地址
+            //获取本机的ip地址 TODO 线上记得打开
             String spbill_create_ip = IpUtils.getIpAddr(httpServletRequest);
+
+//            String spbill_create_ip = "119.23.247.12";
 
             String orderNo = orderInfoEntity.getId() + "";
             Integer money = orderInfoEntity.getAmount().multiply(BigDecimal.TEN).multiply(BigDecimal.TEN).intValue();
@@ -99,7 +101,7 @@ public class ApiWechatPayController {
             //支付金额，这边需要转成字符串类型，否则后面的签名会失败
             request.setTotalFee(money);
             request.setSpbillCreateIp(spbill_create_ip);
-            request.setNotifyUrl("https://www.yunquanlai.com//client/api/wechat/pay/wxNotify");
+            request.setNotifyUrl("https://www.yunquanlai.com/client/api/wechat/pay/wxNotify");
             request.setTradeType("JSAPI");
             request.setOpenid(openid);
 
