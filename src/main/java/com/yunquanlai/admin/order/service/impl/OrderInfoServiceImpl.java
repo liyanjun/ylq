@@ -214,12 +214,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailDao.save(orderProductDetailEntity);
         }
         // todo 测试用，下单后直接走支付完成流程，休眠一秒中，免得配送单都没插入就支付了
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        orderPay(orderInfoEntity.getId(), orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit()).multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        orderPay(orderInfoEntity.getId(), orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit()).multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
         return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities);
     }
 
