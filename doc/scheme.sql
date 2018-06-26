@@ -190,7 +190,7 @@ DROP TABLE IF EXISTS `order_info`;
 CREATE TABLE `order_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `amount_total` decimal(20,2) NOT NULL COMMENT '订单总额',
-  `amount` decimal(20,2) NOT NULL COMMENT '订单金额（真正付款金额）',
+  `amount` decimal(20,2) NOT NULL COMMENT '订单金额（订单商品真正付款金额）',
   `amount_benifit` decimal(20,2) DEFAULT NULL COMMENT '订单折扣优惠金额',
   `amount_activity` decimal(20,2) DEFAULT NULL COMMENT '订单活动优惠金额（即除了优惠标价外，使用的活动奖励）',
   `amount_delivery_fee` decimal(10,0) NOT NULL COMMENT '订单配送费',
@@ -481,7 +481,8 @@ CREATE TABLE `user_address` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `location_x` decimal(20,10) NOT NULL COMMENT '地址坐标x值',
   `location_y` decimal(20,10) NOT NULL COMMENT '地址坐标y值',
-  `address` varchar(256) NOT NULL COMMENT '地址描述',
+  `address` varchar(256) NOT NULL COMMENT '定位地址',
+  `addressDetail` varchar(256) NOT NULL COMMENT '详细地址',
   `name` varchar(32) NOT NULL COMMENT '收货人姓名',
   `phone` varchar(32) NOT NULL COMMENT '收货人电话',
   `sex` tinyint(4) NOT NULL COMMENT '性别，10：男，20：女',
