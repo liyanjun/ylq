@@ -135,7 +135,7 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         template.setAppId(appId);
         template.setAppkey(appKey);
         template.setTransmissionType(2);
-        template.setTransmissionContent(orderDeliveryId);
+        template.setTransmissionContent("{\"oid\":" + orderDeliveryId + "}");
         APNPayload apnPayload = new APNPayload();
         apnPayload.setAutoBadge("+1");
         apnPayload.setContentAvailable(1);
