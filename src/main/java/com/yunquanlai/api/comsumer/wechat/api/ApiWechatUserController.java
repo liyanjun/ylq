@@ -63,8 +63,6 @@ public class ApiWechatUserController {
 
         try {
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
-            LOGGER.info(session.getSessionKey());
-            LOGGER.info(session.getOpenid());
             UserInfoEntity userInfoEntity = userInfoService.queryObjectByOpenId(session.getOpenid());
             if (userInfoEntity == null) {
                 //不存在用户就创建用户

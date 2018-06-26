@@ -62,6 +62,7 @@ public class ApiUserController {
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "微信名", required = true ),
     })
     public R wechatLogin(@RequestParam String openId, String username) {
+        Assert.isBlank(openId,"openId不能为空");
         UserInfoEntity userInfoEntity = userInfoService.queryObjectByOpenId(openId);
         if (userInfoEntity == null) {
             return R.error("用户不存在");

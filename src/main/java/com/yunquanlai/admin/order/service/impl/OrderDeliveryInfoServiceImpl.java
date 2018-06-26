@@ -115,7 +115,7 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         Assert.isEqual(orderDeliveryInfoEntity.getStatus(), OrderDeliveryInfoEntity.STATUS_DELIVERY_END, "该订单订单已标记送达");
         Assert.isNotEqual(orderDeliveryInfoEntity.getStatus(), OrderDeliveryInfoEntity.STATUS_ON_DELIVERY, "配送单不是配送中状态，无法标记送达");
         deliveryDistributorEntity = deliveryDistributorDao.queryObject(deliveryDistributorEntity.getId(), true);
-        Assert.isNull(orderDeliveryInfoEntity, "找不到配送员信息");
+        Assert.isNull(deliveryDistributorEntity, "找不到配送员信息");
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderDeliveryInfoEntity.getOrderInfoId(), true);
         Assert.isNull(orderInfoEntity, "找不到订单信息");
         List<OrderProductDetailEntity> orderProductDetailEntities = orderProductDetailDao.queryListByOrderId(orderInfoEntity.getId());
