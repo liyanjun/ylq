@@ -35,6 +35,7 @@ import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.TokenUtils;
 import com.yunquanlai.utils.validator.Assert;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,6 +142,16 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public R newOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException, JsonProcessingException {
+        //检查该用户之前是否有未支付订单
+        List<OrderInfoEntity> orderInfoEntities = orderInfoDao.queryUnpaidByUserId(user.getId());
+        for (OrderInfoEntity orderInfoEntity : orderInfoEntities) {
+            if (orderInfoEntity != null && orderInfoEntity.getStatus() == 10) {
+                //关闭未支付订单
+                orderInfoEntity.setStatus(OrderInfoEntity.STATUS_CLOSE);
+                orderInfoEntity.setCloseTime(new Date());
+                orderInfoDao.update(orderInfoEntity);
+            }
+        }
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = new OrderDeliveryInfoEntity();
         OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
         List<OrderProductDetailEntity> orderProductDetailEntities = new ArrayList<>(16);
@@ -185,8 +196,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         // 订单
         orderInfoDao.save(orderInfoEntity);
         orderDeliveryInfoEntity.setAddress(orderVO.getAddress());
+        if (StringUtils.isNotBlank(orderVO.getDeliveryTime())) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        if (orderVO.getDeliveryTime() != null) {
             orderDeliveryInfoEntity.setDeliveryTime(sdf.parse(orderVO.getDeliveryTime()));
         }
 
@@ -213,13 +224,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             // 订单商品明细
             orderProductDetailDao.save(orderProductDetailEntity);
         }
-        // todo 测试用，下单后直接走支付完成流程，休眠一秒中，免得配送单都没插入就支付了
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        orderPay(orderInfoEntity.getId(), orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit()).multiply(BigDecimal.TEN).multiply(BigDecimal.TEN));
         return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities);
     }
 
@@ -233,23 +237,23 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_NEW && orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_CLOSE) {
             return;
         }
-        // 校验金额，微信返回的金额单位是分，我们先除以100
-        BigDecimal wechatBackFee = new BigDecimal(totalFee.toString()).divide(BigDecimal.TEN).divide(BigDecimal.TEN);
+        // TODO 上线打开，校验金额，微信返回的金额单位是分，我们先除以100
+//        BigDecimal wechatBackFee = new BigDecimal(totalFee.toString()).divide(BigDecimal.TEN).divide(BigDecimal.TEN);
         if (orderInfoEntity.getDeposit() != null && !orderInfoEntity.getDeposit().equals(BigDecimal.ZERO)) {
-            // 订单包含押金
-            if (!(orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit())).equals(wechatBackFee)) {
-                throw new RuntimeException("支付金额不等于订单金额");
-            }
+//            // 订单包含押金
+//            if (!(orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit())).equals(wechatBackFee)) {
+//                throw new RuntimeException("支付金额不等于订单金额");
+//            }
             // 更新用户押金
             UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderInfoEntity.getUserInfoId(), true);
             userInfoEntity.setDepositAmount(userInfoEntity.getDepositAmount().add(orderInfoEntity.getDeposit()));
             userInfoEntity.setEnableDepositAmount(userInfoEntity.getEnableDepositAmount().add(orderInfoEntity.getDeposit()));
             userInfoDao.update(userInfoEntity);
-        } else {
-            // 订单不包含押金
-            if (!orderInfoEntity.getAmount().equals(wechatBackFee)) {
-                throw new RuntimeException("支付金额不等于订单金额");
-            }
+//        } else {
+//            // 订单不包含押金
+//            if (!orderInfoEntity.getAmount().equals(wechatBackFee)) {
+//                throw new RuntimeException("支付金额不等于订单金额");
+//            }
         }
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_PAID);
         orderInfoEntity.setPaidTime(new Date());
@@ -379,7 +383,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public R saveComment(OrderCommentVO orderCommentVO, Long id) {
-        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderCommentVO.getOrderId(),true);
+        OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderCommentVO.getOrderId(), true);
         if (id.longValue() != orderInfoEntity.getUserInfoId().longValue()) {
             return R.error("不能评价别人的订单。");
         }
@@ -388,11 +392,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_COMMENT);
         CommentDeliveryEntity commentDeliveryEntity = orderCommentVO.getCommentDeliveryEntity();
-        if(commentDeliveryEntity != null){
+        if (commentDeliveryEntity != null) {
             commentDeliveryDao.save(commentDeliveryEntity);
         }
         List<CommentProductEntity> commentProductEntities = orderCommentVO.getCommentProductEntities();
-        if(commentProductEntities != null){
+        if (commentProductEntities != null) {
             for (CommentProductEntity commentProductEntity : commentProductEntities) {
                 commentProductDao.save(commentProductEntity);
             }
@@ -439,7 +443,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (deliveryDistributorEntity == null) {
             throw new RRException("找不到订单ID为【" + orderId + "】的配送单员。");
         }
-        if(orderInfoEntity.getStatus() != OrderInfoEntity.TYPE_EXCEPTION){
+        if (orderInfoEntity.getStatus() != OrderInfoEntity.TYPE_EXCEPTION) {
             throw new RRException("订单不是异常状态，不能手工派单。");
         }
 
@@ -486,7 +490,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
      *
      * @param orderProductDetailEntities 订单所购买的商品
      * @param deliveryEndpointEntity     配送点实体
-     *
      * @return
      */
     private List<ProductStockEntity> checkStock(List<OrderProductDetailEntity> orderProductDetailEntities, DeliveryEndpointEntity deliveryEndpointEntity) {

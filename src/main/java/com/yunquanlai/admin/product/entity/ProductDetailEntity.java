@@ -5,6 +5,7 @@ import com.yunquanlai.utils.validator.group.UpdateGroup;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 
 /**
@@ -37,7 +38,7 @@ public class ProductDetailEntity implements Serializable {
 	/**
 	 * 设置：商品平均评分
 	 */
-	private double averageLevel;
+	private BigDecimal averageLevel;
 
 	/**
 	 * 设置：商品信息id
@@ -88,11 +89,11 @@ public class ProductDetailEntity implements Serializable {
 		return productInfoId;
 	}
 
-	public double getAverageLevel() {
+	public BigDecimal getAverageLevel() {
 		return averageLevel;
 	}
 
-	public void setAverageLevel(double averageLevel) {
+	public void setAverageLevel(BigDecimal averageLevel) {
 		this.averageLevel = averageLevel;
 	}
 }

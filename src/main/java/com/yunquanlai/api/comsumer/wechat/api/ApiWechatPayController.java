@@ -1,6 +1,7 @@
 package com.yunquanlai.api.comsumer.wechat.api;
 
 import com.gexin.rp.sdk.base.uitls.MD5Util;
+import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -138,51 +139,47 @@ public class ApiWechatPayController {
     @IgnoreAuth
     @PostMapping(value = "/wxNotify")
     public void wxNotify(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String line;
-        StringBuilder sb = new StringBuilder();
-        while ((line = br.readLine()) != null) {
-            sb.append(line);
-        }
-        br.close();
-        //sb为微信返回的xml
-        String notify = sb.toString();
         String resXml = "";
-        logger.debug("接收到的报文：" + notify);
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            br.close();
+            //sb为微信返回的xml
+            String notify = sb.toString();
+            logger.debug("接收到的报文：" + notify);
+            WxPayOrderNotifyResult wxPayOrderNotifyResult = wxPayService.parseOrderNotifyResult(notify);
 
-        Map map = PayUtil.doXMLParse(notify);
+            String returnCode = wxPayOrderNotifyResult.getReturnCode();
+            if ("SUCCESS".equals(returnCode)) {
+                logger.debug("支付成功");
+                /**业务逻辑 start**/
+                orderInfoService.orderPay(wxPayOrderNotifyResult.getOutTradeNo(), wxPayOrderNotifyResult.getTotalFee());
+                /**逻辑 end**/
 
-        String returnCode = (String) map.get("return_code");
-        if ("SUCCESS".equals(returnCode)) {
-            logger.debug("支付成功");
-            try {
-                //验证签名是否正确
-                if (PayUtil.verify(PayUtil.createLinkString(map), (String) map.get("sign"), key)) {
-                    logger.debug("签名验证通过，开始业务逻辑");
-                    /**业务逻辑 start**/
-                    orderInfoService.orderPay(map.get("out_trade_no"), map.get("total_fee"));
-                    /**逻辑 end**/
-
-                    //通知微信服务器已经支付成功
-                    resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
-                            + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
-                }
-            } catch (Exception e) {
+                //通知微信服务器已经支付成功
+                resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
+                        + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+            } else {
                 resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
                         + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
             }
-        } else {
+            logger.debug(resXml);
+            logger.debug("微信支付回调数据结束");
+        } catch (Exception e) {
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
                     + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
         }
-        logger.debug(resXml);
-        logger.debug("微信支付回调数据结束");
 
         BufferedOutputStream out = new BufferedOutputStream(
                 response.getOutputStream());
         out.write(resXml.getBytes());
         out.flush();
         out.close();
+
     }
 
     public String getKey() {

@@ -25,5 +25,9 @@ mybatis:
     mapperLocations: classpath:mapper/**/*.xml
     configLocation: classpath:mybatis.xml
 
+yunquanlai:
+  openTime:
+    begin: 9
+    end: 20
 #logging.level.com.yunquanlai=DEBUG
 

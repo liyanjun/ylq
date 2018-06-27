@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +76,7 @@ public class ProductInfoServiceImpl implements ProductInfoService {
         productInfoEntity.setBrandName(productBrandDao.queryObject(productInfoEntity.getBrandId(), false).getName());
         productInfoDao.save(productInfoEntity);
         productDetailEntity.setProductInfoId(productInfoEntity.getId());
+        productDetailEntity.setAverageLevel(BigDecimal.ZERO);
         productDetailDao.save(productDetailEntity);
         List<DeliveryEndpointEntity> deliveryEndpoints = deliveryEndpointDao.queryList(null);
         for (DeliveryEndpointEntity deliveryEndpointEntity : deliveryEndpoints) {

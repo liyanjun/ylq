@@ -13,15 +13,16 @@
     </resultMap>
 
     <select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductDetailEntity">
-		select
-					`id`, 
-					`banner`, 
-					`content`, 
-					`product_info_id`,
-					`average_level`
-				from product_detail where id = #{id}
+        select
+        `id`,
+        `banner`,
+        `content`,
+        `product_info_id`,
+        `average_level`
+        from product_detail where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
-	</select>
+    </select>
+
     <select id="queryObjectByProductInfoId" resultType="com.yunquanlai.admin.product.entity.ProductDetailEntity">
 		select
 					`id`,

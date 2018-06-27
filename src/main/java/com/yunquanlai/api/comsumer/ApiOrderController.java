@@ -12,6 +12,7 @@ import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
 import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
+import com.yunquanlai.utils.DateUtils;
 import com.yunquanlai.utils.DeliveryDistanceUtils;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.TokenUtils;
@@ -21,12 +22,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,11 +57,15 @@ public class ApiOrderController {
     @Autowired
     private DeliveryDistributorService deliveryDistributorService;
 
-    @Autowired
-    private CommentDeliveryService commentDeliveryService;
 
     @Autowired
     private TokenUtils tokenUtils;
+
+    @Value("${yunquanlai.openTime.begin}")
+    private Integer beginHour;
+
+    @Value("${yunquanlai.openTime.end}")
+    private Integer endHour;
 
     /**
      * 用户订单查询
@@ -101,11 +109,11 @@ public class ApiOrderController {
         Assert.isNotEqual(orderInfoEntity.getUserInfoId(), user.getId(), "不能查询别人的订单详情");
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoService.queryObjectByOrderId(orderId);
         DeliveryDistributorEntity deliveryDistributorEntity = deliveryDistributorService.queryObject(orderDeliveryInfoEntity.getDeliveryDistributorId());
-        if(deliveryDistributorEntity != null){
+        if (deliveryDistributorEntity != null) {
             deliveryDistributorEntity.setPassword(null);
         }
         //        commentDeliveryService.
-        return R.ok().put("orderInfo", orderInfoEntity).put("orderDeliveryInfo", orderDeliveryInfoEntity).put("deliveryDistributor",deliveryDistributorEntity);
+        return R.ok().put("orderInfo", orderInfoEntity).put("orderDeliveryInfo", orderDeliveryInfoEntity).put("deliveryDistributor", deliveryDistributorEntity);
     }
 
 
@@ -122,7 +130,8 @@ public class ApiOrderController {
             @ApiImplicitParam(name = "orderVO", value = "订单信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderVO", paramType = "body")
     })
     public R orderConfirm(@RequestBody OrderVO orderVO, @LoginUser @ApiIgnore UserInfoEntity user) {
-        return orderInfoService.confirm(orderVO, user);
+        boolean isOpenTime = isOpenTime();
+        return orderInfoService.confirm(orderVO, user).put("isOpenTime", isOpenTime);
     }
 
 
@@ -138,17 +147,16 @@ public class ApiOrderController {
             @ApiImplicitParam(name = "orderVO", value = "订单信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderVO", paramType = "body")
     })
     public R order(@RequestBody OrderVO orderVO, @LoginUser @ApiIgnore UserInfoEntity user) throws ParseException, JsonProcessingException {
+
+
         if (!tokenUtils.isExitToken(orderVO.getOrderToken())) {
             return R.error("订单确认已失效，请重新下单。");
         }
-        //检查该用户是否有未支付订单
-        Long userId = user.getId();
-        List<OrderInfoEntity> orderInfoEntities = orderInfoService.queryUnpaidByUserId(userId);
-        for(OrderInfoEntity orderInfoEntity : orderInfoEntities){
-            if(orderInfoEntity!=null && orderInfoEntity.getStatus()==10){
-                //关闭未支付订单
-                orderInfoService.closeOrder(orderInfoEntity.getId(), userId);
-            }
+
+        boolean isOpenTime = isOpenTime();
+
+        if (!isOpenTime && StringUtils.isBlank(orderVO.getDeliveryTime())) {
+            return R.error("当前时间不是配送时间，请选择期望配送时间，重新下单。");
         }
 
         // TODO 先注释
@@ -157,7 +165,6 @@ public class ApiOrderController {
 //        }
         return orderInfoService.newOrder(orderVO, user);
     }
-
 
     /**
      * 关闭订单
@@ -205,6 +212,20 @@ public class ApiOrderController {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 判断是否是送水时间
+     *
+     * @return
+     */
+    private boolean isOpenTime() {
+        boolean isOpenTime = false;
+        int hour = LocalDateTime.now().getHour();
+        if (hour >= beginHour && hour < endHour) {
+            isOpenTime = true;
+        }
+        return isOpenTime;
     }
 
 
