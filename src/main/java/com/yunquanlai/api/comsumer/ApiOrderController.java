@@ -1,7 +1,6 @@
 package com.yunquanlai.api.comsumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yunquanlai.admin.comment.dao.CommentDeliveryDao;
 import com.yunquanlai.admin.comment.service.CommentDeliveryService;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
@@ -18,24 +17,15 @@ import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.TokenUtils;
 import com.yunquanlai.utils.annotation.LoginUser;
 import com.yunquanlai.utils.validator.Assert;
-import io.swagger.annotations.*;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -151,6 +141,16 @@ public class ApiOrderController {
         if (!tokenUtils.isExitToken(orderVO.getOrderToken())) {
             return R.error("订单确认已失效，请重新下单。");
         }
+        //检查该用户是否有未支付订单
+        Long userId = user.getId();
+        List<OrderInfoEntity> orderInfoEntities = orderInfoService.queryUnpaidByUserId(userId);
+        for(OrderInfoEntity orderInfoEntity : orderInfoEntities){
+            if(orderInfoEntity!=null && orderInfoEntity.getStatus()==10){
+                //关闭未支付订单
+                orderInfoService.closeOrder(orderInfoEntity.getId(), userId);
+            }
+        }
+
         // TODO 先注释
 //        if (!availableDelivery(orderVO.getLocationX(), orderVO.getLocationY())) {
 //            return R.error("订单不在派送范围内，请联系客服确认。");

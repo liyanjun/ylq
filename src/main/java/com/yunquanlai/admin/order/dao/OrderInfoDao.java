@@ -16,4 +16,5 @@ import java.util.Map;
 public interface OrderInfoDao extends BaseDao<OrderInfoEntity> {
 
     List<OrderInfoEntity> queryListClient(Map<String,Object> map);
+    List<OrderInfoEntity> queryUnpaidByUserId(Long userId);
 }

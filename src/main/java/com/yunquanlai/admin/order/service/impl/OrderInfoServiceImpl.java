@@ -35,7 +35,6 @@ import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.TokenUtils;
 import com.yunquanlai.utils.validator.Assert;
-import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -474,6 +473,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderOperateFlowEntity.setRemark("手工分配订单【" + orderId + "】到【" + deliveryEndpointEntity.getName() + "：编号" + deliveryEndpointEntity.getId() + "】，【" + deliveryDistributorEntity.getName() + "：编号" + deliveryDistributorEntity.getId() + "】");
         orderOperateFlowDao.save(orderOperateFlowEntity);
         applicationContext.publishEvent(new OrderDeliveryNotifyEvent(orderDeliveryInfoEntity.getId()));
+    }
+
+    @Override
+    public List<OrderInfoEntity> queryUnpaidByUserId(Long userId) {
+        return orderInfoDao.queryUnpaidByUserId(userId);
     }
 
 

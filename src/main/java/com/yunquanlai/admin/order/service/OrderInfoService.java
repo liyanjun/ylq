@@ -97,4 +97,6 @@ public interface OrderInfoService {
     void handle(Long orderId, OrderOperateFlowEntity orderOperateFlowEntity);
 
     void handDistribute(Long orderId, Long deliveryDistributorId, Long deliveryEndpointId, OrderOperateFlowEntity orderOperateFlowEntity);
+
+    List<OrderInfoEntity> queryUnpaidByUserId(Long userId);
 }

@@ -61,6 +61,35 @@
         <if test="isLock != null and isLock == true">for update</if>
     </select>
 
+    <select id="queryUnpaidByUserId" resultType="com.yunquanlai.admin.order.entity.OrderInfoEntity">
+        select
+        `id`,
+        `amount_total`,
+        `amount`,
+        `amount_benifit`,
+        `amount_activity`,
+        `amount_delivery_fee`,
+        `detail`,
+        `deposit`,
+        `bucket_num`,
+        `status`,
+        `type`,
+        `pay_type`,
+        `delivery_distributor_id`,
+        `delivery_distributor_name`,
+        `user_info_id`,
+        `username`,
+        `user_phone`,
+        `remark`,
+        `exception`,
+        `creation_time`,
+        `paid_time`,
+        `distribute_time`,
+        `delivery_end_time`,
+        `close_time`
+        from order_info where user_info_id = #{userId} and status = 10
+    </select>
+
     <select id="queryList" resultType="com.yunquanlai.admin.order.entity.OrderInfoEntity">
         select
         `id`,
