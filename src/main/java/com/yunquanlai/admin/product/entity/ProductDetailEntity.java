@@ -1,6 +1,5 @@
 package com.yunquanlai.admin.product.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.yunquanlai.utils.validator.group.AddGroup;
 import com.yunquanlai.utils.validator.group.UpdateGroup;
 import org.hibernate.validator.constraints.NotBlank;
@@ -35,6 +34,10 @@ public class ProductDetailEntity implements Serializable {
      * 设置：商品信息id
      */
 	private Long productInfoId;
+	/**
+	 * 设置：商品平均评分
+	 */
+	private double averageLevel;
 
 	/**
 	 * 设置：商品信息id
@@ -83,5 +86,13 @@ public class ProductDetailEntity implements Serializable {
 	 */
 	public Long getProductInfoId() {
 		return productInfoId;
+	}
+
+	public double getAverageLevel() {
+		return averageLevel;
+	}
+
+	public void setAverageLevel(double averageLevel) {
+		this.averageLevel = averageLevel;
 	}
 }
