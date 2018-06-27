@@ -106,7 +106,7 @@
             </if>
             <if test="creationTime != null">
                 <![CDATA[
-                and creation_time >= #{creationTime}
+                and creation_time <= #{creationTime}
                 ]]>
             </if>
         </where>

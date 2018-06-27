@@ -31,7 +31,7 @@ public class OrderDeliveryExceptionJob {
     public void orderDeliveryException() {
         Map<String, Object> filter = new HashMap<>(16);
         filter.put("status",OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
-        filter.put("distributeTime",DateUtils.localDateTimeToDate(LocalDateTime.now().plusMinutes(1)));
+        filter.put("distributeTime",DateUtils.localDateTimeToDate(LocalDateTime.now().plusMinutes(-1)));
         List<OrderDeliveryInfoEntity> orderDeliveryInfoEntities = orderDeliveryInfoService.queryList(filter);
         for (OrderDeliveryInfoEntity orderDeliveryInfoEntity : orderDeliveryInfoEntities) {
             try {

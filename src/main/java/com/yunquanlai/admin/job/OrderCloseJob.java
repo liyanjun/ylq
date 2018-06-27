@@ -29,7 +29,7 @@ public class OrderCloseJob {
     public void closeOrder() {
         Map<String, Object> filter = new HashMap<>(16);
         filter.put("status",OrderInfoEntity.STATUS_NEW);
-        filter.put("creationTime",DateUtils.localDateTimeToDate(LocalDateTime.now().plusMinutes(10)));
+        filter.put("creationTime",DateUtils.localDateTimeToDate(LocalDateTime.now().plusMinutes(-10)));
         List<OrderInfoEntity> orderInfoEntityList = orderInfoService.queryList(filter);
         for (OrderInfoEntity orderInfoEntity : orderInfoEntityList) {
             try {
