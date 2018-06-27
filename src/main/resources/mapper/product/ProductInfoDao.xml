@@ -165,7 +165,12 @@
     </select>
 
     <select id="queryTotal" resultType="int">
-		select count(*) from product_info 
+		select count(*) from product_info
+        <where>
+            <if test="key != null and key.trim() != ''">
+                `name` like concat('%',#{key},'%') or `brand_name` like concat('%',#{key},'%')
+            </if>
+        </where>
 	</select>
 
     <insert id="save" parameterType="com.yunquanlai.admin.product.entity.ProductInfoEntity" useGeneratedKeys="true"
