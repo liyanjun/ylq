@@ -213,6 +213,8 @@ var vm = new Vue({
                 gridComplete: function () {
                     //隐藏grid底部滚动条
                     $("#jqGridProduct").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
+                    //去掉分页元素
+                    $("#jqGridProductPager").remove();
                 }
             });
         },
