@@ -56,7 +56,6 @@ public class ProductInfoController extends AbstractController {
 
         return R.ok().put("page", pageUtil);
     }
-    // TODO: 2018/6/17 bug:489903 商品信息管理，查询功能无效 （没发现问题）
 
     /**
      * 信息
