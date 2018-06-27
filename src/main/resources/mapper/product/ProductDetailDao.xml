@@ -9,6 +9,7 @@
         <result property="banner" column="banner"/>
         <result property="content" column="content"/>
         <result property="productInfoId" column="product_info_id"/>
+        <result property="averageLevel" column="average_level"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductDetailEntity">
@@ -16,7 +17,8 @@
 					`id`, 
 					`banner`, 
 					`content`, 
-					`product_info_id`
+					`product_info_id`,
+					`average_level`
 				from product_detail where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
 	</select>
@@ -25,7 +27,8 @@
 					`id`,
 					`banner`,
 					`content`,
-					`product_info_id`
+					`product_info_id`,
+					`average_level`
 				from product_detail
 				where product_info_id = #{value}
 	</select>
@@ -35,7 +38,8 @@
         `id`,
         `banner`,
         `content`,
-        `product_info_id`
+        `product_info_id`,
+        `average_level`
         from product_detail
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -60,13 +64,15 @@
 		(
 			`banner`, 
 			`content`, 
-			`product_info_id`
+			`product_info_id`,
+			`average_level`
 		)
 		values
 		(
 			#{banner}, 
 			#{content}, 
-			#{productInfoId}
+			#{productInfoId},
+			#{averageLevel}
 		)
 	</insert>
 
@@ -75,7 +81,8 @@
         <set>
             <if test="banner != null">`banner` = #{banner},</if>
             <if test="content != null">`content` = #{content},</if>
-            <if test="productInfoId != null">`product_info_id` = #{productInfoId}</if>
+            <if test="productInfoId != null">`product_info_id` = #{productInfoId},</if>
+            <if test="averageLevel != null">`average_level` = #{averageLevel}</if>
         </set>
         where id = #{id}
     </update>

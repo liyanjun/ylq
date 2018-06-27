@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yunquanlai.admin.comment.dao.CommentDeliveryDao;
 import com.yunquanlai.admin.comment.dao.CommentProductDao;
+import com.yunquanlai.admin.comment.entity.CommentDeliveryEntity;
 import com.yunquanlai.admin.comment.entity.CommentProductEntity;
 import com.yunquanlai.admin.delivery.dao.DeliveryDistributorDao;
 import com.yunquanlai.admin.delivery.dao.DeliveryEndpointDao;
@@ -387,9 +388,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             return R.error("订单未送达，不能评论。");
         }
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_COMMENT);
-        commentDeliveryDao.save(orderCommentVO.getCommentDeliveryEntity());
-        for (CommentProductEntity commentProductEntity : orderCommentVO.getCommentProductEntities()) {
-            commentProductDao.save(commentProductEntity);
+        CommentDeliveryEntity commentDeliveryEntity = orderCommentVO.getCommentDeliveryEntity();
+        if(commentDeliveryEntity != null){
+            commentDeliveryDao.save(commentDeliveryEntity);
+        }
+        List<CommentProductEntity> commentProductEntities = orderCommentVO.getCommentProductEntities();
+        if(commentProductEntities != null){
+            for (CommentProductEntity commentProductEntity : commentProductEntities) {
+                commentProductDao.save(commentProductEntity);
+            }
         }
         orderInfoDao.update(orderInfoEntity);
         return R.ok();

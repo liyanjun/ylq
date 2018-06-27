@@ -285,8 +285,9 @@ CREATE TABLE `product_detail` (
   `banner` text NOT NULL,
   `content` text NOT NULL,
   `product_info_id` bigint(20) NOT NULL,
+  `average_level` double(11,2) DEFAULT NULL COMMENT '商品平均评分',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='商品详情表';
 
 -- ----------------------------
 -- Table structure for product_info
