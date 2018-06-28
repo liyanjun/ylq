@@ -547,11 +547,11 @@ CREATE TABLE `user_info` (
 -- ----------------------------
 DROP TABLE IF EXISTS `user_withdraw_deposit`;
 CREATE TABLE `user_withdraw_deposit` (
-  `id` bigint(20) NOT NULL COMMENT '主键 ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `user_info_id` bigint(20) NOT NULL COMMENT '对应用户 ID',
   `is_handle` tinyint(1) NOT NULL COMMENT '是否处理，10：未处理，20：已处理',
-  `creation_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `handle_time` datetime NOT NULL COMMENT '处理时间',
+  `creation_time` datetime NOT NULL COMMENT '创建时间',
+  `handle_time` datetime DEFAULT NULL COMMENT '处理时间',
   `handler_id` bigint(20) DEFAULT NULL COMMENT '处理人ID',
   `handler_name` varchar(32) DEFAULT NULL COMMENT '处理人姓名',
   PRIMARY KEY (`id`)
