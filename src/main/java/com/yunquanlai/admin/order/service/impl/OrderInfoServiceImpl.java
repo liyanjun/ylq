@@ -359,6 +359,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
             orderProductDetailEntities.add(orderProductDetailEntity);
         }
+        if(deposit.compareTo(user.getEnableDepositAmount()) == -1 || deposit.compareTo(user.getEnableDepositAmount()) == 0){
+            deposit = BigDecimal.ZERO;
+        }
+        if(deposit.compareTo(user.getEnableDepositAmount()) == 1){
+            deposit = deposit.subtract(user.getEnableDepositAmount());
+        }
         return R.ok().put("orderProductDetails", orderProductDetailEntities).
                 put("deposit", deposit).put("amount", amount).put("orderToken", tokenUtils.getToken());
     }
