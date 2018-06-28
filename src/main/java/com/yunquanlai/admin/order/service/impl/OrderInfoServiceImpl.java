@@ -19,8 +19,10 @@ import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.order.entity.OrderOperateFlowEntity;
 import com.yunquanlai.admin.order.entity.OrderProductDetailEntity;
 import com.yunquanlai.admin.order.service.OrderInfoService;
+import com.yunquanlai.admin.product.dao.ProductDetailDao;
 import com.yunquanlai.admin.product.dao.ProductInfoDao;
 import com.yunquanlai.admin.product.dao.ProductStockDao;
+import com.yunquanlai.admin.product.entity.ProductDetailEntity;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.product.entity.ProductStockEntity;
 import com.yunquanlai.admin.system.dao.SysConfigDao;
@@ -95,6 +97,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Autowired
     private CommentProductDao commentProductDao;
 
+    @Autowired
+    private ProductDetailDao productDetailDao;
     /**
      * 上下文对象
      */
@@ -382,13 +386,35 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public R saveComment(OrderCommentVO orderCommentVO, Long id) {
+    @Transactional
+    public R saveComment(OrderCommentVO orderCommentVO, Long id) throws RuntimeException{
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderCommentVO.getOrderId(), true);
         if (id.longValue() != orderInfoEntity.getUserInfoId().longValue()) {
             return R.error("不能评价别人的订单。");
         }
         if (orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_DELIVERY_END) {
             return R.error("订单未送达，不能评论。");
+        }
+        //计算商品平均评分
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<CommentProductEntity> commentProductList;
+        BigDecimal averageCommentProductLevel;
+        Long productId;
+        //提交评论信息中的商品评分列表
+        List<CommentProductEntity> commentProductEntityList = orderCommentVO.getCommentProductEntities();
+        if (commentProductEntityList != null) {
+            for (CommentProductEntity commentProductEntity : commentProductEntityList) {
+                productId = commentProductEntity.getProductId();
+                map.put("productId", productId);
+                //数据库中同一种商品的所有评分list
+                commentProductList = commentProductDao.queryList(map);
+                commentProductList.add(commentProductEntity);
+                averageCommentProductLevel = getAverageCommProLevel(commentProductList);
+                //根据商品id获取商品详细信息
+                ProductDetailEntity productDetailEntity = productDetailDao.queryObjectByProductInfoId(productId);
+                productDetailEntity.setAverageLevel(averageCommentProductLevel);
+                productDetailDao.update(productDetailEntity);
+            }
         }
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_COMMENT);
         CommentDeliveryEntity commentDeliveryEntity = orderCommentVO.getCommentDeliveryEntity();
@@ -504,6 +530,26 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             productStockEntities.add(productStockEntity);
         }
         return productStockEntities;
+    }
+
+    /**
+     * 获取商品平均评分
+     *
+     * @param commentProductList
+     */
+    private BigDecimal getAverageCommProLevel(List<CommentProductEntity> commentProductList) {
+        if (commentProductList.size() > 0) {
+            BigDecimal sumCommentProductLevel = BigDecimal.ZERO;
+            BigDecimal averageCommentProductLevel = BigDecimal.ZERO;
+            int size = commentProductList.size();
+            for (int i = 0; i < size; i++) {
+                sumCommentProductLevel = sumCommentProductLevel.add(new BigDecimal(commentProductList.get(i).getLevel()));
+            }
+            averageCommentProductLevel = sumCommentProductLevel.divide(new BigDecimal(size), 2, BigDecimal.ROUND_HALF_UP);
+            return averageCommentProductLevel;
+        } else {
+            return BigDecimal.ZERO;
+        }
     }
 
 }

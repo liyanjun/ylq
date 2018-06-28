@@ -1,15 +1,9 @@
 package com.yunquanlai.api.comsumer;
 
 import com.yunquanlai.admin.comment.entity.CommentProductEntity;
-import com.yunquanlai.admin.comment.service.CommentDeliveryService;
 import com.yunquanlai.admin.comment.service.CommentProductService;
-import com.yunquanlai.admin.order.entity.OrderInfoEntity;
 import com.yunquanlai.admin.order.service.OrderInfoService;
-import com.yunquanlai.admin.product.dao.ProductDetailDao;
-import com.yunquanlai.admin.product.entity.ProductDetailEntity;
-import com.yunquanlai.admin.user.entity.UserAddressEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
-import com.yunquanlai.admin.user.service.UserAddressService;
 import com.yunquanlai.api.comsumer.vo.OrderCommentVO;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
@@ -25,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,9 +42,6 @@ public class ApiCommentController {
     @Autowired
     private CommentProductService commentProductService;
 
-    @Autowired
-    private ProductDetailDao productDetailDao;
-
     /**
      * 提交用户评论信息
      *
@@ -64,48 +54,8 @@ public class ApiCommentController {
             @ApiImplicitParam(name = "OrderCommentVO", value = "订单评论信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderCommentVO", paramType = "body"),
     })
     public R comment(@LoginUser @ApiIgnore UserInfoEntity user, @ApiIgnore OrderCommentVO orderCommentVO) {
-        //计算商品平均评分
-        Map<String, Object> map = new HashMap<String, Object>();
-        List<CommentProductEntity> commentProductList;
-        BigDecimal averageCommentProductLevel;
-        Long productId;
-        //提交评论信息中的商品评分列表
-        List<CommentProductEntity> commentProductEntityList = orderCommentVO.getCommentProductEntities();
-        if (commentProductEntityList != null) {
-            for (CommentProductEntity commentProductEntity : commentProductEntityList) {
-                productId = commentProductEntity.getProductId();
-                map.put("productId", productId);
-                //数据库中同一种商品的所有评分list
-                commentProductList = commentProductService.queryList(map);
-                commentProductList.add(commentProductEntity);
-                averageCommentProductLevel = getAverageCommProLevel(commentProductList);
-                //根据商品id获取商品详细信息
-                ProductDetailEntity productDetailEntity = productDetailDao.queryObjectByProductInfoId(productId);
-                productDetailEntity.setAverageLevel(averageCommentProductLevel);
-                productDetailDao.update(productDetailEntity);
-            }
-        }
-        return orderInfoService.saveComment(orderCommentVO, user.getId());
-    }
 
-    /**
-     * 获取商品平均评分
-     *
-     * @param commentProductList
-     */
-    private BigDecimal getAverageCommProLevel(List<CommentProductEntity> commentProductList) {
-        if (commentProductList.size() > 0) {
-            BigDecimal sumCommentProductLevel = BigDecimal.ZERO;
-            BigDecimal averageCommentProductLevel = BigDecimal.ZERO;
-            int size = commentProductList.size();
-            for (int i = 0; i < size; i++) {
-                sumCommentProductLevel = sumCommentProductLevel.add(new BigDecimal(commentProductList.get(i).getLevel()));
-            }
-            averageCommentProductLevel = sumCommentProductLevel.divide(new BigDecimal(size), 2);
-            return averageCommentProductLevel;
-        } else {
-            return BigDecimal.ZERO;
-        }
+        return orderInfoService.saveComment(orderCommentVO, user.getId());
     }
 
     /**
