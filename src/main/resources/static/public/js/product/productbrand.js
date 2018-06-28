@@ -118,7 +118,8 @@ var vm = new Vue({
 		},
 		reload: function (event) {
 			vm.showList = true;
-			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			// var page = $("#jqGrid").jqGrid('getGridParam','page');
+            var page = 1;
 			$("#jqGrid").jqGrid('setGridParam',{
                 postData:{'name': vm.q.brandName},
                 page:page

@@ -168,6 +168,11 @@
 
     <select id="queryTotal" resultType="int">
 		select count(*) from delivery_distributor
+		<where>
+			<if test="key != null and key.trim() != ''">
+				`name` like concat('%',#{key},'%') or `phone` like concat('%',#{key},'%') or `delivery_endpoint_name` like concat('%',#{key},'%')
+			</if>
+		</where>
 	</select>
 
     <insert id="save" parameterType="com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity"

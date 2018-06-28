@@ -9,7 +9,7 @@ var vm = new Vue({
         title: null,
         brandId: "",
         productInfo: {},
-        productInfoEntity:{},
+       // productInfoEntity:{},
         brandList: [],
         defaultImgUrl : "http://pa23ubi36.bkt.clouddn.com/upload/20180611/98eca8e408c14c10b7049403d1385269"
     },
@@ -96,7 +96,7 @@ var vm = new Vue({
         getInfo: function (id) {
             $.get("../productinfo/info/" + id, function (r) {
                 vm.productInfo = r.productInfo;
-                vm.productInfoEntity = r.productInfo.productInfoEntity;
+               // vm.productInfoEntity = r.productInfo.productInfoEntity;
                 editor.txt.html(r.productInfo.content);
                 vm.brandId = vm.productInfo.brandId;
                 $("#selected option:selected").text = vm.productInfo.brandName ;
@@ -129,7 +129,8 @@ var vm = new Vue({
         },
         reload: function (event) {
             vm.showList = true;
-            var page = $("#jqGrid").jqGrid('getGridParam', 'page');
+            // var page = $("#jqGrid").jqGrid('getGridParam', 'page');
+            var page = 1;
             $("#jqGrid").jqGrid('setGridParam', {
                 postData: {'key': vm.q.key},
                 page: page

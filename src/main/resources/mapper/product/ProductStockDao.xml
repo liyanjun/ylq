@@ -82,7 +82,15 @@
     </select>
 
     <select id="queryTotal" resultType="int">
-		select count(*) from product_stock 
+		select count(*) from product_stock
+        <where>
+            <if test="productName != null and productName.trim() != ''">
+                `product_name` like concat('%',#{productName},'%')
+            </if>
+            <if test="deliveryEndpointName != null and deliveryEndpointName.trim() != ''">
+                and `delivery_name` like concat('%',#{deliveryEndpointName},'%')
+            </if>
+        </where>
 	</select>
 
     <insert id="save" parameterType="com.yunquanlai.admin.product.entity.ProductStockEntity" useGeneratedKeys="true"

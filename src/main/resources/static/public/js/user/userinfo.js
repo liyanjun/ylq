@@ -69,63 +69,6 @@ var vm = new Vue({
             vm.title = "详情";
             vm.getInfo(id)
 		},
-/*		add: function(){
-			vm.showList = false;
-			vm.title = "新增";
-			vm.userInfo = {};
-		},
-		update: function (event) {
-			var id = getSelectedRow();
-			if(id == null){
-				return ;
-			}
-			vm.showList = false;
-            vm.title = "修改";
-            
-            vm.getInfo(id)
-		},
-		saveOrUpdate: function (event) {
-			var url = vm.userInfo.id == null ? "../userinfo/save" : "../userinfo/update";
-			$.ajax({
-				type: "POST",
-			    url: url,
-			    contentType: "application/json",
-			    data: JSON.stringify(vm.userInfo),
-			    success: function(r){
-			    	if(r.code === 0){
-						alert('操作成功', function(index){
-							vm.reload();
-						});
-					}else{
-						alert(r.msg);
-					}
-				}
-			});
-		},
-		del: function (event) {
-			var ids = getSelectedRows();
-			if(ids == null){
-				return ;
-			}
-			
-			confirm('确定要删除选中的记录？', function(){
-				$.ajax({
-					type: "POST",
-				    url: "../userinfo/delete",
-				    contentType: "application/json",
-				    data: JSON.stringify(ids),
-				    success: function(r){
-						if(r.code == 0){
-							alert('操作成功', function(index){
-								window.location.reload();
-							});
-						}else{
-							alert(r.msg);
-						}
-					}
-				});
-			});
-		},*/
 		getInfo: function(id){
 			$.get("../userinfo/info/"+id, function(r){
                 vm.userInfo = r.userInfo;
@@ -133,8 +76,9 @@ var vm = new Vue({
 		},
 		reload: function (event) {
 			vm.showList = true;
-			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{
+			// var page = $("#jqGrid").jqGrid('getGridParam','page');
+			var page = 1;
+            $("#jqGrid").jqGrid('setGridParam',{
                 postData:{'key': vm.q.key},
                 page:page
             }).trigger("reloadGrid");

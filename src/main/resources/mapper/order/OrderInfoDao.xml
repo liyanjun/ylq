@@ -206,7 +206,29 @@
     </select>
 
     <select id="queryTotal" resultType="int">
-		select count(*) from order_info 
+		select count(*) from order_info
+        <where>
+            <if test="userInfoId != null">
+                and user_info_id = #{userInfoId}
+            </if>
+            <if test="userName != null and userName.trim() != ''">
+                and `username` like concat('%',#{userName},'%')
+            </if>
+            <if test="userPhone != null and userPhone.trim() != ''">
+                and `user_phone` like concat('%',#{userPhone},'%')
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="type != null and type != ''">
+                and `type` = #{type}
+            </if>
+            <if test="creationTime != null">
+                <![CDATA[
+                and creation_time <= #{creationTime}
+                ]]>
+            </if>
+        </where>
 	</select>
 
     <insert id="save" parameterType="com.yunquanlai.admin.order.entity.OrderInfoEntity" useGeneratedKeys="true"

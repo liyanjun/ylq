@@ -50,7 +50,12 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from delivery_endpoint 
+		select count(*) from delivery_endpoint
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and `name` like concat('%',#{name},'%')
+			</if>
+		</where>
 	</select>
 	 
 	<insert id="save" parameterType="com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity" useGeneratedKeys="true" keyProperty="id">

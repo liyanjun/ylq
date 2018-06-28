@@ -44,7 +44,12 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from product_brand 
+		select count(*) from product_brand
+		<where>
+			<if test="name != null and name.trim() != ''">
+				and `name` like concat('%',#{name},'%')
+			</if>
+		</where>
 	</select>
 	 
 	<insert id="save" parameterType="com.yunquanlai.admin.product.entity.ProductBrandEntity">

@@ -3,7 +3,7 @@ $(function () {
         url: '../productstock/list',
         datatype: "json",
         colModel: [			
-			{ label: '商品编号', name: 'productInfoId', index: 'product_info_id', width: 80 },
+			{ label: '商品id', name: 'productInfoId', index: 'product_info_id', width: 80 },
 			{ label: '商品名称', name: 'productName', index: 'product_name', width: 80 },
 			{ label: '配送点编号', name: 'deliveryEndpointId', index: 'delivery_endpoint_id', width: 80 },
 			{ label: '配送点名', name: 'deliveryName', index: 'delivery_name', width: 80 }, 			
@@ -122,7 +122,8 @@ var vm = new Vue({
 		},
 		reload: function (event) {
 			vm.showList = true;
-			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			//var page = $("#jqGrid").jqGrid('getGridParam','page');
+            var page =1;
 			$("#jqGrid").jqGrid('setGridParam',{
                 postData:{
                 	'productName': vm.q.productName,
