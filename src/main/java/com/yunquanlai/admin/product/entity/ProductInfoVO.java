@@ -1,9 +1,5 @@
 package com.yunquanlai.admin.product.entity;
 
-import com.yunquanlai.utils.validator.group.AddGroup;
-import com.yunquanlai.utils.validator.group.UpdateGroup;
-import org.hibernate.validator.constraints.NotBlank;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -259,5 +255,13 @@ public class ProductInfoVO implements Serializable {
 
     public void setSort(Integer sort) {
         productInfoEntity.setSort(sort);
+    }
+
+    public String getProductNum() {
+        return productInfoEntity.getProductNum();
+    }
+
+    public void setProductNum(String productNum) {
+        productInfoEntity.setProductNum(productNum);
     }
 }

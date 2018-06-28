@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,8 +81,9 @@ public class ApiUserController {
         Assert.isNotNull(temp,"已存在未处理的押金提现申请，请耐心等待。");
         UserWithdrawDepositEntity userWithdrawDepositEntity = new UserWithdrawDepositEntity();
         userWithdrawDepositEntity.setUserInfoId(userInfoEntity.getId());
+        userWithdrawDepositEntity.setIsHandle(10);
         userWithdrawDepositEntity.setCreationTime(new Date());
-        userWithdrawDepositService.save(new UserWithdrawDepositEntity());
+        userWithdrawDepositService.save(userWithdrawDepositEntity);
         return R.ok();
     }
 
