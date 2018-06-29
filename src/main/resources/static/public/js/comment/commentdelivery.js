@@ -57,6 +57,8 @@ vm = new Vue({
     el: '#rrapp',
     data: {
         showList: true,
+        deliveryDistributorId: "",
+        deliveryDistributorName: "",
         title: null,
         commentDelivery: {}
     },
@@ -116,6 +118,9 @@ vm = new Vue({
             $("#jqGrid").jqGrid('setGridParam', {
                 page: page
             }).trigger("reloadGrid");
+        },
+        btnback: function () {
+            window.location.href="../delivery/deliverydistributor.html";
         }
     }
 });

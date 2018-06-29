@@ -36,6 +36,9 @@ var vm = new Vue({
                 vm.deliveryEndpointList = r.deliveryEndpointEntities;
             });
         },
+        reload: function () {
+            window.location.href="../order/orderinfo.html";
+        }
     }
 });
 
