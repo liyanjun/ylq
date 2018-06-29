@@ -10,6 +10,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;import java.util.Map;
 
 
@@ -98,8 +99,9 @@ public class UserWithdrawDepositController extends AbstractController {
 		userWithdrawDepositEntity.setIsHandle(20);
 		userWithdrawDepositEntity.setHandlerId(getUserId());
 		userWithdrawDepositEntity.setHandlerName(getUser().getUsername());
-		userWithdrawDepositEntity.setIsHandle(20);
-		userWithdrawDepositService.save(userWithdrawDepositEntity);
+		userWithdrawDepositEntity.setHandleTime(new Date());
+		//userWithdrawDepositService.save(userWithdrawDepositEntity);
+		userWithdrawDepositService.handleDepositoryWithdraw(userWithdrawDepositEntity);
 		return R.ok();
 	}
 	

@@ -1,6 +1,7 @@
 package com.yunquanlai.admin.user.service;
 
 
+import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity;
 
 import java.util.List;
@@ -22,6 +23,8 @@ public interface UserWithdrawDepositService {
 	int queryTotal(Map<String, Object> map);
 	
 	void save(UserWithdrawDepositEntity userWithdrawDeposit);
+
+	void saveDepositoryWithdraw(UserWithdrawDepositEntity userWithdrawDeposit, UserInfoEntity userInfoEntity);
 	
 	void update(UserWithdrawDepositEntity userWithdrawDeposit);
 	
@@ -30,4 +33,6 @@ public interface UserWithdrawDepositService {
 	void deleteBatch(Long[] ids);
 
     UserWithdrawDepositEntity queryObjectByUserId(Long id);
+
+    void handleDepositoryWithdraw(UserWithdrawDepositEntity userWithdrawDepositEntity);
 }

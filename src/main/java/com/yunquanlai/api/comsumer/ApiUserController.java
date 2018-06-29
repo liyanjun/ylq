@@ -83,7 +83,7 @@ public class ApiUserController {
         userWithdrawDepositEntity.setUserInfoId(userInfoEntity.getId());
         userWithdrawDepositEntity.setIsHandle(10);
         userWithdrawDepositEntity.setCreationTime(new Date());
-        userWithdrawDepositService.save(userWithdrawDepositEntity);
+        userWithdrawDepositService.saveDepositoryWithdraw(userWithdrawDepositEntity, userInfoEntity);
         return R.ok();
     }
 
