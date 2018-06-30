@@ -26,7 +26,7 @@
             diskExpiryThreadIntervalSeconds="120"
             memoryStoreEvictionPolicy="LRU"
     />
-    <cache name="product" maxElementsInMemory="1000"/>
+    <cache name="product" maxElementsInMemory="1000" timeToLiveSeconds="3600"/>
     <cache name="productBrand" maxElementsInMemory="50"/>
     <cache name="common" maxElementsInMemory="100"/>
     <cache name="tokens" maxElementsInMemory="20000"/>

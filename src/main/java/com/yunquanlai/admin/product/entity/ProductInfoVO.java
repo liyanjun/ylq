@@ -264,4 +264,12 @@ public class ProductInfoVO implements Serializable {
     public void setProductNum(String productNum) {
         productInfoEntity.setProductNum(productNum);
     }
+
+    public BigDecimal getAverageLevel() {
+        return productDetailEntity.getAverageLevel();
+    }
+
+    public void setAverageLevel(BigDecimal averageLevel) {
+        productDetailEntity.setAverageLevel(averageLevel);
+    }
 }

@@ -13,10 +13,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
@@ -51,9 +48,9 @@ public class ApiCommentController {
     @ApiOperation(value = "提交用户评论信息{\"orderId\":null,\"commentDeliveryEntity\":{\"deliveryDistributorId\":null,\"comment\":null,\"level\":null,\"creationTime\":null},\"commentProductEntities\":[{\"productId\":null,\"comment\":null,\"level\":null,\"creationTime\":null}]}")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
-            @ApiImplicitParam(name = "OrderCommentVO", value = "订单评论信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderCommentVO", paramType = "body"),
+            @ApiImplicitParam(paramType = "body", name = "orderCommentVO", value = "订单评论信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderCommentVO"),
     })
-    public R comment(@LoginUser @ApiIgnore UserInfoEntity user, @ApiIgnore OrderCommentVO orderCommentVO) {
+    public R comment(@LoginUser @ApiIgnore UserInfoEntity user,@RequestBody OrderCommentVO orderCommentVO) {
 
         return orderInfoService.saveComment(orderCommentVO, user.getId());
     }

@@ -41,6 +41,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -392,7 +393,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    @Transactional
     public R saveComment(OrderCommentVO orderCommentVO, Long id) throws RuntimeException{
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderCommentVO.getOrderId(), true);
         if (id.longValue() != orderInfoEntity.getUserInfoId().longValue()) {
