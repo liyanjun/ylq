@@ -68,7 +68,9 @@ public class ApiUserController {
         }
         userInfoEntity.setUsername(username);
         userInfoService.update(userInfoEntity);
-        return createToken(userInfoEntity.getId());
+        userInfoEntity.setOpenId(null);
+        userInfoEntity.setUid(null);
+        return createToken(userInfoEntity.getId()).put("userInfo",userInfoEntity);
     }
 
     @PostMapping("user/withdraw")
@@ -84,7 +86,9 @@ public class ApiUserController {
         userWithdrawDepositEntity.setIsHandle(10);
         userWithdrawDepositEntity.setCreationTime(new Date());
         userWithdrawDepositService.saveDepositoryWithdraw(userWithdrawDepositEntity, userInfoEntity);
-        return R.ok();
+        userInfoEntity.setOpenId(null);
+        userInfoEntity.setUid(null);
+        return R.ok().put("userInfo",userInfoEntity);
     }
 
     private R createToken(Long userId) {

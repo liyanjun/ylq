@@ -1,5 +1,7 @@
 package com.yunquanlai.admin.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,6 +15,7 @@ import java.util.Date;
  * @email 
  * @date 2018-06-04 15:44:08
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserInfoEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
