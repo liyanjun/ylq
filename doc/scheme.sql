@@ -557,6 +557,7 @@ DROP TABLE IF EXISTS `user_withdraw_deposit`;
 CREATE TABLE `user_withdraw_deposit` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `user_info_id` bigint(20) NOT NULL COMMENT '对应用户 ID',
+  `withdraw_amount` decimal(20,2) NOT NULL COMMENT '申请提现金额',
   `is_handle` tinyint(1) NOT NULL COMMENT '是否处理，10：未处理，20：已处理',
   `creation_time` datetime NOT NULL COMMENT '创建时间',
   `handle_time` datetime DEFAULT NULL COMMENT '处理时间',
