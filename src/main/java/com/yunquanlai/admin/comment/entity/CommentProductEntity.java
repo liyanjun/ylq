@@ -19,6 +19,18 @@ public class CommentProductEntity implements Serializable {
      * 设置：主键ID
      */
 	private Long id;
+	/**
+	 * 设置：用户ID
+	 */
+	private Long userId;
+	/**
+	 * 设置：用户名
+	 */
+	private String userName;
+	/**
+	 * 设置：用户头像(备用)
+	 */
+	private String headUrl;
     /**
      * 设置：商品id
      */
@@ -96,4 +108,28 @@ public class CommentProductEntity implements Serializable {
 	public Date getCreationTime() {
 		return creationTime;
 	}
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getHeadUrl() {
+        return headUrl;
+    }
+
+    public void setHeadUrl(String headUrl) {
+        this.headUrl = headUrl;
+    }
 }

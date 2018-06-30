@@ -6,6 +6,9 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.yunquanlai.admin.comment.entity.CommentProductEntity" id="commentProductMap">
         <result property="id" column="id"/>
+		<result property="userId" column="user_id"/>
+		<result property="userName" column="user_name"/>
+		<result property="headUrl" column="head_url"/>
         <result property="productId" column="product_id"/>
         <result property="comment" column="comment"/>
         <result property="level" column="level"/>
@@ -14,9 +17,12 @@
 
 	<select id="queryObject" resultType="com.yunquanlai.admin.comment.entity.CommentProductEntity">
 		select
-					`id`, 
+					`id`,
+                    `user_id`,
+                    `user_name`,
+                    `head_url`,
 					`product_id`, 
-					`comment`, 
+					`comment`,
 					`level`, 
 					`creation_time`
 				from comment_product where id = #{id}
@@ -25,9 +31,12 @@
 
 	<select id="queryList" resultType="com.yunquanlai.admin.comment.entity.CommentProductEntity">
 		select
-		            `id`, 
+		            `id`,
+                    `user_id`,
+                    `user_name`,
+                    `head_url`,
 		            `product_id`, 
-		            `comment`, 
+		            `comment`,
 		            `level`, 
 		            `creation_time`
 				from comment_product
@@ -52,6 +61,9 @@
 	<select id="queryCommentProductList" resultType="com.yunquanlai.admin.comment.entity.CommentProductEntity">
 		select
 		`id`,
+        `user_id`,
+        `user_name`,
+        `head_url`,
 		`product_id`,
 		`comment`,
 		`level`,
@@ -82,15 +94,21 @@
 	<insert id="save" parameterType="com.yunquanlai.admin.comment.entity.CommentProductEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into comment_product
 		(
+			`user_id`,
+			`user_name`,
+			`head_url`,
 			`product_id`, 
-			`comment`, 
+			`comment`,
 			`level`, 
 			`creation_time`
 		)
 		values
 		(
+			#{userId},
+			#{userName},
+			#{headUrl},
 			#{productId}, 
-			#{comment}, 
+			#{comment},
 			#{level}, 
 			#{creationTime}
 		)
@@ -99,6 +117,9 @@
 	<update id="update" parameterType="com.yunquanlai.admin.comment.entity.CommentProductEntity">
 		update comment_product 
 		<set>
+            <if test="userId != null">`user_id` = #{userId}, </if>
+            <if test="userName != null">`user_name` = #{userName}, </if>
+            <if test="headUrl != null">`head_url` = #{headUrl}, </if>
 			<if test="productId != null">`product_id` = #{productId}, </if>
 			<if test="comment != null">`comment` = #{comment}, </if>
 			<if test="level != null">`level` = #{level}, </if>

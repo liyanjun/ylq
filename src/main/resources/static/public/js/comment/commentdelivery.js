@@ -9,7 +9,9 @@ $(function () {
         url: '../commentdelivery/list' + param,
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
+			{ label: 'id', name: 'id', index: 'id', width: 50, key: true, hidden:true },
+            { label: '用户id', name: 'userId', index: 'user_id', width: 80 },
+            { label: '用户名', name: 'userName', index: 'user_name', width: 80 },
 			{ label: '配送员id', name: 'deliveryDistributorId', index: 'delivery_distributor_id', width: 80 },
 			{
 			    label: '配送员姓名',

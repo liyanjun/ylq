@@ -6,6 +6,9 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.yunquanlai.admin.comment.entity.CommentDeliveryEntity" id="commentDeliveryMap">
         <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="headUrl" column="head_url"/>
         <result property="deliveryDistributorId" column="delivery_distributor_id"/>
         <result property="comment" column="comment"/>
         <result property="level" column="level"/>
@@ -15,8 +18,11 @@
 	<select id="queryObject" resultType="com.yunquanlai.admin.comment.entity.CommentDeliveryEntity">
 		select
 					`id`, 
-					`delivery_distributor_id`, 
-					`comment`, 
+					`user_id`,
+					`user_name`,
+					`head_url`,
+					`delivery_distributor_id`,
+					`comment`,
 					`level`, 
 					`creation_time`
 				from comment_delivery where id = #{id}
@@ -25,9 +31,12 @@
 
 	<select id="queryList" resultType="com.yunquanlai.admin.comment.entity.CommentDeliveryEntity">
 		select
-		            `id`, 
+		            `id`,
+					`user_id`,
+					`user_name`,
+					`head_url`,
 		            `delivery_distributor_id`, 
-		            `comment`, 
+		            `comment`,
 		            `level`, 
 		            `creation_time`
 				from comment_delivery
@@ -56,15 +65,21 @@
 	<insert id="save" parameterType="com.yunquanlai.admin.comment.entity.CommentDeliveryEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into comment_delivery
 		(
+			`user_id`,
+			`user_name`,
+			`head_url`,
 			`delivery_distributor_id`, 
-			`comment`, 
+			`comment`,
 			`level`, 
 			`creation_time`
 		)
 		values
 		(
-			#{deliveryDistributorId}, 
-			#{comment}, 
+			#{userId},
+			#{userName},
+			#{headUrl},
+			#{deliveryDistributorId},
+			#{comment},
 			#{level}, 
 			#{creationTime}
 		)
@@ -73,6 +88,9 @@
 	<update id="update" parameterType="com.yunquanlai.admin.comment.entity.CommentDeliveryEntity">
 		update comment_delivery 
 		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="userName != null">`user_name` = #{userName}, </if>
+			<if test="headUrl != null">`head_url` = #{headUrl}, </if>
 			<if test="deliveryDistributorId != null">`delivery_distributor_id` = #{deliveryDistributorId}, </if>
 			<if test="comment != null">`comment` = #{comment}, </if>
 			<if test="level != null">`level` = #{level}, </if>
