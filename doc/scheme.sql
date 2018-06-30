@@ -21,26 +21,34 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `comment_delivery`;
 CREATE TABLE `comment_delivery` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `user_name` varchar(64) NOT NULL COMMENT '用户名',
+  `head_url` varchar(512)  COMMENT '用户头像（备用）',
   `delivery_distributor_id` bigint(20) NOT NULL COMMENT '配送员id',
-  `comment` varchar(1024) NOT NULL COMMENT '评论内容',
-  `level` int(11) DEFAULT NULL COMMENT '打分，1-5分',
+  `comment` varchar(1024) COMMENT '评论内容',
+  `level` int(11) NOT NULL COMMENT '打分，1-5分',
   `creation_time` datetime DEFAULT NULL COMMENT '评论时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='配送员评价';
-
+ALTER TABLE `comment_delivery`
+ADD INDEX `delivery_distributor_id_index` (`delivery_distributor_id`) USING BTREE ;
 -- ----------------------------
 -- Table structure for comment_product
 -- ----------------------------
 DROP TABLE IF EXISTS `comment_product`;
 CREATE TABLE `comment_product` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `user_name` varchar(64) NOT NULL COMMENT '用户名',
+  `head_url` varchar(512)  COMMENT '用户头像（备用）',
   `product_id` bigint(20) NOT NULL COMMENT '商品名称',
-  `comment` varchar(1024) NOT NULL COMMENT '评论内容',
-  `level` int(11) DEFAULT NULL COMMENT '打分，1-5分',
+  `comment` varchar(1024) COMMENT '评论内容',
+  `level` int(11) NOT NULL COMMENT '打分，1-5分',
   `creation_time` datetime DEFAULT NULL COMMENT '评论时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='配送员评价';
-
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='商品评价';
+ALTER TABLE `comment_product`
+ADD INDEX `product_id_index` (`product_id`) USING BTREE ;
 -- ----------------------------
 -- Table structure for delivery_client_token
 -- ----------------------------

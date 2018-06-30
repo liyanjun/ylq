@@ -43,20 +43,20 @@ public class ApiProductTests {
         Assert.assertEquals(list.size(),5);
     }
 
-    @Test
-    public void testApiCommentProduct(){
-        // TODO: 2018/6/27 测试订单评论方法
-        UserInfoEntity user = userInfoService.queryObject((long) 19);
-        OrderCommentVO orderCommentVO = new OrderCommentVO();
-        orderCommentVO.setOrderId((long) 10018);
-        List<CommentProductEntity> list = new ArrayList<CommentProductEntity>();
-        CommentProductEntity commentProductEntity1 = new CommentProductEntity();
-        commentProductEntity1.setLevel(4);
-        commentProductEntity1.setProductId((long) 10003);
-        commentProductEntity1.setComment("非常不错~");
-        list.add(commentProductEntity1);
-        orderCommentVO.setCommentProductEntities(list);
-        R r = apiCommentController.comment(user, orderCommentVO);
-    }
+//    @Test
+//    public void testApiCommentProduct(){
+//        // TODO: 2018/6/27 测试订单评论方法
+//        UserInfoEntity user = userInfoService.queryObject((long) 19);
+//        OrderCommentVO orderCommentVO = new OrderCommentVO();
+//        orderCommentVO.setOrderId((long) 10018);
+//        List<CommentProductEntity> list = new ArrayList<CommentProductEntity>();
+//        CommentProductEntity commentProductEntity1 = new CommentProductEntity();
+//        commentProductEntity1.setLevel(4);
+//        commentProductEntity1.setProductId((long) 10003);
+//        commentProductEntity1.setComment("非常不错~");
+//        list.add(commentProductEntity1);
+//        orderCommentVO.setCommentProductEntities(list);
+//        R r = apiCommentController.comment(user, orderCommentVO);
+//    }
 
 }
