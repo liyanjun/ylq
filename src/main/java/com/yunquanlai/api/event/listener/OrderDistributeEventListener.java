@@ -8,7 +8,7 @@ import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
 import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.admin.order.service.OrderProductDetailService;
 import com.yunquanlai.api.event.OrderDistributeEvent;
-import com.yunquanlai.utils.DeliveryDistanceUtils;
+import com.yunquanlai.utils.DistanceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class OrderDistributeEventListener implements ApplicationListener<OrderDi
             List<OrderProductDetailEntity> orderProductDetailEntities = orderProductDetailService.queryListByOrderId(orderDeliveryInfoEntity.getOrderInfoId());
             // 找出所有配送点
             List<DeliveryEndpointEntity> deliveryEndpointEntities = deliveryEndpointService.queryList(null);
-            DeliveryDistanceUtils.sortDeliveryEndpoint(orderDeliveryInfoEntity.getLocationX(),orderDeliveryInfoEntity.getLocationY(),deliveryEndpointEntities);
+            DistanceUtils.sortDeliveryEndpoint(orderDeliveryInfoEntity.getLocationX(),orderDeliveryInfoEntity.getLocationY(),deliveryEndpointEntities);
             for (DeliveryEndpointEntity deliveryEndpointEntity : deliveryEndpointEntities) {
                 try {
                     orderInfoService.findDeliveryDistributor(orderProductDetailEntities, orderDeliveryInfoEntity, deliveryEndpointEntity);

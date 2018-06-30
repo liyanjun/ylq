@@ -393,9 +393,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public R saveComment(OrderCommentVO orderCommentVO, Long id) throws RuntimeException{
+    public R saveComment(OrderCommentVO orderCommentVO, UserInfoEntity userInfoEntity) throws RuntimeException{
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderCommentVO.getOrderId(), true);
-        if (id.longValue() != orderInfoEntity.getUserInfoId().longValue()) {
+        if (userInfoEntity.getId().longValue() != orderInfoEntity.getUserInfoId().longValue()) {
             return R.error("不能评价别人的订单。");
         }
         if (orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_DELIVERY_END) {
@@ -425,11 +425,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_COMMENT);
         CommentDeliveryEntity commentDeliveryEntity = orderCommentVO.getCommentDeliveryEntity();
         if (commentDeliveryEntity != null) {
+            commentDeliveryEntity.setUserId(userInfoEntity.getId());
+            commentDeliveryEntity.setUserName(userInfoEntity.getUsername());
             commentDeliveryDao.save(commentDeliveryEntity);
         }
         List<CommentProductEntity> commentProductEntities = orderCommentVO.getCommentProductEntities();
         if (commentProductEntities != null) {
             for (CommentProductEntity commentProductEntity : commentProductEntities) {
+                commentProductEntity.setUserId(userInfoEntity.getId());
+                commentProductEntity.setUserName(userInfoEntity.getUsername());
                 commentProductDao.save(commentProductEntity);
             }
         }

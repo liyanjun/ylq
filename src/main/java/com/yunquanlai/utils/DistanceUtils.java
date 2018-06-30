@@ -1,10 +1,8 @@
 package com.yunquanlai.utils;
 
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
-import com.yunquanlai.admin.order.entity.OrderDeliveryInfoEntity;
-import com.yunquanlai.api.comsumer.ApiOrderController;
+import com.yunquanlai.admin.user.entity.UserAddressEntity;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +16,9 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
-public class DeliveryDistanceUtils {
+public class DistanceUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeliveryDistanceUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DistanceUtils.class);
 
     /**
      * Google Maps计算两点间经纬度距离，暂时不用该方法
@@ -53,6 +51,26 @@ public class DeliveryDistanceUtils {
     }
 
     /**
+     * 所有地址按距离排序
+     *
+     * @param x
+     * @param y
+     * @param userAddressEntities
+     */
+    public static void sortAddressEndpoint(BigDecimal x, BigDecimal y, List<UserAddressEntity> userAddressEntities) {
+        for (UserAddressEntity userAddressEntity : userAddressEntities) {
+            // 求出x,y的差值的绝对值，即为距离
+            BigDecimal tempX = x.subtract(userAddressEntity.getLocationX()).abs();
+            BigDecimal tempY = y.subtract(userAddressEntity.getLocationY()).abs();
+            BigDecimal distance = tempX.pow(2).add(tempY.pow(2));
+            // 不用开方，因为开方了对比大小还是一样的。
+            userAddressEntity.setDistance(distance);
+        }
+        // 按照距离排序
+        Collections.sort(userAddressEntities);
+    }
+
+    /**
      * 计算两点之间的距离，计算单位为公里
      *
      * @param fromLat
@@ -69,7 +87,7 @@ public class DeliveryDistanceUtils {
         path += from + to + key;
         try {
             //计算距离
-            String json = DeliveryDistanceUtils.getResponse(path);
+            String json = DistanceUtils.getResponse(path);
             JSONObject jsonObject;
 
             jsonObject = new JSONObject(json);

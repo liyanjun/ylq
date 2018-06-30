@@ -52,7 +52,7 @@ public class ApiCommentController {
     })
     public R comment(@LoginUser @ApiIgnore UserInfoEntity user,@RequestBody OrderCommentVO orderCommentVO) {
 
-        return orderInfoService.saveComment(orderCommentVO, user.getId());
+        return orderInfoService.saveComment(orderCommentVO, user);
     }
 
     /**
@@ -69,7 +69,6 @@ public class ApiCommentController {
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "limit", value = "查询条数", required = true)
     })
     public R query(@RequestParam Long productId, @RequestParam Integer offset, @RequestParam Integer limit) {
-        //TODO 处理计算商品总评分
         Map map = new HashMap(16);
         map.put("productId", productId);
         map.put("offset", offset);

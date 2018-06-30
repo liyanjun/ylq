@@ -1,7 +1,6 @@
 package com.yunquanlai.api.comsumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yunquanlai.admin.comment.service.CommentDeliveryService;
 import com.yunquanlai.admin.delivery.entity.DeliveryDistributorEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunquanlai.admin.delivery.service.DeliveryDistributorService;
@@ -12,8 +11,7 @@ import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
 import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
-import com.yunquanlai.utils.DateUtils;
-import com.yunquanlai.utils.DeliveryDistanceUtils;
+import com.yunquanlai.utils.DistanceUtils;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.TokenUtils;
 import com.yunquanlai.utils.annotation.LoginUser;
@@ -112,7 +110,6 @@ public class ApiOrderController {
         if (deliveryDistributorEntity != null) {
             deliveryDistributorEntity.setPassword(null);
         }
-        //        commentDeliveryService.
         return R.ok().put("orderInfo", orderInfoEntity).put("orderDeliveryInfo", orderDeliveryInfoEntity).put("deliveryDistributor", deliveryDistributorEntity);
     }
 
@@ -199,12 +196,12 @@ public class ApiOrderController {
         double desX, desY;
         // 找出所有配送点
         List<DeliveryEndpointEntity> deliveryEndpointEntities = deliveryEndpointService.queryList(null);
-        DeliveryDistanceUtils.sortDeliveryEndpoint(locationX, locationY, deliveryEndpointEntities);
+        DistanceUtils.sortDeliveryEndpoint(locationX, locationY, deliveryEndpointEntities);
         //获取距离最短的配送点
         DeliveryEndpointEntity deliveryEndpointEntity = deliveryEndpointEntities.get(0);
         desX = deliveryEndpointEntity.getLocationX().doubleValue();
         desY = deliveryEndpointEntity.getLocationY().doubleValue();
-        double distance = DeliveryDistanceUtils.getDistance(curX, curY, desX, desY);
+        double distance = DistanceUtils.getDistance(curX, curY, desX, desY);
         //配送范围：6公里
         //TODO 6公里似乎太长了，从西大到火炬大厦都配送，如果从朝阳配送点送出怕是要死，需要和甲方讨论
         if (distance > 0 && distance <= 6) {

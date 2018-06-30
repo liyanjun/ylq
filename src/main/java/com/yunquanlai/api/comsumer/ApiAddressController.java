@@ -3,6 +3,7 @@ package com.yunquanlai.api.comsumer;
 import com.yunquanlai.admin.user.entity.UserAddressEntity;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.admin.user.service.UserAddressService;
+import com.yunquanlai.utils.DistanceUtils;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.LoginUser;
 import io.swagger.annotations.*;
@@ -31,6 +32,26 @@ public class ApiAddressController {
     @Autowired
     private UserAddressService userAddressService;
 
+    /**
+     * 获取用户地址信息
+     *
+     * @return
+     */
+    @PostMapping("getMinDistanceAddress")
+    @ApiOperation(value = "根据坐标获取用户距离这个坐标最近的收货地址")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "double", name = "locationX", value = "腾讯地图坐标（loc.latlng.lat）", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "double", name = "locationY", value = "腾讯地图坐标（loc.latlng.lng）", required = true),
+    })
+    public R getMinDistanceAddress(@LoginUser @ApiIgnore UserInfoEntity user, @RequestParam BigDecimal locationX, @RequestParam BigDecimal locationY) {
+        List<UserAddressEntity> userAddressEntityList = userAddressService.queryByUserId(user.getId());
+        if (userAddressEntityList.size() > 0) {
+            DistanceUtils.sortAddressEndpoint(locationX, locationY, userAddressEntityList);
+            return R.ok().put("minUserAddress", userAddressEntityList.iterator().next());
+        }
+        return R.ok().put("minUserAddress", null);
+    }
 
     /**
      * 获取用户地址信息
@@ -74,13 +95,13 @@ public class ApiAddressController {
                          @RequestParam Integer sex) {
         // 在这里没有锁表，因为保持/修改地址也不是高并发操作
         if (userAddressId == null) {
-            userAddressService.save(new UserAddressEntity(name, phone, address,addressDetail, locationX, locationY, sex, user.getId()));
+            userAddressService.save(new UserAddressEntity(name, phone, address, addressDetail, locationX, locationY, sex, user.getId()));
         } else {
             UserAddressEntity userAddressEntity = userAddressService.queryObject(userAddressId);
             if (user.getId().longValue() != userAddressEntity.getUserInfoId().longValue()) {
                 return R.error("不能修改别人的地址");
             }
-            userAddressEntity = new UserAddressEntity(name, phone, address,addressDetail, locationX, locationY, sex, user.getId());
+            userAddressEntity = new UserAddressEntity(name, phone, address, addressDetail, locationX, locationY, sex, user.getId());
             userAddressEntity.setId(userAddressId);
             userAddressService.update(userAddressEntity);
         }

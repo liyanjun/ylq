@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  * @email
  * @date 2018-06-04 15:44:08
  */
-public class UserAddressEntity implements Serializable {
+public class UserAddressEntity implements Serializable,Comparable<UserAddressEntity> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -52,6 +52,8 @@ public class UserAddressEntity implements Serializable {
      * 设置：对应用户ID
      */
     private Long userInfoId;
+
+    private BigDecimal distance;
 
     public UserAddressEntity() {
 
@@ -180,5 +182,18 @@ public class UserAddressEntity implements Serializable {
 
     public void setSex(Integer sex) {
         this.sex = sex;
+    }
+
+    public void setDistance(BigDecimal distance) {
+        this.distance = distance;
+    }
+
+    public BigDecimal getDistance() {
+        return distance;
+    }
+
+    @Override
+    public int compareTo(UserAddressEntity o) {
+        return distance.compareTo(o.getDistance());
     }
 }
