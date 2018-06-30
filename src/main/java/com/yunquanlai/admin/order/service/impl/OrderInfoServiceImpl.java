@@ -399,7 +399,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             return R.error("不能评价别人的订单。");
         }
         if (orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_DELIVERY_END) {
-            return R.error("订单未送达，不能评论。");
+            return R.error("订单已评论或未送达，不能评论。");
         }
         //计算商品平均评分
         Map<String, Object> map = new HashMap<String, Object>();
@@ -434,7 +434,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             }
         }
         orderInfoDao.update(orderInfoEntity);
-        return R.ok();
+        return R.ok().put("msg","评论提交成功");
     }
 
     @Override
