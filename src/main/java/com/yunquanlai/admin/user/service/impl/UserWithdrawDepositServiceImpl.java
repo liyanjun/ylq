@@ -3,6 +3,7 @@ package com.yunquanlai.admin.user.service.impl;
 import com.yunquanlai.admin.user.dao.UserInfoDao;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.admin.user.service.UserInfoService;
+import com.yunquanlai.utils.RRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,14 +47,24 @@ public class UserWithdrawDepositServiceImpl implements UserWithdrawDepositServic
 	}
 
     @Override
-    @Transactional
-    public void saveDepositoryWithdraw(UserWithdrawDepositEntity userWithdrawDeposit, UserInfoEntity userInfoEntity) throws RuntimeException {
-	    BigDecimal depositAmount = userInfoEntity.getDepositAmount();
-	    //提交押金提现申请时，冻结全部押金，可用押金设为0
-	    userInfoEntity.setEnableDepositAmount(new BigDecimal(0));
-	    userInfoEntity.setDisableDepositAmount(depositAmount);
-	    userInfoService.update(userInfoEntity);
-	    userWithdrawDepositDao.save(userWithdrawDeposit);
+    public void saveDepositoryWithdraw(UserWithdrawDepositEntity userWithdrawDeposit, UserInfoEntity userInfoEntity) {
+	    BigDecimal disableDepositAmount = userInfoEntity.getDisableDepositAmount();
+	    BigDecimal enableDepositAmount = userInfoEntity.getEnableDepositAmount();
+	    //可用押金金额>0
+	    if(enableDepositAmount.compareTo(new BigDecimal(0))==1) {
+			//提交押金提现申请时，可用押金设为提取金额
+			userWithdrawDeposit.setWithdrawAmount(enableDepositAmount);
+			//冻结全部押金
+			disableDepositAmount = disableDepositAmount.add(enableDepositAmount);
+			enableDepositAmount = enableDepositAmount.subtract(enableDepositAmount);
+			userInfoEntity.setDisableDepositAmount(disableDepositAmount);
+			userInfoEntity.setEnableDepositAmount(enableDepositAmount);
+			userInfoService.update(userInfoEntity);
+			userWithdrawDepositDao.save(userWithdrawDeposit);
+		} else {
+	    	throw new RRException("可用押金金额为0，不能提现！");
+		}
+
     }
 
     @Override
@@ -77,13 +88,16 @@ public class UserWithdrawDepositServiceImpl implements UserWithdrawDepositServic
 	}
 
     @Override
-    @Transactional
-    public void handleDepositoryWithdraw(UserWithdrawDepositEntity userWithdrawDepositEntity) throws RuntimeException {
+    public void handleDepositoryWithdraw(UserWithdrawDepositEntity userWithdrawDepositEntity) {
         Long userInfoId = userWithdrawDepositEntity.getUserInfoId();
         UserInfoEntity userInfoEntity = userInfoService.queryObject(userInfoId);
-        //处理押金提现申请时，全部押金/冻结押金设为0
-        userInfoEntity.setDisableDepositAmount(new BigDecimal(0));
-        userInfoEntity.setDepositAmount(new BigDecimal(0));
+        BigDecimal depositAmount = userInfoEntity.getDepositAmount();
+        BigDecimal disableDepositAmount = userInfoEntity.getDisableDepositAmount();
+        BigDecimal withdrawAmount = userWithdrawDepositEntity.getWithdrawAmount();
+        //处理押金提现申请时，全部押金/冻结押金减去提现金额
+        userInfoEntity.setDisableDepositAmount(disableDepositAmount.subtract(withdrawAmount));
+        userInfoEntity.setDepositAmount(depositAmount.subtract(withdrawAmount));
+        userWithdrawDepositEntity.setWithdrawAmount(withdrawAmount.subtract(withdrawAmount));
         userInfoService.update(userInfoEntity);
         userWithdrawDepositDao.update(userWithdrawDepositEntity);
     }

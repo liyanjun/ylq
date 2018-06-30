@@ -1,6 +1,7 @@
 package com.yunquanlai.admin.user.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -23,6 +24,11 @@ public class UserWithdrawDepositEntity implements Serializable {
      * 设置：对应用户 ID
      */
 	private Long userInfoId;
+	/**
+	 * 设置：申请提现金额
+	 */
+	private BigDecimal withdrawAmount;
+
     /**
      * 设置：是否处理，10：未处理，20：已处理
      */
@@ -68,6 +74,19 @@ public class UserWithdrawDepositEntity implements Serializable {
 	public Long getUserInfoId() {
 		return userInfoId;
 	}
+    /**
+     *设置：申请提现金额
+     */
+    public void setWithdrawAmount(BigDecimal withdrawAmount) {
+        this.withdrawAmount = withdrawAmount;
+    }
+    /**
+     * 获取：申请提现金额
+     * @return
+     */
+    public BigDecimal getWithdrawAmount() {
+        return withdrawAmount;
+    }
 	/**
 	 * 设置：是否处理，10：未处理，20：已处理
 	 */

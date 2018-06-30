@@ -7,18 +7,24 @@
     <resultMap type="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity" id="userWithdrawDepositMap">
         <result property="id" column="id"/>
         <result property="userInfoId" column="user_info_id"/>
+        <result property="withdrawAmount" column="withdraw_amount"/>
         <result property="isHandle" column="is_handle"/>
         <result property="creationTime" column="creation_time"/>
         <result property="handleTime" column="handle_time"/>
+        <result property="handlerId" column="handler_id"/>
+        <result property="handlerName" column="handler_name"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity">
         select
         `id`,
         `user_info_id`,
+        `withdraw_amount`,
         `is_handle`,
         `creation_time`,
-        `handle_time`
+        `handle_time`,
+        `handler_id`,
+        `handler_name`
         from user_withdraw_deposit where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
     </select>
@@ -27,9 +33,12 @@
 		select
 					`id`,
 					`user_info_id`,
+					`withdraw_amount`,
 					`is_handle`,
 					`creation_time`,
-					`handle_time`
+					`handle_time`,
+					`handler_id`,
+                    `handler_name`
 				from user_withdraw_deposit where user_info_id = #{value} and is_handle = 10
 	</select>
 
@@ -37,9 +46,12 @@
         select
         `id`,
         `user_info_id`,
+        `withdraw_amount`,
         `is_handle`,
         `creation_time`,
-        `handle_time`
+        `handle_time`,
+        `handler_id`,
+        `handler_name`
         from user_withdraw_deposit
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -62,18 +74,24 @@
 		insert into user_withdraw_deposit
 		(
 			`id`, 
-			`user_info_id`, 
+			`user_info_id`,
+			`withdraw_amount`,
 			`is_handle`, 
 			`creation_time`, 
-			`handle_time`
+			`handle_time`,
+			`handler_id`,
+            `handler_name`
 		)
 		values
 		(
 			#{id}, 
-			#{userInfoId}, 
+			#{userInfoId},
+			#{withdrawAmount},
 			#{isHandle}, 
 			#{creationTime}, 
-			#{handleTime}
+			#{handleTime},
+			#{handlerId},
+			#{handlerName}
 		)
 	</insert>
 
@@ -81,9 +99,12 @@
         update user_withdraw_deposit
         <set>
             <if test="userInfoId != null">`user_info_id` = #{userInfoId},</if>
+            <if test="withdrawAmount != null">`withdraw_amount` = #{withdrawAmount},</if>
             <if test="isHandle != null">`is_handle` = #{isHandle},</if>
             <if test="creationTime != null">`creation_time` = #{creationTime},</if>
-            <if test="handleTime != null">`handle_time` = #{handleTime}</if>
+            <if test="handleTime != null">`handle_time` = #{handleTime},</if>
+            <if test="handlerId != null">`handler_id` = #{handlerId},</if>
+            <if test="handlerName != null">`handler_name` = #{handlerName}</if>
         </set>
         where id = #{id}
     </update>
