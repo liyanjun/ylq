@@ -29,5 +29,6 @@ yunquanlai:
   openTime:
     begin: 9
     end: 20
+  emptyValue: 30
 #logging.level.com.yunquanlai=DEBUG
 

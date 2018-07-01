@@ -6,6 +6,7 @@ import com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity;
 import com.yunquanlai.admin.user.service.UserClientTokenService;
 import com.yunquanlai.admin.user.service.UserInfoService;
 import com.yunquanlai.admin.user.service.UserWithdrawDepositService;
+import com.yunquanlai.utils.ConfigUtils;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
 import com.yunquanlai.utils.annotation.LoginUser;
@@ -45,6 +46,9 @@ public class ApiUserController {
     @Autowired
     private UserWithdrawDepositService userWithdrawDepositService;
 
+    @Autowired
+    private ConfigUtils configUtils;
+
     //12小时后过期
     private final static int EXPIRE = 3600 * 12;
 
@@ -70,7 +74,7 @@ public class ApiUserController {
         userInfoService.update(userInfoEntity);
         userInfoEntity.setOpenId(null);
         userInfoEntity.setUid(null);
-        return createToken(userInfoEntity.getId()).put("userInfo",userInfoEntity);
+        return createToken(userInfoEntity.getId()).put("userInfo",userInfoEntity).put("isOpenTime",configUtils.isOpenTime()).put("emptyBucketValue",configUtils.getEmptyValue());
     }
 
     @PostMapping("user/withdraw")

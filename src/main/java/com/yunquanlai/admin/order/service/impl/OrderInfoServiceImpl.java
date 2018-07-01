@@ -33,6 +33,7 @@ import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.api.comsumer.vo.ProductOrderVO;
 import com.yunquanlai.api.event.OrderDeliveryNotifyEvent;
 import com.yunquanlai.api.event.OrderDistributeEvent;
+import com.yunquanlai.utils.ConfigUtils;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
 import com.yunquanlai.utils.TokenUtils;
@@ -100,6 +101,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Autowired
     private ProductDetailDao productDetailDao;
+
+    @Autowired
+    private ConfigUtils configUtils;
     /**
      * 上下文对象
      */
@@ -337,12 +341,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public R confirm(OrderVO orderVO, UserInfoEntity user) {
         List<OrderProductDetailEntity> orderProductDetailEntities = new ArrayList<>(16);
-        BigDecimal bEmptyValue;
-        String emptyValue = sysConfigDao.queryByKey("emptyValue");
-        if (emptyValue == null) {
-            throw new RRException("单个空桶价值未配置");
-        }
-        bEmptyValue = new BigDecimal(emptyValue);
+        BigDecimal bEmptyValue = configUtils.getEmptyValue();
         BigDecimal amount = BigDecimal.ZERO;
         BigDecimal deposit = BigDecimal.ZERO;
 

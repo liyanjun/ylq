@@ -11,6 +11,7 @@ import com.yunquanlai.admin.order.service.OrderDeliveryInfoService;
 import com.yunquanlai.admin.order.service.OrderInfoService;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
+import com.yunquanlai.utils.ConfigUtils;
 import com.yunquanlai.utils.DistanceUtils;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.TokenUtils;
@@ -59,11 +60,9 @@ public class ApiOrderController {
     @Autowired
     private TokenUtils tokenUtils;
 
-    @Value("${yunquanlai.openTime.begin}")
-    private Integer beginHour;
+    @Autowired
+    private ConfigUtils configUtils;
 
-    @Value("${yunquanlai.openTime.end}")
-    private Integer endHour;
 
     /**
      * 用户订单查询
@@ -127,8 +126,7 @@ public class ApiOrderController {
             @ApiImplicitParam(name = "orderVO", value = "订单信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderVO", paramType = "body")
     })
     public R orderConfirm(@RequestBody OrderVO orderVO, @LoginUser @ApiIgnore UserInfoEntity user) {
-        boolean isOpenTime = isOpenTime();
-        return orderInfoService.confirm(orderVO, user).put("isOpenTime", isOpenTime);
+        return orderInfoService.confirm(orderVO, user);
     }
 
 
@@ -150,7 +148,7 @@ public class ApiOrderController {
             return R.error("订单确认已失效，请重新下单。");
         }
 
-        boolean isOpenTime = isOpenTime();
+        boolean isOpenTime = configUtils.isOpenTime();
 
         if (!isOpenTime && StringUtils.isBlank(orderVO.getDeliveryTime())) {
             return R.error("当前时间不是配送时间，请选择期望配送时间，重新下单。");
@@ -210,20 +208,5 @@ public class ApiOrderController {
             return false;
         }
     }
-
-    /**
-     * 判断是否是送水时间
-     *
-     * @return
-     */
-    private boolean isOpenTime() {
-        boolean isOpenTime = false;
-        int hour = LocalDateTime.now().getHour();
-        if (hour >= beginHour && hour < endHour) {
-            isOpenTime = true;
-        }
-        return isOpenTime;
-    }
-
 
 }

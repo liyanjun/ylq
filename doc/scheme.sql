@@ -136,8 +136,8 @@ DROP TABLE IF EXISTS `delivery_endpoint`;
 CREATE TABLE `delivery_endpoint` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `name` varchar(32) NOT NULL COMMENT '配送点名',
-  `location_x` decimal(20,10) NOT NULL COMMENT '配送点坐标x',
-  `location_y` decimal(20,10) NOT NULL COMMENT '配送点坐标y',
+  `location_x` decimal(20,16) NOT NULL COMMENT '配送点坐标x',
+  `location_y` decimal(20,16) NOT NULL COMMENT '配送点坐标y',
   `remark` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='配送点信息';
@@ -170,9 +170,9 @@ CREATE TABLE `order_delivery_info` (
   `address` varchar(256) NOT NULL COMMENT '订单地址信息（拼凑的用于在订单列表显示的）',
   `sex` int(11) NOT NULL COMMENT '收货人性别',
   `phone` varchar(32) NOT NULL COMMENT '用户手机号',
-  `location_x` decimal(20,10) NOT NULL COMMENT '订单配送坐标x',
-  `location_y` decimal(20,10) NOT NULL COMMENT '订单配送坐标y',
-  `amount_delivery_fee` decimal(20,10) NOT NULL COMMENT '该派送单派送费',
+  `location_x` decimal(20,16) NOT NULL COMMENT '订单配送坐标x',
+  `location_y` decimal(20,16) NOT NULL COMMENT '订单配送坐标y',
+  `amount_delivery_fee` decimal(20,2) NOT NULL COMMENT '该派送单派送费',
   `status` tinyint(4) NOT NULL COMMENT '配送单状态，10：未支付，20：未分配，30：分配中，40：配送中，50：配送结束',
   `remark` varchar(1024) DEFAULT NULL COMMENT '配送单备注',
   `detail` text DEFAULT NULL COMMENT '配送单需要配送的商品，json格式',
@@ -488,8 +488,8 @@ CREATE TABLE `sys_user_role` (
 DROP TABLE IF EXISTS `user_address`;
 CREATE TABLE `user_address` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
-  `location_x` decimal(20,10) NOT NULL COMMENT '地址坐标x值',
-  `location_y` decimal(20,10) NOT NULL COMMENT '地址坐标y值',
+  `location_x` decimal(20,16) NOT NULL COMMENT '地址坐标x值',
+  `location_y` decimal(20,16) NOT NULL COMMENT '地址坐标y值',
   `address` varchar(256) NOT NULL COMMENT '定位地址',
   `addressDetail` varchar(256) NOT NULL COMMENT '详细地址',
   `name` varchar(32) NOT NULL COMMENT '收货人姓名',
