@@ -8,6 +8,7 @@ import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.validator.ValidatorUtils;
 import com.yunquanlai.utils.validator.group.AddGroup;
 import com.yunquanlai.utils.validator.group.UpdateGroup;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,9 @@ public class ProductBrandController {
 	@RequestMapping("/list")
 	@RequiresPermissions("productbrand:list")
 	public R list(@RequestParam Map<String, Object> params){
+		//去除查询参数中的空格
+		String name = (String)params.get("name");
+		params.put("name", StringUtils.deleteWhitespace(name));
 		//查询列表数据
         Query query = new Query(params);
 

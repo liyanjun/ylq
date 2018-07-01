@@ -8,6 +8,7 @@ import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.validator.Assert;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,11 @@ public class OrderInfoController extends AbstractController {
     @RequestMapping("/list")
     @RequiresPermissions("orderinfo:list")
     public R list(@RequestParam Map<String, Object> params) {
+        //去除查询参数中的空格
+        String userName = (String)params.get("userName");
+        String userPhone = (String)params.get("userPhone");
+        params.put("userName", StringUtils.deleteWhitespace(userName));
+        params.put("userPhone", StringUtils.deleteWhitespace(userPhone));
         //查询列表数据
         Query query = new Query(params);
         List<OrderInfoEntity> orderInfoList = orderInfoService.queryList(query);

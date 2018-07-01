@@ -46,6 +46,9 @@ public class ProductInfoController extends AbstractController {
     @RequestMapping("/list")
     @RequiresPermissions("productinfo:list")
     public R list(@RequestParam Map<String, Object> params) {
+        //去除查询参数中的空格
+        String key = (String)params.get("key");
+        params.put("key", StringUtils.deleteWhitespace(key));
         //查询列表数据
         Query query = new Query(params);
 

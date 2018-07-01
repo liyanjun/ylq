@@ -8,6 +8,7 @@ import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.validator.ValidatorUtils;
 import com.yunquanlai.utils.validator.group.UpdateGroup;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,11 @@ public class ProductStockController extends AbstractController {
 	@RequestMapping("/list")
 	@RequiresPermissions("productstock:list")
 	public R list(@RequestParam Map<String, Object> params){
+		//去除查询参数中的空格
+		String productName = (String)params.get("productName");
+		String deliveryEndpointName = (String)params.get("deliveryEndpointName");
+		params.put("productName", StringUtils.deleteWhitespace(productName));
+		params.put("deliveryEndpointName", StringUtils.deleteWhitespace(deliveryEndpointName));
 		//查询列表数据
         Query query = new Query(params);
 

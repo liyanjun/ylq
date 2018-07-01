@@ -41,7 +41,7 @@ CREATE TABLE `comment_product` (
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `user_name` varchar(64) NOT NULL COMMENT '用户名',
   `head_url` varchar(512)  COMMENT '用户头像（备用）',
-  `product_id` bigint(20) NOT NULL COMMENT '商品名称',
+  `product_id` bigint(20) NOT NULL COMMENT '商品id',
   `comment` varchar(1024) COMMENT '评论内容',
   `level` int(11) NOT NULL COMMENT '打分，1-5分',
   `creation_time` datetime DEFAULT NULL COMMENT '评论时间',

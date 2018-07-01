@@ -6,6 +6,7 @@ import com.yunquanlai.admin.user.service.UserInfoService;
 import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,9 @@ public class UserInfoController extends AbstractController {
 	@RequestMapping("/list")
 	@RequiresPermissions("userinfo:list")
 	public R list(@RequestParam Map<String, Object> params){
+		//去除查询参数中的空格
+		String key = (String)params.get("key");
+		params.put("key", StringUtils.deleteWhitespace(key));
 		//查询列表数据
         Query query = new Query(params);
 

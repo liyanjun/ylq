@@ -42,6 +42,9 @@ public class DeliveryDistributorController extends AbstractController {
 	@RequestMapping("/list")
 	@RequiresPermissions("deliverydistributor:list")
 	public R list(@RequestParam Map<String, Object> params){
+		//去除查询参数中的空格
+		String key = (String)params.get("key");
+		params.put("key", org.apache.commons.lang3.StringUtils.deleteWhitespace(key));
 		//查询列表数据
         Query query = new Query(params);
 
