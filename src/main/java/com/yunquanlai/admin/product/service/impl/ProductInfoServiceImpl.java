@@ -74,6 +74,7 @@ public class ProductInfoServiceImpl implements ProductInfoService {
         ProductDetailEntity productDetailEntity = productInfoVO.getProductDetailEntity();
 
         productInfoEntity.setBrandName(productBrandDao.queryObject(productInfoEntity.getBrandId(), false).getName());
+        productInfoEntity.setStatus(10);
         productInfoDao.save(productInfoEntity);
         productDetailEntity.setProductInfoId(productInfoEntity.getId());
         productDetailEntity.setAverageLevel(BigDecimal.ZERO);
