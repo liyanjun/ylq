@@ -105,7 +105,10 @@
         from product_info
         <where>
             <if test="key != null and key.trim() != ''">
-                `name` like concat('%',#{key},'%') or `brand_name` like concat('%',#{key},'%')
+                ( `name` like concat('%',#{key},'%') or `brand_name` like concat('%',#{key},'%'))
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
             </if>
         </where>
         order by sort desc,id desc
@@ -168,7 +171,10 @@
 		select count(*) from product_info
         <where>
             <if test="key != null and key.trim() != ''">
-                `name` like concat('%',#{key},'%') or `brand_name` like concat('%',#{key},'%')
+                ( `name` like concat('%',#{key},'%') or `brand_name` like concat('%',#{key},'%'))
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
             </if>
         </where>
 	</select>

@@ -62,7 +62,6 @@ public class UserWithdrawDepositController extends AbstractController {
 	@RequestMapping("/save")
 	@RequiresPermissions("userwithdrawdeposit:save")
 	public R save(@RequestBody UserWithdrawDepositEntity userWithdrawDeposit){
-        // TODO: 2018/6/28  提交押金申请的时候冻结押金，处理押金申请的时候扣除押金
 		userWithdrawDepositService.save(userWithdrawDeposit);
 		
 		return R.ok();

@@ -87,7 +87,6 @@ public class ProductInfoController extends AbstractController {
         ProductInfoEntity productInfoEntity = productInfoVO.getProductInfoEntity();
         ProductDetailEntity productDetailEntity = productInfoVO.getProductDetailEntity();
         //校验商品信息
-        // TODO: 2018/6/17 字段按前端顺序进行验证
         ValidatorUtils.validateEntity(productInfoEntity, AddGroup.class);
         ValidatorUtils.validateEntity(productDetailEntity, AddGroup.class);
         //检验商品编号唯一性

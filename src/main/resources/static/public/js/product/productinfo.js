@@ -3,15 +3,20 @@ var vm = new Vue({
     el: '#rrapp',
     data: {
         q: {
-            key: null
+            key: null,
+            status: null
         },
         showList: true,
         title: null,
         brandId: "",
         productInfo: {},
-       // productInfoEntity:{},
         brandList: [],
-        defaultImgUrl : "http://pa23ubi36.bkt.clouddn.com/upload/20180611/98eca8e408c14c10b7049403d1385269"
+        defaultImgUrl : "http://pa23ubi36.bkt.clouddn.com/upload/20180611/98eca8e408c14c10b7049403d1385269",
+        statusSelect:[
+            {id:"10",name:"新创建"},
+            {id:"20",name:"已上架"},
+            {id:"30",name:"已下架"}
+        ]
     },
     methods: {
         query: function () {
@@ -20,6 +25,7 @@ var vm = new Vue({
         reset: function () {
             $("#searchKey").val("");
             vm.q.key = "";
+            vm.q.status = "";
             vm.reload();
         },
         add: function () {
@@ -132,7 +138,10 @@ var vm = new Vue({
             // var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             var page = 1;
             $("#jqGrid").jqGrid('setGridParam', {
-                postData: {'key': vm.q.key},
+                postData: {
+                    'key': vm.q.key,
+                    "status":vm.q.status
+                },
                 page: page
             }).trigger("reloadGrid");
         }
@@ -168,26 +177,18 @@ $(function () {
             {label: 'd', name: 'id', index: 'id', width: 50, key: true, hidden:true},
             {label: '编号', name: 'productNum', index: 'product_num', width: 50},
             {label: '名称', name: 'name', index: 'name', width: 80},
-            {
-                label: '售价',
-                name: 'amountShow',
-                index: 'amount_show',
-                width: 60,
+            {label: '售价', name: 'amountShow', index: 'amount_show', width: 60,
                 formatter: function (value, options, row) {
                     return value + '元';
                 }
             },
-            {
-                label: '优惠价', name: 'amount', index: 'amount', width: 60, formatter: function (value, options, row) {
+            {label: '优惠价', name: 'amount', index: 'amount', width: 60,
+                formatter: function (value, options, row) {
                     return value + '元';
                 }
             },
             {label: '品牌', name: 'brandName', index: 'brand_name', width: 80},
-            {
-                label: '桶类型',
-                name: 'bucketType',
-                index: 'bucket_type',
-                width: 80,
+            {label: '桶类型', name: 'bucketType', index: 'bucket_type', width: 80,
                 formatter: function (value, options, row) {
                     if (value === 10) {
                         return '一次性桶装水';
@@ -198,28 +199,29 @@ $(function () {
                     }
                 }
             },
-            {
-                label: '配送费',
-                name: 'deliveryFee',
-                index: 'delivery_fee',
-                width: 80,
+            {label: '配送费', name: 'deliveryFee', index: 'delivery_fee', width: 60,
                 formatter: function (value, options, row) {
                     return value + '元';
                 }
             },
-            {
-                label: '一键送水',
-                name: 'isQuick',
-                index: 'isQuick',
-                width: 80,
+            {label: '一键送水', name: 'isQuick', index: 'isQuick', width: 60,
                 formatter: function (value, options, row) {
                     return value === 10 ?
                         '<font color="green">是</font>' :
                         '<font color="red">否</font>';
                 }
             },
-            /*{label: '创建时间', name: 'creationTime', index: 'creation_time', width: 130},*/
-            /*{label: '最后更新时间', name: 'updateTime', index: 'update_time', width: 130},*/
+            {label: '状态', name: 'status', index: 'status', width: 60,
+                formatter: function (value, options, row) {
+                    if (value === 10) {
+                        return '<font color="red">新建</font>';
+                    } else if (value === 20) {
+                        return '<font color="green">已上架</font>'
+                    } else {
+                        return '<font color="gray">已下架</font>';
+                    }
+                }
+            },
             {label: '排序', name: 'sort', index: 'sort', width: 60}
         ],
         viewrecords: true,

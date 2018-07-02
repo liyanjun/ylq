@@ -51,7 +51,6 @@ public class OrderInfoController extends AbstractController {
 
         return R.ok().put("page", pageUtil);
     }
-    // TODO: 2018/6/10 订单查询、已支付异常订单重新分配
 
     /**
      * 手工标记订单为已处理
