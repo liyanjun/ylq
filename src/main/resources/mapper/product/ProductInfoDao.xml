@@ -24,6 +24,7 @@
         <result property="updateName" column="update_name"/>
         <result property="status" column="status"/>
         <result property="productNum" column="product_num"/>
+        <result property="productSpecifications" column="product_specifications"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductInfoEntity">
@@ -46,7 +47,8 @@
 					`update_id`, 
 					`update_name`,
                     `status`,
-                    `product_num`
+                    `product_num`,
+                    `product_specifications`
 				from
 				product_info
 				where id = #{id}
@@ -73,7 +75,8 @@
         `update_id`,
         `update_name`,
         `status`,
-        `product_num`
+        `product_num`,
+        `product_specifications`
         from
         product_info
         where product_num = #{productNum}
@@ -101,7 +104,8 @@
         `update_id`,
         `update_name`,
         `status`,
-        `product_num`
+        `product_num`,
+        `product_specifications`
         from product_info
         <where>
             <if test="key != null and key.trim() != ''">
@@ -138,7 +142,8 @@
         `update_id`,
         `update_name`,
         `status`,
-        `product_num`
+        `product_num`,
+        `product_specifications`
         from product_info
         <where>
             <if test="name != null and name.trim() != ''">
@@ -201,7 +206,8 @@
 			`update_id`, 
 			`update_name`,
 			`status`,
-			`product_num`
+			`product_num`,
+			`product_specifications`
 		)
 		values
 		(
@@ -223,7 +229,8 @@
 			#{updateId}, 
 			#{updateName},
 			#{status},
-			#{productNum}
+			#{productNum},
+			#{productSpecifications}
 		)
 	</insert>
 
@@ -248,7 +255,8 @@
             <if test="updateId != null">`update_id` = #{updateId},</if>
             <if test="updateName != null">`update_name` = #{updateName},</if>
             <if test="status != null">`status` = #{status},</if>
-            <if test="productNum != null">`product_num` = #{productNum}</if>
+            <if test="productNum != null">`product_num` = #{productNum},</if>
+            <if test="productSpecifications != null">`product_specifications` = #{productSpecifications}</if>
         </set>
         where id = #{id}
     </update>

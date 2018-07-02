@@ -272,4 +272,12 @@ public class ProductInfoVO implements Serializable {
     public void setAverageLevel(BigDecimal averageLevel) {
         productDetailEntity.setAverageLevel(averageLevel);
     }
+
+    public String getProductSpecifications() {
+        return productInfoEntity.getProductSpecifications();
+    }
+
+    public void setProductSpecifications(String productSpecifications) {
+        productInfoEntity.setProductSpecifications(productSpecifications);
+    }
 }

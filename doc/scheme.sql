@@ -322,6 +322,7 @@ CREATE TABLE `product_info` (
   `update_name` varchar(32) DEFAULT NULL COMMENT '商品更新人名',
   `status` tinyint(4) NOT NULL COMMENT '商品状态，10：新创建，20：商品上架，30：商品下架',
   `product_num` varchar(32) NOT NULL COMMENT '商品编号',
+  `product_specifications` varchar(64) NOT NULL COMMENT '商品规格',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='商品信息表表';
 ALTER TABLE `product_info`

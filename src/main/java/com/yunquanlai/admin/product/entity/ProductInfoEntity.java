@@ -100,17 +100,21 @@ public class ProductInfoEntity implements Serializable {
 	 * 设置：商品状态
 	 */
 	private Integer status;
-
 	/**
 	 * 是否是一键送水产品，10：是，20：不是
 	 */
     @NotNull(message="是否一键送水不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer isQuick;
-
 	/**
 	 * 商品编号
 	 */
+    @NotBlank(message="商品编号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String productNum;
+	/**
+	 * 商品规格
+	 */
+    @NotBlank(message="商品规格不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	private String productSpecifications;
 
 	/**
 	 * 设置：主键ID
@@ -337,5 +341,13 @@ public class ProductInfoEntity implements Serializable {
 
 	public void setProductNum(String productNum) {
 		this.productNum = productNum;
+	}
+
+	public String getProductSpecifications() {
+		return productSpecifications;
+	}
+
+	public void setProductSpecifications(String productSpecifications) {
+		this.productSpecifications = productSpecifications;
 	}
 }
