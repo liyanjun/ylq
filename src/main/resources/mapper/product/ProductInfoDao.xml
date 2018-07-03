@@ -146,6 +146,7 @@
         `product_specifications`
         from product_info
         <where>
+            status = 20
             <if test="name != null and name.trim() != ''">
                 and name like concat('%', #{name}, '%')
             </if>
