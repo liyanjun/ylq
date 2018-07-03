@@ -30,7 +30,7 @@
 			<a class="btn btn-success" @click="reset"><i class="fa fa-rotate-left"></i> 重置</a>
 			<a v-if="hasPermission('productbrand:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
 			<a v-if="hasPermission('productbrand:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-			<a v-if="hasPermission('productbrand:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			<a v-if="hasPermission('productbrand:delete')" class="btn btn-primary" @click="del" id="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
 		</div>
 	    <table id="jqGrid"></table>
 	    <div id="jqGridPager"></div>
