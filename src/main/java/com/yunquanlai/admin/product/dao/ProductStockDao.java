@@ -5,6 +5,7 @@ import com.yunquanlai.admin.system.dao.BaseDao;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 商品库存信息表
@@ -25,4 +26,6 @@ public interface ProductStockDao extends BaseDao<ProductStockEntity> {
     List<ProductStockEntity> queryByProductId(Long id);
 
     List<ProductStockEntity> queryByDeliveryEndpointId(Long id);
+
+    Integer sumStock(Map filter);
 }

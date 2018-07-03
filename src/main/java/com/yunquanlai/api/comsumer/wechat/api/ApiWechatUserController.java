@@ -63,20 +63,6 @@ public class ApiWechatUserController {
 
         try {
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
-            UserInfoEntity userInfoEntity = userInfoService.queryObjectByOpenId(session.getOpenid());
-            if (userInfoEntity == null) {
-                //不存在用户就创建用户
-                userInfoEntity = new UserInfoEntity();
-                userInfoEntity.setStatus(0);
-                userInfoEntity.setCreationTime(new Date());
-                userInfoEntity.setUid(session.getUnionid());
-                userInfoEntity.setOpenId(session.getOpenid());
-                userInfoEntity.setEmptyBucketNumber(0);
-                userInfoEntity.setEnableDepositAmount(BigDecimal.ZERO);
-                userInfoEntity.setDisableDepositAmount(BigDecimal.ZERO);
-                userInfoEntity.setDepositAmount(BigDecimal.ZERO);
-                userInfoService.save(userInfoEntity);
-            }
             return R.ok().put("session", session);
         } catch (WxErrorException e) {
             LOGGER.error(e.getMessage(), e);

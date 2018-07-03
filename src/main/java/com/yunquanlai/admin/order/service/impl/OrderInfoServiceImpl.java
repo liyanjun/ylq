@@ -188,6 +188,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
             orderProductDetailEntities.add(orderProductDetailEntity);
             productInfoEntity.setCount(productInfoEntity.getCount() + productOrderVO.getCount());
+            productInfoDao.update(productInfoEntity);
         }
         orderInfoEntity.setDeposit(orderVO.getDeposit());
         orderInfoEntity.setBucketNum(orderVO.getBucketNum());

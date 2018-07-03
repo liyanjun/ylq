@@ -96,6 +96,16 @@
         </where>
 	</select>
 
+    <select id="sumStock" resultType="int">
+		select sum(count) from product_stock
+        <where>
+            <if test="productInfoId != null and productInfoId != ''">
+                `product_info_id` = #{productInfoId}
+            </if>
+
+        </where>
+	</select>
+
     <insert id="save" parameterType="com.yunquanlai.admin.product.entity.ProductStockEntity" useGeneratedKeys="true"
             keyProperty="id">
 		insert into product_stock

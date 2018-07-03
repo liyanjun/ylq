@@ -49,7 +49,7 @@ public class ProductInfoServiceImpl implements ProductInfoService {
         Map filter = new HashMap(4);
         filter.put("productInfoId",productInfoEntity.getId());
         ProductInfoVO productInfoVO = new ProductInfoVO(productInfoEntity, productDetailEntity);
-        productInfoVO.setStock(productStockDao.queryTotal(filter));
+        productInfoVO.setStock(productStockDao.sumStock(filter));
         return productInfoVO;
     }
 
@@ -80,6 +80,7 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 
         productInfoEntity.setBrandName(productBrandDao.queryObject(productInfoEntity.getBrandId(), false).getName());
         productInfoEntity.setStatus(10);
+        productInfoEntity.setCount(0);
         productInfoDao.save(productInfoEntity);
         productDetailEntity.setProductInfoId(productInfoEntity.getId());
         productDetailEntity.setAverageLevel(BigDecimal.ZERO);

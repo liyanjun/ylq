@@ -23,6 +23,7 @@ public class RRExceptionHandler {
 	 */
 	@ExceptionHandler(RRException.class)
 	public R handleRRException(RRException e){
+		logger.error("业务异常：",e);
 		R r = new R();
 		r.put("code", e.getCode());
 		r.put("msg", e.getMessage());

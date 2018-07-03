@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,18 +64,33 @@ public class ApiUserController {
     @ApiOperation(value = "用户从小程序登录接口")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "openId", value = "微信 openId", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "微信名", required = true ),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "微信名", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "string", name = "unionId", value = "unionId"),
     })
-    public R wechatLogin(@RequestParam String openId,@RequestParam String username) {
-        Assert.isBlank(openId,"openId不能为空");
+    public R wechatLogin(@RequestParam String openId, @RequestParam String username, String unionId) {
+        Assert.isBlank(openId, "openId不能为空");
+//        Assert.isBlank(username, "用户名不能为空");
         UserInfoEntity userInfoEntity = userInfoService.queryObjectByOpenId(openId);
-        Assert.isNull(userInfoEntity,"用户不存在");
-        Assert.isBlank(username,"用户名不能为空");
-        userInfoEntity.setUsername(username);
-        userInfoService.update(userInfoEntity);
+        if (userInfoEntity == null) {
+            //不存在用户就创建用户
+            userInfoEntity = new UserInfoEntity();
+            userInfoEntity.setStatus(0);
+            userInfoEntity.setCreationTime(new Date());
+            userInfoEntity.setOpenId(openId);
+            userInfoEntity.setUid(unionId);
+            userInfoEntity.setEmptyBucketNumber(0);
+            userInfoEntity.setEnableDepositAmount(BigDecimal.ZERO);
+            userInfoEntity.setDisableDepositAmount(BigDecimal.ZERO);
+            userInfoEntity.setDepositAmount(BigDecimal.ZERO);
+            userInfoService.save(userInfoEntity);
+        }
+        if (!userInfoEntity.equals(userInfoEntity.getUsername())) {
+            userInfoEntity.setUsername(username);
+            userInfoService.update(userInfoEntity);
+        }
         userInfoEntity.setOpenId(null);
         userInfoEntity.setUid(null);
-        return createToken(userInfoEntity.getId()).put("userInfo",userInfoEntity).put("isOpenTime",configUtils.isOpenTime()).put("emptyBucketValue",configUtils.getEmptyValue());
+        return createToken(userInfoEntity.getId()).put("userInfo", userInfoEntity).put("isOpenTime", configUtils.isOpenTime()).put("emptyBucketValue", configUtils.getEmptyValue());
     }
 
     @PostMapping("user/withdraw")
@@ -82,9 +98,9 @@ public class ApiUserController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true)
     })
-    public R depositoryWithdraw(@LoginUser @ApiIgnore UserInfoEntity userInfoEntity){
+    public R depositoryWithdraw(@LoginUser @ApiIgnore UserInfoEntity userInfoEntity) {
         UserWithdrawDepositEntity temp = userWithdrawDepositService.queryObjectByUserId(userInfoEntity.getId());
-        Assert.isNotNull(temp,"已存在未处理的押金提现申请，请耐心等待。");
+        Assert.isNotNull(temp, "已存在未处理的押金提现申请，请耐心等待。");
         UserWithdrawDepositEntity userWithdrawDepositEntity = new UserWithdrawDepositEntity();
         userWithdrawDepositEntity.setUserInfoId(userInfoEntity.getId());
         userWithdrawDepositEntity.setIsHandle(10);
@@ -92,7 +108,7 @@ public class ApiUserController {
         userWithdrawDepositService.saveDepositoryWithdraw(userWithdrawDepositEntity, userInfoEntity);
         userInfoEntity.setOpenId(null);
         userInfoEntity.setUid(null);
-        return R.ok().put("userInfo",userInfoEntity);
+        return R.ok().put("userInfo", userInfoEntity);
     }
 
     private R createToken(Long userId) {
