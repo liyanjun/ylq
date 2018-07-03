@@ -350,4 +350,5 @@ public class ProductInfoEntity implements Serializable {
 	public void setProductSpecifications(String productSpecifications) {
 		this.productSpecifications = productSpecifications;
 	}
+
 }

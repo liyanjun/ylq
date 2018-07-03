@@ -170,7 +170,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
         for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
             // 计算订单总额
-            ProductInfoEntity productInfoEntity = productInfoDao.queryObject(productOrderVO.getProductInfoId(), false);
+            ProductInfoEntity productInfoEntity = productInfoDao.queryObject(productOrderVO.getProductInfoId(), true);
             if (productInfoEntity == null) {
                 return R.error("找不到购买的商品");
             }
@@ -187,6 +187,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntity.setBucketType(productInfoEntity.getBucketType());
             orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
             orderProductDetailEntities.add(orderProductDetailEntity);
+            productInfoEntity.setCount(productInfoEntity.getCount() + productOrderVO.getCount());
         }
         orderInfoEntity.setDeposit(orderVO.getDeposit());
         orderInfoEntity.setBucketNum(orderVO.getBucketNum());

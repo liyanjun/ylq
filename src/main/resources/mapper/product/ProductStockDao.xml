@@ -74,6 +74,9 @@
             <if test="deliveryEndpointName != null and deliveryEndpointName.trim() != ''">
                 and `delivery_name` like concat('%',#{deliveryEndpointName},'%')
             </if>
+            <if test="productInfoId != null and productInfoId != ''">
+                and `product_info_id` = #{productInfoId}
+            </if>
         </where>
         order by id desc
         <if test="offset != null and limit != null">
