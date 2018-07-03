@@ -26,6 +26,11 @@ public class ProductInfoVO implements Serializable {
 
     private String banner4;
 
+    /**
+     * 商品库存
+     */
+    private Integer stock;
+
     public ProductInfoVO() {
         productInfoEntity = new ProductInfoEntity();
         productDetailEntity = new ProductDetailEntity();
@@ -279,5 +284,13 @@ public class ProductInfoVO implements Serializable {
 
     public void setProductSpecifications(String productSpecifications) {
         productInfoEntity.setProductSpecifications(productSpecifications);
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 }

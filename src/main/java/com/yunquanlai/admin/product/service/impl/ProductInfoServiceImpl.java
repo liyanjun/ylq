@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +46,11 @@ public class ProductInfoServiceImpl implements ProductInfoService {
     public ProductInfoVO queryProductInfoVO(Long id) {
         ProductInfoEntity productInfoEntity = productInfoDao.queryObject(id, false);
         ProductDetailEntity productDetailEntity = productDetailDao.queryObjectByProductInfoId(id);
-        return new ProductInfoVO(productInfoEntity, productDetailEntity);
+        Map filter = new HashMap(4);
+        filter.put("productInfoId",productInfoEntity.getId());
+        ProductInfoVO productInfoVO = new ProductInfoVO(productInfoEntity, productDetailEntity);
+        productInfoVO.setStock(productStockDao.queryTotal(filter));
+        return productInfoVO;
     }
 
     @Override
