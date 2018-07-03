@@ -85,7 +85,8 @@ var vm = new Vue({
         deliveryEndpointId:"",
 		deliveryDistributor: {
 		},
-        deliveryEndpointList: []
+        deliveryEndpointList: [],
+        btn : null
 	},
 	methods: {
 		query: function () {
@@ -137,6 +138,7 @@ var vm = new Vue({
 			});
 		},
 		del: function (event) {
+            vm.btn = event.target.id;
 			var ids = getSelectedRows();
 			if(ids == null){
 				return ;
@@ -178,8 +180,7 @@ var vm = new Vue({
         },
 		reload: function (event) {
 			vm.showList = true;
-			// var page = $("#jqGrid").jqGrid('getGridParam','page');
-			var page = 1;
+			var page = (vm.btn == "del")?1:$("#jqGrid").jqGrid('getGridParam','page');
             $("#jqGrid").jqGrid('setGridParam',{
                 postData:{'key': vm.q.key},
                 page:page

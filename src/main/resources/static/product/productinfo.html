@@ -38,7 +38,7 @@
             <a v-if="hasPermission('productinfo:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
             <a v-if="hasPermission('productinfo:update')" class="btn btn-primary" @click="update"><i
                     class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-            <a v-if="hasPermission('productinfo:delete')" class="btn btn-primary" @click="del"><i
+            <a v-if="hasPermission('productinfo:delete')" class="btn btn-primary" @click="del" id="del"><i
                     class="fa fa-trash-o"></i>&nbsp;删除</a>
             <a v-if="hasPermission('commentdelivery:info')" class="btn btn-primary" @click="comment"><i
                     class="fa fa-comments-o"></i>&nbsp;评论</a>
