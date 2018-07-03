@@ -11,7 +11,7 @@ $(function () {
 			{ label: '创建时间', name: 'createDate', width: 60 }
         ],
 		viewrecords: true,
-        height: 385,
+        height: 685,
         rowNum: 10,
 		rowList : [10,30,50],
         rownumbers: true, 

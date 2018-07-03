@@ -15,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,12 +65,11 @@ public class ApiUserController {
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "openId", value = "微信 openId", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "微信名", required = true ),
     })
-    public R wechatLogin(@RequestParam String openId, String username) {
+    public R wechatLogin(@RequestParam String openId,@RequestParam String username) {
         Assert.isBlank(openId,"openId不能为空");
         UserInfoEntity userInfoEntity = userInfoService.queryObjectByOpenId(openId);
-        if (userInfoEntity == null) {
-            return R.error("用户不存在");
-        }
+        Assert.isNull(userInfoEntity,"用户不存在");
+        Assert.isBlank(username,"用户名不能为空");
         userInfoEntity.setUsername(username);
         userInfoService.update(userInfoEntity);
         userInfoEntity.setOpenId(null);

@@ -492,7 +492,7 @@ CREATE TABLE `user_address` (
   `location_x` decimal(20,16) NOT NULL COMMENT '地址坐标x值',
   `location_y` decimal(20,16) NOT NULL COMMENT '地址坐标y值',
   `address` varchar(256) NOT NULL COMMENT '定位地址',
-  `addressDetail` varchar(256) NOT NULL COMMENT '详细地址',
+  `address_detail` varchar(256) NOT NULL COMMENT '详细地址',
   `name` varchar(32) NOT NULL COMMENT '收货人姓名',
   `phone` varchar(32) NOT NULL COMMENT '收货人电话',
   `sex` tinyint(4) NOT NULL COMMENT '性别，10：男，20：女',
@@ -535,7 +535,7 @@ CREATE TABLE `user_empty_bucket_flow` (
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `username` varchar(64) NOT NULL COMMENT '用户名(从小程序过来是就是微信昵称)',
+  `username` varchar(64) COMMENT '用户名(从小程序过来是就是微信昵称)',
   `phone` varchar(32) DEFAULT NULL COMMENT '用户绑定手机号',
   `uid` varchar(64) COMMENT '用户微信 ID',
   `open_id` varchar(64) NOT NULL COMMENT '用户微信 open_id',
