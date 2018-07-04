@@ -293,4 +293,12 @@ public class ProductInfoVO implements Serializable {
     public void setStock(Integer stock) {
         this.stock = stock;
     }
+
+    public Integer getDrinkingWaterType() {
+        return productInfoEntity.getDrinkingWaterType();
+    }
+
+    public void setDrinkingWaterType(Integer drinkingWaterType) {
+        productInfoEntity.setDrinkingWaterType(drinkingWaterType);
+    }
 }

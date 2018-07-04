@@ -201,6 +201,17 @@ $(function () {
                     }
                 }
             },
+            {label: '饮用水类型', name: 'drinkingWaterType', index: 'drinkingWater_type', width: 80,
+                formatter: function (value, options, row) {
+                    if (value === 10) {
+                        return '矿泉水';
+                    } else if (value === 20) {
+                        return '山泉水'
+                    } else {
+                        return '纯净水';
+                    }
+                }
+            },
             {label: '配送费', name: 'deliveryFee', index: 'delivery_fee', width: 60,
                 formatter: function (value, options, row) {
                     return value + '元';

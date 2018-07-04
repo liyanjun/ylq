@@ -115,6 +115,11 @@ public class ProductInfoEntity implements Serializable {
 	 */
     @NotBlank(message="商品规格不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String productSpecifications;
+	/**
+	 * 设置：饮用水类型，10：矿泉水，20：山泉水，30：纯净水'
+	 */
+    @NotNull(message="饮用水种类不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    private Integer drinkingWaterType;
 
 	/**
 	 * 设置：主键ID
@@ -351,4 +356,11 @@ public class ProductInfoEntity implements Serializable {
 		this.productSpecifications = productSpecifications;
 	}
 
+    public Integer getDrinkingWaterType() {
+        return drinkingWaterType;
+    }
+
+    public void setDrinkingWaterType(Integer drinkingWaterType) {
+        this.drinkingWaterType = drinkingWaterType;
+    }
 }

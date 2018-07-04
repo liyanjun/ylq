@@ -25,6 +25,7 @@
         <result property="status" column="status"/>
         <result property="productNum" column="product_num"/>
         <result property="productSpecifications" column="product_specifications"/>
+        <result property="drinkingWaterType" column="drinkingWater_type"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductInfoEntity">
@@ -48,7 +49,8 @@
 					`update_name`,
                     `status`,
                     `product_num`,
-                    `product_specifications`
+                    `product_specifications`,
+                    `drinkingWater_type`
 				from
 				product_info
 				where id = #{id}
@@ -76,7 +78,8 @@
         `update_name`,
         `status`,
         `product_num`,
-        `product_specifications`
+        `product_specifications`,
+        `drinkingWater_type`
         from
         product_info
         where product_num = #{productNum}
@@ -105,7 +108,8 @@
         `update_name`,
         `status`,
         `product_num`,
-        `product_specifications`
+        `product_specifications`,
+        `drinkingWater_type`
         from product_info
         <where>
             <if test="key != null and key.trim() != ''">
@@ -143,7 +147,8 @@
         `update_name`,
         `status`,
         `product_num`,
-        `product_specifications`
+        `product_specifications`,
+        `drinkingWater_type`
         from product_info
         <where>
             status = 20
@@ -158,6 +163,12 @@
             </if>
             <if test="bucketType != null">
                 and bucket_type = #{bucketType}
+            </if>
+            <if test="drinkingWaterType != null ">
+                and drinkingWater_type in
+                <foreach item="drinkingwatertype" collection="drinkingWaterType" open="(" separator="," close=")">
+                    #{drinkingwatertype}
+                </foreach>
             </if>
         </where>
         <choose>
@@ -208,7 +219,8 @@
 			`update_name`,
 			`status`,
 			`product_num`,
-			`product_specifications`
+			`product_specifications`,
+			`drinkingWater_type`
 		)
 		values
 		(
@@ -231,7 +243,8 @@
 			#{updateName},
 			#{status},
 			#{productNum},
-			#{productSpecifications}
+			#{productSpecifications},
+			#{drinkingWaterType}
 		)
 	</insert>
 
@@ -257,7 +270,8 @@
             <if test="updateName != null">`update_name` = #{updateName},</if>
             <if test="status != null">`status` = #{status},</if>
             <if test="productNum != null">`product_num` = #{productNum},</if>
-            <if test="productSpecifications != null">`product_specifications` = #{productSpecifications}</if>
+            <if test="productSpecifications != null">`product_specifications` = #{productSpecifications},</if>
+            <if test="drinkingWaterType != null">`drinkingWater_type` = #{drinkingWaterType}</if>
         </set>
         where id = #{id}
     </update>
