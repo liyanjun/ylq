@@ -25,7 +25,7 @@
         <result property="status" column="status"/>
         <result property="productNum" column="product_num"/>
         <result property="productSpecifications" column="product_specifications"/>
-        <result property="drinkingWaterType" column="drinkingwater_type"/>
+        <result property="waterType" column="water_type"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductInfoEntity">
@@ -50,7 +50,7 @@
                     `status`,
                     `product_num`,
                     `product_specifications`,
-                    `drinkingwater_type`
+                    `water_type`
 				from
 				product_info
 				where id = #{id}
@@ -79,7 +79,7 @@
         `status`,
         `product_num`,
         `product_specifications`,
-        `drinkingwater_type`
+        `water_type`
         from
         product_info
         where product_num = #{productNum}
@@ -109,7 +109,7 @@
         `status`,
         `product_num`,
         `product_specifications`,
-        `drinkingwater_type`
+        `water_type`
         from product_info
         <where>
             <if test="key != null and key.trim() != ''">
@@ -148,7 +148,7 @@
         `status`,
         `product_num`,
         `product_specifications`,
-        `drinkingwater_type`
+        `water_type`
         from product_info
         <where>
             status = 20
@@ -164,10 +164,10 @@
             <if test="bucketType != null">
                 and bucket_type = #{bucketType}
             </if>
-            <if test="drinkingWaterType != null and drinkingWaterType.length>0">
-                and drinkingwater_type in
-                <foreach item="drinkingwatertype" collection="drinkingWaterType" open="(" separator="," close=")">
-                    #{drinkingwatertype}
+            <if test="waterType != null and waterType.length>0">
+                and water_type in
+                <foreach item="waterType" collection="waterType" open="(" separator="," close=")">
+                    #{waterType}
                 </foreach>
             </if>
         </where>
@@ -220,7 +220,7 @@
 			`status`,
 			`product_num`,
 			`product_specifications`,
-			`drinkingwater_type`
+			`water_type`
 		)
 		values
 		(
@@ -244,7 +244,7 @@
 			#{status},
 			#{productNum},
 			#{productSpecifications},
-			#{drinkingWaterType}
+			#{waterType}
 		)
 	</insert>
 
@@ -271,7 +271,7 @@
             <if test="status != null">`status` = #{status},</if>
             <if test="productNum != null">`product_num` = #{productNum},</if>
             <if test="productSpecifications != null">`product_specifications` = #{productSpecifications},</if>
-            <if test="drinkingWaterType != null">`drinkingwater_type` = #{drinkingWaterType}</if>
+            <if test="waterType != null">`water_type` = #{waterType}</if>
         </set>
         where id = #{id}
     </update>

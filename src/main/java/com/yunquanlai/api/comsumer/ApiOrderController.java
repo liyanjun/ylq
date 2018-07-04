@@ -154,10 +154,9 @@ public class ApiOrderController {
             return R.error("当前时间不是配送时间，请选择期望配送时间，重新下单。");
         }
 
-        // TODO 先注释
-//        if (!availableDelivery(orderVO.getLocationX(), orderVO.getLocationY())) {
-//            return R.error("订单不在派送范围内，请联系客服确认。");
-//        }
+        if (!availableDelivery(orderVO.getLocationX(), orderVO.getLocationY())) {
+            return R.error("订单不在派送范围内，请联系客服确认。");
+        }
         return orderInfoService.newOrder(orderVO, user);
     }
 

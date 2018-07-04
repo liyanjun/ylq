@@ -171,8 +171,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
             // 计算订单总额
             ProductInfoEntity productInfoEntity = productInfoDao.queryObject(productOrderVO.getProductInfoId(), true);
-            if (productInfoEntity == null) {
-                return R.error("找不到购买的商品");
+            if (productInfoEntity == null || productInfoEntity.getStatus() != 20) {
+                return R.error("找不到购买的商品，可能商品已下架，请重新购买。");
             }
             amount = amount.add(productInfoEntity.getAmount().multiply(new BigDecimal(productOrderVO.getCount())));
             if (productInfoEntity.getAmountShow() != null) {

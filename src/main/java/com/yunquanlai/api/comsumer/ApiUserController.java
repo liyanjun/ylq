@@ -111,6 +111,15 @@ public class ApiUserController {
         return R.ok().put("userInfo", userInfoEntity);
     }
 
+    @PostMapping("user/info")
+    @ApiOperation(value = "通过token获取用户信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true)
+    })
+    public R info(@LoginUser @ApiIgnore UserInfoEntity userInfoEntity) {
+        return R.ok().put("userInfo", userInfoEntity);
+    }
+
     private R createToken(Long userId) {
         //生成一个token
         String token = UUID.randomUUID().toString();
