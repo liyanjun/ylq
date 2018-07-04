@@ -164,7 +164,7 @@
             <if test="bucketType != null">
                 and bucket_type = #{bucketType}
             </if>
-            <if test="drinkingWaterType != null ">
+            <if test="drinkingWaterType != null and drinkingWaterType.length>0">
                 and drinkingWater_type in
                 <foreach item="drinkingwatertype" collection="drinkingWaterType" open="(" separator="," close=")">
                     #{drinkingwatertype}
