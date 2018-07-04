@@ -201,7 +201,7 @@ $(function () {
                     }
                 }
             },
-            {label: '饮用水类型', name: 'drinkingWaterType', index: 'drinkingWater_type', width: 80,
+            {label: '饮用水类型', name: 'waterType', index: 'water_type', width: 80,
                 formatter: function (value, options, row) {
                     if (value === 10) {
                         return '矿泉水';

@@ -38,8 +38,6 @@ public class ApiWechatUserController {
     @Autowired
     private WxMaService wxMaService;
 
-    @Autowired
-    private UserInfoService userInfoService;
 
     /**
      * 微信小程序登录接口
@@ -55,10 +53,6 @@ public class ApiWechatUserController {
     public R login(@RequestParam String code) {
         if (StringUtils.isBlank(code)) {
             return R.error("empty jscode");
-        }
-
-        if (StringUtils.isBlank(code)) {
-            return R.error("empty name");
         }
 
         try {
