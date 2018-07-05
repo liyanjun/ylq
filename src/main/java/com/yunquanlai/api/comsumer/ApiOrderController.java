@@ -208,4 +208,18 @@ public class ApiOrderController {
         }
     }
 
+    /**
+     * 押金范围
+     *
+     * @return 押金范围
+     */
+    @PostMapping("depositArea")
+    @ApiOperation(value = "押金范围")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
+    })
+    public R depositArea() {
+        return R.ok().put("deposiArea", configUtils.getMap());
+    }
+
 }
