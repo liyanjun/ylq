@@ -1,11 +1,13 @@
 package com.yunquanlai.utils;
 
 import org.apache.shiro.authz.AuthorizationException;
+import org.apache.tomcat.util.http.fileupload.FileUploadBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MultipartException;
 
 /**
  * 异常处理器
@@ -41,6 +43,14 @@ public class RRExceptionHandler {
 	public R handleAuthorizationException(AuthorizationException e){
 		logger.error(e.getMessage(), e);
 		return R.error("没有权限，请联系管理员授权");
+	}
+	@ExceptionHandler(MultipartException.class)
+	public R handleAuthorizationException(MultipartException e){
+		logger.error(e.getMessage(), e);
+		if(e.getCause().getCause() instanceof FileUploadBase.FileSizeLimitExceededException){
+			return R.error("请不要上传大小超过1M的文件");
+		}
+		return R.error("文件上传失败");
 	}
 
 	@ExceptionHandler(Exception.class)

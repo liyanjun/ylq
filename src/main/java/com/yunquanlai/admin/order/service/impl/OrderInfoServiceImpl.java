@@ -316,6 +316,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
         orderInfoEntity.setId(orderDeliveryInfoEntity.getOrderInfoId());
         orderInfoEntity.setDistributeTime(new Date());
+        orderInfoEntity.setDeliveryDistributorId(deliveryDistributorEntity.getId());
+        orderInfoEntity.setDeliveryDistributorName(deliveryDistributorEntity.getName());
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_ON_DELIVERY);
         // 只要分配出去了，异常也是可以被宽恕的，毕竟要向前看
         orderInfoEntity.setException("");
