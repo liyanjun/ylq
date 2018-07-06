@@ -15,7 +15,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,8 +98,8 @@ public class ApiUserController {
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true)
     })
     public R depositoryWithdraw(@LoginUser @ApiIgnore UserInfoEntity userInfoEntity) {
-        UserWithdrawDepositEntity temp = userWithdrawDepositService.queryObjectByUserId(userInfoEntity.getId());
-        Assert.isNotNull(temp, "已存在未处理的押金提现申请，请耐心等待。");
+//        UserWithdrawDepositEntity temp = userWithdrawDepositService.queryObjectByUserId(userInfoEntity.getId());
+//        Assert.isNotNull(temp, "已存在未处理的押金提现申请，请耐心等待。");
         UserWithdrawDepositEntity userWithdrawDepositEntity = new UserWithdrawDepositEntity();
         userWithdrawDepositEntity.setUserInfoId(userInfoEntity.getId());
         userWithdrawDepositEntity.setIsHandle(10);
