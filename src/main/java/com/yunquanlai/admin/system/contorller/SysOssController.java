@@ -1,26 +1,16 @@
 package com.yunquanlai.admin.system.contorller;
 
+import com.alibaba.fastjson.JSON;
 import com.yunquanlai.admin.system.entity.SysOssEntity;
-import com.yunquanlai.utils.oss.CloudStorageConfig;
-import com.yunquanlai.utils.oss.OSSFactory;
 import com.yunquanlai.admin.system.service.SysConfigService;
 import com.yunquanlai.admin.system.service.SysOssService;
-import com.yunquanlai.utils.ConfigConstant;
-import com.yunquanlai.utils.Constant;
-import com.yunquanlai.utils.PageUtils;
-import com.yunquanlai.utils.Query;
-import com.yunquanlai.utils.R;
-import com.yunquanlai.utils.RRException;
+import com.yunquanlai.utils.*;
+import com.yunquanlai.utils.oss.CloudStorageConfig;
+import com.yunquanlai.utils.oss.OSSFactory;
 import com.yunquanlai.utils.validator.ValidatorUtils;
 import com.yunquanlai.utils.validator.group.AliyunGroup;
 import com.yunquanlai.utils.validator.group.QcloudGroup;
 import com.yunquanlai.utils.validator.group.QiniuGroup;
-
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSON;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -115,6 +108,9 @@ public class SysOssController {
 			throw new RRException("上传文件不能为空");
 		}
 
+		if(file.getSize()>1024*1024){
+			throw new RRException("上传图片大小不能超过1M！");
+		}
 		//上传文件
 		String url = OSSFactory.build().upload(file.getBytes());
 

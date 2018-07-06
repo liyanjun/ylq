@@ -37,7 +37,7 @@ var vm = new Vue({
             });
         },
         reload: function () {
-            window.location.href="../order/orderinfo.html";
+            window.location.href="../order/orderinfo.html?orderId="+vm.orderId;
         }
     }
 });

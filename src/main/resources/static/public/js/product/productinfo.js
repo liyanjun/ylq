@@ -201,7 +201,7 @@ $(function () {
                     }
                 }
             },
-            {label: '饮用水类型', name: 'waterType', index: 'water_type', width: 80,
+            {label: '饮用水类型', name: 'waterType', index: 'water_type', width: 60,
                 formatter: function (value, options, row) {
                     if (value === 10) {
                         return '矿泉水';
@@ -212,19 +212,19 @@ $(function () {
                     }
                 }
             },
-            {label: '配送费', name: 'deliveryFee', index: 'delivery_fee', width: 60,
+            {label: '配送费', name: 'deliveryFee', index: 'delivery_fee', width: 50,
                 formatter: function (value, options, row) {
                     return value + '元';
                 }
             },
-            {label: '一键送水', name: 'isQuick', index: 'isQuick', width: 60,
+            {label: '一键送水', name: 'isQuick', index: 'isQuick', width: 50,
                 formatter: function (value, options, row) {
                     return value === 10 ?
                         '<font color="green">是</font>' :
                         '<font color="red">否</font>';
                 }
             },
-            {label: '状态', name: 'status', index: 'status', width: 60,
+            {label: '状态', name: 'status', index: 'status', width: 50,
                 formatter: function (value, options, row) {
                     if (value === 10) {
                         return '<font color="red">新建</font>';
@@ -235,7 +235,7 @@ $(function () {
                     }
                 }
             },
-            {label: '排序', name: 'sort', index: 'sort', width: 60}
+            {label: '排序', name: 'sort', index: 'sort', width: 40}
         ],
         viewrecords: true,
         height: 385,
