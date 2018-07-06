@@ -15,6 +15,7 @@ import com.yunquanlai.utils.ConfigUtils;
 import com.yunquanlai.utils.DistanceUtils;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.TokenUtils;
+import com.yunquanlai.utils.annotation.IgnoreAuth;
 import com.yunquanlai.utils.annotation.LoginUser;
 import com.yunquanlai.utils.validator.Assert;
 import io.swagger.annotations.Api;
@@ -213,11 +214,9 @@ public class ApiOrderController {
      *
      * @return 押金范围
      */
+    @IgnoreAuth
     @PostMapping("depositArea")
     @ApiOperation(value = "押金范围")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
-    })
     public R depositArea() {
         return R.ok().put("deposiArea", configUtils.getMap());
     }

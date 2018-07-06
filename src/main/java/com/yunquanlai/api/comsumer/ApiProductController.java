@@ -102,7 +102,7 @@ public class ApiProductController {
         }
 
         if (orderType != null) {
-            map.put("sidx", "amount_show");
+            map.put("sidx", "amount");
             if (orderType == 10) {
                 map.put("order", "desc");
             } else if (orderType == 20) {
@@ -110,7 +110,6 @@ public class ApiProductController {
             }
         }
 
-        //String[] waterTypes = waterType.split(",");
         map.put("waterType", waterType);
         map.put("bucketType", bucketType);
         map.put("offset", offset);
