@@ -1,5 +1,9 @@
 $(function () {
     $("option[value='']").prop("selected",true);
+    vm.orderId = T.p("orderId");
+    if(vm.orderId != null && vm.orderId != undefined){
+        getDetail(vm.orderId);
+    }
     $("#jqGrid").jqGrid({
         url: '../orderinfo/list',
         datatype: "json",
@@ -84,6 +88,7 @@ $(function () {
             $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
         }
     });
+
 });
 
 var vm = new Vue({
@@ -107,7 +112,8 @@ var vm = new Vue({
             {id:"30",name:"配送中"},
             {id:"40",name:"已到达"},
             {id:"50",name:"关闭"}
-        ]
+        ],
+        orderId: null
     },
     methods: {
         query: function () {
@@ -129,12 +135,13 @@ var vm = new Vue({
             if (id == null) {
                 return;
             }
-            vm.showList = false;
+            /*vm.showList = false;
             vm.showDetail = true;
             vm.title = "详情";
             vm.getInfo(id);
             vm.getOrderDeliveryInfo(id);
-            vm.getOrderProductInfo(id);
+            vm.getOrderProductInfo(id);*/
+            getDetail(id);
         },
         handDistribute: function () {
             var id = getSelectedRow();
@@ -234,3 +241,12 @@ var vm = new Vue({
         }
     }
 });
+
+function getDetail(orderId) {
+    vm.showList = false;
+    vm.showDetail = true;
+    vm.title = "详情";
+    vm.getInfo(orderId);
+    vm.getOrderDeliveryInfo(orderId);
+    vm.getOrderProductInfo(orderId);
+}

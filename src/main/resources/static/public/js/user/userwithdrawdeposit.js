@@ -12,8 +12,8 @@ $(function () {
 				width: 80,
                 formatter: function (value, options, row) {
                     return value === 10 ?
-                        '未处理' :
-                        '已处理';
+                        '<font color="red">未处理</font>' :
+                        '<font color="green">已处理</font>';
                 }
 			},
 			{ label: '创建时间', name: 'creationTime', index: 'creation_time', width: 80 }, 			
