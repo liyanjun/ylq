@@ -7,11 +7,9 @@ import com.yunquanlai.utils.DistanceUtils;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.LoginUser;
 import io.swagger.annotations.*;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.math.BigDecimal;
@@ -85,24 +83,15 @@ public class ApiAddressController {
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "sex", value = "性别，10：男，20：女", required = true)
     })
     public R saveAddress(@LoginUser @ApiIgnore UserInfoEntity user,
-                         Long userAddressId,
-                         @RequestParam String name,
-                         @RequestParam String phone,
-                         @RequestParam String address,
-                         @RequestParam String addressDetail,
-                         @RequestParam BigDecimal locationX,
-                         @RequestParam BigDecimal locationY,
-                         @RequestParam Integer sex) {
+                         @RequestBody UserAddressEntity userAddressEntity) {
+        userAddressEntity.setUserInfoId(user.getId());
         // 在这里没有锁表，因为保持/修改地址也不是高并发操作
-        if (userAddressId == null) {
-            userAddressService.save(new UserAddressEntity(name, phone, address, addressDetail, locationX, locationY, sex, user.getId()));
+        if (userAddressEntity.getId() == null) {
+            userAddressService.save(userAddressEntity);
         } else {
-            UserAddressEntity userAddressEntity = userAddressService.queryObject(userAddressId);
             if (user.getId().longValue() != userAddressEntity.getUserInfoId().longValue()) {
                 return R.error("不能修改别人的地址");
             }
-            userAddressEntity = new UserAddressEntity(name, phone, address, addressDetail, locationX, locationY, sex, user.getId());
-            userAddressEntity.setId(userAddressId);
             userAddressService.update(userAddressEntity);
         }
         return R.ok();

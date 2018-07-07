@@ -125,7 +125,7 @@ public class ApiWechatPayController {
             return R.ok("发起微信支付成功").put("result", map);
         } catch (Exception e) {
             logger.error("发起微信支付失败", e);
-            return R.ok("发起微信支付失败：" + e.getMessage());
+            return R.error("发起微信支付失败,请稍后再试。").put("code",505);
         }
     }
 

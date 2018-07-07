@@ -151,6 +151,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public R newOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException, JsonProcessingException {
+        // TODO 押金校验 可用押金+本次提交押金>本次下单需要的押金阈值
         //检查该用户之前是否有未支付订单
         List<OrderInfoEntity> orderInfoEntities = orderInfoDao.queryUnpaidByUserId(user.getId());
         for (OrderInfoEntity orderInfoEntity : orderInfoEntities) {
