@@ -6,6 +6,7 @@ import com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity;
 import com.yunquanlai.admin.user.service.UserClientTokenService;
 import com.yunquanlai.admin.user.service.UserInfoService;
 import com.yunquanlai.admin.user.service.UserWithdrawDepositService;
+import com.yunquanlai.api.comsumer.vo.TokenRequestVO;
 import com.yunquanlai.utils.ConfigUtils;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
@@ -16,10 +17,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.math.BigDecimal;
@@ -62,29 +60,28 @@ public class ApiUserController {
     @PostMapping("wechat/login")
     @ApiOperation(value = "用户从小程序登录接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "string", name = "openId", value = "微信 openId", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "string", name = "username", value = "微信名", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "string", name = "unionId", value = "unionId"),
+            @ApiImplicitParam(paramType = "body", dataType = "string", name = "tokenRequestVO", value = "tokenRequestVO", required = true)
     })
-    public R wechatLogin(@RequestParam String openId, @RequestParam String username, String unionId) {
-        Assert.isBlank(openId, "openId不能为空");
+    public R wechatLogin(@RequestBody TokenRequestVO tokenRequestVO) {
+        Assert.isBlank(tokenRequestVO.getOpenId(), "openId不能为空");
 //        Assert.isBlank(username, "用户名不能为空");
-        UserInfoEntity userInfoEntity = userInfoService.queryObjectByOpenId(openId);
+        UserInfoEntity userInfoEntity = userInfoService.queryObjectByOpenId(tokenRequestVO.getOpenId());
         if (userInfoEntity == null) {
             //不存在用户就创建用户
             userInfoEntity = new UserInfoEntity();
             userInfoEntity.setStatus(0);
             userInfoEntity.setCreationTime(new Date());
-            userInfoEntity.setOpenId(openId);
-            userInfoEntity.setUid(unionId);
+            userInfoEntity.setOpenId(tokenRequestVO.getOpenId());
+            userInfoEntity.setUid(tokenRequestVO.getUnionId());
+            userInfoEntity.setUsername(tokenRequestVO.getUsername());
             userInfoEntity.setEmptyBucketNumber(0);
             userInfoEntity.setEnableDepositAmount(BigDecimal.ZERO);
             userInfoEntity.setDisableDepositAmount(BigDecimal.ZERO);
             userInfoEntity.setDepositAmount(BigDecimal.ZERO);
             userInfoService.save(userInfoEntity);
         }
-        if (!userInfoEntity.equals(userInfoEntity.getUsername())) {
-            userInfoEntity.setUsername(username);
+        if (tokenRequestVO.getUsername() != null && !tokenRequestVO.getUsername().equals(userInfoEntity.getUsername())) {
+            userInfoEntity.setUsername(tokenRequestVO.getUsername());
             userInfoService.update(userInfoEntity);
         }
         userInfoEntity.setOpenId(null);
