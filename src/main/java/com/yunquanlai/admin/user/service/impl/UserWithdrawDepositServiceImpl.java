@@ -35,7 +35,12 @@ public class UserWithdrawDepositServiceImpl implements UserWithdrawDepositServic
 	public List<UserWithdrawDepositEntity> queryList(Map<String, Object> map){
 		return userWithdrawDepositDao.queryList(map);
 	}
-	
+
+	@Override
+	public List<UserWithdrawDepositEntity> queryListByIds(Long[] ids) {
+		return userWithdrawDepositDao.queryListByIds(ids);
+	}
+
 	@Override
 	public int queryTotal(Map<String, Object> map){
 		return userWithdrawDepositDao.queryTotal(map);
@@ -97,7 +102,7 @@ public class UserWithdrawDepositServiceImpl implements UserWithdrawDepositServic
         //处理押金提现申请时，全部押金/冻结押金减去提现金额
         userInfoEntity.setDisableDepositAmount(disableDepositAmount.subtract(withdrawAmount));
         userInfoEntity.setDepositAmount(depositAmount.subtract(withdrawAmount));
-        userWithdrawDepositEntity.setWithdrawAmount(withdrawAmount.subtract(withdrawAmount));
+        //userWithdrawDepositEntity.setWithdrawAmount(withdrawAmount.subtract(withdrawAmount));
         userInfoService.update(userInfoEntity);
         userWithdrawDepositDao.update(userWithdrawDepositEntity);
     }

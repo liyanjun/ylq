@@ -4,11 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yunquanlai.admin.comment.entity.CommentProductEntity;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunquanlai.admin.delivery.service.DeliveryEndpointService;
-import com.yunquanlai.admin.user.controller.UserWithdrawDepositController;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
-import com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity;
 import com.yunquanlai.admin.user.service.UserInfoService;
-import com.yunquanlai.admin.user.service.UserWithdrawDepositService;
 import com.yunquanlai.api.comsumer.ApiCommentController;
 import com.yunquanlai.api.comsumer.ApiOrderController;
 import com.yunquanlai.api.comsumer.ApiProductController;
@@ -17,7 +14,6 @@ import com.yunquanlai.api.comsumer.vo.OrderCommentVO;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.api.comsumer.vo.ProductOrderVO;
 import com.yunquanlai.utils.R;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +50,13 @@ public class ApiProductTests {
     /**
      * 测试查询商品列表
      */
-   // @Test
+    //@Test
     public void testApiProductQuery() {
-        R r = apiProductController.queryProduct(null,null,null,null,10,0,5);
+        Long[] types = new Long[]{Long.valueOf(10), Long.valueOf(20)};
+        //Long[] types = new Long[]{};
+        R r = apiProductController.queryProduct(null,null,null,null,types,0,5, 10);
         List list = (List)r.get("productInfoList");
-        Assert.assertEquals(list.size(),5);
+        //Assert.assertEquals(list.size(),5);
     }
 
    // @Test
@@ -95,7 +93,7 @@ public class ApiProductTests {
      */
     @Test
     public void testDepositoryWithdraw(){
-        UserInfoEntity userInfoEntity = userInfoService.queryObject((long) 16);
+        UserInfoEntity userInfoEntity = userInfoService.queryObject((long) 4);
 
         R r = apiUserController.depositoryWithdraw(userInfoEntity);
     }
@@ -111,16 +109,4 @@ public class ApiProductTests {
         deliveryEndpointService.save(deliveryEndpointEntity);
     }
 
-    /**
-     * 测试处理提现申请
-     */
-    @Autowired
-    private UserWithdrawDepositController userWithdrawDepositController;
-    @Autowired
-    private UserWithdrawDepositService userWithdrawDepositService;
-    //@Test
-    public void testHandleDepositoryWithdraw(){
-        UserWithdrawDepositEntity userWithdrawDepositEntity = userWithdrawDepositService.queryObject((long) 7);
-        userWithdrawDepositController.handleDepositoryWithdraw(userWithdrawDepositEntity);
-    }
 }

@@ -19,7 +19,9 @@ public interface UserWithdrawDepositService {
 	UserWithdrawDepositEntity queryObject(Long id);
 	
 	List<UserWithdrawDepositEntity> queryList(Map<String, Object> map);
-	
+
+	List<UserWithdrawDepositEntity> queryListByIds(Long[] ids);
+
 	int queryTotal(Map<String, Object> map);
 	
 	void save(UserWithdrawDepositEntity userWithdrawDeposit);

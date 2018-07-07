@@ -4,6 +4,8 @@ package com.yunquanlai.admin.user.dao;
 import com.yunquanlai.admin.system.dao.BaseDao;
 import com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity;
 
+import java.util.List;
+
 /**
  * 客户押金提现申请表
  * 
@@ -14,4 +16,6 @@ import com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity;
 public interface UserWithdrawDepositDao extends BaseDao<UserWithdrawDepositEntity> {
 
     UserWithdrawDepositEntity queryObjectByUserId(Long id);
+
+    List<UserWithdrawDepositEntity> queryListByIds(Long[] ids);
 }

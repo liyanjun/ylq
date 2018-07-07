@@ -94,13 +94,17 @@ public class UserWithdrawDepositController extends AbstractController {
 	 */
 	@RequestMapping("/handle")
 	@RequiresPermissions("userwithdrawdeposit:handle")
-	public R handleDepositoryWithdraw(@RequestBody UserWithdrawDepositEntity userWithdrawDepositEntity){
-		userWithdrawDepositEntity.setIsHandle(20);
-		userWithdrawDepositEntity.setHandlerId(getUserId());
-		userWithdrawDepositEntity.setHandlerName(getUser().getUsername());
-		userWithdrawDepositEntity.setHandleTime(new Date());
-		//userWithdrawDepositService.save(userWithdrawDepositEntity);
-		userWithdrawDepositService.handleDepositoryWithdraw(userWithdrawDepositEntity);
+	public R handleDepositoryWithdraw(@RequestBody Long[] ids){
+	    List<UserWithdrawDepositEntity> userWithdrawDepositEntityList = userWithdrawDepositService.queryListByIds(ids);
+		if(userWithdrawDepositEntityList.size()>0){
+            for(UserWithdrawDepositEntity userWithdrawDepositEntity : userWithdrawDepositEntityList){
+                userWithdrawDepositEntity.setIsHandle(20);
+                userWithdrawDepositEntity.setHandlerId(getUserId());
+                userWithdrawDepositEntity.setHandlerName(getUser().getUsername());
+                userWithdrawDepositEntity.setHandleTime(new Date());
+                userWithdrawDepositService.handleDepositoryWithdraw(userWithdrawDepositEntity);
+            }
+        }
 		return R.ok();
 	}
 	

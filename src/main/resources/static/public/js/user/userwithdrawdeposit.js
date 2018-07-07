@@ -57,49 +57,16 @@ var vm = new Vue({
 		query: function () {
 			vm.reload();
 		},
-		add: function(){
-			vm.showList = false;
-			vm.title = "新增";
-			vm.userWithdrawDeposit = {};
-		},
-		update: function (event) {
-			var id = getSelectedRow();
-			if(id == null){
-				return ;
-			}
-			vm.showList = false;
-            vm.title = "修改";
-            
-            vm.getInfo(id)
-		},
-		saveOrUpdate: function (event) {
-			var url = vm.userWithdrawDeposit.id == null ? "../userwithdrawdeposit/save" : "../userwithdrawdeposit/update";
-			$.ajax({
-				type: "POST",
-			    url: url,
-			    contentType: "application/json",
-			    data: JSON.stringify(vm.userWithdrawDeposit),
-			    success: function(r){
-			    	if(r.code === 0){
-						alert('操作成功', function(index){
-							vm.reload();
-						});
-					}else{
-						alert(r.msg);
-					}
-				}
-			});
-		},
-		del: function (event) {
+		handle: function (event) {
 			var ids = getSelectedRows();
 			if(ids == null){
 				return ;
 			}
-			
-			confirm('确定要删除选中的记录？', function(){
+
+			confirm('确定要处理选中的记录？', function(){
 				$.ajax({
 					type: "POST",
-				    url: "../userwithdrawdeposit/delete",
+				    url: "../userwithdrawdeposit/handle",
 				    contentType: "application/json",
 				    data: JSON.stringify(ids),
 				    success: function(r){
@@ -113,11 +80,6 @@ var vm = new Vue({
 					}
 				});
 			});
-		},
-		getInfo: function(id){
-			$.get("../userwithdrawdeposit/info/"+id, function(r){
-                vm.userWithdrawDeposit = r.userWithdrawDeposit;
-            });
 		},
 		reload: function (event) {
 			vm.showList = true;

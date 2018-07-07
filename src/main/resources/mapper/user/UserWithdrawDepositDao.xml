@@ -66,6 +66,23 @@
         </if>
     </select>
 
+    <select id="queryListByIds" resultType="com.yunquanlai.admin.user.entity.UserWithdrawDepositEntity">
+        select
+        `id`,
+        `user_info_id`,
+        `withdraw_amount`,
+        `is_handle`,
+        `creation_time`,
+        `handle_time`,
+        `handler_id`,
+        `handler_name`
+        from user_withdraw_deposit
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
     <select id="queryTotal" resultType="int">
 		select count(*) from user_withdraw_deposit 
 	</select>
