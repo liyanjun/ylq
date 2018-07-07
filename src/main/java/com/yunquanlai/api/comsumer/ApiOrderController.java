@@ -146,7 +146,7 @@ public class ApiOrderController {
 
 
         if (!tokenUtils.isExitToken(orderVO.getOrderToken())) {
-            return R.error("订单确认已失效，请重新下单。");
+            return R.error("订单确认已失效，请重新下单。").put("code",506);
         }
 
         boolean isOpenTime = configUtils.isOpenTime();

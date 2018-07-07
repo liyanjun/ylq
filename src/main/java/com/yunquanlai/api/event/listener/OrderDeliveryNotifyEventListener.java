@@ -109,11 +109,14 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         // 设置APPID与APPKEY
         template.setAppId(appId);
         template.setAppkey(appKey);
+        // 透传消息设置，1为强制启动应用，客户端接收到消息后就会立即启动应用；2为等待应用启动
+        template.setTransmissionType(1);
+        template.setTransmissionContent("{\"orderDeliveryId\":\"" + orderDeliveryId + "\"}");
+
         Style0 style = new Style0();
         // 设置通知栏标题与内容
-        style.setTitle("您有新的配送任务");
-        style.setText("{\"orderDeliveryId\":\"" + orderDeliveryId + "\",\"content\":\"您有新的配送任务,请注意查看\"}");
-        // 配置通知栏图标
+        style.setTitle("运泉来");
+        style.setText("您有新的配送任务,请注意查看。");// 配置通知栏图标
         style.setLogo("icon.png");
         // 配置通知栏网络图标
         style.setLogoUrl("");
