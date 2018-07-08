@@ -12,5 +12,5 @@ import com.yunquanlai.admin.user.entity.UserEmptyBucketFlowEntity;
  * @date 2018-06-10 12:04:01
  */
 public interface UserEmptyBucketFlowDao extends BaseDao<UserEmptyBucketFlowEntity> {
-	
+
 }

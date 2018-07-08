@@ -99,6 +99,7 @@ INSERT INTO `sys_menu` VALUES ('84', '74', '订单手工处理流水记录', 'or
 INSERT INTO `sys_menu` VALUES ('85', '84', '查看', null, 'orderoperateflow:list,orderoperateflow:info', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('86', '84', '修改', null, 'orderoperateflow:update', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('87', '64', '处理提现申请', null, 'userwithdrawdeposit:handle', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('88', '61', '用户空桶流水', null, 'useremptybucketflow:list', '2', null, '6');
 
 -- ----------------------------
 -- Records of sys_role_menu

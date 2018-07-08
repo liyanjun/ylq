@@ -11,6 +11,7 @@
         <result property="afterEmptyBucket" column="after_empty_bucket"/>
         <result property="emptyBucketNumber" column="empty_bucket_number"/>
         <result property="userInfoId" column="user_info_id"/>
+        <result property="userName" column="username"/>
         <result property="operatorId" column="operator_id"/>
         <result property="creationTime" column="creation_time"/>
     </resultMap>
@@ -23,6 +24,7 @@
 					`after_empty_bucket`, 
 					`empty_bucket_number`, 
 					`user_info_id`, 
+					`username`,
 					`operator_id`,
 					`creation_time`
 				from user_empty_bucket_flow where id = #{id}
@@ -37,9 +39,15 @@
 		            `after_empty_bucket`, 
 		            `empty_bucket_number`, 
 		            `user_info_id`, 
+		            `username`,
 		            `operator_id`,
 		            `creation_time`
 				from user_empty_bucket_flow
+        <where>
+            <if test="userInfoId != null">
+                and `user_info_id`= #{userInfoId}
+            </if>
+        </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -54,7 +62,12 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from user_empty_bucket_flow 
+		select count(*) from user_empty_bucket_flow
+        <where>
+            <if test="userInfoId != null">
+                and `user_info_id`= #{userInfoId}
+            </if>
+        </where>
 	</select>
 	 
 	<insert id="save" parameterType="com.yunquanlai.admin.user.entity.UserEmptyBucketFlowEntity" useGeneratedKeys="true" keyProperty="id">
@@ -65,6 +78,7 @@
 			`after_empty_bucket`, 
 			`empty_bucket_number`, 
 			`user_info_id`, 
+			`username`,
 			`operator_id`,
 			`creation_time`
 		)
@@ -75,6 +89,7 @@
 			#{afterEmptyBucket}, 
 			#{emptyBucketNumber}, 
 			#{userInfoId}, 
+			#{userName},
 			#{operatorId},
 			#{creationTime}
 		)
@@ -88,6 +103,7 @@
 			<if test="afterEmptyBucket != null">`after_empty_bucket` = #{afterEmptyBucket}, </if>
 			<if test="emptyBucketNumber != null">`empty_bucket_number` = #{emptyBucketNumber}, </if>
 			<if test="userInfoId != null">`user_info_id` = #{userInfoId}, </if>
+			<if test="userName != null">`username` = #{userName}, </if>
 			<if test="operatorId != null">`operator_id` = #{operatorId}, </if>
 			<if test="creationTime != null">`creation_time` = #{creationTime}</if>
 		</set>

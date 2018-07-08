@@ -47,6 +47,10 @@ public class UserEmptyBucketFlowEntity implements Serializable {
      * 设置：流水时间
      */
 	private Date creationTime;
+    /**
+     * 设置：用户名
+     */
+	private String userName;
 
 	/**
 	 * 设置：
@@ -144,4 +148,12 @@ public class UserEmptyBucketFlowEntity implements Serializable {
 	public Date getCreationTime() {
 		return creationTime;
 	}
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }

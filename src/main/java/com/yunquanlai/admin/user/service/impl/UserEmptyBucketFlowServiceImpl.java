@@ -28,7 +28,7 @@ public class UserEmptyBucketFlowServiceImpl implements UserEmptyBucketFlowServic
 	public List<UserEmptyBucketFlowEntity> queryList(Map<String, Object> map){
 		return userEmptyBucketFlowDao.queryList(map);
 	}
-	
+
 	@Override
 	public int queryTotal(Map<String, Object> map){
 		return userEmptyBucketFlowDao.queryTotal(map);

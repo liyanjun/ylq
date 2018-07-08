@@ -69,6 +69,15 @@ var vm = new Vue({
             vm.title = "详情";
             vm.getInfo(id)
 		},
+        emptyBucketFlow: function () {
+            var userInfoId = getSelectedRow();
+            if (userInfoId == null) {
+                return;
+            }
+            var url = "../user/useremptybucketflow.html?userInfoId="+userInfoId;
+            // encodeURI 编码
+            window.location.assign(encodeURI(url));
+        },
 		getInfo: function(id){
 			$.get("../userinfo/info/"+id, function(r){
                 vm.userInfo = r.userInfo;

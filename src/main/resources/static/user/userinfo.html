@@ -29,10 +29,7 @@
 			<a class="btn btn-default" @click="query">查询</a>
 			<a class="btn btn-success" @click="reset"><i class="fa fa-rotate-left"></i> 重置</a>
 			<a v-if="hasPermission('userinfo:info')" class="btn btn-primary" @click="detail"><i class="fa fa-file-text-o"></i>&nbsp;详情</a>
-			<!--<a v-if="hasPermission('userinfo:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
-			<a v-if="hasPermission('userinfo:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-			<a v-if="hasPermission('userinfo:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
--->
+			<a v-if="hasPermission('userinfo:info')" class="btn btn-primary" @click="emptyBucketFlow"><i class="fa fa-stack-overflow"></i>&nbsp;查看空桶流水</a>
 		</div>
 	    <table id="jqGrid"></table>
 	    <div id="jqGridPager"></div>

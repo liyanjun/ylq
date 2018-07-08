@@ -525,6 +525,7 @@ CREATE TABLE `user_empty_bucket_flow` (
   `after_empty_bucket` varchar(512) NOT NULL COMMENT '流水后空桶数',
   `empty_bucket_number` varchar(512) NOT NULL COMMENT '操作空桶数',
   `user_info_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
+  `username` varchar(64) DEFAULT NULL COMMENT '用户名',
   `operator_id` bigint(20) NOT NULL COMMENT '操作关联 ID（如果为归还关联配送员用户 ID，如果是获取关联订单 ID）',
   `creation_time` datetime NOT NULL COMMENT '流水时间',
   PRIMARY KEY (`id`)
