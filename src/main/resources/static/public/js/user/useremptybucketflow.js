@@ -73,7 +73,7 @@ var vm = new Vue({
             }).trigger("reloadGrid");
 		},
         btnback: function () {
-            window.location.href="../user/userInfo.html";
+            window.location.href="../user/userinfo.html";
         }
 	}
 });

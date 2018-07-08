@@ -77,6 +77,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserEmptyBucketFlowEntity userEmptyBucketFlowEntity = new UserEmptyBucketFlowEntity();
         userEmptyBucketFlowEntity.setBeforeEmptyBucket(userInfoEntity.getEmptyBucketNumber());
         userInfoEntity.setEmptyBucketNumber(userInfoEntity.getEmptyBucketNumber() - number);
+        userEmptyBucketFlowEntity.setUserName(userInfoEntity.getUsername());
         userEmptyBucketFlowEntity.setUserInfoId(userInfoEntity.getId());
         userEmptyBucketFlowEntity.setEmptyBucketNumber(number);
         userEmptyBucketFlowEntity.setType(10);

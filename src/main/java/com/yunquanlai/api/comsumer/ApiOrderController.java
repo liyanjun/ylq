@@ -24,13 +24,13 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,14 +149,19 @@ public class ApiOrderController {
             return R.error("订单确认已失效，请重新下单。").put("code",506);
         }
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if(sdf.parse(orderVO.getDeliveryTime()).before(new Date())){
+            return R.error("期望配送时间早于当前时间，请重新选择").put("orderToken",tokenUtils.getToken()).put("code",507);
+        }
+
         boolean isOpenTime = configUtils.isOpenTime();
 
         if (!isOpenTime && StringUtils.isBlank(orderVO.getDeliveryTime())) {
-            return R.error("当前时间不是配送时间，请选择期望配送时间，重新下单。");
+            return R.error("当前时间不是营业时间，请选择期望配送时间").put("orderToken",tokenUtils.getToken()).put("code",507);
         }
 
         if (!availableDelivery(orderVO.getLocationX(), orderVO.getLocationY())) {
-            return R.error("订单不在派送范围内，请联系客服确认。");
+            return R.error("配送地址不在派送范围内，请联系客服确认。").put("orderToken",tokenUtils.getToken()).put("code",507);
         }
         return orderInfoService.newOrder(orderVO, user);
     }
