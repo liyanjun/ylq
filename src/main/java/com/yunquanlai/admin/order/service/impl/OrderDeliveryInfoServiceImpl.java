@@ -153,6 +153,7 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
         UserEmptyBucketFlowEntity userEmptyBucketFlowEntity = new UserEmptyBucketFlowEntity();
         userEmptyBucketFlowEntity.setBeforeEmptyBucket(userInfoEntity.getEmptyBucketNumber());
         userEmptyBucketFlowEntity.setUserInfoId(userInfoEntity.getId());
+        userEmptyBucketFlowEntity.setUserName(userInfoEntity.getUsername());
         userEmptyBucketFlowEntity.setEmptyBucketNumber(emptyBucketNumber);
         userEmptyBucketFlowEntity.setType(20);
         userEmptyBucketFlowEntity.setOperatorId(orderDeliveryInfoEntity.getOrderInfoId());
