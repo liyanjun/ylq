@@ -55,11 +55,11 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
         UserClientTokenEntity tokenEntity = userClientTokenService.queryByToken(token);
         if (tokenEntity == null) {
-            throw new RRException("token失效，请重新登录", 502);
+            throw new RRException("登录过期，请重新登录", 502);
         }
 
         if (tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()) {
-            throw new RRException("token过期，请重新登录", 503);
+            throw new RRException("登录过期，请重新登录", 503);
         }
 
         //设置userId到request里，后续根据userId，获取用户信息

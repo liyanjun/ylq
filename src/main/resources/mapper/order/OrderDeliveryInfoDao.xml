@@ -149,7 +149,13 @@
         `user_info_id`
         from order_delivery_info
         where status = #{status} AND delivery_distributor_id = #{deliveryDistributorId}
-        order by status  ,delivery_time ,creation_time
+        <if test="status == 40">
+            order by delivery_time ,creation_time
+        </if>
+        <if test="status == 50">
+            order by delivery_end_time desc,creation_time desc
+        </if>
+
         <if test="offset != null and limit != null">
             limit #{offset}, #{limit}
         </if>

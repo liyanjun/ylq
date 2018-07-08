@@ -71,18 +71,19 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderDeliveryInfoEntity.getUserInfoId(), true);
         Assert.isNull(userInfoEntity, "找不到配送单的用户信息。");
         if (userInfoEntity.getEmptyBucketNumber().intValue() < number.intValue()) {
-            throw new RRException("用户持有空桶数小于回送空桶数。");
+            throw new RRException("用户持有空桶数（包含本次订单空桶数："+userInfoEntity.getEmptyBucketNumber()+"）小于要回送空桶数。");
         }
-        userInfoEntity.setEmptyBucketNumber(userInfoEntity.getEmptyBucketNumber() - number);
-        userInfoDao.update(userInfoEntity);
+
         UserEmptyBucketFlowEntity userEmptyBucketFlowEntity = new UserEmptyBucketFlowEntity();
         userEmptyBucketFlowEntity.setBeforeEmptyBucket(userInfoEntity.getEmptyBucketNumber());
+        userInfoEntity.setEmptyBucketNumber(userInfoEntity.getEmptyBucketNumber() - number);
         userEmptyBucketFlowEntity.setUserInfoId(userInfoEntity.getId());
         userEmptyBucketFlowEntity.setEmptyBucketNumber(number);
         userEmptyBucketFlowEntity.setType(10);
         userEmptyBucketFlowEntity.setOperatorId(deliveryDistributorId);
         userEmptyBucketFlowEntity.setAfterEmptyBucket(userInfoEntity.getEmptyBucketNumber());
         userEmptyBucketFlowEntity.setCreationTime(new Date());
+        userInfoDao.update(userInfoEntity);
         userEmptyBucketFlowDao.save(userEmptyBucketFlowEntity);
         return R.ok().put("name", userInfoEntity.getUsername()).put("emptyBarrels", userInfoEntity.getEmptyBucketNumber());
     }
