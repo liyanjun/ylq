@@ -161,8 +161,11 @@
             <if test="isQuick != null">
                 and is_quick = #{isQuick}
             </if>
-            <if test="bucketType != null">
-                and bucket_type = #{bucketType}
+            <if test="bucketType != null and bucketType.length>0">
+                and bucket_type in
+                <foreach item="bucketType" collection="bucketType" open="(" separator="," close=")">
+                    #{bucketType}
+                </foreach>
             </if>
             <if test="waterType != null and waterType.length>0">
                 and water_type in

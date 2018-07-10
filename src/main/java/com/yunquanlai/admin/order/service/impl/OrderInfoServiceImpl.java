@@ -151,7 +151,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public R newOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException, JsonProcessingException {
-        // TODO 押金校验 可用押金+本次提交押金>本次下单需要的押金阈值
         //检查该用户之前是否有未支付订单
         List<OrderInfoEntity> orderInfoEntities = orderInfoDao.queryUnpaidByUserId(user.getId());
         for (OrderInfoEntity orderInfoEntity : orderInfoEntities) {
@@ -165,13 +164,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = new OrderDeliveryInfoEntity();
         OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
         List<OrderProductDetailEntity> orderProductDetailEntities = new ArrayList<>(16);
+        BigDecimal bEmptyValue = configUtils.getEmptyValue();
         BigDecimal amount = BigDecimal.ZERO;
         BigDecimal amountTotal = BigDecimal.ZERO;
         BigDecimal amountDeliveryFee = BigDecimal.ZERO;
+        BigDecimal deposit = BigDecimal.ZERO;
 
         for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
-            // 计算订单总额
-            ProductInfoEntity productInfoEntity = productInfoDao.queryObject(productOrderVO.getProductInfoId(), true);
+            // 计算订单总额,押金总额
+            ProductInfoEntity productInfoEntity = productInfoDao.queryObject(productOrderVO.getProductInfoId(), false);
             if (productInfoEntity == null || productInfoEntity.getStatus() != 20) {
                 return R.error("找不到购买的商品，可能商品已下架，请重新购买。");
             }
@@ -180,7 +181,18 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 amountTotal = amountTotal.add(productInfoEntity.getAmountShow().multiply(new BigDecimal(productOrderVO.getCount())));
             }
 
+            if (productInfoEntity.getBucketType() == ProductInfoEntity.BUCKET_TYPE_RECYCLE) {
+                deposit = deposit.add(bEmptyValue.multiply(new BigDecimal(productOrderVO.getCount())));
+            }
+
             amountDeliveryFee = amountDeliveryFee.add(productInfoEntity.getDeliveryFee());
+        }
+        //押金校验 用户可用押金+本次提交押金>本次下单需要的押金阈值
+        if(deposit.compareTo(user.getEnableDepositAmount().add(orderVO.getDeposit())) == 1){
+            return R.error("缴纳押金不足，请重新选择押金金额。").put("orderToken",tokenUtils.getToken()).put("code",507);
+        }
+        for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
+            ProductInfoEntity productInfoEntity = productInfoDao.queryObject(productOrderVO.getProductInfoId(), true);
             OrderProductDetailEntity orderProductDetailEntity = new OrderProductDetailEntity();
             orderProductDetailEntity.setCount(productOrderVO.getCount());
             orderProductDetailEntity.setProductInfoId(productInfoEntity.getId());

@@ -87,13 +87,13 @@ public class ApiProductController {
             @ApiImplicitParam(paramType = "query", dataType = "string", name = "name", value = "商品名称"),
             @ApiImplicitParam(paramType = "query", dataType = "long", name = "brandId", value = "商品品牌(传ID)"),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "orderType", value = "排序类型，10：按价格升序，20：按价格降序"),
-            @ApiImplicitParam(paramType = "query", dataType = "int", name = "bucketType", value = "规格，10：一次性桶装水，20：循环桶装水，30：瓶装谁，10,20,30：全部(多选时用逗号隔开)"),
+            @ApiImplicitParam(paramType = "query", dataType = "long[]", name = "bucketType", value = "规格，10：一次性桶装水，20：循环桶装水，30：瓶装谁，10,20,30：全部(多选时用逗号隔开)"),
             @ApiImplicitParam(paramType = "query", dataType = "long[]", name = "waterType", value = "饮用水种类，10：矿泉水，20：山泉水，30：纯净水，10,20,30：全部(多选时用逗号隔开)"),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "isQuick", value = "是否一键送水,是：10，否：20", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "offset", value = "位移数", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "int", name = "limit", value = "查询条数", required = true)
     })
-    public R queryProduct(String name, Integer brandId, Integer orderType, Integer bucketType,Long[] waterType,@RequestParam Integer isQuick, @RequestParam Integer offset, @RequestParam Integer limit) {
+    public R queryProduct(String name, Integer brandId, Integer orderType, Long[] bucketType,Long[] waterType,@RequestParam Integer isQuick, @RequestParam Integer offset, @RequestParam Integer limit) {
         Map map = new HashMap(16);
         map.put("name", name);
         map.put("brandId", brandId);

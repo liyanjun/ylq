@@ -144,13 +144,12 @@ public class ApiOrderController {
     })
     public R order(@RequestBody OrderVO orderVO, @LoginUser @ApiIgnore UserInfoEntity user) throws ParseException, JsonProcessingException {
 
-
         if (!tokenUtils.isExitToken(orderVO.getOrderToken())) {
             return R.error("订单确认已失效，请重新下单。").put("code",506);
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        if(sdf.parse(orderVO.getDeliveryTime()).before(new Date())){
+        if(StringUtils.isNotBlank(orderVO.getDeliveryTime()) && sdf.parse(orderVO.getDeliveryTime()).before(new Date())){
             return R.error("期望配送时间早于当前时间，请重新选择").put("orderToken",tokenUtils.getToken()).put("code",507);
         }
 
