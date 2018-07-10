@@ -41,6 +41,7 @@ public class OrderDistributeEventListener implements ApplicationListener<OrderDi
     public void onApplicationEvent(OrderDistributeEvent applicationEvent) {
         Long orderId = Long.parseLong(applicationEvent.getSource().toString());
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = null;
+        logger.debug("开始处理订单配送，订单编号【" + orderId + "】");
         try {
             orderDeliveryInfoEntity = orderDeliveryInfoService.queryObjectByOrderId(orderId);
             if (orderDeliveryInfoEntity == null) {

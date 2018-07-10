@@ -33,6 +33,7 @@ public class OrderDeliveryWatchJob {
 
     public void distributeOrder() {
         Map<String, Object> filter = new HashMap<>(16);
+        filter.put("status", OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
         filter.put("deliveryTime", DateUtils.localDateTimeToDate(LocalDateTime.now()));
         List<OrderDeliveryInfoEntity> orderDeliveryInfoEntities = orderDeliveryInfoService.queryList(filter);
         for (OrderDeliveryInfoEntity orderDeliveryInfoEntity : orderDeliveryInfoEntities) {
