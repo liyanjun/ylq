@@ -205,7 +205,7 @@ CREATE TABLE `order_info` (
   `deposit` decimal(10,0) COMMENT '订单押金',
   `bucket_num` int(11) NOT NULL COMMENT '订单桶数',
   `detail` text NOT NULL COMMENT '订单购买商品详情',
-  `status` tinyint(4) NOT NULL COMMENT '订单状态，10：新创建，20：已支付，待配送，30：配送中，40：已送达，50：已关闭，60：已评论',
+  `status` tinyint(4) NOT NULL COMMENT '订单状态，10：待支付，20：待配送，30：配送中，40：已送达，50：已关闭，60：已评论',
   `type` tinyint(4) NOT NULL COMMENT '订单状态类型，10：正常，20：异常',
   `pay_type` tinyint(4) NOT NULL COMMENT '订单支付类型，10：现金，20：水票',
   `delivery_distributor_id` bigint(20) DEFAULT NULL COMMENT '关联配送员 ID',

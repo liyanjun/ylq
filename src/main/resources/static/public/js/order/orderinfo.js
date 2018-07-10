@@ -27,9 +27,9 @@ $(function () {
                 label: '订单状态', name: 'status', index: 'status', width: 80,
                 formatter: function (value, options, row) {
                     if (value === 10) {
-                        return '新创建';
+                        return '待支付';
                     } else if (value === 20) {
-                        return '已支付，待配送'
+                        return '待配送'
                     } else if (value == 30) {
                         return '配送中';
                     } else if (value == 40) {
