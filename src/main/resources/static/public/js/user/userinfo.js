@@ -11,8 +11,8 @@ $(function () {
 			{ label: '总押金金额', name: 'depositAmount', index: 'deposit_amount', width: 80 }, 			
 			/*{ label: '可用押金金额', name: 'enableDepositAmount', index: 'enable_deposit_amount', width: 80 },
 			{ label: '不可用押金金额', name: 'disableDepositAmout', index: 'disable_deposit_amout', width: 80 }, 			
-			{ label: '持有空桶数', name: 'emptyBucketNumber', index: 'empty_bucket_number', width: 80 }, 			
-			*/{ label: '注册时间', name: 'creationTime', index: 'creation_time', width: 80 }
+			*/{ label: '持有空桶数', name: 'emptyBucketNumber', index: 'empty_bucket_number', width: 80 },
+			{ label: '注册时间', name: 'creationTime', index: 'creation_time', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
