@@ -8,6 +8,7 @@ import com.yunquanlai.admin.user.service.UserInfoService;
 import com.yunquanlai.admin.user.service.UserWithdrawDepositService;
 import com.yunquanlai.api.comsumer.vo.TokenRequestVO;
 import com.yunquanlai.utils.ConfigUtils;
+import com.yunquanlai.utils.EmojiFilter;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
 import com.yunquanlai.utils.annotation.LoginUser;
@@ -64,7 +65,6 @@ public class ApiUserController {
     })
     public R wechatLogin(@RequestBody TokenRequestVO tokenRequestVO) {
         Assert.isBlank(tokenRequestVO.getOpenId(), "openId不能为空");
-//        Assert.isBlank(username, "用户名不能为空");
         UserInfoEntity userInfoEntity = userInfoService.queryObjectByOpenId(tokenRequestVO.getOpenId());
         if (userInfoEntity == null) {
             //不存在用户就创建用户
@@ -73,7 +73,7 @@ public class ApiUserController {
             userInfoEntity.setCreationTime(new Date());
             userInfoEntity.setOpenId(tokenRequestVO.getOpenId());
             userInfoEntity.setUid(tokenRequestVO.getUnionId());
-            userInfoEntity.setUsername(tokenRequestVO.getUsername());
+            userInfoEntity.setUsername(EmojiFilter.filterEmoji(tokenRequestVO.getUsername()));
             userInfoEntity.setEmptyBucketNumber(0);
             userInfoEntity.setEnableDepositAmount(BigDecimal.ZERO);
             userInfoEntity.setDisableDepositAmount(BigDecimal.ZERO);
