@@ -8,7 +8,7 @@ $(function () {
         url: '../orderinfo/list',
         datatype: "json",
         colModel: [
-            {label: 'id', name: 'id', index: 'id', width: 50, key: true},
+            {label: 'id', name: 'id', index: 'id', width: 50, key: true, hidden:true},
             {label: '用户名', name: 'username', index: 'username', width: 80,
                 formatter: function(value){
                     if(value != null){
@@ -35,7 +35,7 @@ $(function () {
                     } else if (value == 40) {
                         return '已到达';
                     } else if (value == 50) {
-                        return '关闭';
+                        return '已关闭';
                     } else if(value == 60){
                         return "已评论";
                     }
@@ -107,11 +107,12 @@ var vm = new Vue({
         orderDeliveryInfo: {},
         orderProductList: [],
         statusSelect:[
-            {id:"10",name:"新创建"},
-            {id:"20",name:"已支付，待配送"},
+            {id:"10",name:"待支付"},
+            {id:"20",name:"待配送"},
             {id:"30",name:"配送中"},
             {id:"40",name:"已到达"},
-            {id:"50",name:"关闭"}
+            {id:"50",name:"已关闭"},
+            {id:"60",name:"已评论"}
         ],
         orderId: null
     },
@@ -227,8 +228,7 @@ var vm = new Vue({
         },
         reload: function (event) {
             vm.showList = true;
-            // var page = $("#jqGrid").jqGrid('getGridParam', 'page');
-            var page = 1;
+            var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
                 postData:{
                     userName: vm.q.userName,

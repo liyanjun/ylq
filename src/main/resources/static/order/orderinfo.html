@@ -57,11 +57,17 @@
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
             <div class="form-group">
-                <div class="col-sm-2 control-label">订单原价总额</div>
+                <div class="col-sm-2 control-label">用户名</div>
+                <div class="col-sm-10">
+                    <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.username" />
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <div class="col-sm-2 control-label">订单总额</div>
                 <div class="col-sm-10">
                     <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.amountTotal" />
                 </div>
-            </div>
+            </div>-->
             <div class="form-group">
                 <div class="col-sm-2 control-label">订单金额</div>
                 <div class="col-sm-10">
@@ -69,13 +75,13 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">订单押金</div>
+                <div class="col-sm-2 control-label">押金</div>
                 <div class="col-sm-10">
                     <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.deposit" />
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">订单桶数</div>
+                <div class="col-sm-2 control-label">桶数</div>
                 <div class="col-sm-10">
                     <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.bucketNum" />
                 </div>
@@ -94,7 +100,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">订单配送费</div>
+                <div class="col-sm-2 control-label">配送费</div>
                 <div class="col-sm-10">
                     <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.amountDeliveryFee"/>
                 </div>
@@ -102,17 +108,12 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">订单状态</div>
                 <div class="col-sm-10">
-                    <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==10" value="新创建"/>
-                    <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==20" value="已支付，待配送"/>
+                    <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==10" value="待支付"/>
+                    <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==20" value="待配送"/>
                     <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==30" value="配送中"/>
                     <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==40" value="已送达"/>
-                    <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==50" value="关闭"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-2 control-label">用户</div>
-                <div class="col-sm-10">
-                    <input type="text" disabled="disabled" class="form-control" v-model="orderInfo.username" />
+                    <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==50" value="已关闭"/>
+                    <input type="text" disabled="disabled" class="form-control" v-if="orderInfo.status==60" value="已评论"/>
                 </div>
             </div>
             <div class="form-group">
@@ -121,21 +122,21 @@
                     <input type="text" disabled="disabled"  class="form-control" v-model="orderInfo.remark" />
                 </div>
             </div>
-            <div class="form-group">
+            <!--<div class="form-group">
                 <div class="col-sm-2 control-label">订单创建时间</div>
                 <div class="col-sm-10">
                     <input type="text" disabled="disabled"  class="form-control" v-model="orderInfo.creationTime" />
                 </div>
-            </div>
+            </div>-->
             <div class="form-group">
-                <div class="col-sm-2 control-label">订单配送状态</div>
+                <div class="col-sm-2 control-label">配送状态</div>
                 <div class="col-sm-10">
                     <font color="green" v-if="orderInfo.type == 10">正常</font>
                     <font color="red" v-if="orderInfo.type == 20">异常</font>
                 </div>
             </div>
             <div class="form-group" v-if="orderInfo.type == 20">
-                <div class="col-sm-2 control-label">订单异常信息</div>
+                <div class="col-sm-2 control-label">异常信息</div>
                 <div class="col-sm-10">
                     <font color="red" >{{orderInfo.exception}}</font>
                 </div>
@@ -171,6 +172,7 @@
                         <input type="text" disabled="disabled" class="form-control" v-if="orderDeliveryInfo.status==40" value="配送中"/>
                         <input type="text" disabled="disabled" class="form-control" v-if="orderDeliveryInfo.status==50" value="配送结束"/>
                         <input type="text" disabled="disabled" class="form-control" v-if="orderDeliveryInfo.status==60" value="异常"/>
+                        <input type="text" disabled="disabled" class="form-control" v-if="orderDeliveryInfo.status==70" value="已支付"/>
                     </div>
                 </label>
                 </div>

@@ -173,7 +173,7 @@ CREATE TABLE `order_delivery_info` (
   `location_x` decimal(20,16) NOT NULL COMMENT '订单配送坐标x',
   `location_y` decimal(20,16) NOT NULL COMMENT '订单配送坐标y',
   `amount_delivery_fee` decimal(20,2) NOT NULL COMMENT '该派送单派送费',
-  `status` tinyint(4) NOT NULL COMMENT '配送单状态，10：未支付，20：未分配，30：分配中，40：配送中，50：配送结束',
+  `status` tinyint(4) NOT NULL COMMENT '配送单状态，10：未支付，20：未分配，30：分配中，40：配送中，50：配送结束，60：异常，70：已支付',
   `remark` varchar(1024) DEFAULT NULL COMMENT '配送单备注',
   `detail` text DEFAULT NULL COMMENT '配送单需要配送的商品，json格式',
   `creation_time` datetime NOT NULL COMMENT '配送单创建时间',

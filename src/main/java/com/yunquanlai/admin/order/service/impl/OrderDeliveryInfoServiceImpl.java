@@ -196,8 +196,8 @@ public class OrderDeliveryInfoServiceImpl implements OrderDeliveryInfoService {
     @Override
     public void distributeOrder(Long orderDeliveryId) {
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObject(orderDeliveryId, true);
-        if (OrderDeliveryInfoEntity.STATUS_NEW != orderDeliveryInfoEntity.getStatus()) {
-            logger.error("配送单" + orderDeliveryInfoEntity.getId() + "已处理，状态【" + orderDeliveryInfoEntity.getStatus() + "】");
+        if (OrderDeliveryInfoEntity.STATUS_PAID != orderDeliveryInfoEntity.getStatus()) {
+            logger.error("配送单" + orderDeliveryInfoEntity.getId() + "已开始分配，状态【" + orderDeliveryInfoEntity.getStatus() + "】");
             return;
         }
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
