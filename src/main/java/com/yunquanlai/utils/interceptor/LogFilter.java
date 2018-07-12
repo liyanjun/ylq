@@ -5,6 +5,7 @@ import groovy.lang.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -18,12 +19,11 @@ import java.io.IOException;
  * @author liyanjun
  */
 @Singleton
+@Configuration
 @WebFilter(urlPatterns = "/**", filterName = "logFilter")
 public class LogFilter implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogFilter.class);
-
-    public static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -35,7 +35,7 @@ public class LogFilter implements Filter {
         if (LOGGER.isDebugEnabled()) {
             LogBodyRequest logBodyRequest = new LogBodyRequest((HttpServletRequest) servletRequest);
             LOGGER.debug(logBodyRequest.getBody());
-            filterChain.doFilter(servletRequest, servletResponse);
+            filterChain.doFilter(logBodyRequest, servletResponse);
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);
