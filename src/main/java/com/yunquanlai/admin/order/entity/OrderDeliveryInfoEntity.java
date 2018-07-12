@@ -21,6 +21,7 @@ public class OrderDeliveryInfoEntity implements Serializable {
     public static final int STATUS_ON_DELIVERY = 40;
     public static final int STATUS_DELIVERY_END = 50;
     public static final int STATUS_EXCEPTION = 60;
+    public static final int STATUS_PAID = 70;
 
     /**
      * 设置：主键 ID
@@ -55,7 +56,7 @@ public class OrderDeliveryInfoEntity implements Serializable {
      */
     private BigDecimal amountDeliveryFee;
     /**
-     * 设置：配送单状态，10：新创建，20：未分配，30：已关闭，40：配送中，50：配送结束,60:异常
+     * 设置：配送单状态，10：新创建，20：未分配，30：已关闭，40：配送中，50：配送结束,60:异常，70：已支付
      */
     private Integer status;
     /**

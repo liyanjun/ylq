@@ -284,18 +284,20 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoDao.update(orderInfoEntity);
 
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = orderDeliveryInfoDao.queryObjectByOrderId(orderInfoEntity.getId(), true);
-        if (orderDeliveryInfoEntity.getDeliveryTime() != null && orderDeliveryInfoEntity.getDeliveryTime().after(new Date())) {
-            // 还未到期望配送时间，先不处理配送单，等定时任务处理分配
-            return;
-        }
         if (OrderDeliveryInfoEntity.STATUS_NEW != orderDeliveryInfoEntity.getStatus()) {
             logger.error("配送单" + orderDeliveryInfoEntity.getId() + "已支付并处理派送【" + orderDeliveryInfoEntity.getStatus() + "】");
             return;
         }
-        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
-        orderDeliveryInfoEntity.setDistributeTime(new Date());
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_PAID);
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
 
+        if (orderDeliveryInfoEntity.getDeliveryTime() != null && orderDeliveryInfoEntity.getDeliveryTime().after(new Date())) {
+            // 还未到期望配送时间，先不处理配送单，等定时任务处理分配
+            return;
+        }
+
+        orderDeliveryInfoEntity.setDistributeTime(new Date());
+        orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         applicationContext.publishEvent(new OrderDistributeEvent(orderInfoEntity.getId()));
     }
 
