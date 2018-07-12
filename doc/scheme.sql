@@ -337,11 +337,20 @@ ADD UNIQUE INDEX `product_num_unique` (`product_num`) USING BTREE ;
 DROP TABLE IF EXISTS `product_ticket`;
 CREATE TABLE `product_ticket` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `product_ticket_num` varchar(32) NOT NULL COMMENT '水票编号',
   `title` varchar(128) NOT NULL COMMENT '水票标题',
+  `subtitle` varchar(128) NOT NULL COMMENT '水票副标题',
+  `product_info_id` bigint(20) NOT NULL COMMENT '关联产品 ID',
+  `product_info_name` varchar(64) NOT NULL COMMENT '关联商品名称',
+  `purchase_count` int(11) NOT NULL COMMENT '购买桶数',
+  `gift_count` int(11) DEFAULT NULL COMMENT '赠送的桶数',
   `cout` int(11) NOT NULL COMMENT '包含产品数量（如买5送二）这里就应该是7',
   `amout` decimal(20,2) NOT NULL COMMENT '水票价格',
-  `product_info_id` bigint(20) NOT NULL COMMENT '关联产品 ID',
+  `notes` varchar(255) DEFAULT NULL COMMENT '使用须知',
+  `instructions` varchar(255) DEFAULT NULL COMMENT '使用说明',
   `creation_time` datetime NOT NULL COMMENT '创建时间',
+  `end_time` datetime NOT NULL COMMENT '使用截止时间',
+  `remarks` text COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品水票信息表';
 
@@ -587,7 +596,7 @@ CREATE TABLE `user_product_ticket_flow` (
 DROP TABLE IF EXISTS `user_product_ticket`;
 CREATE TABLE `user_product_ticket` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `product_ticket_name` varchar(128) NOT NULL COMMENT '水票名称',
+  `product_ticket_title` varchar(128) NOT NULL COMMENT '水票标题',
   `cout` int(11) NOT NULL COMMENT '剩余数量',
   `amount` decimal(20,2) NOT NULL COMMENT '购买价格',
   `status` tinyint(4) NOT NULL COMMENT '用户水票状态，10：新下单，20：已支付，30：已关闭',
