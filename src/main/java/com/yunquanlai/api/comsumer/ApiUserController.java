@@ -81,7 +81,7 @@ public class ApiUserController {
             userInfoService.save(userInfoEntity);
         }
         if (tokenRequestVO.getUsername() != null && !tokenRequestVO.getUsername().equals(userInfoEntity.getUsername())) {
-            userInfoEntity.setUsername(tokenRequestVO.getUsername());
+            userInfoEntity.setUsername(EmojiFilter.filterEmoji(tokenRequestVO.getUsername()));
             userInfoService.update(userInfoEntity);
         }
         userInfoEntity.setOpenId(null);

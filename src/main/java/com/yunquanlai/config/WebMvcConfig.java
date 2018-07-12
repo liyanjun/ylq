@@ -33,6 +33,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private LoginDeliveryHandlerMethodArgumentResolver loginDeliveryHandlerMethodArgumentResolver;
 
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authorizationInterceptor).addPathPatterns("/client/api/**");
