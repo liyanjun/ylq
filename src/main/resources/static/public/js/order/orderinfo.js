@@ -8,7 +8,7 @@ $(function () {
         url: '../orderinfo/list',
         datatype: "json",
         colModel: [
-            {label: 'id', name: 'id', index: 'id', width: 50, key: true, hidden:true},
+            {label: 'id', name: 'id', index: 'id', width: 50, key: true},
             {label: '用户名', name: 'username', index: 'username', width: 80,
                 formatter: function(value){
                     if(value != null){
