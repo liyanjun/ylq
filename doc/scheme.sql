@@ -215,6 +215,7 @@ CREATE TABLE `order_info` (
   `user_phone` varchar(32) NOT NULL COMMENT '用户手机号',
   `remark` varchar(1024) DEFAULT NULL COMMENT '订单备注',
   `exception` text DEFAULT NULL COMMENT '订单异常信息',
+  `user_product_ticket_id` bigint(20) COMMENT '使用水票支付时，关联水票 ID',
   `creation_time` datetime NOT NULL COMMENT '订单创建时间',
   `paid_time` datetime COMMENT '订单支付时间',
   `distribute_time` datetime COMMENT '订单分配时间',
@@ -344,6 +345,9 @@ CREATE TABLE `product_ticket` (
   `product_info_name` varchar(64) NOT NULL COMMENT '关联商品名称',
   `purchase_count` int(11) NOT NULL COMMENT '购买桶数',
   `gift_count` int(11) DEFAULT NULL COMMENT '赠送的桶数',
+  `min_dilivery` int(11) DEFAULT NULL COMMENT '单次最小配送桶数',
+  `water_coin` int(11) DEFAULT NULL COMMENT '每配送一桶，推广人获得的水币',
+  `status` tinyint(4) DEFAULT NULL COMMENT '售卖上下架状态，10：新创建，20：商品上架，30：商品下架',
   `cout` int(11) NOT NULL COMMENT '包含产品数量（如买5送二）这里就应该是7',
   `amout` decimal(20,2) NOT NULL COMMENT '水票价格',
   `notes` varchar(255) DEFAULT NULL COMMENT '使用须知',
@@ -577,18 +581,6 @@ CREATE TABLE `user_withdraw_deposit` (
   `handler_name` varchar(32) DEFAULT NULL COMMENT '处理人姓名',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户押金提现申请表';
-
--- ----------------------------
--- Table structure for user_product_ticket_flow
--- ----------------------------
-DROP TABLE IF EXISTS `user_product_ticket_flow`;
-CREATE TABLE `user_product_ticket_flow` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
-  `cout` int(11) NOT NULL COMMENT '使用数量',
-  `order_info_id` bigint(20) NOT NULL COMMENT '关联产品 ID',
-  `creation_time` datetime NOT NULL COMMENT '购买时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户水票消费流水';
 
 -- ----------------------------
 -- Table structure for user_product_ticket
