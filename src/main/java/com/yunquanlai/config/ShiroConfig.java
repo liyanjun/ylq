@@ -63,6 +63,7 @@ public class ShiroConfig {
         filterMap.put("/swagger-resources/configuration/ui", "anon");
 
         filterMap.put("/login.html", "anon");
+        filterMap.put("/support.html", "anon");
         filterMap.put("/sys/login", "anon");
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/**", "authc");

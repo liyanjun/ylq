@@ -49,7 +49,7 @@ public class OrderDistributeEventListener implements ApplicationListener<OrderDi
                 return;
             }
 
-            if (OrderDeliveryInfoEntity.STATUS_PAID != orderDeliveryInfoEntity.getStatus()) {
+            if (OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE != orderDeliveryInfoEntity.getStatus()) {
                 logger.error("配送单" + orderDeliveryInfoEntity.getId() + "，不是可以分配派送的状态【" + orderDeliveryInfoEntity.getStatus() + "】");
                 return;
             }
