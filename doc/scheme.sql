@@ -325,6 +325,7 @@ CREATE TABLE `product_info` (
   `product_num` varchar(32) NOT NULL COMMENT '商品编号',
   `product_specifications` varchar(64) NOT NULL COMMENT '商品规格',
   `water_type` tinyint(4) NOT NULL COMMENT '饮用水种类，10：矿泉水，20：山泉水，30：纯净水',
+  `water_coin` int(11) DEFAULT NULL COMMENT '每推广一桶，推广人获得的水币',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='商品信息表表';
 ALTER TABLE `product_info`
@@ -338,7 +339,8 @@ ADD UNIQUE INDEX `product_num_unique` (`product_num`) USING BTREE ;
 DROP TABLE IF EXISTS `product_ticket`;
 CREATE TABLE `product_ticket` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `product_ticket_num` varchar(32) NOT NULL COMMENT '水票编号',
+  `product_ticket_num` varchar(64) NOT NULL COMMENT '水票编号',
+  `img` varchar(512) DEFAULT NULL COMMENT '水票图片(备用)',
   `title` varchar(128) NOT NULL COMMENT '水票标题',
   `subtitle` varchar(128) NOT NULL COMMENT '水票副标题',
   `product_info_id` bigint(20) NOT NULL COMMENT '关联产品 ID',
@@ -353,7 +355,7 @@ CREATE TABLE `product_ticket` (
   `notes` varchar(255) DEFAULT NULL COMMENT '使用须知',
   `instructions` varchar(255) DEFAULT NULL COMMENT '使用说明',
   `creation_time` datetime NOT NULL COMMENT '创建时间',
-  `end_time` datetime NOT NULL COMMENT '使用截止时间',
+  `deadline` date NOT NULL COMMENT '使用截止日期',
   `remarks` text COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品水票信息表';

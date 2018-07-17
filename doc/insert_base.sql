@@ -100,6 +100,12 @@ INSERT INTO `sys_menu` VALUES ('85', '84', '查看', null, 'orderoperateflow:lis
 INSERT INTO `sys_menu` VALUES ('86', '84', '修改', null, 'orderoperateflow:update', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('87', '64', '处理提现申请', null, 'userwithdrawdeposit:handle', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('88', '61', '用户空桶流水', null, 'useremptybucketflow:list', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('89','59', '水票信息表', 'product/productticket.html', 'productticket:list', '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('90', '89', '查看', null, 'productticket:list,productticket:info', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('91', '89', '新增', null, 'productticket:save', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('92', '89', '修改', null, 'productticket:update', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('93', '89', '删除', null, 'productticket:delete', '2', null, '6');
+
 
 -- ----------------------------
 -- Records of sys_role_menu
