@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>商品水票信息表</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../public/css/bootstrap.min.css">
+<link rel="stylesheet" href="../public/css/font-awesome.min.css">
+<link rel="stylesheet" href="../public/plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../public/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../public/css/main.css">
+<script src="../public/libs/jquery.min.js"></script>
+<script src="../public/plugins/layer/layer.js"></script>
+<script src="../public/libs/bootstrap.min.js"></script>
+<script src="../public/libs/vue.min.js"></script>
+<script src="../public/plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../public/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../public/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../public/js/common.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<a v-if="hasPermission('productticket:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a v-if="hasPermission('productticket:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<a v-if="hasPermission('productticket:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+											<div class="form-group">
+			   	<div class="col-sm-2 control-label">水票编号</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.productTicketNum" placeholder="水票编号"/>
+			    </div>
+			</div>
+									<!--<div class="form-group">
+			   	<div class="col-sm-2 control-label">水票图片(备用)</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.img" placeholder="水票图片(备用)"/>
+			    </div>
+			</div>-->
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">标题</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.title" placeholder="标题"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">副标题</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.subtitle" placeholder="副标题"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">关联产品 ID</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.productInfoId" placeholder="关联产品 ID"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">关联商品名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.productInfoName" placeholder="关联商品名称"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">购买桶数</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.purchaseCount" placeholder="购买桶数"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">赠送桶数</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.giftCount" placeholder="赠送桶数"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">起送桶数</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.minDilivery" placeholder="起送桶数"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">每配送一桶，推广人获得的水币</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.waterCoin" placeholder="每配送一桶，推广人获得的水币"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">售卖上下架状态</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.status" placeholder="售卖上下架状态，10：新创建，20：商品上架，30：商品下架"/>
+			    </div>
+			</div>
+									<!--<div class="form-group">
+			   	<div class="col-sm-2 control-label">包含产品数量（如买5送二）这里就应该是7</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.cout" placeholder="包含产品数量（如买5送二）这里就应该是7"/>
+			    </div>
+			</div>-->
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">水票价格</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.amout" placeholder="水票价格"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">使用须知</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.notes" placeholder="使用须知"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">使用说明</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.instructions" placeholder="使用说明"/>
+			    </div>
+			</div>
+									<!--<div class="form-group">-->
+			   	<!--<div class="col-sm-2 control-label">创建时间</div>-->
+			   	<!--<div class="col-sm-10">-->
+			      <!--<input type="text" class="form-control" v-model="productTicket.creationTime" placeholder="创建时间"/>-->
+			    <!--</div>-->
+			<!--</div>-->
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">使用截止日期</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.deadline" placeholder="使用截止日期"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">备注</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="productTicket.remarks" placeholder="备注"/>
+			    </div>
+			</div>
+							<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="../public/js/product/productticket.js"></script>
+</body>
+</html>

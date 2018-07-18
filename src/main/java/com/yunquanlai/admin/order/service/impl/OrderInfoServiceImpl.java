@@ -261,23 +261,23 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_NEW && orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_CLOSE) {
             return;
         }
-        // TODO 上线打开，校验金额，微信返回的金额单位是分，我们先除以100
-//        BigDecimal wechatBackFee = new BigDecimal(totalFee.toString()).divide(BigDecimal.TEN).divide(BigDecimal.TEN);
+//         TODO 上线打开，校验金额，微信返回的金额单位是分，我们先除以100
+        BigDecimal wechatBackFee = new BigDecimal(totalFee.toString()).divide(BigDecimal.TEN).divide(BigDecimal.TEN);
         if (orderInfoEntity.getDeposit() != null && !orderInfoEntity.getDeposit().equals(BigDecimal.ZERO)) {
 //            // 订单包含押金
-//            if (!(orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit())).equals(wechatBackFee)) {
-//                throw new RuntimeException("支付金额不等于订单金额");
-//            }
+            if (!(orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit())).equals(wechatBackFee)) {
+                throw new RuntimeException("支付金额不等于订单金额");
+            }
             // 更新用户押金
             UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderInfoEntity.getUserInfoId(), true);
             userInfoEntity.setDepositAmount(userInfoEntity.getDepositAmount().add(orderInfoEntity.getDeposit()));
             userInfoEntity.setEnableDepositAmount(userInfoEntity.getEnableDepositAmount().add(orderInfoEntity.getDeposit()));
             userInfoDao.update(userInfoEntity);
-//        } else {
-//            // 订单不包含押金
-//            if (!orderInfoEntity.getAmount().equals(wechatBackFee)) {
-//                throw new RuntimeException("支付金额不等于订单金额");
-//            }
+        } else {
+            // 订单不包含押金
+            if (!orderInfoEntity.getAmount().equals(wechatBackFee)) {
+                throw new RuntimeException("支付金额不等于订单金额");
+            }
         }
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_PAID);
         orderInfoEntity.setPaidTime(new Date());
@@ -295,7 +295,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             // 还未到期望配送时间，先不处理配送单，等定时任务处理分配
             return;
         }
-
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
         orderDeliveryInfoEntity.setDistributeTime(new Date());
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
         applicationContext.publishEvent(new OrderDistributeEvent(orderInfoEntity.getId()));
