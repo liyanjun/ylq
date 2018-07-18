@@ -3,6 +3,9 @@ package com.yunquanlai.admin.product.dao;
 import com.yunquanlai.admin.product.entity.ProductTicketEntity;
 import com.yunquanlai.admin.system.dao.BaseDao;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 商品水票信息表
  * 
@@ -12,4 +15,6 @@ import com.yunquanlai.admin.system.dao.BaseDao;
  */
 public interface ProductTicketDao extends BaseDao<ProductTicketEntity> {
     ProductTicketEntity queryObjectByProductTicketNum(String productTicketNum);
+    List<ProductTicketEntity> queryListByProductId(Map<String, Object> map);
+
 }

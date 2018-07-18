@@ -135,6 +135,16 @@ var vm = new Vue({
             }
             sheleves(ids, 30);
         },
+        productTicket: function () {
+            var id = getSelectedRow();
+            var gr = jQuery("#jqGrid").jqGrid('getRowData', id);
+            if (id == null) {
+                return;
+            }
+            var url = "productticket.html?productId="+id +"&productName="+gr.name;
+            // encodeURI 编码
+            window.location.assign(encodeURI(url));
+        },
         reload: function (event) {
             vm.showList = true;
             var page = (vm.btn == "del")?1: $("#jqGrid").jqGrid('getGridParam','page');

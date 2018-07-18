@@ -46,6 +46,8 @@
                     class="fa fa-arrow-circle-o-up"></i>&nbsp;上架</a>
             <a v-if="hasPermission('productinfo:update')" class="btn btn-primary" @click="offShelves"><i
                     class="fa fa-arrow-circle-o-down"></i>&nbsp;下架</a>
+            <a v-if="hasPermission('productinfo:info')" class="btn btn-primary" @click="productTicket"><i
+                    class="fa fa-arrow-circle-o-down"></i>&nbsp;水票</a>
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>

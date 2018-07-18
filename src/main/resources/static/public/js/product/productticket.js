@@ -1,6 +1,12 @@
 $(function () {
+    vm.productId = T.p("productId");
+    vm.productName = T.p("productName");
+    var param = "";
+    if(vm.productId != undefined){
+        param = "?productId=" + vm.productId;
+    }
     $("#jqGrid").jqGrid({
-        url: '../productticket/list',
+        url: '../productticket/list'+param,
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
@@ -9,7 +15,7 @@ $(function () {
 			{ label: '标题', name: 'title', index: 'title', width: 80 },
 			// { label: '副标题', name: 'subtitle', index: 'subtitle', width: 80 },
 			// { label: '关联产品 ID', name: 'productInfoId', index: 'product_info_id', width: 80 },
-			{ label: '关联商品名称', name: 'productInfoName', index: 'product_info_name', width: 80 }, 			
+			{ label: '关联商品名称', name: 'productInfoName', index: 'product_info_name', width: 90 },
 			// { label: '购买桶数', name: 'purchaseCount', index: 'purchase_count', width: 80 },
 			// { label: '赠送桶数', name: 'giftCount', index: 'gift_count', width: 80 },
 			{ label: '起送桶数', name: 'minDilivery', index: 'min_dilivery', width: 80 },
@@ -25,12 +31,12 @@ $(function () {
                     }
                 }
 			},
-			{ label: '包含产品数量', name: 'cout', index: 'cout', width: 80 },
-			{ label: '价格', name: 'amout', index: 'amout', width: 80 },
+			{ label: '包含产品数量', name: 'cout', index: 'cout', width: 90 },
+			{ label: '价格', name: 'amout', index: 'amout', width: 60 },
 			// { label: '使用须知', name: 'notes', index: 'notes', width: 80 },
 			// { label: '使用说明', name: 'instructions', index: 'instructions', width: 80 },
 			// { label: '创建时间', name: 'creationTime', index: 'creation_time', width: 80 },
-			{ label: '使用截止日期', name: 'deadline', index: 'deadline', width: 80 }, 			
+			{ label: '使用截止日期', name: 'deadline', index: 'deadline', width: 90 },
 			{ label: '备注', name: 'remarks', index: 'remarks', width: 80 }			
         ],
 		viewrecords: true,
@@ -65,6 +71,8 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
+        productId:"",
+        productName:"",
 		productTicket: {}
 	},
 	methods: {

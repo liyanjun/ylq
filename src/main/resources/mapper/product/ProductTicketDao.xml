@@ -111,7 +111,43 @@
 			limit #{offset}, #{limit}
 		</if>
 	</select>
-	
+
+	<select id="queryListByProductId" resultType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
+		select
+		`id`,
+		`product_ticket_num`,
+		`img`,
+		`title`,
+		`subtitle`,
+		`product_info_id`,
+		`product_info_name`,
+		`purchase_count`,
+		`gift_count`,
+		`min_dilivery`,
+		`water_coin`,
+		`status`,
+		`cout`,
+		`amout`,
+		`notes`,
+		`instructions`,
+		`creation_time`,
+		`deadline`,
+		`remarks`
+		from product_ticket
+        where product_info_id = #{productInfoId}
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
  	<select id="queryTotal" resultType="int">
 		select count(*) from product_ticket 
 	</select>
