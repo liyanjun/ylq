@@ -27,6 +27,45 @@
         <result property="sort" column="sort"/>
     </resultMap>
 
+    <select id="queryListForClient" resultType="com.yunquanlai.api.comsumer.vo.ProductTicketVO">
+        SELECT
+        a.name as title,
+        "" as subtitle,
+        a.img,
+        b.min_amount as minAmount
+        FROM
+        product_info a
+        LEFT JOIN (
+        SELECT
+        product_info_id,
+        MIN(amount) AS min_amount
+        FROM
+        product_ticket
+        WHERE
+        <where>
+            status = 20
+            <if test="purchaseCount != null">
+                and purchase_count = #{purchaseCount}
+            </if>
+            <if test="giftCount != null">
+                and gift_count = #{giftCount}
+            </if>
+        </where>
+        GROUP BY
+        product_info_id
+        ) b ON a.id = b.product_info_id
+        <where>
+            a.status = 20
+            <if test="brandId != null">
+                and a.brand_id = #{brandId}
+            </if>
+        </where>
+        order by a.sort,a.id desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
 	<select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
 		select
 					`id`, 
