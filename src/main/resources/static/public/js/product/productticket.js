@@ -31,8 +31,8 @@ $(function () {
                     }
                 }
 			},
-			{ label: '包含产品数量', name: 'cout', index: 'cout', width: 90 },
-			{ label: '价格', name: 'amout', index: 'amout', width: 60 },
+			{ label: '包含产品数量', name: 'count', index: 'count', width: 90 },
+			{ label: '价格', name: 'amount', index: 'amount', width: 60 },
 			// { label: '使用须知', name: 'notes', index: 'notes', width: 80 },
 			// { label: '使用说明', name: 'instructions', index: 'instructions', width: 80 },
 			// { label: '创建时间', name: 'creationTime', index: 'creation_time', width: 80 },

@@ -67,11 +67,11 @@ public class ProductTicketEntity implements Serializable {
     /**
      * 设置：包含产品数量（如买5送二）这里就应该是7
      */
-	private Integer cout;
+	private Integer count;
     /**
      * 设置：水票价格
      */
-	private BigDecimal amout;
+	private BigDecimal amount;
     /**
      * 设置：使用须知
      */
@@ -240,26 +240,26 @@ public class ProductTicketEntity implements Serializable {
 	/**
 	 * 设置：包含产品数量（如买5送二）这里就应该是7
 	 */
-	public void setCout(Integer cout) {
-		this.cout = cout;
+	public void setCout(Integer count) {
+		this.count = count;
 	}
 	/**
 	 * 获取：包含产品数量（如买5送二）这里就应该是7
 	 */
 	public Integer getCout() {
-		return cout;
+		return count;
 	}
 	/**
 	 * 设置：水票价格
 	 */
-	public void setAmout(BigDecimal amout) {
-		this.amout = amout;
+	public void setAmout(BigDecimal amount) {
+		this.amount = amount;
 	}
 	/**
 	 * 获取：水票价格
 	 */
 	public BigDecimal getAmout() {
-		return amout;
+		return amount;
 	}
 	/**
 	 * 设置：使用须知

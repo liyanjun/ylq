@@ -3,9 +3,12 @@ package com.yunquanlai.api.comsumer;
 import com.yunquanlai.admin.product.entity.ProductBrandEntity;
 import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.product.entity.ProductInfoVO;
+import com.yunquanlai.admin.product.entity.ProductTicketEntity;
 import com.yunquanlai.admin.product.service.ProductBrandService;
 import com.yunquanlai.admin.product.service.ProductInfoService;
+import com.yunquanlai.admin.product.service.ProductTicketService;
 import com.yunquanlai.admin.system.service.SysConfigService;
+import com.yunquanlai.api.comsumer.vo.ProductTicketVO;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.annotation.IgnoreAuth;
 import io.swagger.annotations.*;
@@ -33,6 +36,9 @@ public class ApiProductController {
 
     @Autowired
     private ProductBrandService productBrandService;
+
+    @Autowired
+    private ProductTicketService productTicketService;
 
     @Autowired
     private SysConfigService sysConfigService;
@@ -116,6 +122,44 @@ public class ApiProductController {
         map.put("limit", limit);
         List<ProductInfoEntity> productInfoEntities = productInfoService.queryListForClient(map);
         return R.ok().put("productInfoList", productInfoEntities);
+    }
 
+    /**
+     * 水票查询
+     */
+    @IgnoreAuth
+    @PostMapping("queryProductTicket")
+    @ApiOperation(value = "水票查询")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "long", name = "brandId", value = "商品品牌(传ID)"),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "buy", value = "买多少", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "gift", value = "送多少", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "offset", value = "位移数", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "int", name = "limit", value = "查询条数", required = true)
+    })
+    public R queryProductTicket(Integer brandId, Integer buy, Integer gift, @RequestParam Integer offset, @RequestParam Integer limit) {
+        Map map = new HashMap(16);
+        map.put("brandId", brandId);
+
+        map.put("buy", buy);
+        map.put("gift", gift);
+        map.put("offset", offset);
+        map.put("limit", limit);
+        List<ProductTicketVO> productTicketVOList = productTicketService.queryListForClient(map);
+        return R.ok().put("productTicketList", productTicketVOList);
+    }
+
+    /**
+     * 通过商品查询水票
+     */
+    @IgnoreAuth
+    @PostMapping("queryProductTicket")
+    @ApiOperation(value = "商品查询")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "long", name = "productId", value = "商品ID"),
+    })
+    public R queryProductTicket(Long productId) {
+        List<ProductTicketEntity> productTicketEntities = productTicketService.queryListByProductId(productId);
+        return R.ok().put("productTicketList", productTicketEntities);
     }
 }

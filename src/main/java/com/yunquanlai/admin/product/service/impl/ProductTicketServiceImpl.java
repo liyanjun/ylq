@@ -3,6 +3,7 @@ package com.yunquanlai.admin.product.service.impl;
 import com.yunquanlai.admin.product.dao.ProductTicketDao;
 import com.yunquanlai.admin.product.entity.ProductTicketEntity;
 import com.yunquanlai.admin.product.service.ProductTicketService;
+import com.yunquanlai.api.comsumer.vo.ProductTicketVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +34,8 @@ public class ProductTicketServiceImpl implements ProductTicketService {
 	}
 
 	@Override
-	public List<ProductTicketEntity> queryListByProductId(Map<String, Object> map) {
-		return productTicketDao.queryListByProductId(map);
+	public List<ProductTicketEntity> queryListByProductId(Long productId) {
+		return productTicketDao.queryListByProductId(productId);
 	}
 
 	@Override
@@ -61,5 +62,10 @@ public class ProductTicketServiceImpl implements ProductTicketService {
 	public void deleteBatch(Long[] ids){
 		productTicketDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public List<ProductTicketVO> queryListForClient(Map map) {
+		return productTicketDao.queryListForClient(map);
+	}
+
 }

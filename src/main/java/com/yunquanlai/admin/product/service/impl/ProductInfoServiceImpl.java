@@ -3,10 +3,7 @@ package com.yunquanlai.admin.product.service.impl;
 import com.yunquanlai.admin.delivery.dao.DeliveryEndpointDao;
 import com.yunquanlai.admin.delivery.entity.DeliveryEndpointEntity;
 import com.yunquanlai.admin.product.dao.*;
-import com.yunquanlai.admin.product.entity.ProductDetailEntity;
-import com.yunquanlai.admin.product.entity.ProductInfoEntity;
-import com.yunquanlai.admin.product.entity.ProductInfoVO;
-import com.yunquanlai.admin.product.entity.ProductStockEntity;
+import com.yunquanlai.admin.product.entity.*;
 import com.yunquanlai.admin.product.service.ProductInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -40,6 +37,9 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 
     @Autowired
     private ProductStockFlowDao productStockFlowDao;
+
+    @Autowired
+    private ProductTicketDao productTicketDao;
 
     @Override
     @Cacheable(value = "product", key = "#id")

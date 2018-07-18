@@ -27,7 +27,7 @@ public class UserProductTicketEntity implements Serializable {
     /**
      * 设置：剩余数量
      */
-	private Integer cout;
+	private Integer count;
     /**
      * 设置：购买价格
      */
@@ -72,14 +72,14 @@ public class UserProductTicketEntity implements Serializable {
 	/**
 	 * 设置：剩余数量
 	 */
-	public void setCout(Integer cout) {
-		this.cout = cout;
+	public void setCout(Integer count) {
+		this.count = count;
 	}
 	/**
 	 * 获取：剩余数量
 	 */
 	public Integer getCout() {
-		return cout;
+		return count;
 	}
 	/**
 	 * 设置：购买价格

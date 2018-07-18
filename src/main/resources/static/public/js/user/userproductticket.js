@@ -5,7 +5,7 @@ $(function () {
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
 			{ label: '水票标题', name: 'productTicketTitle', index: 'product_ticket_title', width: 80 }, 			
-			{ label: '剩余数量', name: 'cout', index: 'cout', width: 80 }, 			
+			{ label: '剩余数量', name: 'count', index: 'count', width: 80 },
 			{ label: '购买价格', name: 'amount', index: 'amount', width: 80 }, 			
 			{ label: '用户水票状态，10：新下单，20：已支付，30：已关闭', name: 'status', index: 'status', width: 80 }, 			
 			{ label: '关联产品 ID', name: 'productInfoId', index: 'product_info_id', width: 80 }, 			

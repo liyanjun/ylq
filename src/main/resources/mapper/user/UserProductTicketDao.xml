@@ -7,7 +7,7 @@
     <resultMap type="com.yunquanlai.admin.user.entity.UserProductTicketEntity" id="userProductTicketMap">
         <result property="id" column="id"/>
         <result property="productTicketTitle" column="product_ticket_title"/>
-        <result property="cout" column="cout"/>
+        <result property="count" column="count"/>
         <result property="amount" column="amount"/>
         <result property="status" column="status"/>
         <result property="productInfoId" column="product_info_id"/>
@@ -18,7 +18,7 @@
 		select
 					`id`, 
 					`product_ticket_title`, 
-					`cout`, 
+					`count`,
 					`amount`, 
 					`status`, 
 					`product_info_id`, 
@@ -31,7 +31,7 @@
 		select
 		            `id`, 
 		            `product_ticket_title`, 
-		            `cout`, 
+		            `count`,
 		            `amount`, 
 		            `status`, 
 		            `product_info_id`, 
@@ -58,7 +58,7 @@
 		insert into user_product_ticket
 		(
 			`product_ticket_title`, 
-			`cout`, 
+			`count`,
 			`amount`, 
 			`status`, 
 			`product_info_id`, 
@@ -67,7 +67,7 @@
 		values
 		(
 			#{productTicketTitle}, 
-			#{cout}, 
+			#{count},
 			#{amount}, 
 			#{status}, 
 			#{productInfoId}, 
@@ -79,7 +79,7 @@
 		update user_product_ticket 
 		<set>
 			<if test="productTicketTitle != null">`product_ticket_title` = #{productTicketTitle}, </if>
-			<if test="cout != null">`cout` = #{cout}, </if>
+			<if test="count != null">`count` = #{count}, </if>
 			<if test="amount != null">`amount` = #{amount}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="productInfoId != null">`product_info_id` = #{productInfoId}, </if>

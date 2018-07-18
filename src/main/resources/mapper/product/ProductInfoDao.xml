@@ -148,7 +148,7 @@
         `status`,
         `product_num`,
         `product_specifications`,
-        `water_type`
+        `water_type`,
         from product_info
         <where>
             status = 20
