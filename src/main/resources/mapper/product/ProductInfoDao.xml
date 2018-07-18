@@ -119,7 +119,7 @@
                 and status = #{status}
             </if>
         </where>
-        order by sort desc,id desc
+        order by sort ,id desc
         <if test="offset != null and limit != null">
             limit #{offset}, #{limit}
         </if>

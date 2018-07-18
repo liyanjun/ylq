@@ -175,7 +175,7 @@ $(function () {
         url: '../productinfo/list',
         datatype: "json",
         colModel: [
-            {label: 'd', name: 'id', index: 'id', width: 50, key: true, hidden:true},
+            {label: 'id', name: 'id', index: 'id', width: 50, key: true},
             {label: '名称', name: 'name', index: 'name', width: 80},
             {label: '编号', name: 'productNum', index: 'product_num', width: 50},
             {label: '规格', name: 'productSpecifications', index: 'product_specifications', width: 50},
