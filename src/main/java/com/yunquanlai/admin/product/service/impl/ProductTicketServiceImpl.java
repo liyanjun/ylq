@@ -31,7 +31,12 @@ public class ProductTicketServiceImpl implements ProductTicketService {
 	public List<ProductTicketEntity> queryList(Map<String, Object> map){
 		return productTicketDao.queryList(map);
 	}
-	
+
+	@Override
+	public List<ProductTicketEntity> queryListByProductId(Map<String, Object> map) {
+		return productTicketDao.queryListByProductId(map);
+	}
+
 	@Override
 	public int queryTotal(Map<String, Object> map){
 		return productTicketDao.queryTotal(map);

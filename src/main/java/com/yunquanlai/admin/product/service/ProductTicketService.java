@@ -19,7 +19,9 @@ public interface ProductTicketService {
 	ProductTicketEntity queryObjectByProductTicketNum(String productTicketNum);
 
 	List<ProductTicketEntity> queryList(Map<String, Object> map);
-	
+
+	List<ProductTicketEntity> queryListByProductId(Map<String, Object> map);
+
 	int queryTotal(Map<String, Object> map);
 	
 	void save(ProductTicketEntity productTicket);
