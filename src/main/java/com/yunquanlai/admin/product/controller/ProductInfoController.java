@@ -95,6 +95,10 @@ public class ProductInfoController extends AbstractController {
             throw new RRException("商品编号已存在 ！");
         }
         Assert.isBlank(productInfoVO.getProductDetailEntity().getBanner().replace(",", ""), "至少需要一张广告轮播图");
+        Integer sort = productInfoEntity.getSort();
+        if(sort==null){
+            productInfoEntity.setSort(10000);
+        }
         productInfoEntity.setCreationTime(new Date());
         productInfoEntity.setCreatorName(getUser().getUsername());
         productInfoEntity.setCreatorId(getUserId());

@@ -123,7 +123,7 @@
                 and status = #{status}
             </if>
         </where>
-        order by sort desc,id desc
+        order by sort ,id desc
         <if test="offset != null and limit != null">
             limit #{offset}, #{limit}
         </if>
@@ -181,10 +181,10 @@
         </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
-                order by ${sidx} ${order},sort desc
+                order by ${sidx} ${order},sort
             </when>
             <otherwise>
-                order by sort desc,id desc
+                order by sort ,id desc
             </otherwise>
         </choose>
         <if test="offset != null and limit != null">
