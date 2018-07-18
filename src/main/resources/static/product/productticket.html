@@ -35,7 +35,7 @@
 		<div class="panel-heading">{{title}}</div>
 		<form class="form-horizontal">
 											<div class="form-group">
-			   	<div class="col-sm-2 control-label">水票编号</div>
+			   	<div class="col-sm-2 control-label">水票编号</div><font color="red">*</font>
 			   	<div class="col-sm-10">
 			      <input type="text" class="form-control" v-model="productTicket.productTicketNum" placeholder="水票编号"/>
 			    </div>
@@ -47,46 +47,55 @@
 			    </div>
 			</div>-->
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">标题</div>
+			   	<div class="col-sm-2 control-label">标题</div><font color="red">*</font>
 			   	<div class="col-sm-10">
 			      <input type="text" class="form-control" v-model="productTicket.title" placeholder="标题"/>
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">副标题</div>
+			   	<div class="col-sm-2 control-label">副标题</div><font color="red">*</font>
 			   	<div class="col-sm-10">
 			      <input type="text" class="form-control" v-model="productTicket.subtitle" placeholder="副标题"/>
 			    </div>
 			</div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">排序</div>
+                <div class="col-sm-10">
+                    <input type='text' onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="productTicket.sort" placeholder="排序"/>
+                </div>
+            </div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">关联产品 ID</div>
+			   	<div class="col-sm-2 control-label">关联产品 ID</div><font color="red">*</font>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="productTicket.productInfoId" placeholder="关联产品 ID"/>
+			      <input type="text" disabled="disabled" class="form-control" v-model="productTicket.productInfoId" placeholder="关联产品 ID"/>
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">关联商品名称</div>
+			   	<div class="col-sm-2 control-label">关联商品名称</div><font color="red">*</font>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="productTicket.productInfoName" placeholder="关联商品名称"/>
+			      <input type="text" disabled="disabled" class="form-control" v-model="productTicket.productInfoName" placeholder="关联商品名称"/>
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">购买桶数</div>
+			   	<div class="col-sm-2 control-label">购买桶数</div><font color="red">*</font>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="productTicket.purchaseCount" placeholder="购买桶数"/>
-			    </div>
+			      <!--<input type="text" class="form-control" v-model="productTicket.purchaseCount" placeholder="购买桶数"/>-->
+                    <input type='text' onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="productTicket.purchaseCount" placeholder="购买桶数"/>
+                </div>
 			</div>
 									<div class="form-group">
 			   	<div class="col-sm-2 control-label">赠送桶数</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="productTicket.giftCount" placeholder="赠送桶数"/>
-			    </div>
+			      <!--<input type="text" class="form-control" v-model="productTicket.giftCount" placeholder="赠送桶数"/>-->
+                    <input type='text' onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="productTicket.giftCount" placeholder="赠送桶数"/>
+                </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">起送桶数</div>
+			   	<div class="col-sm-2 control-label">起送桶数</div><font color="red">*</font>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="productTicket.minDilivery" placeholder="起送桶数"/>
-			    </div>
+			      <!--<input type="text" class="form-control" v-model="productTicket.minDilivery" placeholder="起送桶数"/>-->
+                    <input type='text' onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9]+/,'');}).call(this)" onblur="this.v();" class="form-control" v-model="productTicket.minDilivery" placeholder="起送桶数"/>
+                </div>
 			</div>
 									<div class="form-group">
 			   	<div class="col-sm-2 control-label">每配送一桶，推广人获得的水币</div>
@@ -95,10 +104,19 @@
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">售卖上下架状态</div>
+			   	<div class="col-sm-2 control-label">售卖上下架状态</div><font color="red">*</font>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="productTicket.status" placeholder="售卖上下架状态，10：新创建，20：商品上架，30：商品下架"/>
-			    </div>
+			      <!--<input type="text" class="form-control" v-model="productTicket.status" placeholder="售卖上下架状态，10：新创建，20：商品上架，30：商品下架"/>-->
+                    <label class="radio-inline">
+                        <input type="radio" name="status" value="10" v-model="productTicket.status"/> 新创建
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="status" value="20" v-model="productTicket.status"/> 商品上架
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="status" value="30" v-model="productTicket.status"/> 商品下架
+                    </label>
+				</div>
 			</div>
 									<!--<div class="form-group">
 			   	<div class="col-sm-2 control-label">包含产品数量（如买5送二）这里就应该是7</div>
@@ -107,10 +125,10 @@
 			    </div>
 			</div>-->
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">水票价格</div>
+			   	<div class="col-sm-2 control-label">水票价格</div><font color="red">*</font>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="productTicket.amount" placeholder="水票价格"/>
-			    </div>
+                    <input type='number' min="0" step="0.01" oninput="this.value=checkDecimal(this.value)" class="form-control" v-model="productTicket.amount" placeholder="水票价格"/>
+                </div>
 			</div>
 									<div class="form-group">
 			   	<div class="col-sm-2 control-label">使用须知</div>
@@ -131,10 +149,11 @@
 			    <!--</div>-->
 			<!--</div>-->
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">使用截止日期</div>
+			   	<div class="col-sm-2 control-label">使用截止日期</div><font color="red">*</font>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="productTicket.deadline" placeholder="使用截止日期"/>
-			    </div>
+			      <!--<input type="text" class="form-control" v-model="productTicket.deadline" placeholder="使用截止日期"/>-->
+                    <input type="date" class="form-control" v-model="productTicket.deadline" placeholder="使用截止日期" />
+                </div>
 			</div>
 									<div class="form-group">
 			   	<div class="col-sm-2 control-label">备注</div>

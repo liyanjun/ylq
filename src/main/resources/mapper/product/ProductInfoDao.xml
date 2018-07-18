@@ -26,6 +26,7 @@
         <result property="productNum" column="product_num"/>
         <result property="productSpecifications" column="product_specifications"/>
         <result property="waterType" column="water_type"/>
+        <result property="productTicketDescription" column="product_ticket_description"/>
     </resultMap>
 
     <select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductInfoEntity">
@@ -50,7 +51,8 @@
                     `status`,
                     `product_num`,
                     `product_specifications`,
-                    `water_type`
+                    `water_type`,
+                    `product_ticket_description`
 				from
 				product_info
 				where id = #{id}
@@ -79,7 +81,8 @@
         `status`,
         `product_num`,
         `product_specifications`,
-        `water_type`
+        `water_type`,
+        `product_ticket_description`
         from
         product_info
         where product_num = #{productNum}
@@ -109,7 +112,8 @@
         `status`,
         `product_num`,
         `product_specifications`,
-        `water_type`
+        `water_type`,
+        `product_ticket_description`
         from product_info
         <where>
             <if test="key != null and key.trim() != ''">
@@ -149,6 +153,7 @@
         `product_num`,
         `product_specifications`,
         `water_type`,
+        `product_ticket_description`
         from product_info
         <where>
             status = 20
@@ -223,7 +228,8 @@
 			`status`,
 			`product_num`,
 			`product_specifications`,
-			`water_type`
+			`water_type`,
+			`product_ticket_description`
 		)
 		values
 		(
@@ -247,7 +253,8 @@
 			#{status},
 			#{productNum},
 			#{productSpecifications},
-			#{waterType}
+			#{waterType},
+			#{productTicketDescription}
 		)
 	</insert>
 
@@ -274,7 +281,8 @@
             <if test="status != null">`status` = #{status},</if>
             <if test="productNum != null">`product_num` = #{productNum},</if>
             <if test="productSpecifications != null">`product_specifications` = #{productSpecifications},</if>
-            <if test="waterType != null">`water_type` = #{waterType}</if>
+            <if test="waterType != null">`water_type` = #{waterType},</if>
+            <if test="productTicketDescription != null">`product_ticket_description` = #{productTicketDescription}</if>
         </set>
         where id = #{id}
     </update>

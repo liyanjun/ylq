@@ -3,7 +3,7 @@
 
 <mapper namespace="com.yunquanlai.admin.product.dao.ProductTicketDao">
 
-    <!-- 可根据自己的需求，是否要使用 -->
+	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.yunquanlai.admin.product.entity.ProductTicketEntity" id="productTicketMap">
         <result property="id" column="id"/>
         <result property="productTicketNum" column="product_ticket_num"/>
@@ -17,41 +17,43 @@
         <result property="minDilivery" column="min_dilivery"/>
         <result property="waterCoin" column="water_coin"/>
         <result property="status" column="status"/>
-        <result property="count" column="count"/>
-        <result property="amount" column="amount"/>
+        <result property="cout" column="cout"/>
+        <result property="amout" column="amout"/>
         <result property="notes" column="notes"/>
         <result property="instructions" column="instructions"/>
         <result property="creationTime" column="creation_time"/>
         <result property="deadline" column="deadline"/>
         <result property="remarks" column="remarks"/>
+        <result property="sort" column="sort"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
-        select
-        `id`,
-        `product_ticket_num`,
-        `img`,
-        `title`,
-        `subtitle`,
-        `product_info_id`,
-        `product_info_name`,
-        `purchase_count`,
-        `gift_count`,
-        `min_dilivery`,
-        `water_coin`,
-        `status`,
-        `count`,
-        `amount`,
-        `notes`,
-        `instructions`,
-        `creation_time`,
-        `deadline`,
-        `remarks`
-        from product_ticket where id = #{id}
+	<select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
+		select
+					`id`, 
+					`product_ticket_num`, 
+					`img`, 
+					`title`, 
+					`subtitle`, 
+					`product_info_id`, 
+					`product_info_name`, 
+					`purchase_count`, 
+					`gift_count`, 
+					`min_dilivery`, 
+					`water_coin`, 
+					`status`, 
+					`cout`, 
+					`amout`, 
+					`notes`, 
+					`instructions`, 
+					`creation_time`, 
+					`deadline`, 
+					`remarks`,
+					`sort`
+				from product_ticket where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
-    </select>
+	</select>
 
-    <select id="queryObjectByProductTicketNum" resultType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
+	<select id="queryObjectByProductTicketNum" resultType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
 		select
 		`id`,
 		`product_ticket_num`,
@@ -65,133 +67,97 @@
 		`min_dilivery`,
 		`water_coin`,
 		`status`,
-		`count`,
-		`amount`,
+		`cout`,
+		`amout`,
 		`notes`,
 		`instructions`,
 		`creation_time`,
 		`deadline`,
-		`remarks`
+		`remarks`,
+		`sort`
 		from product_ticket
         where product_ticket_num = #{productTicketNum}
         limit 0,1
 	</select>
 
-    <select id="queryList" resultType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
-        select
-        `id`,
-        `product_ticket_num`,
-        `img`,
-        `title`,
-        `subtitle`,
-        `product_info_id`,
-        `product_info_name`,
-        `purchase_count`,
-        `gift_count`,
-        `min_dilivery`,
-        `water_coin`,
-        `status`,
-        `count`,
-        `amount`,
-        `notes`,
-        `instructions`,
-        `creation_time`,
-        `deadline`,
-        `remarks`
-        from product_ticket
+	<select id="queryList" resultType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
+		select
+		            `id`, 
+		            `product_ticket_num`, 
+		            `img`, 
+		            `title`, 
+		            `subtitle`, 
+		            `product_info_id`, 
+		            `product_info_name`, 
+		            `purchase_count`, 
+		            `gift_count`, 
+		            `min_dilivery`, 
+		            `water_coin`, 
+		            `status`, 
+		            `cout`, 
+		            `amout`, 
+		            `notes`, 
+		            `instructions`, 
+		            `creation_time`, 
+		            `deadline`, 
+		            `remarks`,
+		            `sort`
+				from product_ticket
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
             </when>
-            <otherwise>
+			<otherwise>
                 order by id desc
-            </otherwise>
+			</otherwise>
         </choose>
-        <if test="offset != null and limit != null">
-            limit #{offset}, #{limit}
-        </if>
-    </select>
-
-    <select id="queryListForClient" resultType="com.yunquanlai.api.comsumer.vo.ProductTicketVO">
-        SELECT
-        a.name as title,
-        "" as subtitle,
-        a.img,
-        b.min_amount as minAmount
-        FROM
-        product_info a
-        LEFT JOIN (
-        SELECT
-        product_info_id,
-        MIN(amount) AS min_amount
-        FROM
-        product_ticket
-        WHERE
-        <where>
-            status = 20
-            <if test="purchaseCount != null">
-                and purchase_count = #{purchaseCount}
-            </if>
-            <if test="giftCount != null">
-                and gift_count = #{giftCount}
-            </if>
-        </where>
-        GROUP BY
-        product_info_id
-        ) b ON a.id = b.product_info_id
-        <where>
-            a.status = 20
-            <if test="brandId != null">
-                and a.brand_id = #{brandId}
-            </if>
-        </where>
-        order by a.sort,a.id desc
-        <if test="offset != null and limit != null">
-            limit #{offset}, #{limit}
-        </if>
-    </select>
-
-    <select id="queryListByProductId" resultType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
-        select
-        `id`,
-        `product_ticket_num`,
-        `img`,
-        `title`,
-        `subtitle`,
-        `product_info_id`,
-        `product_info_name`,
-        `purchase_count`,
-        `gift_count`,
-        `min_dilivery`,
-        `water_coin`,
-        `status`,
-        `count`,
-        `amount`,
-        `notes`,
-        `instructions`,
-        `creation_time`,
-        `deadline`,
-        `remarks`
-        from product_ticket
-        where product_info_id = #{productInfoId}
-        <choose>
-            <when test="sidx != null and sidx.trim() != ''">
-                order by ${sidx} ${order}
-            </when>
-            <otherwise>
-                order by id desc
-            </otherwise>
-        </choose>
-        <if test="offset != null and limit != null">
-            limit #{offset}, #{limit}
-        </if>
-    </select>
-
-    <select id="queryTotal" resultType="int">
-		select count(*) from product_ticket 
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
 	</select>
 
-    <insert id="save" parameterType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
+	<select id="queryListByProductId" resultType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
+		select
+		`id`,
+		`product_ticket_num`,
+		`img`,
+		`title`,
+		`subtitle`,
+		`product_info_id`,
+		`product_info_name`,
+		`purchase_count`,
+		`gift_count`,
+		`min_dilivery`,
+		`water_coin`,
+		`status`,
+		`cout`,
+		`amout`,
+		`notes`,
+		`instructions`,
+		`creation_time`,
+		`deadline`,
+		`remarks`,
+		`sort`
+		from product_ticket
+        where product_info_id = #{productInfoId}
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from product_ticket 
+	</select>
+	 
+	<insert id="save" parameterType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
 		insert into product_ticket
 		(
 			`id`, 
@@ -206,13 +172,14 @@
 			`min_dilivery`, 
 			`water_coin`, 
 			`status`, 
-			`count`,
-			`amount`,
+			`cout`, 
+			`amout`, 
 			`notes`, 
 			`instructions`, 
 			`creation_time`, 
 			`deadline`, 
-			`remarks`
+			`remarks`,
+			`sort`
 		)
 		values
 		(
@@ -228,50 +195,52 @@
 			#{minDilivery}, 
 			#{waterCoin}, 
 			#{status}, 
-			#{count},
-			#{amount},
+			#{cout}, 
+			#{amout}, 
 			#{notes}, 
 			#{instructions}, 
 			#{creationTime}, 
 			#{deadline}, 
-			#{remarks}
+			#{remarks},
+			#{sort}
 		)
 	</insert>
-
-    <update id="update" parameterType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
-        update product_ticket
-        <set>
-            <if test="productTicketNum != null">`product_ticket_num` = #{productTicketNum},</if>
-            <if test="img != null">`img` = #{img},</if>
-            <if test="title != null">`title` = #{title},</if>
-            <if test="subtitle != null">`subtitle` = #{subtitle},</if>
-            <if test="productInfoId != null">`product_info_id` = #{productInfoId},</if>
-            <if test="productInfoName != null">`product_info_name` = #{productInfoName},</if>
-            <if test="purchaseCount != null">`purchase_count` = #{purchaseCount},</if>
-            <if test="giftCount != null">`gift_count` = #{giftCount},</if>
-            <if test="minDilivery != null">`min_dilivery` = #{minDilivery},</if>
-            <if test="waterCoin != null">`water_coin` = #{waterCoin},</if>
-            <if test="status != null">`status` = #{status},</if>
-            <if test="count != null">`count` = #{count},</if>
-            <if test="amount != null">`amount` = #{amount},</if>
-            <if test="notes != null">`notes` = #{notes},</if>
-            <if test="instructions != null">`instructions` = #{instructions},</if>
-            <if test="creationTime != null">`creation_time` = #{creationTime},</if>
-            <if test="deadline != null">`deadline` = #{deadline},</if>
-            <if test="remarks != null">`remarks` = #{remarks}</if>
-        </set>
-        where id = #{id}
-    </update>
-
-    <delete id="delete">
+	 
+	<update id="update" parameterType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
+		update product_ticket 
+		<set>
+			<if test="productTicketNum != null">`product_ticket_num` = #{productTicketNum}, </if>
+			<if test="img != null">`img` = #{img}, </if>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="subtitle != null">`subtitle` = #{subtitle}, </if>
+			<if test="productInfoId != null">`product_info_id` = #{productInfoId}, </if>
+			<if test="productInfoName != null">`product_info_name` = #{productInfoName}, </if>
+			<if test="purchaseCount != null">`purchase_count` = #{purchaseCount}, </if>
+			<if test="giftCount != null">`gift_count` = #{giftCount}, </if>
+			<if test="minDilivery != null">`min_dilivery` = #{minDilivery}, </if>
+			<if test="waterCoin != null">`water_coin` = #{waterCoin}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="cout != null">`cout` = #{cout}, </if>
+			<if test="amout != null">`amout` = #{amout}, </if>
+			<if test="notes != null">`notes` = #{notes}, </if>
+			<if test="instructions != null">`instructions` = #{instructions}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="deadline != null">`deadline` = #{deadline}, </if>
+			<if test="remarks != null">`remarks` = #{remarks},</if>
+			<if test="sort != null">`sort` = #{sort}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
 		delete from product_ticket where id = #{value}
 	</delete>
-
-    <delete id="deleteBatch">
-        delete from product_ticket where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
+	
+	<delete id="deleteBatch">
+		delete from product_ticket where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
 
 </mapper>
