@@ -1,5 +1,4 @@
 /*
-分支phase-2
 Navicat MySQL Data Transfer
 
 Source Server         : local
@@ -327,8 +326,9 @@ CREATE TABLE `product_info` (
   `product_specifications` varchar(64) NOT NULL COMMENT '商品规格',
   `water_type` tinyint(4) NOT NULL COMMENT '饮用水种类，10：矿泉水，20：山泉水，30：纯净水',
   `water_coin` int(11) DEFAULT NULL COMMENT '每推广一桶，推广人获得的水币',
+  `product_ticket_description` varchar(128) DEFAULT NULL COMMENT '水票描述',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='商品信息表表';
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='商品信息表';
 ALTER TABLE `product_info`
 AUTO_INCREMENT=10000;
 
@@ -339,7 +339,7 @@ ADD UNIQUE INDEX `product_num_unique` (`product_num`) USING BTREE ;
 -- ----------------------------
 DROP TABLE IF EXISTS `product_ticket`;
 CREATE TABLE `product_ticket` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `product_ticket_num` varchar(64) NOT NULL COMMENT '水票编号',
   `img` varchar(512) DEFAULT NULL COMMENT '水票图片(备用)',
   `title` varchar(128) NOT NULL COMMENT '水票标题',
@@ -348,9 +348,9 @@ CREATE TABLE `product_ticket` (
   `product_info_name` varchar(64) NOT NULL COMMENT '关联商品名称',
   `purchase_count` int(11) NOT NULL COMMENT '购买桶数',
   `gift_count` int(11) DEFAULT NULL COMMENT '赠送的桶数',
-  `min_dilivery` int(11) DEFAULT NULL COMMENT '单次最小配送桶数',
+  `min_dilivery` int(11) NOT NULL COMMENT '单次最小配送桶数',
   `water_coin` int(11) DEFAULT NULL COMMENT '每配送一桶，推广人获得的水币',
-  `status` tinyint(4) DEFAULT NULL COMMENT '售卖上下架状态，10：新创建，20：商品上架，30：商品下架',
+  `status` tinyint(4) NOT NULL COMMENT '售卖上下架状态，10：新创建，20：商品上架，30：商品下架',
   `cout` int(11) NOT NULL COMMENT '包含产品数量（如买5送二）这里就应该是7',
   `amout` decimal(20,2) NOT NULL COMMENT '水票价格',
   `notes` varchar(255) DEFAULT NULL COMMENT '使用须知',
@@ -358,6 +358,7 @@ CREATE TABLE `product_ticket` (
   `creation_time` datetime NOT NULL COMMENT '创建时间',
   `deadline` date NOT NULL COMMENT '使用截止日期',
   `remarks` text COMMENT '备注',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品水票信息表';
 
@@ -606,5 +607,11 @@ CREATE TABLE `user_product_ticket` (
   `finish_time` datetime DEFAULT NULL COMMENT '兑付结束时间',
   `end_time` datetime NOT NULL COMMENT '过期时间',
   `creation_time` datetime NOT NULL COMMENT '创建时间',
+  `benifit_user_id` bigint(20) DEFAULT NULL COMMENT '获赠水币的用户id',
+  `benifit_username` varchar(64) DEFAULT NULL COMMENT '获赠水币的用户名',
+  `benifit_count` int(11) DEFAULT NULL COMMENT '送出桶数',
+  `from_user_id` bigint(20) DEFAULT NULL COMMENT '赠送水币的用户id',
+  `from_username` varchar(64) DEFAULT NULL COMMENT '赠送水币的用户名',
+  `from_count` int(11) DEFAULT NULL COMMENT '得到桶数',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户水票信息表';

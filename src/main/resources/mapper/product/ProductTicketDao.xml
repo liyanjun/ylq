@@ -24,6 +24,7 @@
         <result property="creationTime" column="creation_time"/>
         <result property="deadline" column="deadline"/>
         <result property="remarks" column="remarks"/>
+        <result property="sort" column="sort"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
@@ -46,7 +47,8 @@
 					`instructions`, 
 					`creation_time`, 
 					`deadline`, 
-					`remarks`
+					`remarks`,
+					`sort`
 				from product_ticket where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
 	</select>
@@ -71,7 +73,8 @@
 		`instructions`,
 		`creation_time`,
 		`deadline`,
-		`remarks`
+		`remarks`,
+		`sort`
 		from product_ticket
         where product_ticket_num = #{productTicketNum}
         limit 0,1
@@ -97,7 +100,8 @@
 		            `instructions`, 
 		            `creation_time`, 
 		            `deadline`, 
-		            `remarks`
+		            `remarks`,
+		            `sort`
 				from product_ticket
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -132,7 +136,8 @@
 		`instructions`,
 		`creation_time`,
 		`deadline`,
-		`remarks`
+		`remarks`,
+		`sort`
 		from product_ticket
         where product_info_id = #{productInfoId}
 		<choose>
@@ -173,7 +178,8 @@
 			`instructions`, 
 			`creation_time`, 
 			`deadline`, 
-			`remarks`
+			`remarks`,
+			`sort`
 		)
 		values
 		(
@@ -195,7 +201,8 @@
 			#{instructions}, 
 			#{creationTime}, 
 			#{deadline}, 
-			#{remarks}
+			#{remarks},
+			#{sort}
 		)
 	</insert>
 	 
@@ -219,7 +226,8 @@
 			<if test="instructions != null">`instructions` = #{instructions}, </if>
 			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
 			<if test="deadline != null">`deadline` = #{deadline}, </if>
-			<if test="remarks != null">`remarks` = #{remarks}</if>
+			<if test="remarks != null">`remarks` = #{remarks},</if>
+			<if test="sort != null">`sort` = #{sort}</if>
 		</set>
 		where id = #{id}
 	</update>
