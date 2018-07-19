@@ -142,7 +142,7 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         APNPayload apnPayload = new APNPayload();
         apnPayload.setAutoBadge("+1");
         apnPayload.setContentAvailable(1);
-        apnPayload.setSound("default");
+        apnPayload.setSound("yql_new_order.caf");
         apnPayload.setAlertMsg(new APNPayload.SimpleAlertMsg("您有新的配送任务,请注意查看。"));
         template.setAPNInfo(apnPayload);
         return template;
