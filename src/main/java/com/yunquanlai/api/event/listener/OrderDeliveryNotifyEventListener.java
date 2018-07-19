@@ -116,7 +116,8 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         Style0 style = new Style0();
         // 设置通知栏标题与内容
         style.setTitle("运泉来");
-        style.setText("您有新的配送任务,请注意查看。");// 配置通知栏图标
+        // 配置通知栏图标
+        style.setText("您有新的配送任务,请注意查看。");
         style.setLogo("icon.png");
         // 配置通知栏网络图标
         style.setLogoUrl("");
@@ -142,7 +143,7 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         APNPayload apnPayload = new APNPayload();
         apnPayload.setAutoBadge("+1");
         apnPayload.setContentAvailable(1);
-        apnPayload.setSound("default");
+        apnPayload.setSound("yql_new_order.caf");
         apnPayload.setAlertMsg(new APNPayload.SimpleAlertMsg("您有新的配送任务,请注意查看。"));
         template.setAPNInfo(apnPayload);
         return template;
