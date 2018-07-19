@@ -116,7 +116,8 @@ public class OrderDeliveryNotifyEventListener implements ApplicationListener<Ord
         Style0 style = new Style0();
         // 设置通知栏标题与内容
         style.setTitle("运泉来");
-        style.setText("您有新的配送任务,请注意查看。");// 配置通知栏图标
+        // 配置通知栏图标
+        style.setText("您有新的配送任务,请注意查看。");
         style.setLogo("icon.png");
         // 配置通知栏网络图标
         style.setLogoUrl("");
