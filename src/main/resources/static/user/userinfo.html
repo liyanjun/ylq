@@ -30,6 +30,7 @@
 			<a class="btn btn-success" @click="reset"><i class="fa fa-rotate-left"></i> 重置</a>
 			<a v-if="hasPermission('userinfo:info')" class="btn btn-primary" @click="detail"><i class="fa fa-file-text-o"></i>&nbsp;详情</a>
 			<a v-if="hasPermission('userinfo:info')" class="btn btn-primary" @click="emptyBucketFlow"><i class="fa fa-stack-overflow"></i>&nbsp;查看空桶流水</a>
+			<a v-if="hasPermission('productinfo:info')" class="btn btn-primary" @click="productTicket"><i class="fa fa-arrow-circle-o-down"></i>&nbsp;水票</a>
 		</div>
 	    <table id="jqGrid"></table>
 	    <div id="jqGridPager"></div>

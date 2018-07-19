@@ -17,17 +17,53 @@ public class UserProductTicketEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
     /**
-     * 设置：
+     * 设置：主键 ID
      */
 	private Long id;
+	/**
+	 * 设置：关联用户 ID
+	 */
+	private Long userId;
+	/**
+	 * 设置：关联用户名
+	 */
+	private Long userName;
+    /**
+     * 设置：关联水票 ID
+     */
+    private Long productTicketId;
+    /**
+     * 设置：关联产品 ID
+     */
+    private Long productId;
+    /**
+     * 设置：关联产品名称
+     */
+    private String productName;
     /**
      * 设置：水票标题
      */
 	private String productTicketTitle;
     /**
-     * 设置：剩余数量
+     * 设置：水票编号
      */
-	private Integer count;
+    private String productTicketNum;
+    /**
+     * 设置：水票副标题
+     */
+    private String productTicketSubtitle;
+    /**
+     * 设置：水票总共兑换数量
+     */
+    private Integer totalCount;
+    /**
+     * 设置：用户已使用水票数量
+     */
+    private Integer useCount;
+    /**
+     * 设置：用户剩余水票数量
+     */
+    private Integer remainderCount;
     /**
      * 设置：购买价格
      */
@@ -37,13 +73,41 @@ public class UserProductTicketEntity implements Serializable {
      */
 	private Integer status;
     /**
-     * 设置：关联产品 ID
+     * 设置：兑付结束时间
      */
-	private Long productInfoId;
+    private Date finishTime;
     /**
-     * 设置：购买时间
+     * 设置：过期时间
      */
-	private Date creationTime;
+    private Date endTime;
+    /**
+     * 设置：创建时间
+     */
+    private Date creationTime;
+    /**
+     * 设置：获赠水币的用户id
+     */
+    private Long benifitUserId;
+    /**
+     * 设置：获赠水币的用户名
+     */
+    private String benifitUserName;
+    /**
+     * 设置：送出桶数
+     */
+    private Integer benifitCount;
+    /**
+     * 设置：赠送水币的用户id
+     */
+    private Long fromUserId;
+    /**
+     * 设置：赠送水币的用户名
+     */
+    private String fromUserName;
+    /**
+     * 设置：得到桶数
+     */
+    private Integer fromCount;
 
 	/**
 	 * 设置：
@@ -70,18 +134,6 @@ public class UserProductTicketEntity implements Serializable {
 		return productTicketTitle;
 	}
 	/**
-	 * 设置：剩余数量
-	 */
-	public void setCout(Integer count) {
-		this.count = count;
-	}
-	/**
-	 * 获取：剩余数量
-	 */
-	public Integer getCout() {
-		return count;
-	}
-	/**
 	 * 设置：购买价格
 	 */
 	public void setAmount(BigDecimal amount) {
@@ -106,18 +158,6 @@ public class UserProductTicketEntity implements Serializable {
 		return status;
 	}
 	/**
-	 * 设置：关联产品 ID
-	 */
-	public void setProductInfoId(Long productInfoId) {
-		this.productInfoId = productInfoId;
-	}
-	/**
-	 * 获取：关联产品 ID
-	 */
-	public Long getProductInfoId() {
-		return productInfoId;
-	}
-	/**
 	 * 设置：购买时间
 	 */
 	public void setCreationTime(Date creationTime) {
@@ -129,4 +169,148 @@ public class UserProductTicketEntity implements Serializable {
 	public Date getCreationTime() {
 		return creationTime;
 	}
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getUserName() {
+        return userName;
+    }
+
+    public void setUserName(Long userName) {
+        this.userName = userName;
+    }
+
+    public Long getProductTicketId() {
+        return productTicketId;
+    }
+
+    public void setProductTicketId(Long productTicketId) {
+        this.productTicketId = productTicketId;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductTicketNum() {
+        return productTicketNum;
+    }
+
+    public void setProductTicketNum(String productTicketNum) {
+        this.productTicketNum = productTicketNum;
+    }
+
+    public String getProductTicketSubtitle() {
+        return productTicketSubtitle;
+    }
+
+    public void setProductTicketSubtitle(String productTicketSubtitle) {
+        this.productTicketSubtitle = productTicketSubtitle;
+    }
+
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public Integer getUseCount() {
+        return useCount;
+    }
+
+    public void setUseCount(Integer useCount) {
+        this.useCount = useCount;
+    }
+
+    public Integer getRemainderCount() {
+        return remainderCount;
+    }
+
+    public void setRemainderCount(Integer remainderCount) {
+        this.remainderCount = remainderCount;
+    }
+
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public Long getBenifitUserId() {
+        return benifitUserId;
+    }
+
+    public void setBenifitUserId(Long benifitUserId) {
+        this.benifitUserId = benifitUserId;
+    }
+
+    public String getBenifitUsername() {
+        return benifitUserName;
+    }
+
+    public void setBenifitUsername(String benifitUserName) {
+        this.benifitUserName = benifitUserName;
+    }
+
+    public Integer getBenifitCount() {
+        return benifitCount;
+    }
+
+    public void setBenifitCount(Integer benifitCount) {
+        this.benifitCount = benifitCount;
+    }
+
+    public Long getFromUserId() {
+        return fromUserId;
+    }
+
+    public void setFromUserId(Long fromUserId) {
+        this.fromUserId = fromUserId;
+    }
+
+    public String getFromUsername() {
+        return fromUserName;
+    }
+
+    public void setFromUsername(String fromUserName) {
+        this.fromUserName = fromUserName;
+    }
+
+    public Integer getFromCount() {
+        return fromCount;
+    }
+
+    public void setFromCount(Integer fromCount) {
+        this.fromCount = fromCount;
+    }
 }

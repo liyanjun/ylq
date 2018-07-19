@@ -83,6 +83,16 @@ var vm = new Vue({
                 vm.userInfo = r.userInfo;
             });
 		},
+        productTicket: function () {
+            var id = getSelectedRow();
+            //var gr = jQuery("#jqGrid").jqGrid('getRowData', id);
+            if (id == null) {
+                return;
+            }
+            var url = "userproductticket.html?userId="+id;
+            // encodeURI 编码
+            window.location.assign(encodeURI(url));
+        },
 		reload: function (event) {
 			vm.showList = true;
 			// var page = $("#jqGrid").jqGrid('getGridParam','page');

@@ -594,6 +594,7 @@ DROP TABLE IF EXISTS `user_product_ticket`;
 CREATE TABLE `user_product_ticket` (
   `id` bigint(20) NOT NULL COMMENT '主键 ID',
   `user_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
+  `username` varchar(64) NOT NULL COMMENT '关联用户名',
   `product_ticket_id` bigint(20) NOT NULL COMMENT '关联水票 ID',
   `product_id` bigint(20) NOT NULL COMMENT '关联产品 ID',
   `product_name` varchar(128) NOT NULL COMMENT '关联产品名称',
@@ -603,6 +604,7 @@ CREATE TABLE `user_product_ticket` (
   `total_count` int(11) NOT NULL COMMENT '水票总共兑换数量',
   `use_count` int(11) NOT NULL COMMENT '用户已使用水票数量',
   `remainder_count` int(11) NOT NULL COMMENT '用户剩余水票数量',
+  `amount` bigint(20) NOT NULL COMMENT '购买价格',
   `status` tinyint(255) NOT NULL COMMENT '用户水票状态，10：待支付，20：已支付，30：兑付完毕，40：已关闭',
   `finish_time` datetime DEFAULT NULL COMMENT '兑付结束时间',
   `end_time` datetime NOT NULL COMMENT '过期时间',

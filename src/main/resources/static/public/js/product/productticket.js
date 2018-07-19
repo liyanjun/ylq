@@ -150,7 +150,10 @@ var vm = new Vue({
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page
             }).trigger("reloadGrid");
-		}
+		},
+        btnback: function () {
+            window.location.href="../product/productinfo.html";
+        }
 	}
 });
 

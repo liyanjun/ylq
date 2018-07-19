@@ -142,6 +142,7 @@
 		            `remarks`,
 		            `sort`
 				from product_ticket
+				where product_info_id = #{productInfoId}
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
