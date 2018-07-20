@@ -589,7 +589,6 @@ CREATE TABLE `user_withdraw_deposit` (
 -- ----------------------------
 -- Table structure for user_product_ticket
 -- ----------------------------
-
 DROP TABLE IF EXISTS `user_product_ticket`;
 CREATE TABLE `user_product_ticket` (
   `id` bigint(20) NOT NULL COMMENT '主键 ID',
@@ -617,3 +616,20 @@ CREATE TABLE `user_product_ticket` (
   `from_count` int(11) DEFAULT NULL COMMENT '得到桶数',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户水票信息表';
+
+-- ----------------------------
+-- Table structure for user_product_ticket_flow
+-- ----------------------------
+DROP TABLE IF EXISTS `user_product_ticket_flow`;
+CREATE TABLE `user_product_ticket_flow` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `username` varchar(64) DEFAULT NULL COMMENT '用户名',
+  `user_product_ticket_id` bigint(20) NOT NULL COMMENT '用户水票id',
+  `product_info_id` bigint(20) NOT NULL COMMENT '关联商品 ID',
+  `product_name` varchar(128) NOT NULL COMMENT '关联商品名',
+  `used_count` int(11) NOT NULL COMMENT '使用数量',
+  `remainder_count` int(11) NOT NULL COMMENT '剩余数量',
+  `creation_time` datetime NOT NULL COMMENT '使用时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户水票消费流水';

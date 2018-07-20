@@ -106,7 +106,9 @@ INSERT INTO `sys_menu` VALUES ('91', '89', '新增', null, 'productticket:save',
 INSERT INTO `sys_menu` VALUES ('92', '89', '修改', null, 'productticket:update', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('93', '89', '删除', null, 'productticket:delete', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('94','61', '用户水票信息', 'user/userproductticket.html', 'userproductticket:list', '1', 'fa fa-file-code-o', '6');
-INSERT INTO `sys_menu` VALUES ('95', '94', '查看', null, 'userproductticket:list,userproductticket:info', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('95', '94', '查看', null, 'userproductticket:list,userproductticket:info', '2', null, '6');INSERT INTO `sys_menu` VALUES ('94','61', '用户水票信息', 'user/userproductticket.html', 'userproductticket:list', '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('96','61', '用户水票消费流水', 'user/userproductticketflow.html', 'userproductticketflow:list', '1', 'fa fa-list', '6');
+INSERT INTO `sys_menu` VALUES ('97', '96', '查看', null, 'userproductticketflow:list,userproductticketflow:info', '2', null, '6');
 
 
 -- ----------------------------

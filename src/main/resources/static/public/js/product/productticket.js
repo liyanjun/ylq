@@ -3,7 +3,7 @@ $(function () {
     vm.productName = T.p("productName");
     var param = "";
     if(vm.productId != undefined){
-        param = "?productId=" + vm.productId;
+        param = "?productInfoId=" + vm.productId;
     }
     $("#jqGrid").jqGrid({
         url: '../productticket/list'+param,

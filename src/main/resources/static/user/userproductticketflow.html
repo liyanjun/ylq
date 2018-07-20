@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>客户信息表</title>
+<title>用户水票消费流水</title>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -24,13 +24,13 @@
 	<div v-show="showList">
 		<div class="grid-btn">
 			<div class="form-group col-sm-2">
-				<input type="text" id="searchKey" class="form-control" v-model="q.key" @keyup.enter="query" placeholder="用户名、手机号">
+				<input type="text" id="searchKey" class="form-control" v-model="q.userName" @keyup.enter="query" placeholder="用户名">
 			</div>
 			<a class="btn btn-default" @click="query">查询</a>
 			<a class="btn btn-success" @click="reset"><i class="fa fa-rotate-left"></i> 重置</a>
-			<a v-if="hasPermission('userinfo:info')" class="btn btn-primary" @click="detail"><i class="fa fa-file-text-o"></i>&nbsp;详情</a>
-			<a v-if="hasPermission('userinfo:info')" class="btn btn-primary" @click="emptyBucketFlow"><i class="fa fa-stack-overflow"></i>&nbsp;查看空桶流水</a>
-			<a v-if="hasPermission('productinfo:info')" class="btn btn-primary" @click="productTicket"><i class="fa fa fa-list-alt"></i>&nbsp;水票</a>
+			<a v-if="hasPermission('userproductticketflow:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a v-if="hasPermission('userproductticketflow:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<a v-if="hasPermission('userproductticketflow:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
 		</div>
 	    <table id="jqGrid"></table>
 	    <div id="jqGridPager"></div>
@@ -40,68 +40,62 @@
 		<div class="panel-heading">{{title}}</div>
 		<form class="form-horizontal">
 											<div class="form-group">
+			   	<div class="col-sm-2 control-label">用户id</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="userProductTicketFlow.userId" placeholder="用户id"/>
+			    </div>
+			</div>
+									<div class="form-group">
 			   	<div class="col-sm-2 control-label">用户名</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userInfo.username" placeholder="用户名"/>
+			      <input type="text" class="form-control" v-model="userProductTicketFlow.username" placeholder="用户名"/>
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">手机号</div>
+			   	<div class="col-sm-2 control-label">用户水票id</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userInfo.phone" placeholder="手机号"/>
+			      <input type="text" class="form-control" v-model="userProductTicketFlow.userProductTicketId" placeholder="用户水票id"/>
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">微信 ID</div>
+			   	<div class="col-sm-2 control-label">关联商品 ID</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userInfo.uid" placeholder="微信 ID"/>
+			      <input type="text" class="form-control" v-model="userProductTicketFlow.productInfoId" placeholder="关联商品 ID"/>
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">状态</div>
+			   	<div class="col-sm-2 control-label">关联商品名</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userInfo.status" placeholder="状态"/>
+			      <input type="text" class="form-control" v-model="userProductTicketFlow.productName" placeholder="关联商品名"/>
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">总押金金额</div>
+			   	<div class="col-sm-2 control-label">使用数量</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userInfo.depositAmount" placeholder="总押金金额"/>
+			      <input type="text" class="form-control" v-model="userProductTicketFlow.usedCount" placeholder="使用数量"/>
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">可用押金金额</div>
+			   	<div class="col-sm-2 control-label">剩余数量</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userInfo.enableDepositAmount" placeholder="可用押金金额"/>
+			      <input type="text" class="form-control" v-model="userProductTicketFlow.remainderCount" placeholder="剩余数量"/>
 			    </div>
 			</div>
 									<div class="form-group">
-			   	<div class="col-sm-2 control-label">不可用押金金额</div>
+			   	<div class="col-sm-2 control-label">使用时间</div>
 			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userInfo.disableDepositAmount" placeholder="不可用押金金额"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">持有空桶数</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userInfo.emptyBucketNumber" placeholder="持有空桶数"/>
-			    </div>
-			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">注册时间</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userInfo.creationTime" placeholder="注册时间"/>
+			      <input type="text" class="form-control" v-model="userProductTicketFlow.creationTime" placeholder="使用时间"/>
 			    </div>
 			</div>
 							<div class="form-group">
 				<div class="col-sm-2 control-label"></div> 
-				<!--<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>-->
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
 				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
 			</div>
 		</form>
 	</div>
 </div>
 
-<script src="../public/js/user/userinfo.js"></script>
+<script src="../public/js/user/userproductticketflow.js"></script>
 </body>
 </html>
