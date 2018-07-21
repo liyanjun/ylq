@@ -109,7 +109,9 @@ INSERT INTO `sys_menu` VALUES ('94','61', '用户水票信息', 'user/userproduc
 INSERT INTO `sys_menu` VALUES ('95', '94', '查看', null, 'userproductticket:list,userproductticket:info', '2', null, '6');INSERT INTO `sys_menu` VALUES ('94','61', '用户水票信息', 'user/userproductticket.html', 'userproductticket:list', '1', 'fa fa-file-code-o', '6');
 INSERT INTO `sys_menu` VALUES ('96','61', '用户水票消费流水', 'user/userproductticketflow.html', 'userproductticketflow:list', '1', 'fa fa-list', '6');
 INSERT INTO `sys_menu` VALUES ('97', '96', '查看', null, 'userproductticketflow:list,userproductticketflow:info', '2', null, '6');
-
+INSERT INTO `sys_menu` VALUES ('98', '61', '推广审批申请表', 'user/userrecommendapproval.html', 'userrecommendapproval:list', '1', 'fa fa-address-card-o', '6');
+INSERT INTO `sys_menu` VALUES ('99', '98', '查看', null, 'userrecommendapproval:list,userrecommendapproval:info', '2', null, '6');
+INSERT INTO `sys_menu` VALUES ('100', '98', '修改', null, 'userrecommendapproval:update', '2', null, '6');
 
 -- ----------------------------
 -- Records of sys_role_menu

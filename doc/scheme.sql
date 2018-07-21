@@ -566,6 +566,7 @@ CREATE TABLE `user_info` (
   `creation_time` datetime NOT NULL COMMENT '用户注册时间',
   `recommenderID` bigint(20) DEFAULT NULL COMMENT '推荐人ID',
   `recommenderName` varchar(64) DEFAULT NULL COMMENT '推荐人姓名',
+  `is_recommender` tinyint(4) DEFAULT '20' COMMENT '是否是推广人，10：是，20：否',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uid_unique` (`uid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='客户信息表';
@@ -633,3 +634,22 @@ CREATE TABLE `user_product_ticket_flow` (
   `creation_time` datetime NOT NULL COMMENT '使用时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户水票消费流水';
+
+-- ----------------------------
+-- Table structure for user_recommend_approval
+-- ----------------------------
+DROP TABLE IF EXISTS `user_recommend_approval`;
+CREATE TABLE `user_recommend_approval` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `username` varchar(64) DEFAULT NULL COMMENT '用户名',
+  `positive_id_photo` varchar(512) NOT NULL COMMENT '身份证正面照片',
+  `reverse_id_photo` varchar(512) NOT NULL COMMENT '身份证反面照片',
+  `phone` varchar(32) NOT NULL COMMENT '验证手机号码',
+  `remark_personal_ability` varchar(512) DEFAULT NULL COMMENT '备注个人能力',
+  `application_time` datetime NOT NULL COMMENT '申请时间',
+  `approve_time` datetime DEFAULT NULL COMMENT '审批时间',
+  `approve_opinion` varchar(512) DEFAULT NULL COMMENT '审批意见',
+  `is_approved` tinyint(4) DEFAULT NULL COMMENT '是否通过审批，10：通过，20：不通过',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户推广审批申请表';

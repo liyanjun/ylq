@@ -43,7 +43,7 @@
 			<a v-if="hasPermission('userproductticket:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
 			<a v-if="hasPermission('userproductticket:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
 			<a v-if="hasPermission('userproductticket:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-            <a v-if="hasPermission('orderinfo:info')" class="btn btn-primary" @click="detail"><i class="fa fa-plus"></i>&nbsp;详情</a>
+            <a v-if="hasPermission('orderinfo:info')" class="btn btn-primary" @click="detail"><i class="fa fa-file-text-o"></i>&nbsp;详情</a>
             <a v-if="userId!=''&&userId!=null" class="btn btn-warning" @click="btnback">&nbsp;返回</a>
         </div>
 	    <table id="jqGrid"></table>
