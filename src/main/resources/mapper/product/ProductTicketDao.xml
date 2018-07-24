@@ -17,8 +17,8 @@
         <result property="minDilivery" column="min_dilivery"/>
         <result property="waterCoin" column="water_coin"/>
         <result property="status" column="status"/>
-        <result property="cout" column="cout"/>
-        <result property="amout" column="amout"/>
+        <result property="count" column="count"/>
+        <result property="amount" column="amount"/>
         <result property="notes" column="notes"/>
         <result property="instructions" column="instructions"/>
         <result property="creationTime" column="creation_time"/>
@@ -80,8 +80,8 @@
 					`min_dilivery`, 
 					`water_coin`, 
 					`status`, 
-					`cout`, 
-					`amout`, 
+					`count`,
+					`amount`,
 					`notes`, 
 					`instructions`, 
 					`creation_time`, 
@@ -106,8 +106,8 @@
 		`min_dilivery`,
 		`water_coin`,
 		`status`,
-		`cout`,
-		`amout`,
+		`count`,
+		`amount`,
 		`notes`,
 		`instructions`,
 		`creation_time`,
@@ -115,7 +115,11 @@
 		`remarks`,
 		`sort`
 		from product_ticket
-        where product_ticket_num = #{productTicketNum}
+        <where>
+			<if test="productTicketNum != null and productTicketNum.trim() != ''">
+				and product_ticket_num = #{productTicketNum}
+			</if>
+		</where>
         limit 0,1
 	</select>
 
@@ -133,8 +137,8 @@
 		            `min_dilivery`, 
 		            `water_coin`, 
 		            `status`, 
-		            `cout`, 
-		            `amout`, 
+		            `count`,
+		            `amount`,
 		            `notes`, 
 		            `instructions`, 
 		            `creation_time`, 
@@ -142,6 +146,11 @@
 		            `remarks`,
 		            `sort`
 				from product_ticket
+		<where>
+			<if test="productInfoId != null">
+				and product_info_id = #{productInfoId}
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -169,8 +178,8 @@
 		`min_dilivery`,
 		`water_coin`,
 		`status`,
-		`cout`,
-		`amout`,
+		`count`,
+		`amount`,
 		`notes`,
 		`instructions`,
 		`creation_time`,
@@ -178,7 +187,11 @@
 		`remarks`,
 		`sort`
 		from product_ticket
-        where product_info_id = #{productInfoId}
+		<where>
+			<if test="productInfoId != null">
+				and product_info_id = #{productInfoId}
+			</if>
+		</where>
 		<choose>
 			<when test="sidx != null and sidx.trim() != ''">
 				order by ${sidx} ${order}
@@ -193,7 +206,12 @@
 	</select>
 
  	<select id="queryTotal" resultType="int">
-		select count(*) from product_ticket 
+		select count(*) from product_ticket
+		<where>
+			<if test="productInfoId != null">
+				and product_info_id = #{productInfoId}
+			</if>
+		</where>
 	</select>
 	 
 	<insert id="save" parameterType="com.yunquanlai.admin.product.entity.ProductTicketEntity">
@@ -211,8 +229,8 @@
 			`min_dilivery`, 
 			`water_coin`, 
 			`status`, 
-			`cout`, 
-			`amout`, 
+			`count`,
+			`amount`,
 			`notes`, 
 			`instructions`, 
 			`creation_time`, 
@@ -234,8 +252,8 @@
 			#{minDilivery}, 
 			#{waterCoin}, 
 			#{status}, 
-			#{cout}, 
-			#{amout}, 
+			#{count},
+			#{amount},
 			#{notes}, 
 			#{instructions}, 
 			#{creationTime}, 
@@ -259,8 +277,8 @@
 			<if test="minDilivery != null">`min_dilivery` = #{minDilivery}, </if>
 			<if test="waterCoin != null">`water_coin` = #{waterCoin}, </if>
 			<if test="status != null">`status` = #{status}, </if>
-			<if test="cout != null">`cout` = #{cout}, </if>
-			<if test="amout != null">`amout` = #{amout}, </if>
+			<if test="count != null">`count` = #{count}, </if>
+			<if test="amount != null">`amount` = #{amount}, </if>
 			<if test="notes != null">`notes` = #{notes}, </if>
 			<if test="instructions != null">`instructions` = #{instructions}, </if>
 			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>

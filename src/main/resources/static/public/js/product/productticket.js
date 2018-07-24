@@ -3,7 +3,7 @@ $(function () {
     vm.productName = T.p("productName");
     var param = "";
     if(vm.productId != undefined){
-        param = "?productId=" + vm.productId;
+        param = "?productInfoId=" + vm.productId;
     }
     $("#jqGrid").jqGrid({
         url: '../productticket/list'+param,
@@ -150,7 +150,10 @@ var vm = new Vue({
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page
             }).trigger("reloadGrid");
-		}
+		},
+        btnback: function () {
+            window.location.href="../product/productinfo.html";
+        }
 	}
 });
 

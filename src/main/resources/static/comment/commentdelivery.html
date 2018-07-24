@@ -45,7 +45,7 @@
 <div id="rrapp" v-cloak>
 	<div v-show="showList">
 		<div class="grid-btn">
-			<a v-if="hasPermission('commentdelivery:info')" class="btn btn-primary" @click="info"><i class="fa fa-plus"></i>&nbsp;详情</a>
+			<a v-if="hasPermission('commentdelivery:info')" class="btn btn-primary" @click="info"><i class="fa fa-file-text-o"></i>&nbsp;详情</a>
 			<a v-if="hasPermission('commentdelivery:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
 			<a v-if="deliveryDistributorId!=''&&deliveryDistributorId!=null" class="btn btn-warning" @click="btnback">&nbsp;返回</a>
 		</div>

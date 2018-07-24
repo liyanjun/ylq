@@ -23,10 +23,29 @@
 <div id="rrapp" v-cloak>
 	<div v-show="showList">
 		<div class="grid-btn">
+			<div class="form-group col-sm-2" style="width: 150px">
+				<input type="text" class="form-control" v-model="q.userName" @keyup.enter="query" placeholder="用户名">
+			</div>
+            <div class="form-group col-sm-2" style="width: 150px">
+				<input type="text" class="form-control" v-model="q.productTicketTitle" @keyup.enter="query" placeholder="水票标题">
+			</div>
+            <div class="form-group col-sm-2" style="width: 150px">
+				<input type="text" class="form-control" v-model="q.productName" @keyup.enter="query" placeholder="商品名">
+			</div>
+			<div class="form-group col-sm-2" style="width: 150px">
+				<select v-model="q.status" class="form-control" id="statusSelect">
+					<option value="" disabled selected hidden>水票状态</option>
+					<option v-for="statusSel in statusSelect" :value="statusSel.id">{{statusSel.name}}</option>
+				</select>
+			</div>
+			<a class="btn btn-default" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+            <a class="btn btn-success" @click="reset"><i class="fa fa-rotate-left"></i> 重置</a>
 			<a v-if="hasPermission('userproductticket:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
 			<a v-if="hasPermission('userproductticket:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
 			<a v-if="hasPermission('userproductticket:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-		</div>
+            <a v-if="hasPermission('orderinfo:info')" class="btn btn-primary" @click="detail"><i class="fa fa-file-text-o"></i>&nbsp;详情</a>
+            <a v-if="userId!=''&&userId!=null" class="btn btn-warning" @click="btnback">&nbsp;返回</a>
+        </div>
 	    <table id="jqGrid"></table>
 	    <div id="jqGridPager"></div>
     </div>
@@ -34,45 +53,133 @@
     <div v-show="!showList" class="panel panel-default">
 		<div class="panel-heading">{{title}}</div>
 		<form class="form-horizontal">
-											<div class="form-group">
-			   	<div class="col-sm-2 control-label">水票标题</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userProductTicket.productTicketTitle" placeholder="水票标题"/>
-			    </div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">用户 ID</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.userId" placeholder="用户 ID"/>
+				</div>
 			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">剩余数量</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userProductTicket.count" placeholder="剩余数量"/>
-			    </div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">水票 ID</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.productTicketId" placeholder="水票 ID"/>
+				</div>
 			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">购买价格</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userProductTicket.amount" placeholder="购买价格"/>
-			    </div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">产品 ID</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.productId" placeholder="产品 ID"/>
+				</div>
 			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">用户水票状态，10：新下单，20：已支付，30：已关闭</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userProductTicket.status" placeholder="用户水票状态，10：新下单，20：已支付，30：已关闭"/>
-			    </div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">产品名称</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.productName" placeholder="产品名称"/>
+				</div>
 			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">关联产品 ID</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userProductTicket.productInfoId" placeholder="关联产品 ID"/>
-			    </div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">水票标题</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.productTicketTitle" placeholder="水票标题"/>
+				</div>
 			</div>
-									<div class="form-group">
-			   	<div class="col-sm-2 control-label">购买时间</div>
-			   	<div class="col-sm-10">
-			      <input type="text" class="form-control" v-model="userProductTicket.creationTime" placeholder="购买时间"/>
-			    </div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">水票编号</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.productTicketNum" placeholder="水票编号"/>
+				</div>
 			</div>
-							<div class="form-group">
-				<div class="col-sm-2 control-label"></div> 
-				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">水票副标题</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.productTicketSubtitle" placeholder="水票副标题"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">总共兑换数量</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.totalCount" placeholder="总共兑换数量"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">已使用水票数量</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.useCount" placeholder="已使用水票数量"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">剩余水票数量</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.remainderCount" placeholder="剩余水票数量"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">水票状态</div>
+				<div class="col-sm-10">
+					<!--<input type="text" class="form-control" v-model="userProductTicket.status" placeholder="用户水票状态，10：待支付，20：已支付，30：兑付完毕，40：已关闭"/>-->
+                    <input type="text" disabled="disabled" class="form-control" v-if="userProductTicket.status==10" value="待支付"/>
+                    <input type="text" disabled="disabled" class="form-control" v-if="userProductTicket.status==20" value="已支付"/>
+                    <input type="text" disabled="disabled" class="form-control" v-if="userProductTicket.status==30" value="兑付完毕"/>
+                    <input type="text" disabled="disabled" class="form-control" v-if="userProductTicket.status==40" value="已关闭"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">兑付结束时间</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.finishTime" placeholder="兑付结束时间"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">过期时间</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.endTime" placeholder="过期时间"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">创建时间</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.creationTime" placeholder="创建时间"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">获赠水币用户id</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.benifitUserId" placeholder="获赠水币用户id"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">获赠水币用户名</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.benifitUsername" placeholder="获赠水币用户名"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">送出桶数</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.benifitCount" placeholder="送出桶数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">赠送水币用户id</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.fromUserId" placeholder="赠送水币用户id"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">赠送水币用户名</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.fromUsername" placeholder="赠送水币用户名"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">得到桶数</div>
+				<div class="col-sm-10">
+					<input type="text" disabled="disable" class="form-control" v-model="userProductTicket.fromCount" placeholder="得到桶数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<!--<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>-->
 				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
 			</div>
 		</form>

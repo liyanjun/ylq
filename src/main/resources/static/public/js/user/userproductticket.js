@@ -1,15 +1,46 @@
 $(function () {
+    vm.userId = T.p("userId");
+    var param = "";
+    if(vm.userId != undefined){
+        param = "?userId=" + vm.userId;
+    }
     $("#jqGrid").jqGrid({
-        url: '../userproductticket/list',
+        url: '../userproductticket/list' +param,
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '水票标题', name: 'productTicketTitle', index: 'product_ticket_title', width: 80 }, 			
-			{ label: '剩余数量', name: 'count', index: 'count', width: 80 },
-			{ label: '购买价格', name: 'amount', index: 'amount', width: 80 }, 			
-			{ label: '用户水票状态，10：新下单，20：已支付，30：已关闭', name: 'status', index: 'status', width: 80 }, 			
-			{ label: '关联产品 ID', name: 'productInfoId', index: 'product_info_id', width: 80 }, 			
-			{ label: '购买时间', name: 'creationTime', index: 'creation_time', width: 80 }			
+            { label: '用户名', name: 'userName', index: 'username', width: 80 },
+            // { label: '水票 ID', name: 'productTicketId', index: 'product_ticket_id', width: 80 },
+            // { label: '水票编号', name: 'productTicketNum', index: 'product_ticket_num', width: 80 },
+            { label: '水票标题', name: 'productTicketTitle', index: 'product_ticket_title', width: 80 },
+            // { label: '水票副标题', name: 'productTicketSubtitle', index: 'product_ticket_subtitle', width: 80 },
+            //{ label: '关联产品 ID', name: 'productId', index: 'product_id', width: 80 },
+            { label: '产品名称', name: 'productName', index: 'product_name', width: 80 },
+            { label: '总共兑换数量', name: 'totalCount', index: 'total_count', width: 80 },
+            // { label: '已使用数量', name: 'useCount', index: 'use_count', width: 80 },
+            { label: '剩余数量', name: 'remainderCount', index: 'remainder_count', width: 80 },
+            { label: '水票状态', name: 'status', index: 'status', width: 80,
+                formatter: function (value, options, row) {
+                    if (value === 10) {
+                        return '待支付';
+                    } else if (value === 20) {
+                        return '已支付'
+                    } else if (value === 30) {
+                        return '兑付完毕'
+                    } else {
+                        return '已关闭';
+                    }
+                }
+            },
+            // { label: '兑付结束时间', name: 'finishTime', index: 'finish_time', width: 80 },
+            { label: '过期时间', name: 'endTime', index: 'end_time', width: 80 },
+            // { label: '创建时间', name: 'creationTime', index: 'creation_time', width: 80 },
+            // { label: '获赠水币的用户id', name: 'benifitUserId', index: 'benifit_user_id', width: 80 },
+            { label: '获赠用户名', name: 'benifitUsername', index: 'benifit_username', width: 80 },
+            { label: '送出桶数', name: 'benifitCount', index: 'benifit_count', width: 80 },
+            // { label: '赠送水币的用户id', name: 'fromUserId', index: 'from_user_id', width: 80 },
+            { label: '赠送用户名', name: 'fromUsername', index: 'from_username', width: 80 },
+            { label: '得到桶数', name: 'fromCount', index: 'from_count', width: 80 }
         ],
 		viewrecords: true,
         height: 385,
@@ -41,9 +72,22 @@ $(function () {
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
+        q: {
+            userName: null,
+            productTicketTitle: null,
+            productName: null,
+            status: null
+        },
+        userId:"",
 		showList: true,
 		title: null,
-		userProductTicket: {}
+		userProductTicket: {},
+        statusSelect:[
+            {id:"10",name:"待支付"},
+            {id:"20",name:"已支付"},
+            {id:"30",name:"兑付完毕"},
+            {id:"30",name:"已关闭"}
+        ]
 	},
 	methods: {
 		query: function () {
@@ -54,6 +98,17 @@ var vm = new Vue({
 			vm.title = "新增";
 			vm.userProductTicket = {};
 		},
+        reset: function () {
+            $("#userName").val("");
+            $("#productTicketTitle").val("");
+            $("#productName").val("");
+            $("#statusSelect").val("");
+            vm.q.userName = "";
+            vm.q.productTicketTitle = "";
+            vm.q.productName = "";
+            vm.q.status = "";
+            vm.reload();
+        },
 		update: function (event) {
 			var id = getSelectedRow();
 			if(id == null){
@@ -111,12 +166,31 @@ var vm = new Vue({
                 vm.userProductTicket = r.userProductTicket;
             });
 		},
+        detail: function () {
+            var id = getSelectedRow();
+            if(id == null){
+                return ;
+            }
+            vm.showList = false;
+            vm.title = "详情";
+
+            vm.getInfo(id)
+        },
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
-			$("#jqGrid").jqGrid('setGridParam',{ 
+			$("#jqGrid").jqGrid('setGridParam',{
+                postData:{
+                    userName: vm.q.userName,
+                    productTicketTitle: vm.q.productTicketTitle,
+                    productName: vm.q.productName,
+                    status: vm.q.status
+                },
                 page:page
             }).trigger("reloadGrid");
-		}
+		},
+        btnback: function () {
+            window.location.href="userinfo.html";
+        }
 	}
 });

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunquanlai.admin.user.dao.UserProductTicketFlowDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.yunquanlai.admin.user.entity.UserProductTicketFlowEntity" id="userProductTicketFlowMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="userProductTicketId" column="user_product_ticket_id"/>
+        <result property="productInfoId" column="product_info_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="usedCount" column="used_count"/>
+        <result property="remainderCount" column="remainder_count"/>
+        <result property="creationTime" column="creation_time"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.yunquanlai.admin.user.entity.UserProductTicketFlowEntity">
+		select
+					`id`, 
+					`user_id`, 
+					`username`, 
+					`user_product_ticket_id`, 
+					`product_info_id`, 
+					`product_name`, 
+					`used_count`, 
+					`remainder_count`, 
+					`creation_time`
+				from user_product_ticket_flow where id = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
+	</select>
+
+	<select id="queryList" resultType="com.yunquanlai.admin.user.entity.UserProductTicketFlowEntity">
+		select
+		            `id`, 
+		            `user_id`, 
+		            `username`, 
+		            `user_product_ticket_id`, 
+		            `product_info_id`, 
+		            `product_name`, 
+		            `used_count`, 
+		            `remainder_count`, 
+		            `creation_time`
+				from user_product_ticket_flow
+		<where>
+			<if test="userName != null and userName.trim() != ''">
+				and `username` like concat('%',#{userName},'%')
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from user_product_ticket_flow
+		<where>
+			<if test="userName != null and userName.trim() != ''">
+				and `username` like concat('%',#{userName},'%')
+			</if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunquanlai.admin.user.entity.UserProductTicketFlowEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into user_product_ticket_flow
+		(
+			`user_id`, 
+			`username`, 
+			`user_product_ticket_id`, 
+			`product_info_id`, 
+			`product_name`, 
+			`used_count`, 
+			`remainder_count`, 
+			`creation_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{username}, 
+			#{userProductTicketId}, 
+			#{productInfoId}, 
+			#{productName}, 
+			#{usedCount}, 
+			#{remainderCount}, 
+			#{creationTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunquanlai.admin.user.entity.UserProductTicketFlowEntity">
+		update user_product_ticket_flow 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="userProductTicketId != null">`user_product_ticket_id` = #{userProductTicketId}, </if>
+			<if test="productInfoId != null">`product_info_id` = #{productInfoId}, </if>
+			<if test="productName != null">`product_name` = #{productName}, </if>
+			<if test="usedCount != null">`used_count` = #{usedCount}, </if>
+			<if test="remainderCount != null">`remainder_count` = #{remainderCount}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from user_product_ticket_flow where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from user_product_ticket_flow where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

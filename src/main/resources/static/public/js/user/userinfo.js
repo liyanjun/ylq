@@ -12,7 +12,17 @@ $(function () {
 			/*{ label: '可用押金金额', name: 'enableDepositAmount', index: 'enable_deposit_amount', width: 80 },
 			{ label: '不可用押金金额', name: 'disableDepositAmout', index: 'disable_deposit_amount', width: 80 },
 			*/{ label: '持有空桶数', name: 'emptyBucketNumber', index: 'empty_bucket_number', width: 80 },
-			{ label: '注册时间', name: 'creationTime', index: 'creation_time', width: 80 }
+			{ label: '注册时间', name: 'creationTime', index: 'creation_time', width: 80 },
+			{ label: '推荐人姓名', name: 'recommenderName', index: 'recommenderName', width: 80 },
+			{ label: '是否是推荐人', name: 'isRecommender', index: 'is_recommender', width: 80,
+                formatter: function (value, options, row) {
+                    if (value === 10) {
+                        return '<font color="green">是</font>';
+                    } else if (value === 20) {
+                        return '<font color="red">否</font>'
+                    }
+                }
+			}
         ],
 		viewrecords: true,
         height: 385,
@@ -83,6 +93,16 @@ var vm = new Vue({
                 vm.userInfo = r.userInfo;
             });
 		},
+        productTicket: function () {
+            var id = getSelectedRow();
+            //var gr = jQuery("#jqGrid").jqGrid('getRowData', id);
+            if (id == null) {
+                return;
+            }
+            var url = "userproductticket.html?userId="+id;
+            // encodeURI 编码
+            window.location.assign(encodeURI(url));
+        },
 		reload: function (event) {
 			vm.showList = true;
 			// var page = $("#jqGrid").jqGrid('getGridParam','page');

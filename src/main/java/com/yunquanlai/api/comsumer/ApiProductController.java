@@ -153,7 +153,7 @@ public class ApiProductController {
      * 通过商品查询水票
      */
     @IgnoreAuth
-    @PostMapping("queryProductTicket")
+    @PostMapping("queryProductTicketByProductId")
     @ApiOperation(value = "商品查询")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "long", name = "productId", value = "商品ID"),
