@@ -158,7 +158,7 @@ public class ApiProductController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "long", name = "productId", value = "商品ID"),
     })
-    public R queryProductTicket(Long productId) {
+    public R queryTicket(Long productId) {
         List<ProductTicketEntity> productTicketEntities = productTicketService.queryListByProductId(productId);
         return R.ok().put("productTicketList", productTicketEntities);
     }
