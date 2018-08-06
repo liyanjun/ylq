@@ -30,7 +30,6 @@ import com.yunquanlai.admin.user.dao.UserInfoDao;
 import com.yunquanlai.admin.user.dao.UserProductTicketDao;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.admin.user.entity.UserProductTicketEntity;
-import com.yunquanlai.admin.user.service.UserProductTicketService;
 import com.yunquanlai.api.comsumer.vo.OrderCommentVO;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.api.comsumer.vo.ProductOrderVO;
@@ -45,7 +44,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -530,6 +528,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     public R newTicketOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException, JsonProcessingException {
         checkUnpayOrder(user);
         UserProductTicketEntity userProductTicketEntity = userProductTicketDao.queryObject(orderVO.getTicketId(), true);
+        //TODO 水票是否有效校验
+        if(userProductTicketEntity.getUserId().longValue() != user.getId().longValue()){
+            return R.error("请不要使用别人的水票。");
+        }
 
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = new OrderDeliveryInfoEntity();
         OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
