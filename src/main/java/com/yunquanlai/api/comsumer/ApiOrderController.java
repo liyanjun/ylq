@@ -162,8 +162,12 @@ public class ApiOrderController {
         if (!availableDelivery(orderVO.getLocationX(), orderVO.getLocationY())) {
             return R.error("配送地址不在派送范围内，请联系客服确认。").put("orderToken",tokenUtils.getToken()).put("code",507);
         }
+        if(orderVO.getPayType() == OrderInfoEntity.PAY_TYPE_TICKET){
+            return orderInfoService.newTicketOrder(orderVO, user);
+        }
         return orderInfoService.newOrder(orderVO, user);
     }
+
 
     /**
      * 关闭订单

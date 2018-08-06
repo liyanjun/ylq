@@ -99,4 +99,6 @@ public interface OrderInfoService {
     void handDistribute(Long orderId, Long deliveryDistributorId, Long deliveryEndpointId, OrderOperateFlowEntity orderOperateFlowEntity);
 
     List<OrderInfoEntity> queryUnpaidByUserId(Long userId);
+
+    R newTicketOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException, JsonProcessingException;
 }

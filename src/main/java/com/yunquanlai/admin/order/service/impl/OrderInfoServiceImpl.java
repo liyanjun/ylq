@@ -27,7 +27,10 @@ import com.yunquanlai.admin.product.entity.ProductInfoEntity;
 import com.yunquanlai.admin.product.entity.ProductStockEntity;
 import com.yunquanlai.admin.system.dao.SysConfigDao;
 import com.yunquanlai.admin.user.dao.UserInfoDao;
+import com.yunquanlai.admin.user.dao.UserProductTicketDao;
 import com.yunquanlai.admin.user.entity.UserInfoEntity;
+import com.yunquanlai.admin.user.entity.UserProductTicketEntity;
+import com.yunquanlai.admin.user.service.UserProductTicketService;
 import com.yunquanlai.api.comsumer.vo.OrderCommentVO;
 import com.yunquanlai.api.comsumer.vo.OrderVO;
 import com.yunquanlai.api.comsumer.vo.ProductOrderVO;
@@ -85,6 +88,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private DeliveryDistributorDao deliveryDistributorDao;
 
     @Autowired
+    private UserProductTicketDao userProductTicketDao;
+
+    @Autowired
     private SysConfigDao sysConfigDao;
 
     @Autowired
@@ -104,6 +110,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Autowired
     private ConfigUtils configUtils;
+
     /**
      * 上下文对象
      */
@@ -152,15 +159,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public R newOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException, JsonProcessingException {
         //检查该用户之前是否有未支付订单
-        List<OrderInfoEntity> orderInfoEntities = orderInfoDao.queryUnpaidByUserId(user.getId());
-        for (OrderInfoEntity orderInfoEntity : orderInfoEntities) {
-            if (orderInfoEntity != null && orderInfoEntity.getStatus() == 10) {
-                //关闭未支付订单
-                orderInfoEntity.setStatus(OrderInfoEntity.STATUS_CLOSE);
-                orderInfoEntity.setCloseTime(new Date());
-                orderInfoDao.update(orderInfoEntity);
-            }
-        }
+        checkUnpayOrder(user);
         OrderDeliveryInfoEntity orderDeliveryInfoEntity = new OrderDeliveryInfoEntity();
         OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
         List<OrderProductDetailEntity> orderProductDetailEntities = new ArrayList<>(16);
@@ -188,21 +187,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             amountDeliveryFee = amountDeliveryFee.add(productInfoEntity.getDeliveryFee());
         }
         //押金校验 用户可用押金+本次提交押金>本次下单需要的押金阈值
-        if(deposit.compareTo(user.getEnableDepositAmount().add(orderVO.getDeposit())) == 1){
-            return R.error("缴纳押金不足，请重新选择押金金额。").put("orderToken",tokenUtils.getToken()).put("code",507);
+        if (deposit.compareTo(user.getEnableDepositAmount().add(orderVO.getDeposit())) == 1) {
+            return R.error("缴纳押金不足，请重新选择押金金额。").put("orderToken", tokenUtils.getToken()).put("code", 507);
         }
-        for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
-            ProductInfoEntity productInfoEntity = productInfoDao.queryObject(productOrderVO.getProductInfoId(), true);
-            OrderProductDetailEntity orderProductDetailEntity = new OrderProductDetailEntity();
-            orderProductDetailEntity.setCount(productOrderVO.getCount());
-            orderProductDetailEntity.setProductInfoId(productInfoEntity.getId());
-            orderProductDetailEntity.setProductName(productInfoEntity.getName());
-            orderProductDetailEntity.setBucketType(productInfoEntity.getBucketType());
-            orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
-            orderProductDetailEntities.add(orderProductDetailEntity);
-            productInfoEntity.setCount(productInfoEntity.getCount() + productOrderVO.getCount());
-            productInfoDao.update(productInfoEntity);
-        }
+        updateProductInfo(orderVO, orderProductDetailEntities);
         orderInfoEntity.setDeposit(orderVO.getDeposit());
         orderInfoEntity.setBucketNum(orderVO.getBucketNum());
         orderInfoEntity.setAmount(amount);
@@ -382,10 +370,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
             orderProductDetailEntities.add(orderProductDetailEntity);
         }
-        if(deposit.compareTo(user.getEnableDepositAmount()) == -1 || deposit.compareTo(user.getEnableDepositAmount()) == 0){
+        if (deposit.compareTo(user.getEnableDepositAmount()) == -1 || deposit.compareTo(user.getEnableDepositAmount()) == 0) {
             deposit = BigDecimal.ZERO;
         }
-        if(deposit.compareTo(user.getEnableDepositAmount()) == 1){
+        if (deposit.compareTo(user.getEnableDepositAmount()) == 1) {
             deposit = deposit.subtract(user.getEnableDepositAmount());
         }
         return R.ok().put("orderProductDetails", orderProductDetailEntities).
@@ -411,7 +399,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public R saveComment(OrderCommentVO orderCommentVO, UserInfoEntity userInfoEntity) throws RuntimeException{
+    public R saveComment(OrderCommentVO orderCommentVO, UserInfoEntity userInfoEntity) throws RuntimeException {
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderCommentVO.getOrderId(), true);
         if (userInfoEntity.getId().longValue() != orderInfoEntity.getUserInfoId().longValue()) {
             return R.error("不能评价别人的订单。");
@@ -456,7 +444,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             }
         }
         orderInfoDao.update(orderInfoEntity);
-        return R.ok().put("msg","评论提交成功");
+        return R.ok().put("msg", "评论提交成功");
     }
 
     @Override
@@ -538,12 +526,169 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return orderInfoDao.queryUnpaidByUserId(userId);
     }
 
+    @Override
+    public R newTicketOrder(OrderVO orderVO, UserInfoEntity user) throws ParseException, JsonProcessingException {
+        checkUnpayOrder(user);
+        UserProductTicketEntity userProductTicketEntity = userProductTicketDao.queryObject(orderVO.getTicketId(), true);
+
+        OrderDeliveryInfoEntity orderDeliveryInfoEntity = new OrderDeliveryInfoEntity();
+        OrderInfoEntity orderInfoEntity = new OrderInfoEntity();
+        List<OrderProductDetailEntity> orderProductDetailEntities = new ArrayList<>(16);
+        BigDecimal bEmptyValue = configUtils.getEmptyValue();
+        BigDecimal amount = BigDecimal.ZERO;
+        BigDecimal amountTotal = BigDecimal.ZERO;
+        BigDecimal amountDeliveryFee = BigDecimal.ZERO;
+        BigDecimal deposit = BigDecimal.ZERO;
+        int count = 0;
+
+        for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
+            // 计算订单总额,押金总额
+            ProductInfoEntity productInfoEntity = productInfoDao.queryObject(productOrderVO.getProductInfoId(), false);
+            if (productInfoEntity == null || productInfoEntity.getStatus() != 20) {
+                return R.error("找不到购买的商品，可能商品已下架，请重新购买。");
+            }
+            count = count + productOrderVO.getCount();
+            amount = amount.add(productInfoEntity.getAmount().multiply(new BigDecimal(productOrderVO.getCount())));
+            if (productInfoEntity.getAmountShow() != null) {
+                amountTotal = amountTotal.add(productInfoEntity.getAmountShow().multiply(new BigDecimal(productOrderVO.getCount())));
+            }
+
+            if (productInfoEntity.getBucketType() == ProductInfoEntity.BUCKET_TYPE_RECYCLE) {
+                deposit = deposit.add(bEmptyValue.multiply(new BigDecimal(productOrderVO.getCount())));
+            }
+            amountDeliveryFee = amountDeliveryFee.add(productInfoEntity.getDeliveryFee());
+        }
+
+        if (userProductTicketEntity.getTotalCount() < count) {
+            return R.error("水票可用剩余桶数不足。");
+        }
+
+        //押金校验 用户可用押金+本次提交押金>本次下单需要的押金阈值
+        if (deposit.compareTo(user.getEnableDepositAmount().add(orderVO.getDeposit())) == 1) {
+            return R.error("缴纳押金不足，请重新选择押金金额。").put("orderToken", tokenUtils.getToken()).put("code", 507);
+        }
+        updateProductInfo(orderVO, orderProductDetailEntities);
+        orderInfoEntity.setDeposit(orderVO.getDeposit());
+        orderInfoEntity.setBucketNum(orderVO.getBucketNum());
+        orderInfoEntity.setAmount(amount);
+        orderInfoEntity.setAmountTotal(amountTotal);
+        orderInfoEntity.setAmountDeliveryFee(amountDeliveryFee);
+        orderInfoEntity.setUsername(user.getUsername());
+        orderInfoEntity.setUserPhone(orderVO.getPhone());
+        orderInfoEntity.setUserInfoId(user.getId());
+        orderInfoEntity.setCreationTime(new Date());
+        orderInfoEntity.setStatus(OrderInfoEntity.STATUS_NEW);
+        orderInfoEntity.setType(OrderInfoEntity.TYPE_NORMAL);
+        orderInfoEntity.setPayType(OrderInfoEntity.PAY_TYPE_TICKET);
+        orderInfoEntity.setRemark(orderVO.getRemark());
+        orderInfoEntity.setDetail(mapper.writeValueAsString(orderProductDetailEntities));
+        // 订单
+        orderDeliveryInfoEntity.setAddress(orderVO.getAddress());
+        if (StringUtils.isNotBlank(orderVO.getDeliveryTime())) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            orderDeliveryInfoEntity.setDeliveryTime(sdf.parse(orderVO.getDeliveryTime()));
+        }
+
+        orderDeliveryInfoEntity.setAmountDeliveryFee(amountDeliveryFee);
+        orderDeliveryInfoEntity.setDetail(mapper.writeValueAsString(orderProductDetailEntities));
+        orderDeliveryInfoEntity.setLocationX(orderVO.getLocationX());
+        orderDeliveryInfoEntity.setLocationY(orderVO.getLocationY());
+        orderDeliveryInfoEntity.setOrderInfoId(orderInfoEntity.getId());
+        orderDeliveryInfoEntity.setPhone(orderVO.getPhone());
+        orderDeliveryInfoEntity.setName(orderVO.getName());
+        orderDeliveryInfoEntity.setRemark(orderVO.getRemark());
+        orderDeliveryInfoEntity.setSex(orderVO.getSex());
+        orderDeliveryInfoEntity.setUserInfoId(user.getId());
+        orderDeliveryInfoEntity.setOrderInfoId(orderInfoEntity.getId());
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_NEW);
+        orderDeliveryInfoEntity.setCreationTime(new Date());
+        orderDeliveryInfoEntity.setEmptyBarrels(0);
+
+        ticketOrderPay(orderInfoEntity, orderDeliveryInfoEntity, orderProductDetailEntities);
+
+        return R.ok().put("orderInfo", orderInfoEntity).put("orderDetail", orderProductDetailEntities);
+    }
+
+    /**
+     * 水票订单支付处理
+     *
+     * @param orderInfoEntity
+     * @param orderDeliveryInfoEntity
+     * @param orderProductDetailEntities
+     */
+    private void ticketOrderPay(OrderInfoEntity orderInfoEntity, OrderDeliveryInfoEntity orderDeliveryInfoEntity, List<OrderProductDetailEntity> orderProductDetailEntities) {
+        // 更新用户押金
+        UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderInfoEntity.getUserInfoId(), true);
+        userInfoEntity.setDepositAmount(userInfoEntity.getDepositAmount().add(orderInfoEntity.getDeposit()));
+        userInfoEntity.setEnableDepositAmount(userInfoEntity.getEnableDepositAmount().add(orderInfoEntity.getDeposit()));
+        userInfoDao.update(userInfoEntity);
+        orderInfoEntity.setStatus(OrderInfoEntity.STATUS_PAID);
+        orderInfoEntity.setPaidTime(new Date());
+        orderInfoDao.save(orderInfoEntity);
+        for (OrderProductDetailEntity orderProductDetailEntity : orderProductDetailEntities) {
+            orderProductDetailEntity.setOrderInfoId(orderInfoEntity.getId());
+            // 订单商品明细
+            orderProductDetailDao.save(orderProductDetailEntity);
+        }
+
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_PAID);
+        orderDeliveryInfoDao.save(orderDeliveryInfoEntity);
+
+        if (orderDeliveryInfoEntity.getDeliveryTime() != null && orderDeliveryInfoEntity.getDeliveryTime().after(new Date())) {
+            // 还未到期望配送时间，先不处理配送单，等定时任务处理分配
+            return;
+        }
+        orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
+        orderDeliveryInfoEntity.setDistributeTime(new Date());
+        orderDeliveryInfoDao.save(orderDeliveryInfoEntity);
+        applicationContext.publishEvent(new OrderDistributeEvent(orderInfoEntity.getId()));
+    }
+
+    /**
+     * 下单更新产品信息
+     *
+     * @param orderVO
+     * @param orderProductDetailEntities
+     */
+    private void updateProductInfo(OrderVO orderVO, List<OrderProductDetailEntity> orderProductDetailEntities) {
+        for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
+            ProductInfoEntity productInfoEntity = productInfoDao.queryObject(productOrderVO.getProductInfoId(), true);
+            OrderProductDetailEntity orderProductDetailEntity = new OrderProductDetailEntity();
+            orderProductDetailEntity.setCount(productOrderVO.getCount());
+            orderProductDetailEntity.setProductInfoId(productInfoEntity.getId());
+            orderProductDetailEntity.setProductName(productInfoEntity.getName());
+            orderProductDetailEntity.setBucketType(productInfoEntity.getBucketType());
+            orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
+            orderProductDetailEntities.add(orderProductDetailEntity);
+            productInfoEntity.setCount(productInfoEntity.getCount() + productOrderVO.getCount());
+            productInfoDao.update(productInfoEntity);
+        }
+    }
+
+    /**
+     * 检查该用户之前是否有未支付订单
+     *
+     * @param user 用户信息
+     */
+    private void checkUnpayOrder(UserInfoEntity user) {
+        List<OrderInfoEntity> orderInfoEntities = orderInfoDao.queryUnpaidByUserId(user.getId());
+        for (OrderInfoEntity orderInfoEntity : orderInfoEntities) {
+            if (orderInfoEntity != null && orderInfoEntity.getStatus() == 10) {
+                //关闭未支付订单
+                orderInfoEntity.setStatus(OrderInfoEntity.STATUS_CLOSE);
+                orderInfoEntity.setCloseTime(new Date());
+                orderInfoDao.update(orderInfoEntity);
+            }
+        }
+    }
+
 
     /**
      * 检查库存，并预生成要扣除的库存数
      *
      * @param orderProductDetailEntities 订单所购买的商品
      * @param deliveryEndpointEntity     配送点实体
+     *
      * @return
      */
     private List<ProductStockEntity> checkStock(List<OrderProductDetailEntity> orderProductDetailEntities, DeliveryEndpointEntity deliveryEndpointEntity) {
