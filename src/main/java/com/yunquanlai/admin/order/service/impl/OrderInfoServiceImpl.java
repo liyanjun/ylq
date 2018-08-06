@@ -262,12 +262,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             return;
         }
 //         TODO 上线打开，校验金额，微信返回的金额单位是分，我们先除以100
-        BigDecimal wechatBackFee = new BigDecimal(totalFee.toString()).divide(BigDecimal.TEN).divide(BigDecimal.TEN);
+//        BigDecimal wechatBackFee = new BigDecimal(totalFee.toString()).divide(BigDecimal.TEN).divide(BigDecimal.TEN);
         if (orderInfoEntity.getDeposit() != null && !orderInfoEntity.getDeposit().equals(BigDecimal.ZERO)) {
 //            // 订单包含押金
-            if (!(orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit())).equals(wechatBackFee)) {
-                throw new RuntimeException("支付金额不等于订单金额");
-            }
+//            if (!(orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit())).equals(wechatBackFee)) {
+//                throw new RuntimeException("支付金额不等于订单金额");
+//            }
             // 更新用户押金
             UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderInfoEntity.getUserInfoId(), true);
             userInfoEntity.setDepositAmount(userInfoEntity.getDepositAmount().add(orderInfoEntity.getDeposit()));
@@ -275,9 +275,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             userInfoDao.update(userInfoEntity);
         } else {
             // 订单不包含押金
-            if (!orderInfoEntity.getAmount().equals(wechatBackFee)) {
-                throw new RuntimeException("支付金额不等于订单金额");
-            }
+//            if (!orderInfoEntity.getAmount().equals(wechatBackFee)) {
+//                throw new RuntimeException("支付金额不等于订单金额");
+//            }
         }
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_PAID);
         orderInfoEntity.setPaidTime(new Date());

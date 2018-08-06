@@ -5,29 +5,32 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 
-
 /**
  * 用户水票信息表
- * 
+ *
  * @author liyanjun
- * @email 
+ * @email
  * @date 2018-07-17 12:11:07
  */
 public class UserProductTicketEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+    private static final long serialVersionUID = 1L;
+
+    public final static int STATUS_NEW = 10;
+    public final static int STATUS_PAID = 20;
+    public final static int STATUS_CLOSE = 30;
+
     /**
      * 设置：主键 ID
      */
-	private Long id;
-	/**
-	 * 设置：关联用户 ID
-	 */
-	private Long userId;
-	/**
-	 * 设置：关联用户名
-	 */
-	private Long userName;
+    private Long id;
+    /**
+     * 设置：关联用户 ID
+     */
+    private Long userId;
+    /**
+     * 设置：关联用户名
+     */
+    private String userName;
     /**
      * 设置：关联水票 ID
      */
@@ -43,7 +46,7 @@ public class UserProductTicketEntity implements Serializable {
     /**
      * 设置：水票标题
      */
-	private String productTicketTitle;
+    private String productTicketTitle;
     /**
      * 设置：水票编号
      */
@@ -67,11 +70,11 @@ public class UserProductTicketEntity implements Serializable {
     /**
      * 设置：购买价格
      */
-	private BigDecimal amount;
+    private BigDecimal amount;
     /**
      * 设置：用户水票状态，10：新下单，20：已支付，30：已关闭
      */
-	private Integer status;
+    private Integer status;
     /**
      * 设置：兑付结束时间
      */
@@ -109,66 +112,75 @@ public class UserProductTicketEntity implements Serializable {
      */
     private Integer fromCount;
 
-	/**
-	 * 设置：
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-	/**
-	 * 获取：
-	 */
-	public Long getId() {
-		return id;
-	}
-	/**
-	 * 设置：水票标题
-	 */
-	public void setProductTicketTitle(String productTicketTitle) {
-		this.productTicketTitle = productTicketTitle;
-	}
-	/**
-	 * 获取：水票标题
-	 */
-	public String getProductTicketTitle() {
-		return productTicketTitle;
-	}
-	/**
-	 * 设置：购买价格
-	 */
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
-	/**
-	 * 获取：购买价格
-	 */
-	public BigDecimal getAmount() {
-		return amount;
-	}
-	/**
-	 * 设置：用户水票状态，10：新下单，20：已支付，30：已关闭
-	 */
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-	/**
-	 * 获取：用户水票状态，10：新下单，20：已支付，30：已关闭
-	 */
-	public Integer getStatus() {
-		return status;
-	}
-	/**
-	 * 设置：购买时间
-	 */
-	public void setCreationTime(Date creationTime) {
-		this.creationTime = creationTime;
-	}
-	/**
-	 * 获取：购买时间
-	 */
-	public Date getCreationTime() {
-		return creationTime;
-	}
+    /**
+     * 设置：
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * 获取：
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * 设置：水票标题
+     */
+    public void setProductTicketTitle(String productTicketTitle) {
+        this.productTicketTitle = productTicketTitle;
+    }
+
+    /**
+     * 获取：水票标题
+     */
+    public String getProductTicketTitle() {
+        return productTicketTitle;
+    }
+
+    /**
+     * 设置：购买价格
+     */
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    /**
+     * 获取：购买价格
+     */
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    /**
+     * 设置：用户水票状态，10：新下单，20：已支付，30：已关闭
+     */
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    /**
+     * 获取：用户水票状态，10：新下单，20：已支付，30：已关闭
+     */
+    public Integer getStatus() {
+        return status;
+    }
+
+    /**
+     * 设置：购买时间
+     */
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    /**
+     * 获取：购买时间
+     */
+    public Date getCreationTime() {
+        return creationTime;
+    }
 
     public Long getUserId() {
         return userId;
@@ -178,11 +190,11 @@ public class UserProductTicketEntity implements Serializable {
         this.userId = userId;
     }
 
-    public Long getUserName() {
+    public String getUserName() {
         return userName;
     }
 
-    public void setUserName(Long userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
