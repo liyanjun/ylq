@@ -89,7 +89,7 @@ public class ApiWechatPayController {
             //生成的随机字符串
             String nonce_str = StringUtils.getRandomStringByLength(32);
             //商品名称
-            String body = "运泉来-" + orderInfoEntity.getId();
+            String body = "泉润万家-" + orderInfoEntity.getId();
             //获取本机的ip地址 TODO 线上记得打开
 //            String spbill_create_ip = IpUtils.getIpAddr(httpServletRequest);
 
