@@ -188,8 +188,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             amountDeliveryFee = amountDeliveryFee.add(productInfoEntity.getDeliveryFee());
         }
         //押金校验 用户可用押金+本次提交押金>本次下单需要的押金阈值
-        if(deposit.compareTo(user.getEnableDepositAmount().add(orderVO.getDeposit())) == 1){
-            return R.error("缴纳押金不足，请重新选择押金金额。").put("orderToken",tokenUtils.getToken()).put("code",507);
+        if (deposit.compareTo(user.getEnableDepositAmount().add(orderVO.getDeposit())) == 1) {
+            return R.error("缴纳押金不足，请重新选择押金金额。").put("orderToken", tokenUtils.getToken()).put("code", 507);
         }
         for (ProductOrderVO productOrderVO : orderVO.getProductOrderVOList()) {
             ProductInfoEntity productInfoEntity = productInfoDao.queryObject(productOrderVO.getProductInfoId(), true);
@@ -252,7 +252,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public void orderPay(Object outTradeNo, Object totalFee) {
+    public void orderPay(Object outTradeNo, Integer totalFee) {
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(outTradeNo, true);
         if (orderInfoEntity == null) {
             throw new RuntimeException("找不到有效的订单");
@@ -261,24 +261,21 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_NEW && orderInfoEntity.getStatus() != OrderInfoEntity.STATUS_CLOSE) {
             return;
         }
-//         TODO 上线打开，校验金额，微信返回的金额单位是分，我们先除以100
-        BigDecimal wechatBackFee = new BigDecimal(totalFee.toString()).divide(BigDecimal.TEN).divide(BigDecimal.TEN);
+        logger.debug("订单【" + outTradeNo + "】状态校验成功，开始金额校验，totalFee【" + totalFee + "】单位分");
+        Integer money = orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit()).multiply(BigDecimal.TEN).multiply(BigDecimal.TEN).intValue();
+        if (totalFee.intValue( ) != money.intValue()) {
+            throw new RuntimeException("订单【" + outTradeNo + "】支付金额不等于订单金额，订单金额【" + money + "】(包含押金)，支付金额【" + totalFee + "】。");
+        }
+
+        logger.debug("【" + outTradeNo + "】金额校验成功,改变订单状态为【STATUS_PAID】,进行配送处理");
         if (orderInfoEntity.getDeposit() != null && !orderInfoEntity.getDeposit().equals(BigDecimal.ZERO)) {
-//            // 订单包含押金
-            if (!(orderInfoEntity.getAmount().add(orderInfoEntity.getDeposit())).equals(wechatBackFee)) {
-                throw new RuntimeException("支付金额不等于订单金额");
-            }
             // 更新用户押金
             UserInfoEntity userInfoEntity = userInfoDao.queryObject(orderInfoEntity.getUserInfoId(), true);
             userInfoEntity.setDepositAmount(userInfoEntity.getDepositAmount().add(orderInfoEntity.getDeposit()));
             userInfoEntity.setEnableDepositAmount(userInfoEntity.getEnableDepositAmount().add(orderInfoEntity.getDeposit()));
             userInfoDao.update(userInfoEntity);
-        } else {
-            // 订单不包含押金
-            if (!orderInfoEntity.getAmount().equals(wechatBackFee)) {
-                throw new RuntimeException("支付金额不等于订单金额");
-            }
         }
+
         orderInfoEntity.setStatus(OrderInfoEntity.STATUS_PAID);
         orderInfoEntity.setPaidTime(new Date());
         orderInfoDao.update(orderInfoEntity);
@@ -292,7 +289,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderDeliveryInfoDao.update(orderDeliveryInfoEntity);
 
         if (orderDeliveryInfoEntity.getDeliveryTime() != null && orderDeliveryInfoEntity.getDeliveryTime().after(new Date())) {
-            // 还未到期望配送时间，先不处理配送单，等定时任务处理分配
+            logger.debug("【" + outTradeNo + "】还未到期望配送时间，先不处理配送单，等定时任务处理分配\n");
             return;
         }
         orderDeliveryInfoEntity.setStatus(OrderDeliveryInfoEntity.STATUS_UN_DISTRIBUTE);
@@ -382,10 +379,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderProductDetailEntity.setAmount(productInfoEntity.getAmount());
             orderProductDetailEntities.add(orderProductDetailEntity);
         }
-        if(deposit.compareTo(user.getEnableDepositAmount()) == -1 || deposit.compareTo(user.getEnableDepositAmount()) == 0){
+        if (deposit.compareTo(user.getEnableDepositAmount()) == -1 || deposit.compareTo(user.getEnableDepositAmount()) == 0) {
             deposit = BigDecimal.ZERO;
         }
-        if(deposit.compareTo(user.getEnableDepositAmount()) == 1){
+        if (deposit.compareTo(user.getEnableDepositAmount()) == 1) {
             deposit = deposit.subtract(user.getEnableDepositAmount());
         }
         return R.ok().put("orderProductDetails", orderProductDetailEntities).
@@ -411,7 +408,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public R saveComment(OrderCommentVO orderCommentVO, UserInfoEntity userInfoEntity) throws RuntimeException{
+    public R saveComment(OrderCommentVO orderCommentVO, UserInfoEntity userInfoEntity) throws RuntimeException {
         OrderInfoEntity orderInfoEntity = orderInfoDao.queryObject(orderCommentVO.getOrderId(), true);
         if (userInfoEntity.getId().longValue() != orderInfoEntity.getUserInfoId().longValue()) {
             return R.error("不能评价别人的订单。");
@@ -456,7 +453,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             }
         }
         orderInfoDao.update(orderInfoEntity);
-        return R.ok().put("msg","评论提交成功");
+        return R.ok().put("msg", "评论提交成功");
     }
 
     @Override

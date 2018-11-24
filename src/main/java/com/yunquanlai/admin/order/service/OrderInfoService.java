@@ -46,7 +46,7 @@ public interface OrderInfoService {
      * @param out_trade_no 微信返回的商户号 ID
      * @param total_fee    微信返回的支付金额
      */
-    void orderPay(Object out_trade_no, Object total_fee);
+    void orderPay(Object out_trade_no, Integer total_fee);
 
 
     /**

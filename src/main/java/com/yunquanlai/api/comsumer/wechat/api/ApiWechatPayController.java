@@ -170,6 +170,7 @@ public class ApiWechatPayController {
             logger.debug(resXml);
             logger.debug("微信支付回调数据结束");
         } catch (Exception e) {
+            logger.error("支付处理错误",e);
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
                     + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
         }
