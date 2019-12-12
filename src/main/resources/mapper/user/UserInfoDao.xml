@@ -16,6 +16,9 @@
         <result property="disableDepositAmount" column="disable_deposit_amount"/>
         <result property="emptyBucketNumber" column="empty_bucket_number"/>
         <result property="creationTime" column="creation_time"/>
+        <result property="recommenderID" column="recommenderID"/>
+        <result property="recommenderName" column="recommenderName"/>
+        <result property="isRecommender" column="is_recommender"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.yunquanlai.admin.user.entity.UserInfoEntity">
@@ -30,7 +33,10 @@
 					`enable_deposit_amount`, 
 					`disable_deposit_amount`, 
 					`empty_bucket_number`, 
-					`creation_time`
+					`creation_time`,
+					`recommenderID`,
+					`recommenderName`,
+					`is_recommender`
 				from user_info where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
 	</select>
@@ -47,7 +53,10 @@
 		`enable_deposit_amount`,
 		`disable_deposit_amount`,
 		`empty_bucket_number`,
-		`creation_time`
+		`creation_time`,
+		`recommenderID`,
+		`recommenderName`,
+		`is_recommender`
 		from user_info where open_id = #{value}
 	</select>
 
@@ -63,7 +72,10 @@
 		            `enable_deposit_amount`, 
 		            `disable_deposit_amount`, 
 		            `empty_bucket_number`, 
-		            `creation_time`
+		            `creation_time`,
+					`recommenderID`,
+					`recommenderName`,
+					`is_recommender`
 				from user_info
 		<where>
 			<if test="key != null and key.trim() != ''">
@@ -97,7 +109,10 @@
 			`enable_deposit_amount`, 
 			`disable_deposit_amount`, 
 			`empty_bucket_number`, 
-			`creation_time`
+			`creation_time`,
+			`recommenderID`,
+			`recommenderName`,
+			`is_recommender`
 		)
 		values
 		(
@@ -110,7 +125,10 @@
 			#{enableDepositAmount}, 
 			#{disableDepositAmount}, 
 			#{emptyBucketNumber}, 
-			#{creationTime}
+			#{creationTime},
+			#{recommenderID},
+			#{recommenderName},
+			#{isRecommender}
 		)
 	</insert>
 
@@ -126,7 +144,10 @@
 			<if test="enableDepositAmount != null">`enable_deposit_amount` = #{enableDepositAmount}, </if>
 			<if test="disableDepositAmount != null">`disable_deposit_amount` = #{disableDepositAmount}, </if>
 			<if test="emptyBucketNumber != null">`empty_bucket_number` = #{emptyBucketNumber}, </if>
-			<if test="creationTime != null">`creation_time` = #{creationTime}</if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="recommenderID != null">`recommenderID` = #{recommenderID}, </if>
+			<if test="recommenderName != null">`recommenderName` = #{recommenderName}, </if>
+			<if test="isRecommender != null">`is_recommender` = #{isRecommender}</if>
 		</set>
 		where id = #{id}
 	</update>

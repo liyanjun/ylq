@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * 下单信息
  */
-public class OrderVO {
+public class TicketOrderVO {
     /**
      * 订单地址
      */
@@ -43,14 +43,7 @@ public class OrderVO {
      * 是否需要发票
      */
     private Integer needBill;
-    /**
-     * 支付类型：10：现金，20：水票
-     */
-    private Integer payType;
-    /**
-     * 水票 ID
-     */
-    private Integer ticketId;
+
     /**
      * 防重复提交token
      */
@@ -170,21 +163,5 @@ public class OrderVO {
 
     public void setBucketNum(BigDecimal bucketNum) {
         this.bucketNum = bucketNum;
-    }
-
-    public Integer getPayType() {
-        return payType;
-    }
-
-    public void setPayType(Integer payType) {
-        this.payType = payType;
-    }
-
-    public Integer getTicketId() {
-        return ticketId;
-    }
-
-    public void setTicketId(Integer ticketId) {
-        this.ticketId = ticketId;
     }
 }

@@ -63,6 +63,18 @@ public class UserInfoEntity implements Serializable {
      * 设置：用户注册时间
      */
 	private Date creationTime;
+    /**
+     * 设置：推荐人ID
+     */
+	private Long recommenderID;
+    /**
+     * 设置：推荐人姓名
+     */
+	private String recommenderName;
+    /**
+     * 设置：是否是推荐人，10：是，20：否
+     */
+	private Integer isRecommender;
 
 	/**
 	 * 设置：
@@ -193,4 +205,28 @@ public class UserInfoEntity implements Serializable {
 	public Date getCreationTime() {
 		return creationTime;
 	}
+
+    public Long getRecommenderID() {
+        return recommenderID;
+    }
+
+    public void setRecommenderID(Long recommenderID) {
+        this.recommenderID = recommenderID;
+    }
+
+    public String getRecommenderName() {
+        return recommenderName;
+    }
+
+    public void setRecommenderName(String recommenderName) {
+        this.recommenderName = recommenderName;
+    }
+
+    public Integer getIsRecommender() {
+        return isRecommender;
+    }
+
+    public void setIsRecommender(Integer isRecommender) {
+        this.isRecommender = isRecommender;
+    }
 }

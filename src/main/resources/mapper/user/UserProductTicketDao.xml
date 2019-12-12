@@ -6,37 +6,102 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.yunquanlai.admin.user.entity.UserProductTicketEntity" id="userProductTicketMap">
         <result property="id" column="id"/>
-        <result property="productTicketTitle" column="product_ticket_title"/>
-        <result property="cout" column="cout"/>
-        <result property="amount" column="amount"/>
-        <result property="status" column="status"/>
-        <result property="productInfoId" column="product_info_id"/>
-        <result property="creationTime" column="creation_time"/>
+		<result property="userId" column="user_id"/>
+		<result property="userName" column="username"/>
+		<result property="productTicketId" column="product_ticket_id"/>
+		<result property="productId" column="product_id"/>
+		<result property="productName" column="product_name"/>
+		<result property="productTicketTitle" column="product_ticket_title"/>
+		<result property="productTicketNum" column="product_ticket_num"/>
+		<result property="productTicketSubtitle" column="product_ticket_subtitle"/>
+		<result property="totalCount" column="total_count"/>
+		<result property="useCount" column="use_count"/>
+		<result property="remainderCount" column="remainder_count"/>
+		<result property="amount" column="amount"/>
+		<result property="status" column="status"/>
+		<result property="finishTime" column="finish_time"/>
+		<result property="endTime" column="end_time"/>
+		<result property="creationTime" column="creation_time"/>
+		<result property="benifitUserId" column="benifit_user_id"/>
+		<result property="benifitUserName" column="benifit_username"/>
+		<result property="benifitCount" column="benifit_count"/>
+		<result property="fromUserId" column="from_user_id"/>
+		<result property="fromUserName" column="from_username"/>
+		<result property="fromCount" column="from_count"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.yunquanlai.admin.user.entity.UserProductTicketEntity">
 		select
-					`id`, 
-					`product_ticket_title`, 
-					`cout`, 
-					`amount`, 
-					`status`, 
-					`product_info_id`, 
-					`creation_time`
-				from user_product_ticket where id = #{id}
+		`id`,
+		`user_id`,
+		`username`,
+		`product_ticket_id`,
+		`product_id`,
+		`product_name`,
+		`product_ticket_title`,
+		`product_ticket_num`,
+		`product_ticket_subtitle`,
+		`total_count`,
+		`use_count`,
+		`remainder_count`,
+		`amount`,
+		`status`,
+		`finish_time`,
+		`end_time`,
+		`creation_time`,
+		`benifit_user_id`,
+		`benifit_username`,
+		`benifit_count`,
+		`from_user_id`,
+		`from_username`,
+		`from_count`
+		from user_product_ticket where id = #{id}
         <if test="isLock != null and isLock == true">for update</if>
 	</select>
 
 	<select id="queryList" resultType="com.yunquanlai.admin.user.entity.UserProductTicketEntity">
 		select
-		            `id`, 
-		            `product_ticket_title`, 
-		            `cout`, 
-		            `amount`, 
-		            `status`, 
-		            `product_info_id`, 
-		            `creation_time`
+		`id`,
+		`user_id`,
+		`username`,
+		`product_ticket_id`,
+		`product_id`,
+		`product_name`,
+		`product_ticket_title`,
+		`product_ticket_num`,
+		`product_ticket_subtitle`,
+		`total_count`,
+		`use_count`,
+		`remainder_count`,
+		`amount`,
+		`status`,
+		`finish_time`,
+		`end_time`,
+		`creation_time`,
+		`benifit_user_id`,
+		`benifit_username`,
+		`benifit_count`,
+		`from_user_id`,
+		`from_username`,
+		`from_count`
 				from user_product_ticket
+		<where>
+			<if test="userId != null">
+				and user_id = #{userId}
+			</if>
+			<if test="userName != null and userName.trim() != ''">
+				and `username` like concat('%',#{userName},'%')
+			</if>
+			<if test="productTicketTitle != null and productTicketTitle.trim() != ''">
+				and `product_ticket_title` like concat('%',#{productTicketTitle},'%')
+			</if>
+			<if test="productName != null and productName.trim() != ''">
+				and `product_name` like concat('%',#{productName},'%')
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -51,39 +116,104 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from user_product_ticket 
+		select count(*) from user_product_ticket
+		<where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+			<if test="userName != null and userName.trim() != ''">
+				and `username` like concat('%',#{userName},'%')
+			</if>
+			<if test="productTicketTitle != null and productTicketTitle.trim() != ''">
+				and `product_ticket_title` like concat('%',#{productTicketTitle},'%')
+			</if>
+			<if test="productName != null and productName.trim() != ''">
+				and `product_name` like concat('%',#{productName},'%')
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
 	</select>
 	 
 	<insert id="save" parameterType="com.yunquanlai.admin.user.entity.UserProductTicketEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into user_product_ticket
 		(
-			`product_ticket_title`, 
-			`cout`, 
-			`amount`, 
-			`status`, 
-			`product_info_id`, 
-			`creation_time`
+			`user_id`,
+			`username`,
+			`product_ticket_id`,
+			`product_id`,
+			`product_name`,
+			`product_ticket_title`,
+			`product_ticket_num`,
+			`product_ticket_subtitle`,
+			`total_count`,
+			`use_count`,
+			`remainder_count`,
+			`amount`,
+			`status`,
+			`finish_time`,
+			`end_time`,
+			`creation_time`,
+			`benifit_user_id`,
+			`benifit_username`,
+			`benifit_count`,
+			`from_user_id`,
+			`from_username`,
+			`from_count`
 		)
 		values
 		(
-			#{productTicketTitle}, 
-			#{cout}, 
-			#{amount}, 
-			#{status}, 
-			#{productInfoId}, 
-			#{creationTime}
+			#{userId},
+			#{userName},
+			#{productTicketId},
+			#{productId},
+			#{productName},
+			#{productTicketTitle},
+			#{productTicketNum},
+			#{productTicketSubtitle},
+			#{totalCount},
+			#{useCount},
+			#{remainderCount},
+			#{amount},
+			#{status},
+			#{finishTime},
+			#{endTime},
+			#{creationTime},
+			#{benifitUserId},
+			#{benifitUserName},
+			#{benifitCount},
+			#{fromUserId},
+			#{fromUserName},
+			#{fromCount}
 		)
 	</insert>
 	 
 	<update id="update" parameterType="com.yunquanlai.admin.user.entity.UserProductTicketEntity">
 		update user_product_ticket 
 		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="userName != null">`username` = #{userName}, </if>
+			<if test="productTicketId != null">`product_ticket_id` = #{productTicketId}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="productName != null">`product_name` = #{productName}, </if>
 			<if test="productTicketTitle != null">`product_ticket_title` = #{productTicketTitle}, </if>
-			<if test="cout != null">`cout` = #{cout}, </if>
+			<if test="productTicketNum != null">`product_ticket_num` = #{productTicketNum}, </if>
+			<if test="productTicketSubtitle != null">`product_ticket_subtitle` = #{productTicketSubtitle}, </if>
+			<if test="totalCount != null">`total_count` = #{totalCount}, </if>
+			<if test="useCount != null">`use_count` = #{useCount}, </if>
+			<if test="remainderCount != null">`remainder_count` = #{remainderCount}, </if>
 			<if test="amount != null">`amount` = #{amount}, </if>
 			<if test="status != null">`status` = #{status}, </if>
-			<if test="productInfoId != null">`product_info_id` = #{productInfoId}, </if>
-			<if test="creationTime != null">`creation_time` = #{creationTime}</if>
+			<if test="finishTime != null">`finish_time` = #{finishTime}, </if>
+			<if test="endTime != null">`end_time` = #{endTime}, </if>
+			<if test="creationTime != null">`creation_time` = #{creationTime}, </if>
+			<if test="benifitUserId != null">`benifit_user_id` = #{benifitUserId}, </if>
+			<if test="benifitUserName != null">`benifit_username` = #{benifitUserName}, </if>
+			<if test="benifitCount != null">`benifit_count` = #{benifitCount}, </if>
+			<if test="fromUserId != null">`from_user_id` = #{fromUserId}, </if>
+			<if test="fromUserName != null">`from_username` = #{fromUserName}, </if>
+			<if test="fromCount != null">`from_count` = #{fromCount}</if>
 		</set>
 		where id = #{id}
 	</update>

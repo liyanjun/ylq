@@ -1,5 +1,7 @@
 package com.yunquanlai.admin.user.service;
 
+import com.yunquanlai.admin.product.entity.ProductTicketEntity;
+import com.yunquanlai.admin.user.entity.UserInfoEntity;
 import com.yunquanlai.admin.user.entity.UserProductTicketEntity;
 
 import java.util.List;
@@ -27,4 +29,8 @@ public interface UserProductTicketService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+    void buyTicket(UserInfoEntity user, ProductTicketEntity productTicket);
+
+	void pay(String outTradeNo, Integer totalFee);
 }

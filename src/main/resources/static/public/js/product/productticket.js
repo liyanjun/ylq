@@ -1,15 +1,21 @@
 $(function () {
+    vm.productId = T.p("productId");
+    vm.productName = T.p("productName");
+    var param = "";
+    if(vm.productId != undefined){
+        param = "?productInfoId=" + vm.productId;
+    }
     $("#jqGrid").jqGrid({
-        url: '../productticket/list',
+        url: '../productticket/list'+param,
         datatype: "json",
         colModel: [			
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '水票编号', name: 'productTicketNum', index: 'product_ticket_num', width: 80 }, 			
+			{ label: '水票编号', name: 'productTicketNum', index: 'product_ticket_num', width: 80 },
 			// { label: '水票图片(备用)', name: 'img', index: 'img', width: 80 },
-			{ label: '标题', name: 'title', index: 'title', width: 80 },
+			{ label: '标题', name: 'title', index: 'title', width: 100 },
 			// { label: '副标题', name: 'subtitle', index: 'subtitle', width: 80 },
 			// { label: '关联产品 ID', name: 'productInfoId', index: 'product_info_id', width: 80 },
-			{ label: '关联商品名称', name: 'productInfoName', index: 'product_info_name', width: 80 }, 			
+			{ label: '关联商品名称', name: 'productInfoName', index: 'product_info_name', width: 100 },
 			// { label: '购买桶数', name: 'purchaseCount', index: 'purchase_count', width: 80 },
 			// { label: '赠送桶数', name: 'giftCount', index: 'gift_count', width: 80 },
 			{ label: '起送桶数', name: 'minDilivery', index: 'min_dilivery', width: 80 },
@@ -25,13 +31,14 @@ $(function () {
                     }
                 }
 			},
-			{ label: '包含产品数量', name: 'cout', index: 'cout', width: 80 },
-			{ label: '价格', name: 'amout', index: 'amout', width: 80 },
+			{ label: '产品数量', name: 'count', index: 'count', width: 80 },
+			{ label: '价格', name: 'amount', index: 'amount', width: 60 },
 			// { label: '使用须知', name: 'notes', index: 'notes', width: 80 },
 			// { label: '使用说明', name: 'instructions', index: 'instructions', width: 80 },
 			// { label: '创建时间', name: 'creationTime', index: 'creation_time', width: 80 },
-			{ label: '使用截止日期', name: 'deadline', index: 'deadline', width: 80 }, 			
-			{ label: '备注', name: 'remarks', index: 'remarks', width: 80 }			
+			{ label: '使用截止日期', name: 'deadline', index: 'deadline', width: 90 },
+			{ label: '备注', name: 'remarks', index: 'remarks', width: 80 },
+			{ label: '排序', name: 'sort', index: 'sort', width: 60 }
         ],
 		viewrecords: true,
         height: 385,
@@ -65,7 +72,9 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		productTicket: {}
+        productId:"",
+        productName:"",
+		productTicket: {},
 	},
 	methods: {
 		query: function () {
@@ -75,6 +84,8 @@ var vm = new Vue({
 			vm.showList = false;
 			vm.title = "新增";
 			vm.productTicket = {};
+            vm.productTicket.productInfoId = vm.productId;
+            vm.productTicket.productInfoName = vm.productName;
 		},
 		update: function (event) {
 			var id = getSelectedRow();
@@ -139,6 +150,16 @@ var vm = new Vue({
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page
             }).trigger("reloadGrid");
-		}
+		},
+        btnback: function () {
+            window.location.href="../product/productinfo.html";
+        }
 	}
 });
+
+//只能输入两位小数
+function checkDecimal(data) {
+    var re = /([0-9]+\.[0-9]{2})[0-9]*/;
+    var num = data.replace(re,"$1");
+    return num;
+}

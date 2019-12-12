@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunquanlai.admin.user.dao.UserRecommendApprovalDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.yunquanlai.admin.user.entity.UserRecommendApprovalEntity" id="userRecommenderApprovalMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="positiveIdPhoto" column="positive_id_photo"/>
+        <result property="reverseIdPhoto" column="reverse_id_photo"/>
+        <result property="phone" column="phone"/>
+        <result property="remarkPersonalAbility" column="remark_personal_ability"/>
+        <result property="applicationTime" column="application_time"/>
+        <result property="approveTime" column="approve_time"/>
+        <result property="approveOpinion" column="approve_opinion"/>
+        <result property="isApproved" column="is_approved"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.yunquanlai.admin.user.entity.UserRecommendApprovalEntity">
+		select
+					`id`, 
+					`user_id`, 
+					`username`, 
+					`positive_id_photo`, 
+					`reverse_id_photo`, 
+					`phone`, 
+					`remark_personal_ability`, 
+					`application_time`, 
+					`approve_time`, 
+					`approve_opinion`, 
+					`is_approved`
+				from user_recommend_approval where id = #{id}
+        <if test="isLock != null and isLock == true">for update</if>
+	</select>
+
+	<select id="queryList" resultType="com.yunquanlai.admin.user.entity.UserRecommendApprovalEntity">
+		select
+		            `id`, 
+		            `user_id`, 
+		            `username`, 
+		            `positive_id_photo`, 
+		            `reverse_id_photo`, 
+		            `phone`, 
+		            `remark_personal_ability`, 
+		            `application_time`, 
+		            `approve_time`, 
+		            `approve_opinion`, 
+		            `is_approved`
+				from user_recommend_approval
+		<where>
+			<if test="userName != null and userName.trim() != ''">
+				and `username` like concat('%',#{userName},'%')
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from user_recommend_approval
+		<where>
+			<if test="userName != null and userName.trim() != ''">
+				and `username` like concat('%',#{userName},'%')
+			</if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunquanlai.admin.user.entity.UserRecommendApprovalEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into user_recommend_approval
+		(
+			`user_id`, 
+			`username`, 
+			`positive_id_photo`, 
+			`reverse_id_photo`, 
+			`phone`, 
+			`remark_personal_ability`, 
+			`application_time`, 
+			`approve_time`, 
+			`approve_opinion`, 
+			`is_approved`
+		)
+		values
+		(
+			#{userId}, 
+			#{username}, 
+			#{positiveIdPhoto}, 
+			#{reverseIdPhoto}, 
+			#{phone}, 
+			#{remarkPersonalAbility}, 
+			#{applicationTime}, 
+			#{approveTime}, 
+			#{approveOpinion}, 
+			#{isApproved}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunquanlai.admin.user.entity.UserRecommendApprovalEntity">
+		update user_recommend_approval
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="positiveIdPhoto != null">`positive_id_photo` = #{positiveIdPhoto}, </if>
+			<if test="reverseIdPhoto != null">`reverse_id_photo` = #{reverseIdPhoto}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="remarkPersonalAbility != null">`remark_personal_ability` = #{remarkPersonalAbility}, </if>
+			<if test="applicationTime != null">`application_time` = #{applicationTime}, </if>
+			<if test="approveTime != null">`approve_time` = #{approveTime}, </if>
+			<if test="approveOpinion != null">`approve_opinion` = #{approveOpinion}, </if>
+			<if test="isApproved != null">`is_approved` = #{isApproved}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from user_recommend_approval where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from user_recommend_approval where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

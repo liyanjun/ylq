@@ -122,6 +122,11 @@ public class ProductInfoEntity implements Serializable {
     private Integer waterType;
 
 	/**
+	 * 设置：水票描述
+	 */
+	private String productTicketDescription;
+
+	/**
 	 * 设置：主键ID
 	 */
 	public void setId(Long id) {
@@ -363,4 +368,12 @@ public class ProductInfoEntity implements Serializable {
     public void setWaterType(Integer waterType) {
         this.waterType = waterType;
     }
+
+	public String getProductTicketDescription() {
+		return productTicketDescription;
+	}
+
+	public void setProductTicketDescription(String productTicketDescription) {
+		this.productTicketDescription = productTicketDescription;
+	}
 }

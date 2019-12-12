@@ -1,5 +1,12 @@
 package com.yunquanlai.admin.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.yunquanlai.utils.validator.group.AddGroup;
+import com.yunquanlai.utils.validator.group.UpdateGroup;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,6 +30,7 @@ public class ProductTicketEntity implements Serializable {
     /**
      * 设置：水票编号
      */
+	@NotBlank(message="水票编号不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String productTicketNum;
     /**
      * 设置：水票图片(备用)
@@ -31,22 +39,27 @@ public class ProductTicketEntity implements Serializable {
     /**
      * 设置：水票标题
      */
+    @NotBlank(message="水票标题不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String title;
     /**
      * 设置：水票副标题
      */
+    @NotBlank(message="水票副标题不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String subtitle;
     /**
      * 设置：关联产品 ID
      */
+    @NotNull(message="关联商品ID不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Long productInfoId;
     /**
      * 设置：关联商品名称
      */
+    @NotBlank(message="关联商品名不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String productInfoName;
     /**
      * 设置：购买桶数
      */
+    @NotNull(message="购买桶数不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer purchaseCount;
     /**
      * 设置：赠送的桶数
@@ -55,6 +68,7 @@ public class ProductTicketEntity implements Serializable {
     /**
      * 设置：单次最小配送桶数
      */
+    @NotNull(message="起送桶数不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer minDilivery;
     /**
      * 设置：每配送一桶，推广人获得的水币
@@ -63,15 +77,17 @@ public class ProductTicketEntity implements Serializable {
     /**
      * 设置：售卖上下架状态，10：新创建，20：商品上架，30：商品下架
      */
+    @NotNull(message="售卖上下架状态", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer status;
     /**
      * 设置：包含产品数量（如买5送二）这里就应该是7
      */
-	private Integer cout;
+	private Integer count;
     /**
      * 设置：水票价格
      */
-	private BigDecimal amout;
+    @NotNull(message="水票价格不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	private BigDecimal amount;
     /**
      * 设置：使用须知
      */
@@ -87,11 +103,17 @@ public class ProductTicketEntity implements Serializable {
     /**
      * 设置：使用截止日期
      */
+    @JsonFormat(pattern="yyyy-MM-dd")
+    @Future(message="使用截止日期不能早于当前日期", groups = {AddGroup.class, UpdateGroup.class})
 	private Date deadline;
     /**
      * 设置：备注
      */
 	private String remarks;
+    /**
+     * 设置：排序
+     */
+    private Integer sort;
 
 	/**
 	 * 设置：
@@ -240,26 +262,26 @@ public class ProductTicketEntity implements Serializable {
 	/**
 	 * 设置：包含产品数量（如买5送二）这里就应该是7
 	 */
-	public void setCout(Integer cout) {
-		this.cout = cout;
+	public void setCout(Integer count) {
+		this.count = count;
 	}
 	/**
 	 * 获取：包含产品数量（如买5送二）这里就应该是7
 	 */
 	public Integer getCout() {
-		return cout;
+		return count;
 	}
 	/**
 	 * 设置：水票价格
 	 */
-	public void setAmout(BigDecimal amout) {
-		this.amout = amout;
+	public void setAmout(BigDecimal amount) {
+		this.amount = amount;
 	}
 	/**
 	 * 获取：水票价格
 	 */
 	public BigDecimal getAmout() {
-		return amout;
+		return amount;
 	}
 	/**
 	 * 设置：使用须知
@@ -321,4 +343,12 @@ public class ProductTicketEntity implements Serializable {
 	public String getRemarks() {
 		return remarks;
 	}
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
 }

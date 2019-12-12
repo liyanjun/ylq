@@ -1,6 +1,7 @@
 package com.yunquanlai.admin.product.service;
 
 import com.yunquanlai.admin.product.entity.ProductTicketEntity;
+import com.yunquanlai.api.comsumer.vo.ProductTicketVO;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,9 @@ public interface ProductTicketService {
 	ProductTicketEntity queryObjectByProductTicketNum(String productTicketNum);
 
 	List<ProductTicketEntity> queryList(Map<String, Object> map);
-	
+
+	List<ProductTicketEntity> queryListByProductId(Long productId);
+
 	int queryTotal(Map<String, Object> map);
 	
 	void save(ProductTicketEntity productTicket);
@@ -29,4 +32,6 @@ public interface ProductTicketService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+	List<ProductTicketVO> queryListForClient(Map map);
 }

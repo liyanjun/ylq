@@ -7,6 +7,9 @@ import com.yunquanlai.utils.PageUtils;
 import com.yunquanlai.utils.Query;
 import com.yunquanlai.utils.R;
 import com.yunquanlai.utils.RRException;
+import com.yunquanlai.utils.validator.ValidatorUtils;
+import com.yunquanlai.utils.validator.group.AddGroup;
+import com.yunquanlai.utils.validator.group.UpdateGroup;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +67,8 @@ public class ProductTicketController extends AbstractController {
 	@RequestMapping("/save")
 	@RequiresPermissions("productticket:save")
 	public R save(@RequestBody ProductTicketEntity productTicket){
+		//校验水票信息
+		ValidatorUtils.validateEntity(productTicket, AddGroup.class);
         //检验水票编号唯一性
         ProductTicketEntity productTicketEntity = productTicketService.queryObjectByProductTicketNum(productTicket.getProductTicketNum());
         if(productTicketEntity != null){
@@ -82,6 +87,8 @@ public class ProductTicketController extends AbstractController {
 	@RequestMapping("/update")
 	@RequiresPermissions("productticket:update")
 	public R update(@RequestBody ProductTicketEntity productTicket){
+        //校验水票信息
+        ValidatorUtils.validateEntity(productTicket, UpdateGroup.class);
 		productTicketService.update(productTicket);
 		
 		return R.ok();

@@ -137,7 +137,7 @@ public class ApiOrderController {
      * @return
      */
     @PostMapping("order")
-    @ApiOperation(value = "下单orderVO样例{ \"deposit\": 15.0,\"bucketNum\": 1,\"orderToken\": \"xxxxx\",\"address\": \"南宁市幸福里\", \"name\": \"李有钱\", \"sex\": 10, \"locationX\": 22.156487, \"locationY\": 23.458798, \"phone\": \"15677188594\", \"remark\": \"水里多放辣椒\", \"deliveryTime\": null, \"productOrderVOList\":[ {\"productInfoId\": 10001, \"count\": 2}, {\"productInfoId\": 10002, \"count\": 1} ] }")
+    @ApiOperation(value = "下单orderVO样例{ \"deposit\": 15.0, \"payType\": 20, \"ticketId\": 123456,\"bucketNum\": 1,\"orderToken\": \"xxxxx\",\"address\": \"南宁市幸福里\", \"name\": \"李有钱\", \"sex\": 10, \"locationX\": 22.156487, \"locationY\": 23.458798, \"phone\": \"15677188594\", \"remark\": \"水里多放辣椒\", \"deliveryTime\": null, \"productOrderVOList\":[ {\"productInfoId\": 10001, \"count\": 2}, {\"productInfoId\": 10002, \"count\": 1} ] }")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "token", value = "token", required = true),
             @ApiImplicitParam(name = "orderVO", value = "订单信息", required = true, dataType = "com.yunquanlai.api.comsumer.vo.OrderVO", paramType = "body")
@@ -162,8 +162,12 @@ public class ApiOrderController {
         if (!availableDelivery(orderVO.getLocationX(), orderVO.getLocationY())) {
             return R.error("配送地址不在派送范围内，请联系客服确认。").put("orderToken",tokenUtils.getToken()).put("code",507);
         }
+        if(orderVO.getPayType() == OrderInfoEntity.PAY_TYPE_TICKET){
+            return orderInfoService.newTicketOrder(orderVO, user);
+        }
         return orderInfoService.newOrder(orderVO, user);
     }
+
 
     /**
      * 关闭订单

@@ -326,8 +326,9 @@ CREATE TABLE `product_info` (
   `product_specifications` varchar(64) NOT NULL COMMENT '商品规格',
   `water_type` tinyint(4) NOT NULL COMMENT '饮用水种类，10：矿泉水，20：山泉水，30：纯净水',
   `water_coin` int(11) DEFAULT NULL COMMENT '每推广一桶，推广人获得的水币',
+  `product_ticket_description` varchar(128) DEFAULT NULL COMMENT '水票描述',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='商品信息表表';
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='商品信息表';
 ALTER TABLE `product_info`
 AUTO_INCREMENT=10000;
 
@@ -338,7 +339,7 @@ ADD UNIQUE INDEX `product_num_unique` (`product_num`) USING BTREE ;
 -- ----------------------------
 DROP TABLE IF EXISTS `product_ticket`;
 CREATE TABLE `product_ticket` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `product_ticket_num` varchar(64) NOT NULL COMMENT '水票编号',
   `img` varchar(512) DEFAULT NULL COMMENT '水票图片(备用)',
   `title` varchar(128) NOT NULL COMMENT '水票标题',
@@ -347,16 +348,17 @@ CREATE TABLE `product_ticket` (
   `product_info_name` varchar(64) NOT NULL COMMENT '关联商品名称',
   `purchase_count` int(11) NOT NULL COMMENT '购买桶数',
   `gift_count` int(11) DEFAULT NULL COMMENT '赠送的桶数',
-  `min_dilivery` int(11) DEFAULT NULL COMMENT '单次最小配送桶数',
+  `min_dilivery` int(11) NOT NULL COMMENT '单次最小配送桶数',
   `water_coin` int(11) DEFAULT NULL COMMENT '每配送一桶，推广人获得的水币',
-  `status` tinyint(4) DEFAULT NULL COMMENT '售卖上下架状态，10：新创建，20：商品上架，30：商品下架',
-  `cout` int(11) NOT NULL COMMENT '包含产品数量（如买5送二）这里就应该是7',
-  `amout` decimal(20,2) NOT NULL COMMENT '水票价格',
+  `status` tinyint(4) NOT NULL COMMENT '售卖上下架状态，10：新创建，20：商品上架，30：商品下架',
+  `count` int(11) NOT NULL COMMENT '包含产品数量（如买5送二）这里就应该是7',
+  `amount` decimal(20,2) NOT NULL COMMENT '水票价格',
   `notes` varchar(255) DEFAULT NULL COMMENT '使用须知',
   `instructions` varchar(255) DEFAULT NULL COMMENT '使用说明',
   `creation_time` datetime NOT NULL COMMENT '创建时间',
   `deadline` date NOT NULL COMMENT '使用截止日期',
   `remarks` text COMMENT '备注',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品水票信息表';
 
@@ -564,6 +566,7 @@ CREATE TABLE `user_info` (
   `creation_time` datetime NOT NULL COMMENT '用户注册时间',
   `recommenderID` bigint(20) DEFAULT NULL COMMENT '推荐人ID',
   `recommenderName` varchar(64) DEFAULT NULL COMMENT '推荐人姓名',
+  `is_recommender` tinyint(4) DEFAULT '20' COMMENT '是否是推广人，10：是，20：否',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uid_unique` (`uid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='客户信息表';
@@ -587,11 +590,11 @@ CREATE TABLE `user_withdraw_deposit` (
 -- ----------------------------
 -- Table structure for user_product_ticket
 -- ----------------------------
-
 DROP TABLE IF EXISTS `user_product_ticket`;
 CREATE TABLE `user_product_ticket` (
   `id` bigint(20) NOT NULL COMMENT '主键 ID',
   `user_id` bigint(20) NOT NULL COMMENT '关联用户 ID',
+  `username` varchar(64) NOT NULL COMMENT '关联用户名',
   `product_ticket_id` bigint(20) NOT NULL COMMENT '关联水票 ID',
   `product_id` bigint(20) NOT NULL COMMENT '关联产品 ID',
   `product_name` varchar(128) NOT NULL COMMENT '关联产品名称',
@@ -601,9 +604,52 @@ CREATE TABLE `user_product_ticket` (
   `total_count` int(11) NOT NULL COMMENT '水票总共兑换数量',
   `use_count` int(11) NOT NULL COMMENT '用户已使用水票数量',
   `remainder_count` int(11) NOT NULL COMMENT '用户剩余水票数量',
+  `amount` bigint(20) NOT NULL COMMENT '购买价格',
   `status` tinyint(255) NOT NULL COMMENT '用户水票状态，10：待支付，20：已支付，30：兑付完毕，40：已关闭',
   `finish_time` datetime DEFAULT NULL COMMENT '兑付结束时间',
   `end_time` datetime NOT NULL COMMENT '过期时间',
   `creation_time` datetime NOT NULL COMMENT '创建时间',
+  `benifit_user_id` bigint(20) DEFAULT NULL COMMENT '获赠水币的用户id',
+  `benifit_username` varchar(64) DEFAULT NULL COMMENT '获赠水币的用户名',
+  `benifit_count` int(11) DEFAULT NULL COMMENT '送出桶数',
+  `from_user_id` bigint(20) DEFAULT NULL COMMENT '赠送水币的用户id',
+  `from_username` varchar(64) DEFAULT NULL COMMENT '赠送水币的用户名',
+  `from_count` int(11) DEFAULT NULL COMMENT '得到桶数',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户水票信息表';
+
+-- ----------------------------
+-- Table structure for user_product_ticket_flow
+-- ----------------------------
+DROP TABLE IF EXISTS `user_product_ticket_flow`;
+CREATE TABLE `user_product_ticket_flow` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `username` varchar(64) DEFAULT NULL COMMENT '用户名',
+  `user_product_ticket_id` bigint(20) NOT NULL COMMENT '用户水票id',
+  `product_info_id` bigint(20) NOT NULL COMMENT '关联商品 ID',
+  `product_name` varchar(128) NOT NULL COMMENT '关联商品名',
+  `used_count` int(11) NOT NULL COMMENT '使用数量',
+  `remainder_count` int(11) NOT NULL COMMENT '剩余数量',
+  `creation_time` datetime NOT NULL COMMENT '使用时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户水票消费流水';
+
+-- ----------------------------
+-- Table structure for user_recommend_approval
+-- ----------------------------
+DROP TABLE IF EXISTS `user_recommend_approval`;
+CREATE TABLE `user_recommend_approval` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `username` varchar(64) DEFAULT NULL COMMENT '用户名',
+  `positive_id_photo` varchar(512) NOT NULL COMMENT '身份证正面照片',
+  `reverse_id_photo` varchar(512) NOT NULL COMMENT '身份证反面照片',
+  `phone` varchar(32) NOT NULL COMMENT '验证手机号码',
+  `remark_personal_ability` varchar(512) DEFAULT NULL COMMENT '备注个人能力',
+  `application_time` datetime NOT NULL COMMENT '申请时间',
+  `approve_time` datetime DEFAULT NULL COMMENT '审批时间',
+  `approve_opinion` varchar(512) DEFAULT NULL COMMENT '审批意见',
+  `is_approved` tinyint(4) DEFAULT NULL COMMENT '是否通过审批，10：通过，20：不通过',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户推广审批申请表';
